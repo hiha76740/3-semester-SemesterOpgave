@@ -1,0 +1,15 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/BookMyHome.Api/BookMyHome.Api.csproj" />
+    <Project Path="src/BookMyHome.ApplicationLib/BookMyHome.ApplicationLib.csproj" />
+    <Project Path="src/BookMyHome.DomainLib/BookMyHome.DomainLib.csproj" />
+    <Project Path="src/BookMyHome.FacadeLib/BookMyHome.FacadeLib.csproj" />
+    <Project Path="src/BookMyHome.InfrastructureLib/BookMyHome.InfrastructureLib.csproj" />
+    <Project Path="src/BookMyHome.Web/BookMyHome.Web.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/BookMyHome.ApplicationLib.Tests/BookMyHome.ApplicationLib.Tests.csproj" />
+    <Project Path="tests/BookMyHome.DomainLib.Tests/BookMyHome.DomainLib.Tests.csproj" />
+    <Project Path="tests/BookMyHome.Web.Tests/BookMyHome.Web.Tests.csproj" />
+  </Folder>
+</Solution>
