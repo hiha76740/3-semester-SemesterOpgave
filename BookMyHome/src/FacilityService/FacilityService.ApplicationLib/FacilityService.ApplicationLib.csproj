@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\FacilityService.DomainLib\FacilityService.DomainLib.csproj" />
+    <ProjectReference Include="..\FacilityService.FacadeLib\FacilityService.FacadeLib.csproj" />
+    <ProjectReference Include="..\..\Shared\BookMyHome.SharedKernelLib\BookMyHome.SharedKernelLib.csproj" />
+    <ProjectReference Include="..\..\Shared\BookMyHome.ContractsLib\BookMyHome.ContractsLib.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+</Project>

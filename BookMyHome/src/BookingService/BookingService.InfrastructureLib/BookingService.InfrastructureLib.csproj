@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\BookingService.DomainLib\BookingService.DomainLib.csproj" />
+    <ProjectReference Include="..\BookingService.FacadeLib\BookingService.FacadeLib.csproj" />
+    <ProjectReference Include="..\BookingService.ApplicationLib\BookingService.ApplicationLib.csproj" />
+    <ProjectReference Include="..\..\Shared\BookMyHome.SharedKernelLib\BookMyHome.SharedKernelLib.csproj" />
+    <ProjectReference Include="..\..\Shared\BookMyHome.BuildingBlocksLib\BookMyHome.BuildingBlocksLib.csproj" />
+    <ProjectReference Include="..\..\Shared\BookMyHome.ContractsLib\BookMyHome.ContractsLib.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.11">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+</Project>

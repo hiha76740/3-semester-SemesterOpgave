@@ -1,15 +1,57 @@
 <Solution>
   <Folder Name="/src/">
-    <Project Path="src/BookMyHome.Api/BookMyHome.Api.csproj" />
-    <Project Path="src/BookMyHome.ApplicationLib/BookMyHome.ApplicationLib.csproj" />
-    <Project Path="src/BookMyHome.DomainLib/BookMyHome.DomainLib.csproj" />
-    <Project Path="src/BookMyHome.FacadeLib/BookMyHome.FacadeLib.csproj" />
-    <Project Path="src/BookMyHome.InfrastructureLib/BookMyHome.InfrastructureLib.csproj" />
     <Project Path="src/BookMyHome.Web/BookMyHome.Web.csproj" />
   </Folder>
+  <Folder Name="/src/AccomodationService/">
+    <Project Path="src/AccomodationService/AccomodationService.Api/AccomodationService.Api.csproj" />
+    <Project Path="src/AccomodationService/AccomodationService.ApplicationLib/AccomodationService.ApplicationLib.csproj" />
+    <Project Path="src/AccomodationService/AccomodationService.DomainLib/AccomodationService.DomainLib.csproj" />
+    <Project Path="src/AccomodationService/AccomodationService.FacadeLib/AccomodationService.FacadeLib.csproj" />
+    <Project Path="src/AccomodationService/AccomodationService.InfrastructureLib/AccomodationService.InfrastructureLib.csproj" />
+  </Folder>
+  <Folder Name="/src/BookingService/">
+    <Project Path="src/BookingService/BookingService.Api/BookingService.Api.csproj" />
+    <Project Path="src/BookingService/BookingService.ApplicationLib/BookingService.ApplicationLib.csproj" />
+    <Project Path="src/BookingService/BookingService.DomainLib/BookingService.DomainLib.csproj" />
+    <Project Path="src/BookingService/BookingService.FacadeLib/BookingService.FacadeLib.csproj" />
+    <Project Path="src/BookingService/BookingService.InfrastructureLib/BookingService.InfrastructureLib.csproj" />
+  </Folder>
+  <Folder Name="/src/FacilityService/">
+    <Project Path="src/FacilityService/FacilityService.Api/FacilityService.Api.csproj" />
+    <Project Path="src/FacilityService/FacilityService.ApplicationLib/FacilityService.ApplicationLib.csproj" />
+    <Project Path="src/FacilityService/FacilityService.DomainLib/FacilityService.DomainLib.csproj" />
+    <Project Path="src/FacilityService/FacilityService.FacadeLib/FacilityService.FacadeLib.csproj" />
+    <Project Path="src/FacilityService/FacilityService.InfrastructureLib/FacilityService.InfrastructureLib.csproj" />
+  </Folder>
+  <Folder Name="/src/Shared/">
+    <Project Path="src/Shared/BookMyHome.BuildingBlocksLib/BookMyHome.BuildingBlocksLib.csproj" />
+    <Project Path="src/Shared/BookMyHome.ContractsLib/BookMyHome.ContractsLib.csproj" />
+    <Project Path="src/Shared/BookMyHome.SharedKernelLib/BookMyHome.SharedKernelLib.csproj" />
+  </Folder>
+  <Folder Name="/src/UserService/">
+    <Project Path="src/UserService/UserService.Api/UserService.Api.csproj" />
+    <Project Path="src/UserService/UserService.ApplicationLib/UserService.ApplicationLib.csproj" />
+    <Project Path="src/UserService/UserService.DomainLib/UserService.DomainLib.csproj" />
+    <Project Path="src/UserService/UserService.FacadeLib/UserService.FacadeLib.csproj" />
+    <Project Path="src/UserService/UserService.InfrastructureLib/UserService.InfrastructureLib.csproj" />
+  </Folder>
   <Folder Name="/tests/">
-    <Project Path="tests/BookMyHome.ApplicationLib.Tests/BookMyHome.ApplicationLib.Tests.csproj" />
-    <Project Path="tests/BookMyHome.DomainLib.Tests/BookMyHome.DomainLib.Tests.csproj" />
     <Project Path="tests/BookMyHome.Web.Tests/BookMyHome.Web.Tests.csproj" />
+  </Folder>
+  <Folder Name="/tests/AccomodationService/">
+    <Project Path="tests/AccomodationService/AccomodationService.ApplicationLib.Tests/AccomodationService.ApplicationLib.Tests.csproj" />
+    <Project Path="tests/AccomodationService/AccomodationService.DomainLib.Tests/AccomodationService.DomainLib.Tests.csproj" />
+  </Folder>
+  <Folder Name="/tests/BookingService/">
+    <Project Path="tests/BookingService/BookingService.ApplicationLib.Tests/BookingService.ApplicationLib.Tests.csproj" />
+    <Project Path="tests/BookingService/BookingService.DomainLib.Tests/BookingService.DomainLib.Tests.csproj" />
+  </Folder>
+  <Folder Name="/tests/FacilityService/">
+    <Project Path="tests/FacilityService/FacilityService.ApplicationLib.Tests/FacilityService.ApplicationLib.Tests.csproj" />
+    <Project Path="tests/FacilityService/FacilityService.DomainLib.Tests/FacilityService.DomainLib.Tests.csproj" />
+  </Folder>
+  <Folder Name="/tests/UserService/">
+    <Project Path="tests/UserService/UserService.ApplicationLib.Tests/UserService.ApplicationLib.Tests.csproj" />
+    <Project Path="tests/UserService/UserService.DomainLib.Tests/UserService.DomainLib.Tests.csproj" />
   </Folder>
 </Solution>

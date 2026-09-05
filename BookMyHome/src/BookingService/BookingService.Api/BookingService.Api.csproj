@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.11" />
+    <PackageReference Include="Microsoft.OpenApi" Version="2.11.0" />
+    <PackageReference Include="Scalar.AspNetCore" Version="2.17.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BookingService.FacadeLib\BookingService.FacadeLib.csproj" />
+    <ProjectReference Include="..\BookingService.InfrastructureLib\BookingService.InfrastructureLib.csproj" />
+    <ProjectReference Include="..\BookingService.ApplicationLib\BookingService.ApplicationLib.csproj" />
+    <ProjectReference Include="..\..\Shared\BookMyHome.SharedKernelLib\BookMyHome.SharedKernelLib.csproj" />
+    <ProjectReference Include="..\..\Shared\BookMyHome.BuildingBlocksLib\BookMyHome.BuildingBlocksLib.csproj" />
+    <ProjectReference Include="..\..\Shared\BookMyHome.ContractsLib\BookMyHome.ContractsLib.csproj" />
+  </ItemGroup>
+
+</Project>
