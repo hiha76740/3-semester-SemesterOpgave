@@ -1,6 +1,7 @@
 ﻿using BookingService.ApplicationLib.Repositories;
 using BookingService.DomainLib.Entities;
 using BookingService.FacadeLib.Commands.DTOs;
+using BookingService.FacadeLib.Commands.Interfaces;
 using Shared.BookMyHome.SharedKernelLib.Exceptions;
 
 namespace BookingService.ApplicationLib.Handlers;
