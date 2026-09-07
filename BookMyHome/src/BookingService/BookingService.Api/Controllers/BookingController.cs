@@ -26,9 +26,7 @@ namespace BookingService.Api.Controllers
 
             foreach (var item in list)
             {
-                var bookingReponse = item.AsResponse();
-
-                response.Add(bookingReponse);
+                response.Add(item.AsResponse());
             }
 
             return response;
