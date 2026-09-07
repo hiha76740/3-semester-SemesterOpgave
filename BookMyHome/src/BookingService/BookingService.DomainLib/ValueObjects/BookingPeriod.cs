@@ -10,8 +10,8 @@ public record BookingPeriod
 
     public BookingPeriod(DateOnly startDate, DateOnly endDate)
     {
-        if (startDate <= endDate)
-            throw new DomainException("End date can not be in the past or same as start date");
+        if (startDate >= endDate)
+            throw new DomainException("End date can not be before or same as start date");
 
         StartDate = startDate;
         EndDate = endDate;
