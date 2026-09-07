@@ -15,9 +15,15 @@ public class CreateBookingHandler(IGuestService guestService, IAccomodationServi
         var guestId = new GuestId(command.GuestId);
         var accomodationId = new AccomodationId(command.AccomodationId);
 
-        var guestExist = await guestService.GuestExistAsync(guestId);
-        var accomodationExist = await accomodationService.AccomodationExistAsync(accomodationId);
-        var existingBookings = await bookingRepo.GetAllAsync();
+        var guestExistTask = guestService.GuestExistAsync(guestId);
+        var accomodationExistTask = accomodationService.AccomodationExistAsync(accomodationId);
+        var existingBookingsTask = bookingRepo.GetAllAsync();
+
+        await Task.WhenAll(guestExistTask, accomodationExistTask, existingBookingsTask);
+
+        var guestExist = await guestExistTask;
+        var accomodationExist = await accomodationExistTask;
+        var existingBookings = await existingBookingsTask;
 
         if (guestExist == false)
             throw new NotFoundException("Guest not found doing booking creation");
