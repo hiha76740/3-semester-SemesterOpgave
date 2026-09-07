@@ -43,7 +43,7 @@ namespace BookingService.DomainLib.Entities
             eb.Id != booking.Id &&
             eb.Status == BookingStatus.Booked &&
             booking.Period.StartDate < eb.Period.EndDate &&
-            eb.Period.EndDate < booking.Period.EndDate
+            eb.Period.StartDate < booking.Period.EndDate
                 );
 
             if (overlapFound == true)
@@ -60,6 +60,7 @@ namespace BookingService.DomainLib.Entities
             Status = BookingStatus.Booked;
         }
 
+        // EF Constructor
         private Booking() { }
 
     }
