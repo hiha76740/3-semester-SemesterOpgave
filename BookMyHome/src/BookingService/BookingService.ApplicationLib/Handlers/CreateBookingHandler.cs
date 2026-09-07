@@ -17,6 +17,7 @@ public class CreateBookingHandler(IGuestService guestService, IAccomodationServi
 
         var guestExist = await guestService.GuestExistAsync(guestId);
         var accomodationExist = await accomodationService.AccomodationExistAsync(accomodationId);
+        var existingBookings = await bookingRepo.GetAllAsync();
 
         if (guestExist == false)
             throw new NotFoundException("Guest not found doing booking creation");
@@ -24,7 +25,7 @@ public class CreateBookingHandler(IGuestService guestService, IAccomodationServi
         if (accomodationExist == false)
             throw new NotFoundException("Accomodation not found doing booking creation");
 
-        var booking = Booking.Create(guestId, accomodationId, command.StartDate, command.EndDate, command.Price);
+        var booking = Booking.Create(guestId, accomodationId, command.StartDate, command.EndDate, command.Price, existingBookings);
 
         await bookingRepo.AddAsync(booking);
 
