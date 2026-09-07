@@ -1,5 +1,5 @@
-﻿using BookingService.FacadeLib.Commands.Interfaces;
-using BookingService.FacadeLib.Queries.DTOs;
+﻿using BookingService.Api.Mapper;
+using BookingService.FacadeLib.Commands.Interfaces;
 using BookingService.FacadeLib.Queries.Interfaces;
 using BookMyHome.ContractsLib.Responses.BookingService;
 using Microsoft.AspNetCore.Mvc;
@@ -26,7 +26,7 @@ namespace BookingService.Api.Controllers
 
             foreach (var item in list)
             {
-                var bookingReponse = MapResponse(item);
+                var bookingReponse = item.AsResponse();
 
                 response.Add(bookingReponse);
             }
@@ -40,24 +40,10 @@ namespace BookingService.Api.Controllers
             var dto = await queries.GetBookingByIdAsync(id);
 
             if (dto != null)
-                return MapResponse(dto);
+                return dto.AsResponse();
 
             else
                 throw new NotImplementedException();
-        }
-
-        private BookingResponse MapResponse(BookingDTO DTO)
-        {
-            var output = new BookingResponse(
-                DTO.Id,
-                DTO.GuestId,
-                DTO.AccomodationId,
-                DTO.StartDate,
-                DTO.EndDate,
-                DTO.Price
-                );
-
-            return output;
         }
     }
 
