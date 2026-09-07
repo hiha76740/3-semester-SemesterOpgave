@@ -14,10 +14,12 @@ permissions:
 env:
   DOTNET_VERSION: "10.0.x"
   SOLUTION_PATH: "BookMyHome.slnx"
+  DOMAIN_PROJECT_PATH: "tests/BookingService/BookingService.DomainLib.Tests/BookingService.DomainLib.Tests.csproj"
+  APPLICATION_PROJECT_PATH: "tests/BookingService/BookingService.ApplicationLib.Tests/BookingService.ApplicationLib.Tests.csproj"
 
 jobs:
-  Build-And-Test:
-    name: Build and Test
+  Build-And-Test-Domain:
+    name: Build and Test Domain
     runs-on: ubuntu-latest
 
     steps:
@@ -36,8 +38,37 @@ jobs:
           --configuration Release
           --no-restore
 
-      - name: Test
-        run: dotnet test ${{ env.SOLUTION_PATH }}
+      - name: Test Domain
+        run: dotnet test --project ${{ env.DOMAIN_PROJECT_PATH }}
+          --configuration Release
+          --no-restore
+          --no-build
+          --verbosity normal
+
+
+  Build-And-Test-Application:
+    needs: Build-And-Test-Domain
+    name: Build and Test Application
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Get Code
+        uses: actions/checkout@v7
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+      - name: Restore
+        run: dotnet restore ${{ env.SOLUTION_PATH }}
+
+      - name: Build
+        run: dotnet build ${{ env.SOLUTION_PATH }}
+          --configuration Release
+          --no-restore
+
+      - name: Test Application
+        run: dotnet test --project ${{ env.APPLICATION_PROJECT_PATH }}
           --configuration Release
           --no-restore
           --no-build
