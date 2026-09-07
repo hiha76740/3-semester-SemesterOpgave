@@ -14,7 +14,7 @@ namespace BookingService.DomainLib.Entities
         public GuestId GuestId { get; init; }
         public AccomodationId AccomodationId { get; init; }
 
-        public static Booking Create(GuestId guestId, AccomodationId accomodationId, DateOnly startDate, DateOnly endDate, decimal price)
+        public static Booking Create(GuestId guestId, AccomodationId accomodationId, DateOnly startDate, DateOnly endDate, decimal price, IEnumerable<Booking> existingBookings)
         {
             if (price < 0)
                 throw new DomainException("price can not be less than 0");
@@ -22,6 +22,8 @@ namespace BookingService.DomainLib.Entities
             var bookingPeriod = new BookingPeriod(startDate, endDate);
 
             var booking = new Booking(guestId, accomodationId, bookingPeriod, price);
+
+            ValidateOverlap(booking, existingBookings);
 
             return booking;
         }
@@ -34,6 +36,19 @@ namespace BookingService.DomainLib.Entities
             Status = BookingStatus.Cancelled;
         }
 
+
+        private static void ValidateOverlap(Booking booking,IEnumerable<Booking> existingBookings)
+        {
+            var overlapFound = existingBookings.Any(eb =>
+            eb.Id != booking.Id &&
+            eb.Status == BookingStatus.Booked &&
+            booking.Period.StartDate < eb.Period.EndDate &&
+            eb.Period.EndDate < booking.Period.EndDate
+                );
+
+            if (overlapFound == true)
+                throw new DomainException("Can not create booking due to overlap");
+        }
 
         private Booking(GuestId guestId, AccomodationId accomodationId, BookingPeriod bookingPeriod, decimal price)
         {
