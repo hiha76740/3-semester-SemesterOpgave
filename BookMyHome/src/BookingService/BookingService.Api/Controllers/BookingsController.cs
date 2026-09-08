@@ -9,7 +9,7 @@ namespace BookingService.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class BookingController(ICreateBookingHandler create, IBookingQueries queries) : ControllerBase
+    public class BookingsController(ICreateBookingHandler create, IBookingQueries queries) : ControllerBase
     {
         [HttpPost]
         public async Task<StatusCodeResult> MakeBooking(CreateBookingRequest request)
