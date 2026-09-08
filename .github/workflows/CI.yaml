@@ -13,9 +13,9 @@ permissions:
 
 env:
   DOTNET_VERSION: "10.0.x"
-  SOLUTION_PATH: "BookMyHome.slnx"
-  DOMAIN_PROJECT_PATH: "tests/BookingService/BookingService.DomainLib.Tests/BookingService.DomainLib.Tests.csproj"
-  APPLICATION_PROJECT_PATH: "tests/BookingService/BookingService.ApplicationLib.Tests/BookingService.ApplicationLib.Tests.csproj"
+  SOLUTION_PATH: "BookMyHome/BookMyHome.slnx"
+  DOMAIN_PROJECT_PATH: "BookMyHome/tests/BookingService/BookingService.DomainLib.Tests/BookingService.DomainLib.Tests.csproj"
+  APPLICATION_PROJECT_PATH: "BookMyHome/tests/BookingService/BookingService.ApplicationLib.Tests/BookingService.ApplicationLib.Tests.csproj"
 
 jobs:
   Build-And-Test-Domain:
