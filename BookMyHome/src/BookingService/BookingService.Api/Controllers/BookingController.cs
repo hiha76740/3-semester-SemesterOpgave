@@ -1,6 +1,7 @@
 ﻿using BookingService.Api.Mapper;
 using BookingService.FacadeLib.Commands.Interfaces;
 using BookingService.FacadeLib.Queries.Interfaces;
+using BookMyHome.ContractsLib.Requests;
 using BookMyHome.ContractsLib.Responses.BookingService;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,9 +12,11 @@ namespace BookingService.Api.Controllers
     public class BookingController(ICreateBookingHandler create, IBookingQueries queries) : ControllerBase
     {
         [HttpPost]
-        public StatusCodeResult MakeBooking()
+        public async Task<StatusCodeResult> MakeBooking(CreateBookingRequest request)
         {
-            throw new NotImplementedException();
+            await create.Handle(request.CreateRequestAsCommand());
+
+            return Ok();
         }
 
 
