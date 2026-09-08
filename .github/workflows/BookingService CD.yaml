@@ -9,7 +9,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: "BookRight_BookingService"
+  IMAGE_NAME: "BookingService"
   GITHUB_ACTOR: "hiha76740"
   DOCKER_IMAGE_CONTEXT: BookMyHome/src/BookingService
 
@@ -39,5 +39,5 @@ jobs:
         with: 
           context: ${{ env.DOCKER_IMAGE_CONTEXT }}
           push: true
-          tags: ${{ env.REGISTRY }}/${{ env.GITHUB.ACTOR }}/${{ env.IMAGE_NAME }}:latest
+          tags: ${{ env.REGISTRY }}/${{ env.GITHUB_ACTOR }}/${{ env.IMAGE_NAME }}:latest
     
