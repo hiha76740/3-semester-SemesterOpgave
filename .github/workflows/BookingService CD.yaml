@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - "BookMyHome/src/BookingService/**"
+      - "BookMyHome/src/Shared/**"
 
 env:
   REGISTRY: ghcr.io
