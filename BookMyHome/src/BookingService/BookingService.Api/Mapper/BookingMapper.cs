@@ -21,7 +21,6 @@ namespace BookingService.Api.Mapper
             return output;
         }
 
-
         public static CreateBookingCommand CreateRequestAsCommand(this CreateBookingRequest request)
         {
             var output = new CreateBookingCommand(
