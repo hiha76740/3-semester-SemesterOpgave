@@ -9,7 +9,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: "bookingservice"
+  IMAGE_NAME: "bookmyhome-bookingservice"
   GITHUB_ACTOR: "hiha76740"
   DOCKER_IMAGE_CONTEXT: BookMyHome
 
