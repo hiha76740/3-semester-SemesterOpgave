@@ -10,7 +10,7 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: "BookRight_BookingService"
-  GITHUB_ACTOR: "ivang6464"
+  GITHUB_ACTOR: "hiha76740"
   DOCKER_IMAGE_CONTEXT: BookMyHome/src/BookingService
 
 jobs:
