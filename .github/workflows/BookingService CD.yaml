@@ -11,7 +11,7 @@ env:
   REGISTRY: ghcr.io
   IMAGE_NAME: "bookingservice"
   GITHUB_ACTOR: "hiha76740"
-  DOCKER_IMAGE_CONTEXT: BookMyHome/src/BookingService
+  DOCKER_IMAGE_CONTEXT: BookMyHome
 
 jobs:
   Build-and-Deploy-BookingService:
@@ -38,6 +38,7 @@ jobs:
         uses: docker/build-push-action@v7
         with: 
           context: ${{ env.DOCKER_IMAGE_CONTEXT }}
+          file: BookMyHome/src/BookingService/BookingService.Api//Dockerfile
           push: true
           tags: ${{ env.REGISTRY }}/${{ env.GITHUB_ACTOR }}/${{ env.IMAGE_NAME }}:latest
     
