@@ -1,3 +1,3 @@
 ﻿namespace BookMyHome.ContractsLib.Requests;
 
-public record CreateBookingRequest();
+public record CreateBookingRequest(Guid GuestId, Guid AccomodationId, DateOnly StartDate, DateOnly EndDate, decimal Price);
