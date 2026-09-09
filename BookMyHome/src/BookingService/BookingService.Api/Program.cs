@@ -11,11 +11,11 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
 
-//builder.Services.AddHandlerDI();
+builder.Services.AddHandlerDI();
 //builder.Services.AddDatabaseDI(builder.Configuration);
-//builder.Services.AddRepositoryDI();
-//builder.Services.AddQueriesDI();
-//builder.Services.AddServicesDI();
+builder.Services.AddRepositoryDI();
+builder.Services.AddQueriesDI();
+builder.Services.AddServicesDI();
 
 
 var app = builder.Build();
