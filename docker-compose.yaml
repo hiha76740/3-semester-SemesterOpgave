@@ -1,6 +1,6 @@
 services:
   BookMyHome-BookingService:
-    image: ghcr.io/hiha76740/bookingservice:latest
+    image: ghcr.io/hiha76740/bookmyhome-bookingservice:latest
     restart: unless-stopped
     ports:
         - 8080:8080
