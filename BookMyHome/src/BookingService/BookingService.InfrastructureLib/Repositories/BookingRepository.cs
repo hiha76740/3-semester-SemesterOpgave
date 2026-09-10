@@ -1,27 +1,33 @@
 ﻿using BookingService.ApplicationLib.Repositories;
 using BookingService.DomainLib.Entities;
+using BookingService.InfrastructureLib.Persistence;
+using Microsoft.EntityFrameworkCore;
 
 namespace BookingService.InfrastructureLib.Repositories;
 
-public class BookingRepository : IBookingRepository
+public class BookingRepository(BookingDbContext db) : IBookingRepository
 {
-    Task IBookingRepository.AddAsync(Booking booking)
+    async Task IBookingRepository.AddAsync(Booking booking)
     {
-        throw new NotImplementedException();
+        await db.Bookings.AddAsync(booking);
     }
 
-    Task<IEnumerable<Booking>> IBookingRepository.GetAllAsync()
+    async Task<IEnumerable<Booking>> IBookingRepository.GetAllAsync()
     {
-        throw new NotImplementedException();
+        var output = await db.Bookings.ToListAsync();
+
+        return output;
     }
 
-    Task<Booking> IBookingRepository.GetBookingByIdAsync(BookingId id)
+    async Task<Booking?> IBookingRepository.GetBookingByIdAsync(BookingId id)
     {
-        throw new NotImplementedException();
+        var output = await db.Bookings.FirstOrDefaultAsync(b => b.Id == id);
+
+        return output;
     }
 
-    Task IBookingRepository.SaveAsync()
+    async Task IBookingRepository.SaveAsync()
     {
-        throw new NotImplementedException();
+        await db.SaveChangesAsync();
     }
 }
