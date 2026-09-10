@@ -1,4 +1,5 @@
-﻿using BookingService.FacadeLib.Queries.DTOs;
+﻿using BookingService.DomainLib.Entities;
+using BookingService.FacadeLib.Queries.DTOs;
 using BookingService.FacadeLib.Queries.Interfaces;
 using BookingService.InfrastructureLib.Persistence;
 using Microsoft.EntityFrameworkCore;
@@ -24,9 +25,11 @@ public class BookingQueryHandlerIMPL(BookingDbContext db) : IBookingQueries
 
     async Task<BookingDTO?> IBookingQueries.GetBookingByIdAsync(Guid Id)
     {
+        var bookingId = new BookingId(Id);
+
         return await db.Bookings
             .AsNoTracking()
-            .Where(b => b.Id.Value == Id)
+            .Where(b => b.Id == bookingId)
             .Select(b => new BookingDTO(
                 b.Id.Value,
                 b.GuestId.Value,
