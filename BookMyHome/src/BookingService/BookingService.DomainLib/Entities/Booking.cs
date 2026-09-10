@@ -41,6 +41,7 @@ namespace BookingService.DomainLib.Entities
         {
             var overlapFound = existingBookings.Any(eb =>
             eb.Id != booking.Id &&
+            eb.AccomodationId == booking.AccomodationId &&
             eb.Status == BookingStatus.Booked &&
             booking.Period.StartDate < eb.Period.EndDate &&
             eb.Period.StartDate < booking.Period.EndDate
