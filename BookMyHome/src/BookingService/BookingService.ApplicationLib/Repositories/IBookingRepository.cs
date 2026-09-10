@@ -4,7 +4,7 @@ namespace BookingService.ApplicationLib.Repositories;
 
 public interface IBookingRepository
 {
-    Task<Booking> GetBookingByIdAsync(BookingId id);
+    Task<Booking?> GetBookingByIdAsync(BookingId id);
 
     Task<IEnumerable<Booking>> GetAllAsync();
 
