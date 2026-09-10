@@ -9,9 +9,6 @@ public static class DatabaseDI
 {
     public static IServiceCollection AddDatabaseDI(this IServiceCollection services, IConfiguration configuration)
     {
-        throw new NotImplementedException();
-
-        //TODO: change when implementing database
         var conn = configuration.GetConnectionString("BookingDB");
         services.AddDbContext<BookingDbContext>(options =>
         options.UseSqlServer(conn));
