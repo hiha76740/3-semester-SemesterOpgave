@@ -12,7 +12,7 @@ builder.Services.AddOpenApi();
 
 
 builder.Services.AddHandlerDI();
-//builder.Services.AddDatabaseDI(builder.Configuration);
+builder.Services.AddDatabaseDI(builder.Configuration);
 builder.Services.AddRepositoryDI();
 builder.Services.AddQueriesDI();
 builder.Services.AddServicesDI();
