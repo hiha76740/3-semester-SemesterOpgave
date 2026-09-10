@@ -5,8 +5,9 @@ namespace BookingService.InfrastructureLib.Services;
 
 public class GuestService : IGuestService
 {
+    //TODO: change when we learn about calling other services
     Task<bool> IGuestService.GuestExistAsync(GuestId id)
     {
-        throw new NotImplementedException();
+        return Task.FromResult(true);
     }
 }
