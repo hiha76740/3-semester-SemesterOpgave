@@ -21,9 +21,12 @@ namespace BookingService.Api.Controllers
 
 
         [HttpGet]
-        public async Task<IReadOnlyList<BookingResponse>> GetAll()
+        public async Task<ActionResult<IReadOnlyList<BookingResponse>>> GetAll()
         {
             var list = await queries.GetAllAsync();
+
+            if (list.Count == 0)
+                return NotFound("No bookings was found");
 
             var response = new List<BookingResponse>();
 
@@ -32,19 +35,18 @@ namespace BookingService.Api.Controllers
                 response.Add(item.AsResponse());
             }
 
-            return response;
+            return Ok(response);
         }
 
         [HttpGet("{id:guid}")]
-        public async Task<BookingResponse> GetById(Guid id)
+        public async Task<ActionResult<BookingResponse>> GetById(Guid id)
         {
             var dto = await queries.GetBookingByIdAsync(id);
 
-            if (dto != null)
-                return dto.AsResponse();
+            if (dto == null)
+                return NotFound("No booking was found");
 
-            else
-                throw new NotImplementedException();
+            return Ok(dto.AsResponse());
         }
     }
 
