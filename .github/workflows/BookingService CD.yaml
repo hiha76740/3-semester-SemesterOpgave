@@ -2,9 +2,10 @@ name: BookingService CD
 
 on:
   workflow_run:
-    - "BookingService CI"
-  types:
-    - completed
+    workflows:
+      - "BookingService CI"
+    types:
+      - completed
 
 env:
   REGISTRY: ghcr.io
@@ -14,7 +15,9 @@ env:
 
 jobs:
   Build-and-Deploy-BookingService:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: >
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.head_branch == 'main'
 
     name: Build and Deploy BookingService
     runs-on: ubuntu-latest
