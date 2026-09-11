@@ -1,23 +1,24 @@
 name: Accomodation CI
 
 on:
-	workflow_dispatch:
-	push:
-		branches:
-			- main
-		paths:
-			- "BookMyHome/src/AccomodationService/**
-			- "BookMyHome/src/Shared/**
-	permissions:
-		contents: read
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - "BookMyHome/src/AccomodationService/**
+      - "BookMyHome/src/Shared/**
+      
+permissions:
+  contents: read
 	
-	env:
-		DOTNET_VERSION: "10.0.x"
-		SOLUTION_PATH: "BookMyHome/BookMyHome.slnx"
-		DOMAIN_PROJECT_PATH: "BookMyHome/tests/AccomodationService/AccomodationService.DomainLib.Tests/AccomodationService.DomainLib.Tests.csproj"
-		APPLICATION_PROJECT_PATH: "BookMyHome/tests/AccomodationService/AccomodationService.ApplicationLib.Tests/AccomodationService.ApplicationLib.Tests.csproj"
+env:
+  DOTNET_VERSION: "10.0.x"
+  SOLUTION_PATH: "BookMyHome/BookMyHome.slnx"
+  DOMAIN_PROJECT_PATH: "BookMyHome/tests/AccomodationService/AccomodationService.DomainLib.Tests/AccomodationService.DomainLib.Tests.csproj"
+  APPLICATION_PROJECT_PATH: "BookMyHome/tests/AccomodationService/AccomodationService.ApplicationLib.Tests/AccomodationService.ApplicationLib.Tests.csproj"
 
-	jobs:
+jobs:
   Build-And-Test-Domain:
     name: Build and Test Domain
     runs-on: ubuntu-latest
