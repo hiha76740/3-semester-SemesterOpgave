@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BookingService.Api.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     public class BookingsController(ICreateBookingHandler create, IBookingQueries queries) : ControllerBase
     {
         [HttpPost]
