@@ -6,8 +6,8 @@ on:
     branches:
       - main
     paths:
-      - "BookMyHome/src/AccomodationService/**
-      - "BookMyHome/src/Shared/**
+      - "BookMyHome/src/AccomodationService/**"
+      - "BookMyHome/src/Shared/**"
       
 permissions:
   contents: read
