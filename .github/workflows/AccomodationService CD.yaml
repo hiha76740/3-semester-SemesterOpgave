@@ -1,0 +1,50 @@
+name: AccomodationService CD
+
+on:
+  workflow_run:
+    workflows:
+      - "AccomodationService CI"
+    types:
+      - completed
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: "bookmyhome-accomodationService"
+  GITHUB_ACTOR: "hiha76740"
+  DOCKER_IMAGE_CONTEXT: BookMyHome
+
+jobs:
+  Build-and-Deploy-AccomodationService:
+    if: >
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.head_branch == 'main'
+
+    name: Build and Deploy AccomodationService
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Get Code
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+
+
+      - name: Log into registry ${{ env.REGISTRY }}
+        uses: docker/login-action@v4
+        with: 
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        id: build-and-push
+        uses: docker/build-push-action@v7
+        with: 
+          context: ${{ env.DOCKER_IMAGE_CONTEXT }}
+          file: BookMyHome/src/AccomodationService/AccomodationService.Api//Dockerfile
+          push: true
+          tags: ${{ env.REGISTRY }}/${{ env.GITHUB_ACTOR }}/${{ env.IMAGE_NAME }}:latest
+    
