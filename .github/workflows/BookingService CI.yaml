@@ -2,7 +2,7 @@ name: BookingService CI
 
 on:
   workflow_dispatch:
-  pull_request:
+  push:
     branches:
       - main
     paths:
