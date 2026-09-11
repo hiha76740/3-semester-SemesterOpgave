@@ -1,4 +1,4 @@
-name: Accomodation CI
+name: AccomodationService CI
 
 on:
   workflow_dispatch:
@@ -8,10 +8,10 @@ on:
     paths:
       - "BookMyHome/src/AccomodationService/**"
       - "BookMyHome/src/Shared/**"
-      
+
 permissions:
   contents: read
-	
+
 env:
   DOTNET_VERSION: "10.0.x"
   SOLUTION_PATH: "BookMyHome/BookMyHome.slnx"
