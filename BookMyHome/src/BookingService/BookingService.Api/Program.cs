@@ -14,6 +14,7 @@ builder.Services.AddRepositoryDI();
 builder.Services.AddQueriesDI();
 builder.Services.AddServicesDI();
 
+builder.Services.AddHealthChecks();
 
 var app = builder.Build();
 
@@ -28,6 +29,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.MapHealthChecks("health");
 
 app.UseAuthorization();
 
