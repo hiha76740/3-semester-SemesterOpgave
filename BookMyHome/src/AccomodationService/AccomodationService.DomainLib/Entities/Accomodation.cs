@@ -7,6 +7,7 @@ public class Accomodation
 {
     public AccomodationId Id { get; init; }
     public string Title { get; init; }
+    public AccomodationStatus Status { get; private set; }
 
     private readonly List<Listing> _listings = [];
     public IReadOnlyList<Listing> listings => _listings.AsReadOnly();
@@ -71,6 +72,7 @@ public class Accomodation
     {
         Id = new AccomodationId(Guid.NewGuid());
         Title = title;
+        Status = AccomodationStatus.Active;
     }
 
     // EF constructor
