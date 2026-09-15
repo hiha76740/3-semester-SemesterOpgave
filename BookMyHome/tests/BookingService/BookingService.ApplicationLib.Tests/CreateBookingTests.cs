@@ -52,7 +52,7 @@ public class CreateBookingTests
         await handler.Handle(command);
 
         // Assert
-        mockBookingRepo.Verify(r => r.AddAsync(It.IsAny<Booking>()),Times.Once);
+        mockBookingRepo.Verify(r => r.CreateAsync(It.IsAny<Booking>()),Times.Once);
         mockBookingRepo.Verify(r => r.SaveAsync(), Times.Once);
     }
 }

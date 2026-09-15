@@ -7,7 +7,7 @@ namespace BookingService.InfrastructureLib.Repositories;
 
 public class BookingRepository(BookingDbContext db) : IBookingRepository
 {
-    async Task IBookingRepository.AddAsync(Booking booking)
+    async Task IBookingRepository.CreateAsync(Booking booking)
     {
         await db.Bookings.AddAsync(booking);
     }
