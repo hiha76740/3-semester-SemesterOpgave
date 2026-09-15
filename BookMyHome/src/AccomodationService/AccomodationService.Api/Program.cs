@@ -1,12 +1,16 @@
+using AccomodationService.ApplicationLib.Extensions;
+using AccomodationService.InfrastructureLib.Extensions;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+builder.Services.AddHandlerDI();
+builder.Services.AddDatabaseDI(builder.Configuration);
+builder.Services.AddRepositoryDI();
+builder.Services.AddQueriesDI();
 
 var app = builder.Build();
 
@@ -14,7 +18,10 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
-    app.MapScalarApiReference();
+    app.MapScalarApiReference(options =>
+    {
+        options.Title = "Accomodation API";
+    });
 }
 
 app.UseHttpsRedirection();
