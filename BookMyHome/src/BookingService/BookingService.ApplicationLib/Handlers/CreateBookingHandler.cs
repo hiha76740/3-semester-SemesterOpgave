@@ -33,7 +33,7 @@ public class CreateBookingHandler(IGuestService guestService, IAccomodationServi
 
         var booking = Booking.Create(guestId, accomodationId, command.StartDate, command.EndDate, command.Price, existingBookings);
 
-        await bookingRepo.AddAsync(booking);
+        await bookingRepo.CreateAsync(booking);
 
         await bookingRepo.SaveAsync();
     }
