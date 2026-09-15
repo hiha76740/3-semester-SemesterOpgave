@@ -1,3 +1,3 @@
 ﻿namespace AccomodationService.FacadeLib.Commands.DTOs;
 
-public record CreateAccomodationCommand(string title);
+public record CreateAccomodationCommand(Guid hostId, string title);
