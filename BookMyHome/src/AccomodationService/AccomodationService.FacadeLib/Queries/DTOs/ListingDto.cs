@@ -1,0 +1,3 @@
+﻿namespace AccomodationService.FacadeLib.Queries.DTOs;
+
+public record ListingDto(Guid ListingId,Guid AccomodationId, string ListingName, decimal DailyPrice, string HouseRules, string AccomodationType);
