@@ -1,4 +1,5 @@
 ﻿using AccomodationService.DomainLib.Enums;
+using AccomodationService.DomainLib.ValueObjects;
 using Shared.BookMyHome.SharedKernelLib.Exceptions;
 
 namespace AccomodationService.DomainLib.Entities;
@@ -7,6 +8,7 @@ public class Accomodation
 {
     public AccomodationId Id { get; init; }
     public string Title { get; init; }
+    public HostId HostId { get; init; }
     public AccomodationStatus Status { get; private set; }
 
     private readonly List<Listing> _listings = [];
@@ -58,20 +60,21 @@ public class Accomodation
     }
 
 
-    public static Accomodation Create(string title)
+    public static Accomodation Create(HostId hostId, string title)
     {
         if (string.IsNullOrWhiteSpace(title))
             throw new DomainException("Title can not be empty");
 
-        var accomodation = new Accomodation(title);
+        var accomodation = new Accomodation(hostId, title);
 
         return accomodation;
     }
 
-    private Accomodation(string title)
+    private Accomodation(HostId hostId, string title)
     {
         Id = new AccomodationId(Guid.NewGuid());
         Title = title;
+        HostId = hostId;
         Status = AccomodationStatus.Active;
     }
 
