@@ -17,7 +17,7 @@ public class Accomodation
 
     public void CreateListing(string listingName, decimal dailyPrice, string houseRules, AccomodationType type)
     {
-        var listing = new Listing(listingName, dailyPrice, houseRules, type);
+        var listing = new Listing(this.Id, listingName, dailyPrice, houseRules, type);
 
         _listings.Add(listing);
     }
