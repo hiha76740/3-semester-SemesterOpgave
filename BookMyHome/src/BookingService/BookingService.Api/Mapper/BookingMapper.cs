@@ -1,21 +1,21 @@
 ﻿using BookingService.FacadeLib.Commands.DTOs;
 using BookingService.FacadeLib.Queries.DTOs;
-using BookMyHome.ContractsLib.Requests;
-using BookMyHome.ContractsLib.Responses.BookingService;
+using BookMyHome.ContractsLib.Requests.Bookings;
+using BookMyHome.ContractsLib.Responses.Bookings;
 
 namespace BookingService.Api.Mapper
 {
     public static class BookingMapper
     {
-        public static BookingResponse AsResponse(this BookingDTO DTO)
+        public static BookingResponse AsResponse(this BookingDTO Dto)
         {
             var output = new BookingResponse(
-                DTO.Id,
-                DTO.GuestId,
-                DTO.AccomodationId,
-                DTO.StartDate,
-                DTO.EndDate,
-                DTO.Price
+                Dto.Id,
+                Dto.GuestId,
+                Dto.AccomodationId,
+                Dto.StartDate,
+                Dto.EndDate,
+                Dto.Price
                 );
 
             return output;

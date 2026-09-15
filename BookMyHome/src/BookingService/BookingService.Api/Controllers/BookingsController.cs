@@ -1,8 +1,8 @@
 ﻿using BookingService.Api.Mapper;
 using BookingService.FacadeLib.Commands.Interfaces;
 using BookingService.FacadeLib.Queries.Interfaces;
-using BookMyHome.ContractsLib.Requests;
-using BookMyHome.ContractsLib.Responses.BookingService;
+using BookMyHome.ContractsLib.Requests.Bookings;
+using BookMyHome.ContractsLib.Responses.Bookings;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel;
 
