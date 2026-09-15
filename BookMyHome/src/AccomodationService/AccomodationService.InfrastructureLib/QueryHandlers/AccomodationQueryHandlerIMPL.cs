@@ -8,6 +8,8 @@ namespace AccomodationService.InfrastructureLib.QueryHandlers;
 
 public class AccomodationQueryHandlerIMPL(AccomodationDbContext db) : IAccomodationQueries
 {
+
+
     async Task<AccomodationDto?> IAccomodationQueries.GetAccomodationByIdAsync(Guid id)
     {
         var accomodationId = new AccomodationId(id);
@@ -34,4 +36,42 @@ public class AccomodationQueryHandlerIMPL(AccomodationDbContext db) : IAccomodat
             ))
             .ToListAsync();
     }
+
+    async Task<IReadOnlyList<ListingDto>> IAccomodationQueries.GetAllAccomdationListingsAsync(Guid id)
+    {
+        var accomodationId = new AccomodationId(id);
+
+        return await db.Listings
+            .AsNoTracking()
+            .Where(l => l.AccomodationId == accomodationId)
+            .Select(l => new ListingDto(
+                l.Id.Value,
+                l.AccomodationId.Value,
+                l.ListingName,
+                l.DailyPrice,
+                l.HouseRules,
+                l.Type.ToString()
+                ))
+            .ToListAsync();
+    }
+
+    async Task<ListingDto?> IAccomodationQueries.GetAccomdationListingByIdAsync(Guid accomodationId, Guid listingId)
+    {
+        var aId = new AccomodationId(accomodationId);
+        var lId = new ListingId(listingId);
+
+        return await db.Listings
+            .AsNoTracking()
+            .Where(l => l.AccomodationId == aId && l.Id == lId)
+            .Select(l => new ListingDto(
+                l.Id.Value,
+                l.AccomodationId.Value,
+                l.ListingName,
+                l.DailyPrice,
+                l.HouseRules,
+                l.Type.ToString()
+                ))
+            .FirstOrDefaultAsync();
+    }
+    
 }
