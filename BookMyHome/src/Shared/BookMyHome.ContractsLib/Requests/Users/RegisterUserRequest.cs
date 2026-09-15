@@ -9,5 +9,6 @@ public record RegisterUserRequest(
     string City,
     string PhoneNumber,
     string Email,
-    string Password
+    string Password,
+    string Role
     );
