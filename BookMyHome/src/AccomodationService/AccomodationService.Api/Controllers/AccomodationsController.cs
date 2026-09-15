@@ -87,5 +87,50 @@ namespace AccomodationService.Api.Controllers
                 return BadRequest(ex);
             }
         }
+
+        [HttpGet("{accomodationId:guid}/listings")]
+        public async Task<ActionResult<IReadOnlyList<ListingResponse>>> GetAllAccomdationListings(Guid accomodationId)
+        {
+            try
+            {
+                var list = await queries.GetAllAccomdationListingsAsync(accomodationId);
+
+                if (list.Count == 0) 
+                    return NotFound("No listings was found");
+
+                var response = new List<ListingResponse>();
+
+                foreach (var item in list)
+                {
+                    response.Add(item.AsReponse());
+                }
+
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(ex);
+            }
+        }
+
+        [HttpGet("{accomodationId:guid}/listings/{listingId:guid}")]
+        public async Task<ActionResult<ListingResponse>> GetAccomodationListingByIdAsync(Guid accomodationId, Guid listingId)
+        {
+            try
+            {
+                var dto = await queries.GetAccomdationListingByIdAsync(accomodationId, listingId);
+
+                if (dto == null) 
+                    return NotFound("The requested listing was not found");
+
+                return Ok(dto.AsReponse());
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(ex);
+            }
+        }
     }
 }
