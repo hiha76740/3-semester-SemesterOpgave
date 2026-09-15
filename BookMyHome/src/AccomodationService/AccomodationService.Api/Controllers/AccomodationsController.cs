@@ -35,7 +35,7 @@ namespace AccomodationService.Api.Controllers
         [HttpGet]
         [EndpointSummary("This endpoint will get all accomodations")]
         [EndpointDescription("Gets all accomodations or returns not found if no accomodations was found")]
-        [ProducesResponseType<IReadOnlyList<AccomodationResponse>>(StatusCodes.Status200OK, "application/json", Description = "Returns list of all bookings")]
+        [ProducesResponseType<IReadOnlyList<AccomodationResponse>>(StatusCodes.Status200OK, "application/json", Description = "Returns list of all accomodations")]
         [ProducesResponseType(StatusCodes.Status404NotFound, Description = "No accomodations was found")]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while receiving all accomodations")]
         public async Task<ActionResult<IReadOnlyList<AccomodationResponse>>> GetAll()
