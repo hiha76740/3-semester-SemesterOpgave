@@ -10,7 +10,7 @@ namespace UserService.Api.Controllers
         [HttpPost("register")]
         public Task<ActionResult> Register(RegisterUserRequest request)
         {
-            
+            throw new NotImplementedException();
         }
 
     }
