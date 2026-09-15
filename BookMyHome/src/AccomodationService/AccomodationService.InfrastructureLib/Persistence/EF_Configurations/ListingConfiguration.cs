@@ -15,6 +15,11 @@ internal class ListingConfiguration : IEntityTypeConfiguration<Listing>
             id => id.Value,
             value => new ListingId(value));
 
+        builder.Property(l => l.AccomodationId)
+            .HasConversion(
+            id => id.Value,
+            value => new AccomodationId(value));
+
         builder.Property(l => l.Type)
             .HasConversion<string>();
     }
