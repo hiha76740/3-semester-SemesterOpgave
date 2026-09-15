@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AccomodationService.InfrastructureLib.Migrations
 {
     [DbContext(typeof(AccomodationDbContext))]
-    [Migration("20260915084012_Initial")]
+    [Migration("20260915121753_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -51,7 +51,7 @@ namespace AccomodationService.InfrastructureLib.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("AccomodationId")
+                    b.Property<Guid>("AccomodationId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("DailyPrice")
@@ -73,14 +73,16 @@ namespace AccomodationService.InfrastructureLib.Migrations
 
                     b.HasIndex("AccomodationId");
 
-                    b.ToTable("Listing");
+                    b.ToTable("Listings");
                 });
 
             modelBuilder.Entity("AccomodationService.DomainLib.Entities.Listing", b =>
                 {
                     b.HasOne("AccomodationService.DomainLib.Entities.Accomodation", null)
                         .WithMany("listings")
-                        .HasForeignKey("AccomodationId");
+                        .HasForeignKey("AccomodationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("AccomodationService.DomainLib.Entities.Accomodation", b =>

@@ -26,29 +26,30 @@ namespace AccomodationService.InfrastructureLib.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Listing",
+                name: "Listings",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    AccomodationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ListingName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DailyPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     HouseRules = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AccomodationId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Listing", x => x.Id);
+                    table.PrimaryKey("PK_Listings", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Listing_Accomodations_AccomodationId",
+                        name: "FK_Listings_Accomodations_AccomodationId",
                         column: x => x.AccomodationId,
                         principalTable: "Accomodations",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Listing_AccomodationId",
-                table: "Listing",
+                name: "IX_Listings_AccomodationId",
+                table: "Listings",
                 column: "AccomodationId");
         }
 
@@ -56,7 +57,7 @@ namespace AccomodationService.InfrastructureLib.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Listing");
+                name: "Listings");
 
             migrationBuilder.DropTable(
                 name: "Accomodations");
