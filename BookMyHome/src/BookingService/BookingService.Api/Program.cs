@@ -7,7 +7,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
-
 builder.Services.AddHandlerDI();
 builder.Services.AddDatabaseDI(builder.Configuration);
 builder.Services.AddRepositoryDI();
