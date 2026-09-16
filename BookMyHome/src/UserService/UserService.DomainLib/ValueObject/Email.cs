@@ -8,9 +8,12 @@ public record Email
 
     public Email(string emailAddress)
     {
+        if (emailAddress.Contains("@") == false)
+            throw new DomainException("Email is not valid");
+
         if (string.IsNullOrWhiteSpace(emailAddress))
             throw new DomainException("Email address can not be empty");
 
-        EmailAddress = emailAddress;
+        EmailAddress = emailAddress.ToLower();
     }
 }
