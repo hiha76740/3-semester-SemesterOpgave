@@ -20,7 +20,18 @@ namespace UserService.DomainLib.Entities
 
 
 
-        public User Create(string firstName, string lastName, DateOnly birthdate, string street, string postalCode, string city, string phoneNumber, string email, string passwordHash, UserRoles role)
+        public static User Create(
+            string firstName,
+            string lastName,
+            DateOnly birthdate, 
+            string street,
+            string postalCode,
+            string city, 
+            string phoneNumber, 
+            string email, 
+            string passwordHash,
+            UserRoles role
+            )
         {
             if (string.IsNullOrWhiteSpace(firstName))
                 throw new DomainException("First name can not be empty");
