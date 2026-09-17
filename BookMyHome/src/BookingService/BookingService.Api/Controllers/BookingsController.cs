@@ -13,7 +13,7 @@ namespace BookingService.Api.Controllers
     [Route("api/v1/[controller]")]
     public class BookingsController(ICreateBookingHandler create, IBookingQueries queries) : ControllerBase
     {
-        [Authorize]
+        [Authorize(Roles = "Guest")]
         [HttpPost]
         [EndpointSummary("This endpoint will create a booking")]
         [EndpointDescription("Creates a booking when all required info is given")]
@@ -36,7 +36,7 @@ namespace BookingService.Api.Controllers
             }
         }
 
-        [Authorize]
+        [Authorize(Roles = "Guest")]
         [HttpGet]
         [EndpointSummary("This endpoint will get all bookings")]
         [EndpointDescription("Gets all bookings or returns not found if no bookings")]
@@ -68,7 +68,7 @@ namespace BookingService.Api.Controllers
             }
         }
 
-        [Authorize]
+        [Authorize(Roles = "Guest")]
         [HttpGet("{id:guid}")]
         [EndpointSummary("This endpoint will get a specific booking")]
         [EndpointDescription("Gets the booking for the entered id or returns not found if no booking")]
