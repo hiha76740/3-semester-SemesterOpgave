@@ -17,6 +17,11 @@ internal class PasswordHashService : IPasswordHashService
 
     bool IPasswordHashService.Verify(string password, string passwordHash)
     {
-        throw new NotImplementedException();
+        var result = _passwordHasher.VerifyHashedPassword(_passwordHasherUser, passwordHash, password);
+
+        if (result == PasswordVerificationResult.Failed)
+            return false;
+
+        return true;
     }
 }
