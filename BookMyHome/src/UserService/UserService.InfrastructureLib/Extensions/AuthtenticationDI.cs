@@ -10,6 +10,7 @@ public static class AuthtenticationDI
     {
         services.AddScoped<IPasswordHashService, PasswordHashService>();
         services.AddScoped<ITokenService, JwtTokenService>();
+        services.AddScoped<IRefreshTokenService, RefreshTokenService>();
 
         return services;
     }
