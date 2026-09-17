@@ -13,7 +13,7 @@ namespace AccomodationService.Api.Controllers
     [ApiController]
     public class AccomodationsController(ICreateAccomodationHandler create, IAccomodationQueries queries) : ControllerBase
     {
-        [Authorize]
+        [Authorize(Roles = "Host")]
         [HttpPost]
         [EndpointSummary("This endpoint will create a accomodation")]
         [EndpointDescription("Creates a accomodation when all required info is given")]
@@ -34,7 +34,7 @@ namespace AccomodationService.Api.Controllers
             }
         }
 
-        [Authorize]
+        [Authorize(Roles = "Host")]
         [HttpGet]
         [EndpointSummary("This endpoint will get all accomodations")]
         [EndpointDescription("Gets all accomodations or returns not found if no accomodations was found")]
@@ -66,7 +66,7 @@ namespace AccomodationService.Api.Controllers
             }
         }
 
-        [Authorize]
+        [Authorize(Roles = "Host")]
         [HttpGet("{id:guid}")]
         [EndpointSummary("This endpoint will get a specific accomodation")]
         [EndpointDescription("Gets the accomodation for the entered id or returns not found if no accomodation was found")]
