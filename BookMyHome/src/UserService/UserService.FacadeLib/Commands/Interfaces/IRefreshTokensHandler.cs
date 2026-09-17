@@ -4,5 +4,5 @@ namespace UserService.FacadeLib.Commands.Interfaces;
 
 public interface IRefreshTokensHandler
 {
-    Task<TokenDto> HandleAsync(RefreshTokenCommand command);
+    Task<TokenDto?> HandleAsync(RefreshTokenCommand command);
 }
