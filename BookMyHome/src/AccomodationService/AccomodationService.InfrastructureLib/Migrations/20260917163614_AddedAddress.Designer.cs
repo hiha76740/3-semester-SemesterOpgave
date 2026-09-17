@@ -5,6 +5,7 @@ using AccomodationService.InfrastructureLib.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -12,9 +13,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AccomodationService.InfrastructureLib.Migrations
 {
     [DbContext(typeof(AccomodationDbContext))]
-    partial class AccomodationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260917163614_AddedAddress")]
+    partial class AddedAddress
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

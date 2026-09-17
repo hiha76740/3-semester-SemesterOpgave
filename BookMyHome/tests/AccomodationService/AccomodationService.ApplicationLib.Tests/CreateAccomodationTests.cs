@@ -16,12 +16,18 @@ public class CreateAccomodationTests
         // Arrange
         var hostId = new HostId(Guid.NewGuid());
         var title = "My new house";
+        var street = "Test street 1";
+        var postalCode = "12345";
+        var city = "Test city";
 
         var mockAccomodationRepo = new Mock<IAccomodationRepository>();
 
         var command = new CreateAccomodationCommand(
             hostId.Value,
-            title
+            title,
+            street,
+            postalCode,
+            city
             );
 
         var handler = new CreateAccomodationHandler(mockAccomodationRepo.Object) as ICreateAccomodationHandler;

@@ -23,7 +23,10 @@ namespace AccomodationService.Api.Mapper
         {
             var output = new CreateAccomodationCommand(
                 request.HostId,
-                request.Title
+                request.Title,
+                request.Street,
+                request.PostalCode,
+                request.City
                 );
 
             return output;

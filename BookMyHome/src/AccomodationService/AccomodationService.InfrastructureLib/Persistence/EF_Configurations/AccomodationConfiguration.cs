@@ -23,5 +23,9 @@ internal class AccomodationConfiguration : IEntityTypeConfiguration<Accomodation
 
         builder.Property(a => a.Status)
             .HasConversion<string>();
+
+        builder.ComplexProperty(
+            a => a.Address,
+            ad => ad.ToJson());
     }
 }

@@ -12,7 +12,13 @@ public class CreateAccomodationHandler(IAccomodationRepository accomodationRepo)
     {
         var hostId = new HostId(command.hostId);
 
-        var accomodation = Accomodation.Create(hostId, command.title);
+        var accomodation = Accomodation.Create(
+            hostId,
+            command.title,
+            command.Street,
+            command.PostalCode,
+            command.City
+            );
 
         await accomodationRepo.CreateAsync(accomodation);
 
