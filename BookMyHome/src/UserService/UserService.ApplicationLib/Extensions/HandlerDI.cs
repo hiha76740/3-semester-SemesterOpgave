@@ -10,6 +10,7 @@ public static class HandlerDI
     {
         services.AddScoped<IRegisterUserHandler, RegisterUserHandler>();
         services.AddScoped<ILoginHandler, LoginHandler>();
+        services.AddScoped<IRefreshTokensHandler, RefreshTokenHandler>();
 
         return services;
     }
