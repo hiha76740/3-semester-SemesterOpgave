@@ -3,6 +3,7 @@ using AccomodationService.FacadeLib.Commands.Interfaces;
 using AccomodationService.FacadeLib.Queries.Interfaces;
 using BookMyHome.ContractsLib.Requests.Accomodations;
 using BookMyHome.ContractsLib.Responses.Accomodations;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel;
 
@@ -12,6 +13,7 @@ namespace AccomodationService.Api.Controllers
     [ApiController]
     public class AccomodationsController(ICreateAccomodationHandler create, IAccomodationQueries queries) : ControllerBase
     {
+        [Authorize]
         [HttpPost]
         [EndpointSummary("This endpoint will create a accomodation")]
         [EndpointDescription("Creates a accomodation when all required info is given")]
@@ -32,6 +34,7 @@ namespace AccomodationService.Api.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet]
         [EndpointSummary("This endpoint will get all accomodations")]
         [EndpointDescription("Gets all accomodations or returns not found if no accomodations was found")]
@@ -63,6 +66,7 @@ namespace AccomodationService.Api.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet("{id:guid}")]
         [EndpointSummary("This endpoint will get a specific accomodation")]
         [EndpointDescription("Gets the accomodation for the entered id or returns not found if no accomodation was found")]
@@ -88,6 +92,7 @@ namespace AccomodationService.Api.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet("{accomodationId:guid}/listings")]
         public async Task<ActionResult<IReadOnlyList<ListingResponse>>> GetAllAccomdationListings(Guid accomodationId)
         {
@@ -114,6 +119,7 @@ namespace AccomodationService.Api.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet("{accomodationId:guid}/listings/{listingId:guid}")]
         public async Task<ActionResult<ListingResponse>> GetAccomodationListingByIdAsync(Guid accomodationId, Guid listingId)
         {
