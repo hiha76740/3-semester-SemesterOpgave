@@ -2,6 +2,6 @@
 
 public enum UserRoles
 {
-    Guest,
-    Host
+    Guest = 1,
+    Host = 2
 }
