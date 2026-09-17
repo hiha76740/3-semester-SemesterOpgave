@@ -18,17 +18,21 @@ namespace UserService.DomainLib.Entities
         public string Username { get; init; } = string.Empty;
         public string PasswordHash { get; private set; } = string.Empty;
 
+        public string? RefreshToken { get; private set; } = string.Empty;
+        public DateTime? RefreshTokenExpiryTime { get; private set; }
+
+
 
 
         public static User Create(
             string firstName,
             string lastName,
-            DateOnly birthdate, 
+            DateOnly birthdate,
             string street,
             string postalCode,
-            string city, 
-            string phoneNumber, 
-            string email, 
+            string city,
+            string phoneNumber,
+            string email,
             string passwordHash,
             UserRoles role
             )
@@ -53,6 +57,15 @@ namespace UserService.DomainLib.Entities
 
             return user;
 
+        }
+
+        public void SetRefreshToken(string refreshToken)
+        {
+            if (string.IsNullOrWhiteSpace(refreshToken))
+                throw new DomainException("refresh token could not be set, no value");
+
+            RefreshToken = refreshToken;
+            RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
         }
 
         public void ChangeFirstName(string newFirstName)
