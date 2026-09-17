@@ -1,24 +1,26 @@
-﻿using Shared.BookMyHome.SharedKernelLib.Exceptions;
+﻿using UserService.ApplicationLib.Authentication;
 using UserService.ApplicationLib.Repositories;
 using UserService.FacadeLib.Commands.DTOs;
 using UserService.FacadeLib.Commands.Interfaces;
 
 namespace UserService.ApplicationLib.Handlers
 {
-    internal class LoginHandler(IUserRepository userRepo) : ILoginHandler
+    public class LoginHandler(IUserRepository userRepo, IPasswordHashService passwordHashService, ITokenService tokenService) : ILoginHandler
     {
-        async Task ILoginHandler.HandleAsync(LoginCommand command)
+        async Task<string?> ILoginHandler.HandleAsync(LoginCommand command)
         {
             var user = await userRepo.GetUserByUsernameAsync(command.Username);
 
             if (user == null)
-                throw new NotFoundException("User or password was incorrect");
+                return null;
 
-            
+            if (passwordHashService.Verify(command.password, user.PasswordHash) == false)
+                return null;
 
-            
 
+            string token = tokenService.CreateToken(user);
 
+            return token;
         }
     }
 }
