@@ -12,6 +12,8 @@ builder.Services.AddHandlerDI();
 builder.Services.AddAuthenTicationDI();
 builder.Services.AddRepositoryDI();
 
+builder.Services.AddHealthChecks();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -22,6 +24,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.MapHealthChecks("health");
 
 app.UseAuthorization();
 
