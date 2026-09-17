@@ -92,7 +92,7 @@ namespace AccomodationService.Api.Controllers
             }
         }
 
-        [Authorize]
+        [Authorize(Roles = "Host, Guest")]
         [HttpGet("{accomodationId:guid}/listings")]
         public async Task<ActionResult<IReadOnlyList<ListingResponse>>> GetAllAccomdationListings(Guid accomodationId)
         {
@@ -119,7 +119,7 @@ namespace AccomodationService.Api.Controllers
             }
         }
 
-        [Authorize]
+        [Authorize(Roles = "Host, Guest")]
         [HttpGet("{accomodationId:guid}/listings/{listingId:guid}")]
         public async Task<ActionResult<ListingResponse>> GetAccomodationListingByIdAsync(Guid accomodationId, Guid listingId)
         {
