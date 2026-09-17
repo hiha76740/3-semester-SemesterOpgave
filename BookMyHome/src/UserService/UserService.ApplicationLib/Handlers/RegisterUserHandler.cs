@@ -14,7 +14,7 @@ public class RegisterUserHandler(
 {
     async Task IRegisterUserHandler.Handle(RegisterUserCommand command)
     {
-        var usernameExsist =  await userRepo.UsernameExsistsAsync(command.Email);
+        var usernameExsist =  await userRepo.UsernameExsistsAsync(command.Email);   
 
         if (usernameExsist == true)
             throw new ArgumentException("User already exsist");
