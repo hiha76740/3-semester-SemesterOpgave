@@ -4,5 +4,5 @@ namespace UserService.FacadeLib.Commands.Interfaces;
 
 public interface ILoginHandler
 {
-    Task HandleAsync(LoginCommand command);
+    Task<string?> HandleAsync(LoginCommand command);
 }
