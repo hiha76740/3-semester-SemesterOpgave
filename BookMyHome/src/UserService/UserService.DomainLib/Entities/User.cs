@@ -6,16 +6,16 @@ namespace UserService.DomainLib.Entities
 {
     public class User
     {
-        public UserId Id { get; init; }
+        public UserId Id { get; init; } = null!;
         public string FirstName { get; private set; } = string.Empty;
         public string LastName { get; private set; } = string.Empty;
         public DateOnly Birthdate { get; init; }
-        public Address Address { get; private set; }
-        public PhoneNumber PhoneNumber { get; private set; }
-        public Email Email { get; private set; }
+        public Address Address { get; private set; } = null!;
+        public PhoneNumber PhoneNumber { get; private set; } = null!;
+        public Email Email { get; private set; } = null!;
         public UserRoles Role { get; private set; }
 
-        public string Username { get; init; }
+        public string Username { get; init; } = string.Empty;
         public string PasswordHash { get; private set; } = string.Empty;
 
 
@@ -39,7 +39,7 @@ namespace UserService.DomainLib.Entities
             if (string.IsNullOrWhiteSpace(lastName))
                 throw new DomainException("Last name can not be empty");
 
-            if (birthdate <= DateOnly.FromDateTime(DateTime.Today))
+            if (birthdate >= DateOnly.FromDateTime(DateTime.Today))
                 throw new DomainException("Birth date has to be in the past");
 
             if (string.IsNullOrWhiteSpace(passwordHash))
