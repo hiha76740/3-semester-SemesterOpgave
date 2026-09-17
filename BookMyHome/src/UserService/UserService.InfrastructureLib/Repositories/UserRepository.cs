@@ -7,6 +7,11 @@ namespace UserService.InfrastructureLib.Repositories;
 
 public class UserRepository(UserDbContext db) : IUserRepository
 {
+    async Task<User?> IUserRepository.GetUserById(UserId id)
+    {
+        return await db.Users.FindAsync(id);
+    }
+
     Task<User?> IUserRepository.GetUserByUsernameAsync(string username)
     {
         return db.Users.FirstOrDefaultAsync(u => u.Username == username);
