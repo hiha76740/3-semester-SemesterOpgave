@@ -49,6 +49,24 @@ services:
       retries: 3
       start_period: 60s
 
+  BookMyHome-UserService:
+    depends_on:
+      - mssql
+    image: ghcr.io/hiha76740/bookmyhome-userservice:latest
+    container_name: bookmyhome-userservice
+    restart: unless-stopped
+    ports:
+        - 8082:8080
+
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8082/health"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 60s
+
   watchtower:
     image: nickfedor/watchtower
     container_name: bookmyhome-watchtower
