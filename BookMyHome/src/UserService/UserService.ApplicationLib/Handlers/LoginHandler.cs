@@ -5,9 +5,9 @@ using UserService.FacadeLib.Commands.Interfaces;
 
 namespace UserService.ApplicationLib.Handlers
 {
-    public class LoginHandler(IUserRepository userRepo, IPasswordHashService passwordHashService, ITokenService tokenService) : ILoginHandler
+    public class LoginHandler(IUserRepository userRepo, IPasswordHashService passwordHashService, ITokenService tokenService, IRefreshTokenService refreshTokenService) : ILoginHandler
     {
-        async Task<string?> ILoginHandler.HandleAsync(LoginCommand command)
+        async Task<TokenDto?> ILoginHandler.HandleAsync(LoginCommand command)
         {
             var user = await userRepo.GetUserByUsernameAsync(command.Username);
 
@@ -19,8 +19,16 @@ namespace UserService.ApplicationLib.Handlers
 
 
             string token = tokenService.CreateToken(user);
+            
+            string refreshToken = refreshTokenService.GenerateRefreshToken();
 
-            return token;
+            user.SetRefreshToken(refreshToken);
+
+            await userRepo.SaveAsync();
+
+            var dto = new TokenDto(token, refreshToken);
+
+            return dto;
         }
     }
 }
