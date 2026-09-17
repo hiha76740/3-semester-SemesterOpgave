@@ -1,12 +1,11 @@
 ﻿using BookMyHome.ContractsLib.Requests.Users;
-using Microsoft.AspNetCore.Identity.Data;
 using UserService.FacadeLib.Commands.DTOs;
 
 namespace UserService.Api.Mapper;
 
 public static class UserMapper
 {
-    public static RegisterUserCommand AsCommand(this RegisterUserRequest request)
+    public static RegisterUserCommand AsRegisterCommand(this RegisterUserRequest request)
     {
         var output = new RegisterUserCommand(
             request.FirstName,
@@ -19,6 +18,16 @@ public static class UserMapper
             request.Email,
             request.Password,
             request.Role
+            );
+
+        return output;
+    }
+
+    public static LoginCommand AsLoginCommand(this LoginRequest request)
+    {
+        var output = new LoginCommand(
+            request.Username,
+            request.Password
             );
 
         return output;
