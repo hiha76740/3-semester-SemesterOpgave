@@ -6,9 +6,9 @@ namespace AccomodationService.DomainLib.Entities;
 
 public class Accomodation
 {
-    public AccomodationId Id { get; init; }
-    public string Title { get; init; }
-    public HostId HostId { get; init; }
+    public AccomodationId Id { get; init; } = null!;
+    public string Title { get; init; } = null!;
+    public HostId HostId { get; init; } = null!;
     public AccomodationStatus Status { get; private set; }
 
     private readonly List<Listing> _listings = [];

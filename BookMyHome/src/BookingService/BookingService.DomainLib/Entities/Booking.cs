@@ -6,13 +6,13 @@ namespace BookingService.DomainLib.Entities
 {
     public class Booking
     {
-        public BookingId Id { get; init; }
-        public BookingPeriod Period { get; init; }
+        public BookingId Id { get; init; } = null!;
+        public BookingPeriod Period { get; init; } = null!;
         public BookingStatus Status { get; private set; }
         public decimal Price { get; init; }
 
-        public GuestId GuestId { get; init; }
-        public AccomodationId AccomodationId { get; init; }
+        public GuestId GuestId { get; init; } = null!;
+        public AccomodationId AccomodationId { get; init; } = null!;
 
         public static Booking Create(GuestId guestId, AccomodationId accomodationId, DateOnly startDate, DateOnly endDate, decimal price, IEnumerable<Booking> existingBookings)
         {

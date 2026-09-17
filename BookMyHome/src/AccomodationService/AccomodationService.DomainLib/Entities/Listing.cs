@@ -5,15 +5,15 @@ namespace AccomodationService.DomainLib.Entities;
 
 public class Listing
 {
-    public ListingId Id { get; init; }
+    public ListingId Id { get; init; } = null!;
 
-    public AccomodationId AccomodationId { get; init; }
+    public AccomodationId AccomodationId { get; init; } = null!;
 
-    public string ListingName { get; init; }
+    public string ListingName { get; init; } = string.Empty;
 
     public decimal DailyPrice { get; private set; }
 
-    public string HouseRules { get; private set; }
+    public string HouseRules { get; private set; } = string.Empty;
 
     public AccomodationType Type { get; init; }
 
