@@ -3,6 +3,7 @@ using BookingService.FacadeLib.Commands.Interfaces;
 using BookingService.FacadeLib.Queries.Interfaces;
 using BookMyHome.ContractsLib.Requests.Bookings;
 using BookMyHome.ContractsLib.Responses.Bookings;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel;
 
@@ -12,6 +13,7 @@ namespace BookingService.Api.Controllers
     [Route("api/v1/[controller]")]
     public class BookingsController(ICreateBookingHandler create, IBookingQueries queries) : ControllerBase
     {
+        [Authorize]
         [HttpPost]
         [EndpointSummary("This endpoint will create a booking")]
         [EndpointDescription("Creates a booking when all required info is given")]
@@ -34,7 +36,7 @@ namespace BookingService.Api.Controllers
             }
         }
 
-
+        [Authorize]
         [HttpGet]
         [EndpointSummary("This endpoint will get all bookings")]
         [EndpointDescription("Gets all bookings or returns not found if no bookings")]
@@ -66,6 +68,7 @@ namespace BookingService.Api.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet("{id:guid}")]
         [EndpointSummary("This endpoint will get a specific booking")]
         [EndpointDescription("Gets the booking for the entered id or returns not found if no booking")]
