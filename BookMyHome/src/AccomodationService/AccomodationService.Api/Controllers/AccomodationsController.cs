@@ -107,7 +107,13 @@ namespace AccomodationService.Api.Controllers
 
         [Authorize(Roles = "Host, Guest")]
         [HttpGet("{accomodationId:guid}/listings")]
-        public async Task<ActionResult<IReadOnlyList<ListingResponse>>> GetAllAccomdationListings(Guid accomodationId)
+        [EndpointSummary("This endpoint will get a all listings for a specific accomodation")]
+        [EndpointDescription("Gets all listings of a accomodation or returns not found if no listings or accomodation was found")]
+        [ProducesResponseType<AccomodationResponse>(StatusCodes.Status200OK, "application/json", Description = "Returns all listings for the requested accomodation")]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Description = "Listings or accomodation not found")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while receiving listings for requsted accomodation")]
+        public async Task<ActionResult<IReadOnlyList<ListingResponse>>> GetAllAccomdationListings(
+            [Description("Id of the accomodation you want to find listings for")] Guid accomodationId)
         {
             try
             {
@@ -134,7 +140,14 @@ namespace AccomodationService.Api.Controllers
 
         [Authorize(Roles = "Host, Guest")]
         [HttpGet("{accomodationId:guid}/listings/{listingId:guid}")]
-        public async Task<ActionResult<ListingResponse>> GetAccomodationListingByIdAsync(Guid accomodationId, Guid listingId)
+        [EndpointSummary("This endpoint will get a specific listing for a specific accomodation")]
+        [EndpointDescription("Gets a specific listing of a accomodation or returns not found if no listing or accomodation was found")]
+        [ProducesResponseType<AccomodationResponse>(StatusCodes.Status200OK, "application/json", Description = "Returns specific listing for the requested accomodation")]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Description = "Listing or accomodation not found")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while receiving listing for requsted accomodation")]
+        public async Task<ActionResult<ListingResponse>> GetAccomodationListingByIdAsync(
+            [Description("Id of the accomodation you want to find listing for")] Guid accomodationId,
+            [Description("Id of the listing you want to find")] Guid listingId)
         {
             try
             {

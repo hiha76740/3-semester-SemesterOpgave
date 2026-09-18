@@ -1,5 +1,6 @@
 ﻿using BookMyHome.ContractsLib.Requests.Users;
 using BookMyHome.ContractsLib.Responses.Users;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UserService.Api.Mapper;
 using UserService.FacadeLib.Commands.Interfaces;
@@ -10,6 +11,11 @@ namespace UserService.Api.Controllers
     [ApiController]
     public class AuthController(IRegisterUserHandler register, ILoginHandler login, IRefreshTokensHandler refreshToken) : ControllerBase
     {
+
+        [EndpointSummary("This endpoint will register a user")]
+        [EndpointDescription("Register a user when all required info is given")]
+        [ProducesResponseType(StatusCodes.Status200OK, Description = "User was registered succesfully")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error doing registration of user")]
         [HttpPost("register")]
         async public Task<ActionResult> Register(RegisterUserRequest request)
         {
@@ -26,6 +32,10 @@ namespace UserService.Api.Controllers
             }
         }
 
+        [EndpointSummary("This endpoint will log in a user")]
+        [EndpointDescription("Logs in a user when username and password is correct")]
+        [ProducesResponseType(StatusCodes.Status200OK, Description = "User was logged in succesfully")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error doing log in")]
         [HttpPost("login")]
         public async Task<ActionResult<TokenResponse>> Login(LoginRequest request)
         {
@@ -45,6 +55,11 @@ namespace UserService.Api.Controllers
             }
         }
 
+        [Authorize]
+        [EndpointSummary("This endpoint will create a new refresh token")]
+        [EndpointDescription("Creates a new refresh token when all required info is given")]
+        [ProducesResponseType(StatusCodes.Status200OK, Description = "Refresh token was created succesfully")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error doing creation of refresh token")]
         [HttpPost("Refresh-token")]
         public async Task<ActionResult<TokenResponse>> Refresh(RefreshTokenRequest request)
         {
