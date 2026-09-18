@@ -170,6 +170,7 @@ namespace AccomodationService.Api.Controllers
             }
         }
 
+        [Authorize(Roles = "Host")]
         [HttpPost("listing")]
         public async Task<ActionResult> CreateListingAsync(CreateListingRequest request)
         {
