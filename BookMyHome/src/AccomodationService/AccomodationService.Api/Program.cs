@@ -42,6 +42,7 @@ if (app.Environment.IsDevelopment())
     app.MapScalarApiReference(options =>
     {
         options.Title = "Accomodation API";
+        options.HideModels = true;
     });
 }
 

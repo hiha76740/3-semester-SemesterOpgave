@@ -43,6 +43,7 @@ if (app.Environment.IsDevelopment())
     app.MapScalarApiReference(options =>
     {
         options.Title = "Booking API";
+        options.HideModels = true;
     });
 }
 
