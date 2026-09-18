@@ -19,8 +19,6 @@ public class AccomodationQueryHandlerIMPL(AccomodationDbContext db) : IAccomodat
             .AsNoTracking()
             .Where(a => a.Id == accomodationId)
             .Select(a => new AccomodationDto(
-                a.Id.Value,
-                a.HostId.Value,
                 a.Title
                 ))
             .FirstOrDefaultAsync();
@@ -31,8 +29,6 @@ public class AccomodationQueryHandlerIMPL(AccomodationDbContext db) : IAccomodat
         return await db.Accomodations
             .AsNoTracking()
             .Select(a => new AccomodationDto(
-            a.Id.Value,
-            a.HostId.Value,
             a.Title
             ))
             .ToListAsync();
@@ -83,8 +79,6 @@ public class AccomodationQueryHandlerIMPL(AccomodationDbContext db) : IAccomodat
             .AsNoTracking()
             .Where(a => a.HostId == hostId)
             .Select(a => new AccomodationDto(
-            a.Id.Value,
-            a.HostId.Value,
             a.Title
             ))
             .ToListAsync();

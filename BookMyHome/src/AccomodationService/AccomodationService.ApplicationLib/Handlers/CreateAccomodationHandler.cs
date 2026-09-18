@@ -10,11 +10,11 @@ public class CreateAccomodationHandler(IAccomodationRepository accomodationRepo)
 {
     async Task ICreateAccomodationHandler.Handle(CreateAccomodationCommand command)
     {
-        var hostId = new HostId(command.hostId);
+        var hostId = new HostId(command.HostId);
 
         var accomodation = Accomodation.Create(
             hostId,
-            command.title,
+            command.Title,
             command.Street,
             command.PostalCode,
             command.City
