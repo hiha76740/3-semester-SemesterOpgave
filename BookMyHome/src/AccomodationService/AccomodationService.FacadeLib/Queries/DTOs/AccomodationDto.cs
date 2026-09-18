@@ -1,3 +1,3 @@
 ﻿namespace AccomodationService.FacadeLib.Queries.DTOs;
 
-public record AccomodationDto(string Title);
+public record AccomodationDto(Guid AccomodationId, string Title);

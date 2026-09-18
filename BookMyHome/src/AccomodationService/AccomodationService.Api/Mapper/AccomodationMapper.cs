@@ -10,6 +10,7 @@ namespace AccomodationService.Api.Mapper
         public static AccomodationResponse AsResponse(this AccomodationDto Dto)
         {
             var output = new AccomodationResponse(
+                Dto.AccomodationId,
                 Dto.Title
                 );
 
