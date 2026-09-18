@@ -8,6 +8,8 @@ public interface IAccomodationQueries
 
     Task<IReadOnlyList<AccomodationDto>> GetAllAccomodationsAsync();
 
+    Task<IReadOnlyList<AccomodationDto>> GetAllAccomodationsCurrentUserAsync(Guid id);
+
     Task<IReadOnlyList<ListingDto>> GetAllAccomdationListingsAsync (Guid id);
 
     Task<ListingDto?> GetAccomdationListingByIdAsync(Guid accomodationId, Guid listingId);

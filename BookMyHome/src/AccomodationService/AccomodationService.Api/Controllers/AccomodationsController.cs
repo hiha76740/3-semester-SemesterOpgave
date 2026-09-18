@@ -6,6 +6,7 @@ using BookMyHome.ContractsLib.Responses.Accomodations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel;
+using System.Security.Claims;
 
 namespace AccomodationService.Api.Controllers
 {
@@ -23,7 +24,14 @@ namespace AccomodationService.Api.Controllers
         {
             try
             {
-                await create.Handle(request.CreateRequestAsCommand());
+                var id = GetCurrentUserId();
+
+                if (id == null || HttpContext.User.FindFirstValue(ClaimTypes.Role) != "Host")
+                    return BadRequest("Invalid request");
+
+                await create.Handle(
+                    request.CreateRequestAsCommand(id.Value)
+                    );
 
                 return Ok();
             }
@@ -36,8 +44,8 @@ namespace AccomodationService.Api.Controllers
 
         [Authorize(Roles = "Host")]
         [HttpGet]
-        [EndpointSummary("This endpoint will get all accomodations")]
-        [EndpointDescription("Gets all accomodations or returns not found if no accomodations was found")]
+        [EndpointSummary("This endpoint will get all accomodations for the current host")]
+        [EndpointDescription("Gets all accomodations for the current host or returns not found if no accomodations was found")]
         [ProducesResponseType<IReadOnlyList<AccomodationResponse>>(StatusCodes.Status200OK, "application/json", Description = "Returns list of all accomodations")]
         [ProducesResponseType(StatusCodes.Status404NotFound, Description = "No accomodations was found")]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while receiving all accomodations")]
@@ -45,7 +53,12 @@ namespace AccomodationService.Api.Controllers
         {
             try
             {
-                var list = await queries.GetAllAccomodationsAsync();
+                var id = GetCurrentUserId();
+
+                if (id == null || HttpContext.User.FindFirstValue(ClaimTypes.Role) != "Host")
+                    return BadRequest("Invalid request");
+
+                var list = await queries.GetAllAccomodationsCurrentUserAsync(id.Value);
 
                 if (list.Count == 0)
                     return NotFound("No accomodations found");
@@ -137,6 +150,18 @@ namespace AccomodationService.Api.Controllers
 
                 return BadRequest(ex);
             }
+        }
+
+        private Guid? GetCurrentUserId()
+        {
+            var stringUserId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var idIsValid = Guid.TryParse(stringUserId, out Guid id);
+
+            if (idIsValid == false)
+                return null;
+
+            return id;
         }
     }
 }

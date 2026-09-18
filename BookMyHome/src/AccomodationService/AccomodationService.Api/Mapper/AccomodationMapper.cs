@@ -10,8 +10,6 @@ namespace AccomodationService.Api.Mapper
         public static AccomodationResponse AsResponse(this AccomodationDto Dto)
         {
             var output = new AccomodationResponse(
-                Dto.Id,
-                Dto.HostId,
                 Dto.Title
                 );
 
@@ -19,10 +17,10 @@ namespace AccomodationService.Api.Mapper
         }
 
 
-        public static CreateAccomodationCommand CreateRequestAsCommand(this CreateAccomodationRequest request)
+        public static CreateAccomodationCommand CreateRequestAsCommand(this CreateAccomodationRequest request, Guid id)
         {
             var output = new CreateAccomodationCommand(
-                request.HostId,
+                id,
                 request.Title,
                 request.Street,
                 request.PostalCode,
