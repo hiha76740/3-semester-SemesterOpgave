@@ -11,6 +11,11 @@ internal class AccomodationRepository(AccomodationDbContext db) : IAccomodationR
         await db.Accomodations.AddAsync(accomodation);
     }
 
+    async Task<Accomodation?> IAccomodationRepository.GetAccomodationByIdAsync(AccomodationId id)
+    {
+        return await db.Accomodations.FindAsync(id);
+    }
+
     async Task IAccomodationRepository.SaveAsync()
     {
         await db.SaveChangesAsync();

@@ -6,6 +6,8 @@ namespace AccomodationService.ApplicationLib.Repositories
     {
         Task CreateAsync(Accomodation accomodation);
 
+        Task<Accomodation?> GetAccomodationByIdAsync(AccomodationId id);
+
         Task SaveAsync();
     }
 }

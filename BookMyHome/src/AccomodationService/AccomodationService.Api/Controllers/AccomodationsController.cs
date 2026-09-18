@@ -12,7 +12,12 @@ namespace AccomodationService.Api.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    public class AccomodationsController(ICreateAccomodationHandler create, IAccomodationQueries queries) : ControllerBase
+    public class AccomodationsController(
+        ICreateAccomodationHandler accomodationcreate,
+        IAccomodationQueries queries,
+        ICreateListingHandler listingCreate
+        
+        ) : ControllerBase
     {
         [Authorize(Roles = "Host")]
         [HttpPost]
@@ -29,7 +34,7 @@ namespace AccomodationService.Api.Controllers
                 if (id == null || HttpContext.User.FindFirstValue(ClaimTypes.Role) != "Host")
                     return BadRequest("Invalid request");
 
-                await create.Handle(
+                await accomodationcreate.Handle(
                     request.CreateRequestAsCommand(id.Value)
                     );
 
@@ -38,7 +43,7 @@ namespace AccomodationService.Api.Controllers
             catch (Exception ex)
             {
 
-                return BadRequest(ex);
+                return BadRequest(ex.Message);
             }
         }
 
@@ -75,7 +80,7 @@ namespace AccomodationService.Api.Controllers
             catch (Exception ex)
             {
 
-                return BadRequest(ex);
+                return BadRequest(ex.Message);
             }
         }
 
@@ -101,7 +106,7 @@ namespace AccomodationService.Api.Controllers
             catch (Exception ex)
             {
 
-                return BadRequest(ex);
+                return BadRequest(ex.Message);
             }
         }
 
@@ -134,7 +139,7 @@ namespace AccomodationService.Api.Controllers
             catch (Exception ex)
             {
 
-                return BadRequest(ex);
+                return BadRequest(ex.Message);
             }
         }
 
@@ -161,7 +166,28 @@ namespace AccomodationService.Api.Controllers
             catch (Exception ex)
             {
 
-                return BadRequest(ex);
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost("listing")]
+        public async Task<ActionResult> CreateListingAsync(CreateListingRequest request)
+        {
+            try
+            {
+                var userId = GetCurrentUserId();
+
+                if (userId == null)
+                    return BadRequest("Invalid request");
+
+                await listingCreate.HandleAsync(request.AsCreateListingCommand(userId.Value));
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(ex.Message);
             }
         }
 

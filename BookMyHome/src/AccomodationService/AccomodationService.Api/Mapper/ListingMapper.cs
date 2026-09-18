@@ -1,5 +1,8 @@
-﻿using AccomodationService.FacadeLib.Queries.DTOs;
+﻿using AccomodationService.FacadeLib.Commands.DTOs;
+using AccomodationService.FacadeLib.Queries.DTOs;
+using BookMyHome.ContractsLib.Requests.Accomodations;
 using BookMyHome.ContractsLib.Responses.Accomodations;
+using System.Runtime.CompilerServices;
 
 namespace AccomodationService.Api.Mapper;
 
@@ -14,6 +17,20 @@ public static class ListingMapper
             dto.DailyPrice,
             dto.HouseRules,
             dto.AccomodationType
+            );
+
+        return output;
+    }
+
+    public static CreateListingCommand AsCreateListingCommand(this CreateListingRequest request, Guid hostId)
+    {
+        var output = new CreateListingCommand(
+            hostId,
+            request.AccomodationId,
+            request.ListingName,
+            request.DailyPrice,
+            request.HouseRules,
+            request.AccomodationType
             );
 
         return output;
