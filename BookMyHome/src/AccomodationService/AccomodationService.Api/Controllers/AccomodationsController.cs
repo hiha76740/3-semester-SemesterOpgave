@@ -18,8 +18,10 @@ namespace AccomodationService.Api.Controllers
         ICreateAccomodationHandler accomodationcreate,
         IAccomodationQueries queries,
         ICreateListingHandler listingCreate,
-        IUpdateListingDailyPriceHandler updateListingDailyPrice
-        
+        IUpdateListingDailyPriceHandler updateListingDailyPrice,
+        IUpdateListingHouseRulesHandler updateListingHouseRules,
+        IDeleteListingByIdHandler deleteListingById
+
         ) : ControllerBase
     {
         [Authorize(Roles = "Host")]
@@ -127,7 +129,7 @@ namespace AccomodationService.Api.Controllers
             {
                 var list = await queries.GetAllAccomdationListingsAsync(accomodationId);
 
-                if (list.Count == 0) 
+                if (list.Count == 0)
                     return NotFound("No listings was found");
 
                 var response = new List<ListingResponse>();
@@ -161,7 +163,7 @@ namespace AccomodationService.Api.Controllers
             {
                 var dto = await queries.GetAccomdationListingByIdAsync(accomodationId, listingId);
 
-                if (dto == null) 
+                if (dto == null)
                     return NotFound("The requested listing was not found");
 
                 return Ok(dto.AsReponse());
@@ -208,7 +210,7 @@ namespace AccomodationService.Api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while updating daily price for the request listing")]
         public async Task<ActionResult> UpdateListingDailyPrice(
             [Description("Id of the accomodation the listing is assoicated to")] Guid accomodationId,
-            [Description("Id of the listing you want to update the daily price for")] Guid listingId, 
+            [Description("Id of the listing you want to update the daily price for")] Guid listingId,
             UpdateListingDailyPriceRequest request)
         {
             try
@@ -235,6 +237,79 @@ namespace AccomodationService.Api.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [Authorize(Roles = "Host")]
+        [HttpPut("{accomodationId:guid}/listings/{listingId:guid}/houserules")]
+        [EndpointSummary("This endpoint will update the house rules on a specific listing")]
+        [EndpointDescription("Updates a listing house rules of a specific accomodation")]
+        [ProducesResponseType(StatusCodes.Status200OK, Description = "Updating of listing house rules for the requested listing succesfully completed")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while updating house rules for the request listing")]
+        public async Task<ActionResult> UpdateListingHouseRules(
+            [Description("Id of the accomodation the listing is assoicated to")] Guid accomodationId,
+            [Description("Id of the listing you want to update the house rules for")] Guid listingId,
+            UpdateListingHouseRulesRequest request)
+        {
+            try
+            {
+                var id = GetCurrentUserId();
+
+                if (id == null || HttpContext.User.FindFirstValue(ClaimTypes.Role) != "Host")
+                    return BadRequest("Invalid request");
+
+                var command = new UpdateListingHouseRulesCommand(
+                    id.Value,
+                    accomodationId,
+                    listingId,
+                    request.HouseRules
+                    );
+
+                await updateListingHouseRules.HandleAsync(command);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [Authorize(Roles = "Host")]
+        [HttpDelete("{accomodationId:guid}/listings/{listingId:guid}")]
+        [EndpointSummary("This endpoint will delete a specific listing")]
+        [EndpointDescription("Deletes a specific listing of a specific accomodation")]
+        [ProducesResponseType(StatusCodes.Status200OK, Description = "Deletion of requested listing succesfully completed")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while deleting the request listing")]
+        public async Task<ActionResult> DeleteListingById(
+            [Description("Id of the accomodation the listing is assoicated to")]  Guid accomodationId,
+            [Description("Id of the listing you want to delete")] Guid listingId
+            )
+        {
+            try
+            {
+                var id = GetCurrentUserId();
+
+                if (id == null || HttpContext.User.FindFirstValue(ClaimTypes.Role) != "Host")
+                    return BadRequest("Invalid request");
+
+                var command = new DeleteListingByIdCommand(
+                    id.Value,
+                    accomodationId,
+                    listingId
+                    );
+
+                await deleteListingById.HandleAsync(command);
+
+                return Ok();
+
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(ex.Message);
+            }
+        }
+
 
         private Guid? GetCurrentUserId()
         {
