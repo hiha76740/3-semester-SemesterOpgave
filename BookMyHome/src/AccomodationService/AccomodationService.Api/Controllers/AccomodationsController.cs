@@ -1,4 +1,5 @@
 ﻿using AccomodationService.Api.Mapper;
+using AccomodationService.FacadeLib.Commands.DTOs;
 using AccomodationService.FacadeLib.Commands.Interfaces;
 using AccomodationService.FacadeLib.Queries.Interfaces;
 using BookMyHome.ContractsLib.Requests.Accomodations;
@@ -200,8 +201,8 @@ namespace AccomodationService.Api.Controllers
 
 
         [Authorize(Roles = "Host")]
-        [HttpPut]
-        public async Task<ActionResult> UpdateListingDailyPrice(UpdateListingDailyPriceRequest request)
+        [HttpPut("{accomodationId:guid}/listings/{listingId:guid}/price")]
+        public async Task<ActionResult> UpdateListingDailyPrice(Guid accomodationId, Guid listingId, UpdateListingDailyPriceRequest request)
         {
             try
             {
@@ -210,8 +211,14 @@ namespace AccomodationService.Api.Controllers
                 if (id == null || HttpContext.User.FindFirstValue(ClaimTypes.Role) != "Host")
                     return BadRequest("Invalid request");
 
+                var command = new UpdateListingDailyPriceCommand(
+                    id.Value,
+                    accomodationId,
+                    listingId,
+                    request.Price
+                    );
 
-                await updateListingDailyPrice.HandleAsync(request.AsUpdateListingDailyPriceCommand(id.Value));
+                await updateListingDailyPrice.HandleAsync(command);
 
                 return Ok();
             }
