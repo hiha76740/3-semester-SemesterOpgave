@@ -1,0 +1,4 @@
+﻿namespace AccomodationService.FacadeLib.Commands.DTOs;
+
+
+public record UpdateListingHouseRulesCommand(Guid HostId, Guid AccomodationId, Guid ListingId, string HouseRules);
