@@ -8,6 +8,8 @@ namespace AccomodationService.ApplicationLib.Repositories
 
         Task<Accomodation?> GetAccomodationByIdAsync(AccomodationId id);
 
+        Task<Accomodation?> GetAccomodationWithListingsAsync(AccomodationId id);
+
         Task SaveAsync();
     }
 }

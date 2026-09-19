@@ -2,7 +2,6 @@
 using AccomodationService.FacadeLib.Queries.DTOs;
 using BookMyHome.ContractsLib.Requests.Accomodations;
 using BookMyHome.ContractsLib.Responses.Accomodations;
-using System.Runtime.CompilerServices;
 
 namespace AccomodationService.Api.Mapper;
 
@@ -31,6 +30,18 @@ public static class ListingMapper
             request.DailyPrice,
             request.HouseRules,
             request.AccomodationType
+            );
+
+        return output;
+    }
+
+    public static UpdateListingDailyPriceCommand AsUpdateListingDailyPriceCommand(this UpdateListingDailyPriceRequest request, Guid hostId)
+    {
+        var output = new UpdateListingDailyPriceCommand(
+            hostId,
+            request.AccomodationId,
+            request.ListingId,
+            request.Price
             );
 
         return output;

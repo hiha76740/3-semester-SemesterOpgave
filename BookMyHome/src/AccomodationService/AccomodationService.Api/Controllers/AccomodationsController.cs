@@ -6,6 +6,7 @@ using BookMyHome.ContractsLib.Responses.Accomodations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel;
+using System.Formats.Asn1;
 using System.Security.Claims;
 
 namespace AccomodationService.Api.Controllers
@@ -15,7 +16,8 @@ namespace AccomodationService.Api.Controllers
     public class AccomodationsController(
         ICreateAccomodationHandler accomodationcreate,
         IAccomodationQueries queries,
-        ICreateListingHandler listingCreate
+        ICreateListingHandler listingCreate,
+        IUpdateListingDailyPriceHandler updateListingDailyPrice
         
         ) : ControllerBase
     {
@@ -114,7 +116,7 @@ namespace AccomodationService.Api.Controllers
         [HttpGet("{accomodationId:guid}/listings")]
         [EndpointSummary("This endpoint will get a all listings for a specific accomodation")]
         [EndpointDescription("Gets all listings of a accomodation or returns not found if no listings or accomodation was found")]
-        [ProducesResponseType<AccomodationResponse>(StatusCodes.Status200OK, "application/json", Description = "Returns all listings for the requested accomodation")]
+        [ProducesResponseType<IReadOnlyList<ListingResponse>>(StatusCodes.Status200OK, "application/json", Description = "Returns all listings for the requested accomodation")]
         [ProducesResponseType(StatusCodes.Status404NotFound, Description = "Listings or accomodation not found")]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while receiving listings for requsted accomodation")]
         public async Task<ActionResult<IReadOnlyList<ListingResponse>>> GetAllAccomdationListings(
@@ -147,7 +149,7 @@ namespace AccomodationService.Api.Controllers
         [HttpGet("{accomodationId:guid}/listings/{listingId:guid}")]
         [EndpointSummary("This endpoint will get a specific listing for a specific accomodation")]
         [EndpointDescription("Gets a specific listing of a accomodation or returns not found if no listing or accomodation was found")]
-        [ProducesResponseType<AccomodationResponse>(StatusCodes.Status200OK, "application/json", Description = "Returns specific listing for the requested accomodation")]
+        [ProducesResponseType<ListingResponse>(StatusCodes.Status200OK, "application/json", Description = "Returns specific listing for the requested accomodation")]
         [ProducesResponseType(StatusCodes.Status404NotFound, Description = "Listing or accomodation not found")]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while receiving listing for requsted accomodation")]
         public async Task<ActionResult<ListingResponse>> GetAccomodationListingByIdAsync(
@@ -172,6 +174,10 @@ namespace AccomodationService.Api.Controllers
 
         [Authorize(Roles = "Host")]
         [HttpPost("listing")]
+        [EndpointSummary("This endpoint will create a listing for a specific accomodation")]
+        [EndpointDescription("Creates a listing of a specific accomodation")]
+        [ProducesResponseType(StatusCodes.Status200OK, Description = "Creation of listing for the requested accomodation succesfully completed")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while creating listing for requsted accomodation")]
         public async Task<ActionResult> CreateListingAsync(CreateListingRequest request)
         {
             try
@@ -182,6 +188,30 @@ namespace AccomodationService.Api.Controllers
                     return BadRequest("Invalid request");
 
                 await listingCreate.HandleAsync(request.AsCreateListingCommand(userId.Value));
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+        [Authorize(Roles = "Host")]
+        [HttpPut]
+        public async Task<ActionResult> UpdateListingDailyPrice(UpdateListingDailyPriceRequest request)
+        {
+            try
+            {
+                var id = GetCurrentUserId();
+
+                if (id == null || HttpContext.User.FindFirstValue(ClaimTypes.Role) != "Host")
+                    return BadRequest("Invalid request");
+
+
+                await updateListingDailyPrice.HandleAsync(request.AsUpdateListingDailyPriceCommand(id.Value));
 
                 return Ok();
             }
