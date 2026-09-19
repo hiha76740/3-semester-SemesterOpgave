@@ -34,16 +34,4 @@ public static class ListingMapper
 
         return output;
     }
-
-    public static UpdateListingDailyPriceCommand AsUpdateListingDailyPriceCommand(this UpdateListingDailyPriceRequest request, Guid hostId)
-    {
-        var output = new UpdateListingDailyPriceCommand(
-            hostId,
-            request.AccomodationId,
-            request.ListingId,
-            request.Price
-            );
-
-        return output;
-    }
 }
