@@ -22,7 +22,7 @@ public class UpdateListingHouseRulesHandler(IAccomodationRepository repo) : IUpd
         if (accomodation.HostId != hostId)
             throw new UnauthorizedAccessException("Update aborted, Unauthorized Access");
 
-        accomodation.UpdateHouseRules(command.ListingId,command.HouseRules);
+        accomodation.UpdateListingHouseRules(command.ListingId,command.HouseRules);
 
         await repo.SaveAsync();
     }

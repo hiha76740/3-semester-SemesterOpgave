@@ -41,7 +41,7 @@ public class Accomodation
         listing.UpdateDailyPrice(newPrice);
     }
 
-    public void UpdateHouseRules(Guid id, string newHouseRules)
+    public void UpdateListingHouseRules(Guid id, string newHouseRules)
     {
         var listingId = new ListingId(id);
 
