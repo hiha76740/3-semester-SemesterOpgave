@@ -202,7 +202,14 @@ namespace AccomodationService.Api.Controllers
 
         [Authorize(Roles = "Host")]
         [HttpPut("{accomodationId:guid}/listings/{listingId:guid}/price")]
-        public async Task<ActionResult> UpdateListingDailyPrice(Guid accomodationId, Guid listingId, UpdateListingDailyPriceRequest request)
+        [EndpointSummary("This endpoint will update the daily price on a specific listing")]
+        [EndpointDescription("Updates a listing daily price of a specific accomodation")]
+        [ProducesResponseType(StatusCodes.Status200OK, Description = "Updating of listing daily price for the requested listing succesfully completed")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while updating daily price for the request listing")]
+        public async Task<ActionResult> UpdateListingDailyPrice(
+            [Description("Id of the accomodation the listing is assoicated to")] Guid accomodationId,
+            [Description("Id of the listing you want to update the daily price for")] Guid listingId, 
+            UpdateListingDailyPriceRequest request)
         {
             try
             {
