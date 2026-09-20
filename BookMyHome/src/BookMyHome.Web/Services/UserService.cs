@@ -5,7 +5,7 @@ namespace BookMyHome.Web.Services
 {
     public class UserService(HttpClient httpClient) : IUserService
     {
-        private readonly string baseUrl = "https://localhost:7157/";
+        private readonly string baseUrl = "http://localhost:9000/";
 
         Task IUserService.Login()
         {
