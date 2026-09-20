@@ -1,0 +1,23 @@
+﻿@page "/login"
+@inject IUserService Service
+@using BookMyHome.Web.Models
+@using BookMyHome.Web.Services
+
+<RadzenLogin AllowRegister="true"
+             AllowResetPassword="false"
+             Login="@(args => Login(args))"
+             Register="@(args => Register())" />
+
+@code {
+
+    void Login(LoginArgs args)
+    {
+    }
+
+    async void Register()
+    {
+        var model = new UserModel();
+
+        var statusCode = await Service.Register(model);
+    }
+}
