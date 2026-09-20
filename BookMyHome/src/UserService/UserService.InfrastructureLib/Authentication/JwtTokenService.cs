@@ -45,7 +45,7 @@ public class JwtTokenService(IConfiguration configuration) : ITokenService
             ValidIssuer = configuration["AppSettings:Issuer"],
             ValidateAudience = true,
             ValidAudience = configuration["AppSettings:Audience"],
-            ValidateLifetime = true,
+            ValidateLifetime = false,
             IssuerSigningKey = new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes(configuration["AppSettings:Token"]!)),
             ValidateIssuerSigningKey = true,
