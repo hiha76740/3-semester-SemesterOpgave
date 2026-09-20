@@ -22,7 +22,7 @@ namespace UserService.ApplicationLib.Handlers
             
             string refreshToken = refreshTokenService.GenerateRefreshToken();
 
-            user.SetRefreshToken(refreshToken);
+            user.SetRefreshToken(refreshToken,true);
 
             await userRepo.SaveAsync();
 

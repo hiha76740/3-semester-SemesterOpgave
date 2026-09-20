@@ -59,13 +59,15 @@ namespace UserService.DomainLib.Entities
 
         }
 
-        public void SetRefreshToken(string refreshToken)
+        public void SetRefreshToken(string refreshToken, bool refreshExpiryTime)
         {
             if (string.IsNullOrWhiteSpace(refreshToken))
                 throw new DomainException("refresh token could not be set, no value");
 
+            if (refreshExpiryTime == true)
+                RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
+
             RefreshToken = refreshToken;
-            RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
         }
 
         public void ChangeFirstName(string newFirstName)

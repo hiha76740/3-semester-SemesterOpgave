@@ -26,7 +26,7 @@ public class RefreshTokenHandler(IUserRepository userRepo, ITokenService tokenSe
         var token = tokenService.CreateToken(user);
         var refreshToken = refreshTokenService.GenerateRefreshToken();
 
-        user.SetRefreshToken(refreshToken);
+        user.SetRefreshToken(refreshToken, false);
 
         await userRepo.SaveAsync();
 
