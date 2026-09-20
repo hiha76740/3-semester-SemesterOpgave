@@ -1,6 +1,6 @@
 ﻿@page "/login"
 @inject IUserService Service
-@using BookMyHome.Web.Models
+@using BookMyHome.ContractsLib.Requests.Users
 @using BookMyHome.Web.Services
 
 <RadzenLogin AllowRegister="true"
@@ -10,14 +10,15 @@
 
 @code {
 
-    void Login(LoginArgs args)
+    private async Task Login(LoginArgs args)
     {
+        var loginReponse = await Service.Login(args.Username!, args.Password!);
     }
 
-    async void Register()
+    async Task Register()
     {
-        var model = new UserModel();
+        var request = new RegisterUserRequest("Harry","Potter",new DateOnly(1987,07,30),"Legustervænget 7","7100","Vejle","95175312","HarryPotter@Hogwarts.test","Hedwig","Guest");
 
-        var statusCode = await Service.Register(model);
+        var statusCode = await Service.Register(request);
     }
 }
