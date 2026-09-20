@@ -1,3 +1,3 @@
 ﻿namespace BookMyHome.ContractsLib.Requests.Users;
 
-public record RefreshTokenRequest(Guid UserId, string RefreshToken);
+public record RefreshTokenRequest(string ExpiredAccessToken, string RefreshToken);
