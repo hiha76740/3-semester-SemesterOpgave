@@ -1,4 +1,7 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
+using System.Text;
 using UserService.Api.DependencyInjection;
 using UserService.ApplicationLib.Extensions;
 using UserService.InfrastructureLib.Extensions;
@@ -15,6 +18,36 @@ builder.Services.AddRepositoryDI();
 builder.Services.AddInternalServiceDI();
 
 builder.Services.AddHealthChecks();
+
+// TODO: Move Into shared and call it from there
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidIssuer = builder.Configuration["AppSettings:Issuer"],
+            ValidateAudience = true,
+            ValidAudience = builder.Configuration["AppSettings:Audience"],
+            ValidateLifetime = true,
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(builder.Configuration["AppSettings:Token"]!)),
+            ValidateIssuerSigningKey = true,
+            ClockSkew = TimeSpan.Zero
+        };
+
+        options.Events = new JwtBearerEvents
+        {
+            OnMessageReceived = ctx =>
+            {
+                ctx.Request.Cookies.TryGetValue("accessToken", out var accessToken);
+                if (string.IsNullOrEmpty(accessToken) == false)
+                    ctx.Token = accessToken;
+
+                return Task.CompletedTask;
+            }
+        };
+    });
 
 builder.Services.AddCors(options =>
 {
@@ -49,6 +82,7 @@ app.MapHealthChecks("health");
 
 app.UseCors("AllowBlazorOrigin");
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
