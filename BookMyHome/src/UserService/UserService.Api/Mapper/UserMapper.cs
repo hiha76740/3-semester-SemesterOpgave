@@ -47,7 +47,7 @@ public static class UserMapper
     public static RefreshTokenCommand AsTokenCommand(this RefreshTokenRequest request)
     {
         var output = new RefreshTokenCommand(
-            request.UserId,
+            request.ExpiredAccessToken,
             request.RefreshToken
             );
 

@@ -58,9 +58,8 @@ namespace UserService.Api.Controllers
             }
         }
 
-        
 
-        [Authorize]
+
         [EndpointSummary("This endpoint will create a new refresh token")]
         [EndpointDescription("Creates a new refresh token when all required info is given")]
         [ProducesResponseType(StatusCodes.Status200OK, Description = "Refresh token was created succesfully")]
@@ -70,14 +69,13 @@ namespace UserService.Api.Controllers
         {
             try
             {
-                var id = GetCurrentUserId();
                 HttpContext.Request.Cookies.TryGetValue("refreshToken", out var refreshToken);
+                HttpContext.Request.Cookies.TryGetValue("accessToken", out var expiredAccessToken);
 
-
-                if (id == null || refreshToken == null)
+                if (refreshToken == null || expiredAccessToken == null)
                     return BadRequest("Invalid request");
 
-                var request = new RefreshTokenRequest(id.Value, refreshToken);
+                var request = new RefreshTokenRequest(expiredAccessToken, refreshToken);
 
                 var result = await refresh.HandleAsync(request.AsTokenCommand());
 
