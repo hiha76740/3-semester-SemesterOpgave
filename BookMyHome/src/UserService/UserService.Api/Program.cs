@@ -14,6 +14,21 @@ builder.Services.AddRepositoryDI();
 
 builder.Services.AddHealthChecks();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowBlazorOrigin", policy =>
+    {
+        policy.WithOrigins("https://localhost:7179")
+        .AllowAnyHeader()
+        .AllowAnyMethod();
+
+        policy.WithOrigins("https://localhost:8082")
+        .AllowAnyHeader()
+        .AllowAnyMethod();
+    });
+});
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -29,6 +44,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.MapHealthChecks("health");
+
+app.UseCors("AllowBlazorOrigin");
 
 app.UseAuthorization();
 
