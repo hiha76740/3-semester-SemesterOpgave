@@ -310,7 +310,7 @@ namespace AccomodationService.Api.Controllers
             }
         }
 
-
+        // TODO: Delete this after it has been moved into shared
         private Guid? GetCurrentUserId()
         {
             var stringUserId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
