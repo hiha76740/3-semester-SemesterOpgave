@@ -1,11 +1,12 @@
-﻿using BookMyHome.Web.Models;
+﻿using BookMyHome.ContractsLib.Requests.Users;
+using BookMyHome.ContractsLib.Responses.Users;
 
 namespace BookMyHome.Web.Services
 {
     public interface IUserService
     {
-        Task Login();
+        Task Login(string username, string password);
 
-        Task<int> Register(UserModel model);
+        Task<int> Register(RegisterUserRequest request);
     }
 }
