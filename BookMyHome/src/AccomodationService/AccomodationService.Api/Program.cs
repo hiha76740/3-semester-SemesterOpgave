@@ -32,6 +32,20 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowBlazorOrigin", policy =>
+    {
+        policy.WithOrigins("https://localhost:7179")
+        .AllowAnyHeader()
+        .AllowAnyMethod();
+
+        policy.WithOrigins("https://localhost:8082")
+        .AllowAnyHeader()
+        .AllowAnyMethod();
+    });
+});
+
 builder.Services.AddHealthChecks();
 
 var app = builder.Build();
@@ -49,6 +63,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.MapHealthChecks("health");
+
+app.UseCors("AllowBlazorOrigin");
 
 app.UseAuthorization();
 
