@@ -1,13 +1,14 @@
 ﻿@page "/login"
 @inject IUserService Service
-@using BookMyHome.ContractsLib.Requests.Users
+@inject NavigationManager NavigationManager
 @using BookMyHome.Web.Services
 
-<RadzenLogin AllowRegister="true"
-             AllowResetPassword="false"
-             Login="@(args => Login(args))"
-             Register="@(args => Register())" />
-
+<RadzenCard class="rz-my-12 rz-mx-auto rz-p-4 rz-p-md-12" style="max-width: 600px;">
+    <RadzenLogin AllowRegister="true"
+                 AllowResetPassword="false"
+                 Login="@(args => Login(args))"
+                 Register="(args => Register())" />
+</RadzenCard>
 @code {
 
     private async Task Login(LoginArgs args)
@@ -17,8 +18,6 @@
 
     async Task Register()
     {
-        var request = new RegisterUserRequest("Harry","Potter",new DateOnly(1987,07,30),"Legustervænget 7","7100","Vejle","95175312","HarryPotter@Hogwarts.test","Hedwig","Guest");
-
-        var statusCode = await Service.Register(request);
+        NavigationManager.NavigateTo("/register");
     }
 }
