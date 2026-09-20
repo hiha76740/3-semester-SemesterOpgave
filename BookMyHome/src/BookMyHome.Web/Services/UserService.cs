@@ -1,5 +1,6 @@
-﻿using BookMyHome.Web.Models;
+﻿using BookMyHome.ContractsLib.Requests.Users;
 using System.Net.Http.Json;
+
 
 namespace BookMyHome.Web.Services
 {
@@ -7,14 +8,15 @@ namespace BookMyHome.Web.Services
     {
         private readonly string baseUrl = "http://localhost:9000/";
 
-        Task IUserService.Login()
+        async Task IUserService.Login(string username, string password)
         {
-            throw new NotImplementedException();
+            var response = await httpClient.PostAsJsonAsync($"{baseUrl}api/v1/Auth/login", new LoginRequest(username, password));
+            
         }
 
-        async Task<int> IUserService.Register(UserModel model)
+        async Task<int> IUserService.Register(RegisterUserRequest request)
         {
-            var response = await httpClient.PostAsJsonAsync($"{baseUrl}api/v1/Auth/register", model);
+            var response = await httpClient.PostAsJsonAsync($"{baseUrl}api/v1/Auth/register", request);
             var responseStatusCode = response.StatusCode;
             return (int)responseStatusCode;
         }
