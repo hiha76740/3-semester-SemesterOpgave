@@ -80,6 +80,7 @@ app.MapHealthChecks("health");
 
 app.UseCors("AllowBlazorOrigin");
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
