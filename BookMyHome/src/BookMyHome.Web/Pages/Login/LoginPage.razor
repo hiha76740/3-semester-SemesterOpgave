@@ -12,7 +12,7 @@
 
     private async Task Login(LoginArgs args)
     {
-        var loginReponse = await Service.Login(args.Username!, args.Password!);
+        await Service.Login(args.Username!, args.Password!);
     }
 
     async Task Register()
