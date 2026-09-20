@@ -16,6 +16,7 @@ builder.Services.AddRepositoryDI();
 builder.Services.AddQueriesDI();
 builder.Services.AddServicesDI();
 
+// TODO: Move Into shared and call it from there
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -45,6 +46,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
+// Move into shared and call it from there
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowBlazorOrigin", policy =>
