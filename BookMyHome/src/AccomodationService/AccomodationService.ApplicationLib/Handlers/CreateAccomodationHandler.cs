@@ -12,6 +12,16 @@ public class CreateAccomodationHandler(IAccomodationRepository accomodationRepo)
     {
         var hostId = new HostId(command.HostId);
 
+        var accomodationExsist = await accomodationRepo.AccomodationExsistByAddress(
+            hostId,
+            command.Street,
+            command.PostalCode,
+            command.City
+            );
+
+        if (accomodationExsist == true)
+            throw new InvalidOperationException("You already have a accomodation on this address");
+
         var accomodation = Accomodation.Create(
             hostId,
             command.Title,

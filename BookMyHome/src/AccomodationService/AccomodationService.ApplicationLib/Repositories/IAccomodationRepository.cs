@@ -1,4 +1,5 @@
 ﻿using AccomodationService.DomainLib.Entities;
+using AccomodationService.DomainLib.ValueObjects;
 
 namespace AccomodationService.ApplicationLib.Repositories
 {
@@ -9,6 +10,8 @@ namespace AccomodationService.ApplicationLib.Repositories
         Task<Accomodation?> GetAccomodationByIdAsync(AccomodationId id);
 
         Task<Accomodation?> GetAccomodationWithListingsAsync(AccomodationId id);
+
+        Task<bool> AccomodationExsistByAddress(HostId id, string street, string postalCode, string city);
 
         Task SaveAsync();
     }
