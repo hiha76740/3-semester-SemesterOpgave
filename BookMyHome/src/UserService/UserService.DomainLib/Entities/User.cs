@@ -18,7 +18,7 @@ namespace UserService.DomainLib.Entities
         public string Username { get; init; } = string.Empty;
         public string PasswordHash { get; private set; } = string.Empty;
 
-        public string? RefreshToken { get; private set; } = string.Empty;
+        public string? RefreshToken { get; private set; }
         public DateTime? RefreshTokenExpiryTime { get; private set; }
 
 
