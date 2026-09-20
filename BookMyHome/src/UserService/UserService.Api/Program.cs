@@ -1,4 +1,5 @@
 using Scalar.AspNetCore;
+using UserService.Api.DependencyInjection;
 using UserService.ApplicationLib.Extensions;
 using UserService.InfrastructureLib.Extensions;
 
@@ -11,6 +12,7 @@ builder.Services.AddDatabaseDI(builder.Configuration);
 builder.Services.AddHandlerDI();
 builder.Services.AddAuthenTicationDI();
 builder.Services.AddRepositoryDI();
+builder.Services.AddInternalServiceDI();
 
 builder.Services.AddHealthChecks();
 
