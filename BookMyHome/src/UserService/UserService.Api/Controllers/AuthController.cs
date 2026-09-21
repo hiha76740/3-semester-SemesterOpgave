@@ -1,15 +1,25 @@
 ﻿using BookMyHome.ContractsLib.Requests.Users;
+using BookMyHome.ContractsLib.Responses.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using UserService.Api.Mapper;
 using UserService.Api.Services;
 using UserService.FacadeLib.Commands.Interfaces;
+using UserService.FacadeLib.Queries.Interfaces;
 
 namespace UserService.Api.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    public class AuthController(IRegisterUserHandler register, ILoginHandler login, IRefreshTokensHandler refresh, ICookieService cookieService) : ControllerBase
+    public class AuthController(
+        IRegisterUserHandler register,
+        ILoginHandler login,
+        IRefreshTokensHandler refresh,
+        ICookieService cookieService,
+        IAuthQueries authQueries
+        ) : ControllerBase
     {
 
         [EndpointSummary("This endpoint will register a user")]
@@ -91,6 +101,33 @@ namespace UserService.Api.Controllers
             }
         }
 
+
+
+        [Authorize]
+        [HttpGet("Me")]
+        public async Task<ActionResult<AuthUserResponse>> GetCurrentUserInfo()
+        {
+            try
+            {
+                var userId = GetCurrentUserId();
+
+                if (userId == null)
+                    return BadRequest("Invalid request");
+
+                var dto = await authQueries.GetCurrentUserInfo(userId.Value);
+
+                if (dto == null)
+                    return NotFound("user not found");
+
+                return Ok(dto.AsAuthUserReponse());
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
 
         //TODO: move this to shared folder and call in all API's
         private Guid? GetCurrentUserId()
