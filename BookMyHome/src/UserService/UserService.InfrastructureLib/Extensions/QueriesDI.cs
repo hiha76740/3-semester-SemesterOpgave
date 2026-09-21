@@ -8,6 +8,7 @@ public static class QueriesDI
     public static IServiceCollection AddQueriesDI(this IServiceCollection services)
     {
         services.AddScoped<IUserQueries, UserQueryIMPLHandler>();
+        services.AddScoped<IAuthQueries, AuthQueryHandlerIMPL>();
 
         return services;
     }
