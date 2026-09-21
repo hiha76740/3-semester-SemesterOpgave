@@ -1,4 +1,5 @@
 ﻿using BookMyHome.ContractsLib.Requests.Users;
+using BookMyHome.ContractsLib.Responses.Authentication;
 
 namespace BookMyHome.Web.Services
 {
@@ -7,5 +8,7 @@ namespace BookMyHome.Web.Services
         Task<int> Login(string username, string password);
 
         Task<int> Register(RegisterUserRequest request);
+
+        Task<AuthUserResponse> GetAuthUserAsync();
     }
 }

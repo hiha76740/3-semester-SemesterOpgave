@@ -1,4 +1,5 @@
 ﻿using BookMyHome.ContractsLib.Requests.Users;
+using BookMyHome.ContractsLib.Responses.Authentication;
 using System.Net.Http.Json;
 
 
@@ -7,6 +8,16 @@ namespace BookMyHome.Web.Services
     public class AuthService(HttpClient httpClient) : IAuthService
     {
         private readonly string baseUrl = "http://localhost:9000/";
+
+        async Task<AuthUserResponse> IAuthService.GetAuthUserAsync()
+        {
+            var response = await httpClient.GetFromJsonAsync<AuthUserResponse>($"{baseUrl}api/v1/Auth/Me");
+
+            if (response == null)
+                throw new InvalidOperationException("Something went wrong while recieving user info");
+
+            return response;
+        }
 
         async Task<int> IAuthService.Login(string username, string password)
         {
