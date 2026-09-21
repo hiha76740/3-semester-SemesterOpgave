@@ -18,7 +18,12 @@
 
     private async Task Login(LoginArgs args)
     {
-        await Service.Login(args.Username!, args.Password!);
+        var reponse = await Service.Login(args.Username!, args.Password!);
+
+        if (reponse == 200)
+        {
+            NavigationManager.NavigateTo("/");
+        }
     }
 
     async Task Register()
