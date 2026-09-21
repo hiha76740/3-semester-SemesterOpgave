@@ -12,7 +12,7 @@ namespace UserService.Api.Services
                    Expires = DateTimeOffset.UtcNow.AddMinutes(5),
                    HttpOnly = true,
                    IsEssential = true,
-                   Secure = true,
+                   Secure = false,
                    SameSite = SameSiteMode.None
                });
 
@@ -22,7 +22,7 @@ namespace UserService.Api.Services
                     Expires = DateTimeOffset.UtcNow.AddDays(7),
                     HttpOnly = true,
                     IsEssential = true,
-                    Secure = true,
+                    Secure = false,
                     SameSite = SameSiteMode.None
                 });
         }
