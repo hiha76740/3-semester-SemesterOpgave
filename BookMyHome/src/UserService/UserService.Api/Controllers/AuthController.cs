@@ -1,6 +1,4 @@
 ﻿using BookMyHome.ContractsLib.Requests.Users;
-using BookMyHome.ContractsLib.Responses.Users;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using UserService.Api.Mapper;
