@@ -12,17 +12,25 @@
                  Register="(args => Register())" />
 </RadzenCard>
 
-
+<p></p>
 
 @code {
+
+    private string FirstName;
+    private string LastName;
+    private string Username;
 
     private async Task Login(LoginArgs args)
     {
         var reponse = await Service.Login(args.Username!, args.Password!);
 
         if (reponse == 200)
-        {
-            NavigationManager.NavigateTo("/");
+        {  
+            var user = await Service.GetAuthUserAsync();
+            FirstName = user.Firstname;
+            LastName = user.Lastname;
+            Username = user.Username;
+            // NavigationManager.NavigateTo("/");
         }
     }
 
