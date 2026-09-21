@@ -1,6 +1,5 @@
-﻿using BookMyHome.ContractsLib.Requests.Users;
+﻿using BookMyHome.ContractsLib.Responses.Users;
 using System.Net.Http.Json;
-
 
 namespace BookMyHome.Web.Services
 {
@@ -8,17 +7,14 @@ namespace BookMyHome.Web.Services
     {
         private readonly string baseUrl = "http://localhost:9000/";
 
-        async Task IUserService.Login(string username, string password)
+        async Task<IReadOnlyList<AccessRoleReponse>> IUserService.GetAllAccessRoles()
         {
-            var response = await httpClient.PostAsJsonAsync($"{baseUrl}api/v1/Auth/login", new LoginRequest(username, password));
-            
-        }
+            var response = await httpClient.GetFromJsonAsync<IReadOnlyList<AccessRoleReponse>>($"{baseUrl}api/v1/Users/Roles");
 
-        async Task<int> IUserService.Register(RegisterUserRequest request)
-        {
-            var response = await httpClient.PostAsJsonAsync($"{baseUrl}api/v1/Auth/register", request);
-            var responseStatusCode = response.StatusCode;
-            return (int)responseStatusCode;
+            if (response == null)
+                return new List<AccessRoleReponse>();
+
+            return response;
         }
     }
 }
