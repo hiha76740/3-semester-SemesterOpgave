@@ -8,9 +8,12 @@ namespace BookMyHome.Web.Services
     {
         private readonly string baseUrl = "http://localhost:9000/";
 
-        async Task IAuthService.Login(string username, string password)
+        async Task<int> IAuthService.Login(string username, string password)
         {
-            await httpClient.PostAsJsonAsync($"{baseUrl}api/v1/Auth/login", new LoginRequest(username, password));
+            var response = await httpClient.PostAsJsonAsync($"{baseUrl}api/v1/Auth/login", new LoginRequest(username, password));
+
+            var responseStatusCode = response.StatusCode;
+            return (int)responseStatusCode;
         }
 
         async Task<int> IAuthService.Register(RegisterUserRequest request)

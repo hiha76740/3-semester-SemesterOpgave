@@ -4,7 +4,7 @@ namespace BookMyHome.Web.Services
 {
     public interface IAuthService
     {
-        Task Login(string username, string password);
+        Task<int> Login(string username, string password);
 
         Task<int> Register(RegisterUserRequest request);
     }
