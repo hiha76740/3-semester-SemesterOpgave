@@ -1,4 +1,5 @@
 ﻿using BookMyHome.ContractsLib.Requests.Users;
+using BookMyHome.ContractsLib.Responses.Accomodations;
 using BookMyHome.ContractsLib.Responses.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -59,7 +60,7 @@ namespace UserService.Api.Controllers
 
                 return Ok();
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
@@ -103,6 +104,10 @@ namespace UserService.Api.Controllers
 
 
         [Authorize]
+        [EndpointSummary("This endpoint will get current user information")]
+        [EndpointDescription("Get current user information, like username, firstname and lastname")]
+        [ProducesResponseType<AuthUserResponse>(StatusCodes.Status200OK, "application/json", Description = "Returns info of current user")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while getting current user info")]
         [HttpGet("Me")]
         public async Task<ActionResult<AuthUserResponse>> GetCurrentUserInfo()
         {
