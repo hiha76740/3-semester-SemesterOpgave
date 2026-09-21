@@ -1,6 +1,8 @@
 ﻿@page "/login"
-@inject IUserService Service
+@inject IAuthService Service
 @inject NavigationManager NavigationManager
+
+
 @using BookMyHome.Web.Services
 
 <RadzenCard class="rz-my-12 rz-mx-auto rz-p-4 rz-p-md-12" style="max-width: 600px;">
@@ -9,6 +11,9 @@
                  Login="@(args => Login(args))"
                  Register="(args => Register())" />
 </RadzenCard>
+
+
+
 @code {
 
     private async Task Login(LoginArgs args)
