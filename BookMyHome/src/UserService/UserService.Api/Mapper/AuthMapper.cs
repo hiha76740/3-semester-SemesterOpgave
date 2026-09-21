@@ -1,6 +1,7 @@
 ﻿using BookMyHome.ContractsLib.Requests.Users;
-using BookMyHome.ContractsLib.Responses.Users;
+using BookMyHome.ContractsLib.Responses.Authentication;
 using UserService.FacadeLib.Commands.DTOs;
+using UserService.FacadeLib.Queries.DTOs;
 
 namespace UserService.Api.Mapper;
 
@@ -49,6 +50,18 @@ public static class AuthMapper
         var output = new RefreshTokenCommand(
             request.ExpiredAccessToken,
             request.RefreshToken
+            );
+
+        return output;
+    }
+
+    public static AuthUserResponse AsAuthUserReponse(this AuthUserDto dto)
+    {
+        var output = new AuthUserResponse(
+            dto.Id,
+            dto.Username,
+            dto.Firstname,
+            dto.Lastname
             );
 
         return output;
