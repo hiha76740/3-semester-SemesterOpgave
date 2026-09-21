@@ -16,6 +16,7 @@ builder.Services.AddHandlerDI();
 builder.Services.AddAuthenTicationDI();
 builder.Services.AddRepositoryDI();
 builder.Services.AddInternalServiceDI();
+builder.Services.AddQueriesDI();
 
 builder.Services.AddHealthChecks();
 
