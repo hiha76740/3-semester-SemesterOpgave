@@ -13,7 +13,7 @@ namespace UserService.DomainLib.Entities
         public Address Address { get; private set; } = null!;
         public PhoneNumber PhoneNumber { get; private set; } = null!;
         public Email Email { get; private set; } = null!;
-        public UserRoles Role { get; private set; }
+        public AccessRoles Role { get; private set; }
 
         public string Username { get; init; } = string.Empty;
         public string PasswordHash { get; private set; } = string.Empty;
@@ -34,7 +34,7 @@ namespace UserService.DomainLib.Entities
             string phoneNumber,
             string email,
             string passwordHash,
-            UserRoles role
+            AccessRoles role
             )
         {
             if (string.IsNullOrWhiteSpace(firstName))
@@ -122,7 +122,7 @@ namespace UserService.DomainLib.Entities
             PhoneNumber = newPhoneNumber;
         }
 
-        private User(string firstName, string lastName, DateOnly birthdate, Address address, PhoneNumber phoneNumber, Email email, string passwordHash, UserRoles role)
+        private User(string firstName, string lastName, DateOnly birthdate, Address address, PhoneNumber phoneNumber, Email email, string passwordHash, AccessRoles role)
         {
             Id = new UserId(Guid.NewGuid());
             FirstName = firstName;
