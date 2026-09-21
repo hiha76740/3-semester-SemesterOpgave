@@ -54,11 +54,13 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowBlazorOrigin", policy =>
     {
-        // Allow the exact client origins and allow credentials so cookies are accepted by the browser
-        policy.WithOrigins("https://localhost:7179", "https://localhost:8082")
-              .AllowAnyHeader()
-              .AllowAnyMethod()
-              .AllowCredentials();
+        policy.WithOrigins("https://localhost:7179")
+        .AllowAnyHeader()
+        .AllowAnyMethod();
+
+        policy.WithOrigins("https://localhost:8082")
+        .AllowAnyHeader()
+        .AllowAnyMethod();
     });
 });
 
