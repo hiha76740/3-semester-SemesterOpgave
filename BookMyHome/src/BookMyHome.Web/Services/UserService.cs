@@ -5,7 +5,7 @@ namespace BookMyHome.Web.Services
 {
     public class UserService(HttpClient httpClient) : IUserService
     {
-        private readonly string baseUrl = "http://localhost:9000/";
+        private readonly string baseUrl = "https://localhost:9010/";
 
         async Task<IReadOnlyList<AccessRoleReponse>> IUserService.GetAllAccessRoles()
         {
