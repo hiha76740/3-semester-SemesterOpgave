@@ -29,5 +29,8 @@ internal class UserConfiguration : IEntityTypeConfiguration<User>
             u => u.Email,
             e => e.ToJson()
             );
+
+        builder.Property(u => u.Role)
+            .HasConversion<string>();
     }
 }

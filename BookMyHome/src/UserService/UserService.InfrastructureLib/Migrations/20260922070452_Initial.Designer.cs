@@ -13,8 +13,8 @@ using UserService.InfrastructureLib.Persistence;
 namespace UserService.InfrastructureLib.Migrations
 {
     [DbContext(typeof(UserDbContext))]
-    [Migration("20260917104423_AddRefreshTokens")]
-    partial class AddRefreshTokens
+    [Migration("20260922070452_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -52,8 +52,9 @@ namespace UserService.InfrastructureLib.Migrations
                     b.Property<DateTime?>("RefreshTokenExpiryTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Role")
-                        .HasColumnType("int");
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Username")
                         .IsRequired()
