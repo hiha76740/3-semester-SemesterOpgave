@@ -41,17 +41,11 @@ namespace BookMyHome.Web.Services
             return (int)response.StatusCode;
         }
 
-        async Task<int> IAuthService.Register(RegisterUserRequest userRequest)
+        async Task<int> IAuthService.Register(RegisterUserRequest request)
         {
-            var request = new HttpRequestMessage(HttpMethod.Post, $"{baseUrl}api/v1/Auth/register");
-
-            request.Content = JsonContent.Create(userRequest);
-
-            request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
-
-            var response = await httpClient.SendAsync(request);
-            
-            return (int)response.StatusCode;
+            var response = await httpClient.PostAsJsonAsync($"{baseUrl}api/v1/Auth/register", request);
+            var responseStatusCode = response.StatusCode;
+            return (int)responseStatusCode;
         }
     }
 }
