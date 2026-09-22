@@ -1,22 +1,20 @@
-﻿using BookMyHome.Web.Models;
+﻿using BookMyHome.ContractsLib.Responses.Users;
 using System.Net.Http.Json;
 
 namespace BookMyHome.Web.Services
 {
     public class UserService(HttpClient httpClient) : IUserService
     {
-        private readonly string baseUrl = "https://localhost:7157/";
+        private readonly string baseUrl = "http://localhost:9000/";
 
-        Task IUserService.Login()
+        async Task<IReadOnlyList<AccessRoleReponse>> IUserService.GetAllAccessRoles()
         {
-            throw new NotImplementedException();
-        }
+            var response = await httpClient.GetFromJsonAsync<IReadOnlyList<AccessRoleReponse>>($"{baseUrl}api/v1/Users/Roles");
 
-        async Task<int> IUserService.Register(UserModel model)
-        {
-            var response = await httpClient.PostAsJsonAsync($"{baseUrl}api/v1/Auth/register", model);
-            var responseStatusCode = response.StatusCode;
-            return (int)responseStatusCode;
+            if (response == null)
+                return new List<AccessRoleReponse>();
+
+            return response;
         }
     }
 }

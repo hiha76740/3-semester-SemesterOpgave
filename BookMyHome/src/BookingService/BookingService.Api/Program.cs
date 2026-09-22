@@ -16,6 +16,7 @@ builder.Services.AddRepositoryDI();
 builder.Services.AddQueriesDI();
 builder.Services.AddServicesDI();
 
+// TODO: Move Into shared and call it from there
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -31,8 +32,21 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateIssuerSigningKey = true,
             ClockSkew = TimeSpan.Zero
         };
+
+        options.Events = new JwtBearerEvents
+        {
+            OnMessageReceived = ctx =>
+            {
+                ctx.Request.Cookies.TryGetValue("accessToken", out var accessToken);
+                if (string.IsNullOrEmpty(accessToken) == false)
+                    ctx.Token = accessToken;
+
+                return Task.CompletedTask;
+            }
+        };
     });
 
+// Move into shared and call it from there
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowBlazorOrigin", policy =>
@@ -67,6 +81,7 @@ app.MapHealthChecks("health");
 
 app.UseCors("AllowBlazorOrigin");
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

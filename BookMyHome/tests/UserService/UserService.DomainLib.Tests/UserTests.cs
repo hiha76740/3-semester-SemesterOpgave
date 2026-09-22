@@ -13,7 +13,7 @@ public class UserTests
     private readonly static string City = "Vejle";
     private readonly static string PhoneNumber = "12345678";
     private readonly static string Email = "test@test.dk";
-    private readonly static UserRoles Role = UserRoles.Host;
+    private readonly static AccessRoles Role = AccessRoles.Host;
     private readonly static string PasswordHash = "NotAHash";
 
     public static User CreateValidUser(
@@ -26,7 +26,7 @@ public class UserTests
         string? city = null,
         string? phoneNumber = null,
         string? email = null,
-        UserRoles? role = null,
+        AccessRoles? role = null,
         string? passwordHash = null
         )
     {

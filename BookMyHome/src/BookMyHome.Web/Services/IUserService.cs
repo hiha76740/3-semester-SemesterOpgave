@@ -1,11 +1,9 @@
-﻿using BookMyHome.Web.Models;
+﻿using BookMyHome.ContractsLib.Responses.Users;
 
 namespace BookMyHome.Web.Services
 {
     public interface IUserService
     {
-        Task Login();
-
-        Task<int> Register(UserModel model);
+        public Task<IReadOnlyList<AccessRoleReponse>> GetAllAccessRoles();
     }
 }

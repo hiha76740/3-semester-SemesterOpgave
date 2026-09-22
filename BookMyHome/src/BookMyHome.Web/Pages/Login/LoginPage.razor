@@ -1,23 +1,41 @@
 ﻿@page "/login"
-@inject IUserService Service
-@using BookMyHome.Web.Models
+@inject IAuthService Service
+@inject NavigationManager NavigationManager
+
+
 @using BookMyHome.Web.Services
 
-<RadzenLogin AllowRegister="true"
-             AllowResetPassword="false"
-             Login="@(args => Login(args))"
-             Register="@(args => Register())" />
+<RadzenCard class="rz-my-12 rz-mx-auto rz-p-4 rz-p-md-12" style="max-width: 600px;">
+    <RadzenLogin AllowRegister="true"
+                 AllowResetPassword="false"
+                 Login="@(args => Login(args))"
+                 Register="(args => Register())" />
+</RadzenCard>
+
+<p></p>
 
 @code {
 
-    void Login(LoginArgs args)
+    private string FirstName;
+    private string LastName;
+    private string Username;
+
+    private async Task Login(LoginArgs args)
     {
+        var reponse = await Service.Login(args.Username!, args.Password!);
+
+        if (reponse == 200)
+        {  
+            var user = await Service.GetAuthUserAsync();
+            FirstName = user.Firstname;
+            LastName = user.Lastname;
+            Username = user.Username;
+            // NavigationManager.NavigateTo("/");
+        }
     }
 
-    async void Register()
+    async Task Register()
     {
-        var model = new UserModel();
-
-        var statusCode = await Service.Register(model);
+        NavigationManager.NavigateTo("/register");
     }
 }

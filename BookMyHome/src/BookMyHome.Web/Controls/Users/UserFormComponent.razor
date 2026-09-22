@@ -1,0 +1,193 @@
+﻿@using BookMyHome.ContractsLib.Requests.Users
+@using BookMyHome.ContractsLib.Responses.Users
+@inject NavigationManager navigationManager
+
+
+<RadzenCard class="rz-my-12 rz-mx-auto rz-p-4 rz-p-md-12" style="max-width: 600px;">
+    <RadzenTemplateForm TItem="Registration" Data=@model Submit=@HandleSubmit>
+        <RadzenStack Gap="1rem">
+            <article style="">
+                <h4>Generelt</h4>
+                <RadzenRow AlignItems="AlignItems.Center" RowGap="0.25rem">
+                    <RadzenColumn Size="12" SizeMD="4" class="rz-text-align-start rz-text-align-md-end">
+                        <RadzenLabel Text="Fornavn" Component="FirstName" />
+                    </RadzenColumn>
+                    <RadzenColumn Size="12" SizeMD="8">
+                        <RadzenTextBox Name="FirstName" @bind-Value=@model.FirstName Style="display: block; width: 100%;" />
+                        <RadzenRequiredValidator Component="FirstName" Text="First name is required." Style="position: absolute" />
+                    </RadzenColumn>
+                </RadzenRow>
+                <br />
+                <RadzenRow AlignItems="AlignItems.Center" RowGap="0.25rem">
+                    <RadzenColumn Size="12" SizeMD="4" class="rz-text-align-start rz-text-align-md-end">
+                        <RadzenLabel Text="Efternavn" Component="LastName" />
+                    </RadzenColumn>
+                    <RadzenColumn Size="12" SizeMD="8">
+                        <RadzenTextBox Name="LastName" @bind-Value=@model.LastName Style="display: block; width: 100%;" />
+                        <RadzenRequiredValidator Component="LastName" Text="Last name is required." Style="position: absolute" />
+                    </RadzenColumn>
+                </RadzenRow>
+                <br />
+                <RadzenRow AlignItems="AlignItems.Center" RowGap="0.25rem">
+                    <RadzenColumn Size="12" SizeMD="4" class="rz-text-align-start rz-text-align-md-end">
+                        <RadzenLabel Text="Fødselsdato" Component="Birthdate" />
+                    </RadzenColumn>
+                    <RadzenColumn Size="12" SizeMD="8">
+                        <RadzenDatePicker Name="Birthdate" @bind-Value="@model.Birthdate" DateFormat="dd/MM/yyyy" Style="display: block; width: 100%" />
+                    </RadzenColumn>
+                </RadzenRow>
+                <br />
+                <RadzenRow AlignItems="AlignItems.Center" RowGap="0.25rem">
+                    <RadzenColumn Size="12" SizeMD="4" class="rz-text-align-start rz-text-align-md-end">
+                        <RadzenLabel Text="Indtast kodeord" Component="Password" />
+                    </RadzenColumn>
+                    <RadzenColumn Size="12" SizeMD="8">
+                        <RadzenPassword Name="Password" @bind-Value=@model.Password Style="display: block; width: 100%;" />
+                        <RadzenRequiredValidator Component="Password" Text="Password is required." Style="position: absolute" />
+                    </RadzenColumn>
+                </RadzenRow>
+                <br />
+                <RadzenRow AlignItems="AlignItems.Center" RowGap="0.25rem">
+                    <RadzenColumn Size="12" SizeMD="4" class="rz-text-align-start rz-text-align-md-end">
+                        <RadzenLabel Text="Gentag kodeord" Component="RepeatPassword" />
+                    </RadzenColumn>
+                    <RadzenColumn Size="12" SizeMD="8">
+                        <RadzenPassword Name="RepeatPassword" @bind-Value=@model.RepeatPassword style="display: block; width: 100%;" />
+                        <RadzenCompareValidator Value=@model.Password Component="RepeatPassword" Text="Passwords should be the same" Style="position: absolute" />
+                    </RadzenColumn>
+                </RadzenRow>
+            </article>
+            <article>
+                <h4>Kontakt oplysninger</h4>
+                <RadzenRow AlignItems="AlignItems.Center" RowGap="0.25rem">
+                    <RadzenColumn Size="12" SizeMD="4" class="rz-text-align-start rz-text-align-md-end">
+                        <RadzenLabel Text="Email" Component="Email" />
+                    </RadzenColumn>
+                    <RadzenColumn Size="12" SizeMD="8">
+                        <RadzenTextBox Name="Email" @bind-Value=@model.Email Style="display: block; width: 100%;" />
+                        <RadzenRequiredValidator Component="Email" Text="Email is required." Style="position: absolute" />
+                        <RadzenEmailValidator Component="Email" Text="Provide a valid email address." Style="position: absolute" />
+                    </RadzenColumn>
+                </RadzenRow>
+                <br />
+                <RadzenRow AlignItems="AlignItems.Center" RowGap="0.25rem">
+                    <RadzenColumn Size="12" SizeMD="4" class="rz-text-align-start rz-text-align-md-end">
+                        <RadzenLabel Text="Telefon nr." Component="PhoneNumber" />
+                    </RadzenColumn>
+                    <RadzenColumn Size="12" SizeMD="8">
+                        <RadzenTextBox Name="PhoneNumber" @bind-Value=@model.PhoneNumber Style="display: block; width: 100%;" />
+                        <RadzenRequiredValidator Component="PhoneNumber" Text="Phone number is required." Style="position: absolute" />
+                        <RadzenNumericRangeValidator Component="PhoneNumber" Min="10000000" Max="99999999" Text="Phone number is not valid" Style="position: absolute" />
+                    </RadzenColumn>
+                </RadzenRow>
+            </article>
+            <article>
+                <h4>Addresse oplysninger</h4>
+                <RadzenRow AlignItems="AlignItems.Center" RowGap="0.25rem">
+                    <RadzenColumn Size="12" SizeMD="4" class="rz-text-align-start rz-text-align-md-end">
+                        <RadzenLabel Text="Addresse" Component="Street" />
+                    </RadzenColumn>
+                    <RadzenColumn Size="12" SizeMD="8">
+                        <RadzenTextBox Name="Street" @bind-Value=@model.Street Style="display: block; width: 100%;" />
+                        <RadzenRequiredValidator Component="Street" Text="Street is required." Style="position: absolute" />
+                    </RadzenColumn>
+                </RadzenRow>
+                <br />
+                <RadzenRow AlignItems="AlignItems.Center" RowGap="0.25rem">
+                    <RadzenColumn Size="12" SizeMD="4" class="rz-text-align-start rz-text-align-md-end">
+                        <RadzenLabel Text="Postnr." Component="PostalCode" />
+                    </RadzenColumn>
+                    <RadzenColumn Size="12" SizeMD="8">
+                        <RadzenTextBox Name="PostalCode" @bind-Value=@model.PostalCode Style="display: block; width: 100%;" />
+                        <RadzenRequiredValidator Component="PostalCode" Text="Postal code is required." Style="position: absolute" />
+                        <RadzenNumericRangeValidator Component="PostalCode" Min="1000" Max="9999" Text="Postal code is not valid" Style="position: absolute" />
+                    </RadzenColumn>
+                </RadzenRow>
+                <br />
+                <RadzenRow AlignItems="AlignItems.Center" RowGap="0.25rem">
+                    <RadzenColumn Size="12" SizeMD="4" class="rz-text-align-start rz-text-align-md-end">
+                        <RadzenLabel Text="By" Component="City" />
+                    </RadzenColumn>
+                    <RadzenColumn Size="12" SizeMD="8">
+                        <RadzenTextBox Name="City" @bind-Value=@model.City Style="display: block; width: 100%;" />
+                        <RadzenRequiredValidator Component="City" Text="City is required." Style="position: absolute" />
+                    </RadzenColumn>
+                </RadzenRow>
+            </article>
+            <article>
+                <h4>Adgangs rolle</h4>
+                <RadzenRow AlignItems="AlignItems.Center" RowGap="0.25rem">
+                    <RadzenColumn Size="12" SizeMD="8">
+                        <RadzenRadioButtonList @bind-Value="model.AccessRole" TValue="string">
+                            <Items>
+                                @foreach (var type in AccessRoles)
+                                {
+                                    <RadzenRadioButtonListItem Text="@type.Role" Value="@type.Role" />
+                                }
+                            </Items>
+                        </RadzenRadioButtonList>
+                    </RadzenColumn>
+                </RadzenRow>
+            </article>
+            <RadzenRow AlignItems="AlignItems.Center" class="rz-mt-4">
+                <RadzenColumn Size="12" Offset="0" SizeMD="8" OffsetMD="4">
+                    <RadzenButton ButtonType="ButtonType.Submit" Text="@SubmitText" ButtonStyle="ButtonStyle.Primary" />
+                </RadzenColumn>
+                <RadzenColumn Size="12" Offset="0" SizeMD="8" OffsetMD="0">
+                    <RadzenButton ButtonType="ButtonType.Button" Text="Cancel" ButtonStyle="ButtonStyle.Secondary" Click="Cancel" />
+                </RadzenColumn>
+            </RadzenRow>
+        </RadzenStack>
+    </RadzenTemplateForm>
+</RadzenCard>
+
+@code {
+    [Parameter, EditorRequired]
+    public IReadOnlyList<AccessRoleReponse> AccessRoles { get; set; }
+
+    [Parameter, EditorRequired]
+    public EventCallback<RegisterUserRequest> SubmitCallback { get; set; }
+
+    [Parameter]
+    public string SubmitText { get; set; } = "Submit";
+
+    class Registration
+    {
+        public string FirstName { get; set; } = string.Empty;
+        public string LastName { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public string PhoneNumber { get; set; } = string.Empty;
+        public DateOnly Birthdate { get; set; } = DateOnly.FromDateTime(DateTime.Today);
+        public string Street { get; set; } = string.Empty;
+        public string PostalCode { get; set; } = string.Empty;
+        public string City { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
+        public string RepeatPassword { get; set; } = string.Empty;
+        public string AccessRole { get; set; } = string.Empty;
+    }
+
+    Registration model = new Registration();
+
+    private void HandleSubmit()
+    {
+        var request = new RegisterUserRequest(
+            model.FirstName,
+            model.LastName,
+            model.Birthdate,
+            model.Street,
+            model.PostalCode,
+            model.City,
+            model.PhoneNumber,
+            model.Email,
+            model.Password,
+            model.AccessRole
+        );
+
+        SubmitCallback.InvokeAsync(request);
+    }
+
+    private void Cancel()
+    {
+        navigationManager.NavigateTo("/login");
+    }
+}

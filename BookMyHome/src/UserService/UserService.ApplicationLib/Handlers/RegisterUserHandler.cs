@@ -21,7 +21,7 @@ public class RegisterUserHandler(
         if (usernameExsist == true)
             throw new ArgumentException("User already exsist");
 
-        if (Enum.TryParse<UserRoles>(command.Role, ignoreCase: true, out var role) == false)
+        if (Enum.TryParse<AccessRoles>(command.Role, ignoreCase: true, out var role) == false)
             throw new ArgumentException($"Invalid role: {command.Role}");
 
         var hashPassword = passwordHashService.Hash(command.Password);

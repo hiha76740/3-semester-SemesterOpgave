@@ -9,6 +9,7 @@ public static class QueriesDI
     public static IServiceCollection AddQueriesDI(this IServiceCollection services)
     {
         services.AddScoped<IAccomodationQueries, AccomodationQueryHandlerIMPL>();
+        services.AddScoped<IListingQueries, ListingQueryHandlerIMPL>();
 
         return services;
     }

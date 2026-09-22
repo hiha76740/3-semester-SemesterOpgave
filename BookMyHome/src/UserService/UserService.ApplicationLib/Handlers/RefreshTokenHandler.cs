@@ -1,6 +1,5 @@
 ﻿using UserService.ApplicationLib.Authentication;
 using UserService.ApplicationLib.Repositories;
-using UserService.DomainLib.Entities;
 using UserService.FacadeLib.Commands.DTOs;
 using UserService.FacadeLib.Commands.Interfaces;
 
@@ -10,13 +9,16 @@ public class RefreshTokenHandler(IUserRepository userRepo, ITokenService tokenSe
 {
     async Task<TokenDto?> IRefreshTokensHandler.HandleAsync(RefreshTokenCommand command)
     {
-        var userId = new UserId(command.id);
+        var principal = tokenService.GetPrincipalFromExpiredToken(command.ExpiredAccessToken);
 
-        var user = await userRepo.GetUserById(userId);
+        if (principal.Identity == null || principal.Identity.Name == null)
+            throw new ArgumentNullException(nameof(principal));
+
+        var user = await userRepo.GetUserByUsernameAsync(principal.Identity.Name);
 
         if (
-            user == null 
-            || user.RefreshToken != command.RefreshToken 
+            user == null
+            || user.RefreshToken != command.RefreshToken
             || user.RefreshTokenExpiryTime <= DateTime.UtcNow
             )
             return null;
@@ -24,7 +26,7 @@ public class RefreshTokenHandler(IUserRepository userRepo, ITokenService tokenSe
         var token = tokenService.CreateToken(user);
         var refreshToken = refreshTokenService.GenerateRefreshToken();
 
-        user.SetRefreshToken(refreshToken);
+        user.SetRefreshToken(refreshToken, false);
 
         await userRepo.SaveAsync();
 
