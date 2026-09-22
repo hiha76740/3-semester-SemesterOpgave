@@ -1,5 +1,6 @@
 ﻿using BookMyHome.ContractsLib.Requests.Users;
 using BookMyHome.ContractsLib.Responses.Authentication;
+using Microsoft.AspNetCore.Components.WebAssembly.Http;
 using System.Net.Http.Json;
 
 
@@ -7,31 +8,50 @@ namespace BookMyHome.Web.Services
 {
     public class AuthService(HttpClient httpClient) : IAuthService
     {
-        private readonly string baseUrl = "http://localhost:9000/";
+        private readonly string baseUrl = "https://localhost:9010/";
 
         async Task<AuthUserResponse> IAuthService.GetAuthUserAsync()
         {
-            var response = await httpClient.GetFromJsonAsync<AuthUserResponse>($"{baseUrl}api/v1/Auth/Me");
+            var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}api/v1/Auth/Me");
 
-            if (response == null)
-                throw new InvalidOperationException("Something went wrong while recieving user info");
+            request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
 
-            return response;
+            var response = await httpClient.SendAsync(request);
+
+            response.EnsureSuccessStatusCode();
+
+            var authUser = await response.Content.ReadFromJsonAsync<AuthUserResponse>();
+
+            if (authUser == null)
+                throw new InvalidOperationException("Could not deserialize authenticated user");
+
+            return authUser;
         }
 
         async Task<int> IAuthService.Login(string username, string password)
         {
-            var response = await httpClient.PostAsJsonAsync($"{baseUrl}api/v1/Auth/login", new LoginRequest(username, password));
+            var request = new HttpRequestMessage(HttpMethod.Post, $"{baseUrl}api/v1/Auth/login");
 
-            var responseStatusCode = response.StatusCode;
-            return (int)responseStatusCode;
+            request.Content = JsonContent.Create(new LoginRequest(username, password));
+
+            request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
+
+            var response = await httpClient.SendAsync(request);
+
+            return (int)response.StatusCode;
         }
 
-        async Task<int> IAuthService.Register(RegisterUserRequest request)
+        async Task<int> IAuthService.Register(RegisterUserRequest userRequest)
         {
-            var response = await httpClient.PostAsJsonAsync($"{baseUrl}api/v1/Auth/register", request);
-            var responseStatusCode = response.StatusCode;
-            return (int)responseStatusCode;
+            var request = new HttpRequestMessage(HttpMethod.Post, $"{baseUrl}api/v1/Auth/register");
+
+            request.Content = JsonContent.Create(userRequest);
+
+            request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
+
+            var response = await httpClient.SendAsync(request);
+            
+            return (int)response.StatusCode;
         }
     }
 }
