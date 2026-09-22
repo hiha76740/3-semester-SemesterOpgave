@@ -61,7 +61,8 @@ public static class AuthMapper
             dto.Id,
             dto.Username,
             dto.Firstname,
-            dto.Lastname
+            dto.Lastname,
+            dto.Role
             );
 
         return output;
