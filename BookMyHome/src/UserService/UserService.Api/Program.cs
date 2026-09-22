@@ -54,13 +54,12 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowBlazorOrigin", policy =>
     {
-        policy.WithOrigins("https://localhost:7179")
+        policy.WithOrigins(
+            "https://localhost:7179",
+            "https://localhost:8082")
         .AllowAnyHeader()
-        .AllowAnyMethod();
-
-        policy.WithOrigins("https://localhost:8082")
-        .AllowAnyHeader()
-        .AllowAnyMethod();
+        .AllowAnyMethod()
+        .AllowCredentials();
     });
 });
 
