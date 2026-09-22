@@ -44,8 +44,8 @@ namespace BookMyHome.Web.Services
         async Task<int> IAuthService.Register(RegisterUserRequest request)
         {
             var response = await httpClient.PostAsJsonAsync($"{baseUrl}api/v1/Auth/register", request);
-            var responseStatusCode = response.StatusCode;
-            return (int)responseStatusCode;
+
+            return (int)response.StatusCode;
         }
     }
 }
