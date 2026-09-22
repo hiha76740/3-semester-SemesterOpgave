@@ -17,7 +17,8 @@ public class AuthQueryHandlerIMPL(UserDbContext db) : IAuthQueries
                 u.Id.Value,
                 u.Username,
                 u.FirstName,
-                u.LastName
+                u.LastName,
+                u.Role.ToString()
                 ))
             .FirstOrDefaultAsync();
     }
