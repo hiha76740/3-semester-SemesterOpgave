@@ -1,7 +1,55 @@
 ﻿@page "/listings"
+@inject IListingService Service
+@using BookMyHome.ContractsLib.Responses.Accomodations
+@using BookMyHome.Web.Controls.Listings
+@using BookMyHome.Web.Service_Interfaces
 
-<h3>Listings</h3>
+<section>
+    <h3>Find dit næste ophold</h3>
+
+    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Start" Gap="0.5rem" class="rz-p-sm-12">
+        <RadzenStack Gap="0.5rem">
+            <RadzenLabel Text="Lokation" Component="LocationSearch" />
+            <RadzenTextBox Placeholder="Søg" Style="width: 100%; max-width: 400px;" Name="LocationSearch" />
+        </RadzenStack>
+        <RadzenStack Gap="0.5rem">
+            <RadzenLabel Text="Fra" Component="StartDate" />
+            <RadzenDatePicker @bind-Value="@from" DateFormat="dd/MM/yyyy" Name="StartDate" Immediate="true" Change="@(_ => OnChange())" />
+        </RadzenStack>
+        <RadzenStack Gap="0.5rem">
+            <RadzenLabel Text="Til" Component="EndDate" />
+            <RadzenDatePicker @bind-Value="@to" DateFormat="dd/MM/yyyy" Name="EndDate" Immediate="true" Change="@(_ => OnChange())" />
+            <RadzenCompareValidator Component="EndDate"
+                                    Value="@to"
+                                    Operator="CompareOperator.GreaterThan"
+                                    Text="Slut dato skal være efter start dato">
+            </RadzenCompareValidator>
+        </RadzenStack>
+    </RadzenStack>
+</section>
+
+<section>
+    <h4>Ledige boliger</h4>
+    @foreach (var listing in ListingsList)
+    {
+        <ListingCard Listing="@listing" />
+    }
+
+</section>
 
 @code {
+    private DateOnly from;
+    private DateOnly to;
 
+    public IReadOnlyList<ListingResponse> ListingsList { get; set; } = [];
+
+    private void OnChange()
+    {
+
+    }
+
+    async protected override Task OnInitializedAsync()
+    {
+        ListingsList = await Service.GetAllListings();
+    }
 }
