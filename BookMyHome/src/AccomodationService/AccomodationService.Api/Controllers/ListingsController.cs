@@ -53,7 +53,7 @@ namespace AccomodationService.Api.Controllers
         }
 
         [Authorize(Roles = "Host, Guest")]
-        [HttpGet("accomodationId")]
+        [HttpGet("{listingId}/accomodationId")]
         [EndpointSummary("This endpoint will get a accomodation Id for the request listing")]
         [EndpointDescription("Gets accomodation id for request listing or returns not found if no accomodation was found")]
         [ProducesResponseType<Guid>(StatusCodes.Status200OK, "application/json", Description = "Returns accomodationId for requested listing")]
