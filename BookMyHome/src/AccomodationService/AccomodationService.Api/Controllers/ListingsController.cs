@@ -22,7 +22,7 @@ namespace AccomodationService.Api.Controllers
         ) : ControllerBase
     {
         [Authorize(Roles = "Host, Guest")]
-        [HttpGet("listing")]
+        [HttpGet()]
         [EndpointSummary("This endpoint will get a all listings")]
         [EndpointDescription("Gets all listings or returns not found if no listings was found")]
         [ProducesResponseType<IReadOnlyList<ListingResponse>>(StatusCodes.Status200OK, "application/json", Description = "Returns all listings")]
