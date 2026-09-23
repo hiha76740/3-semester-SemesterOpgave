@@ -1,4 +1,5 @@
 ﻿using BookMyHome.ContractsLib.Responses.Users;
+using BookMyHome.Web.ServiceInterfaces;
 using System.Net.Http.Json;
 
 namespace BookMyHome.Web.Services
