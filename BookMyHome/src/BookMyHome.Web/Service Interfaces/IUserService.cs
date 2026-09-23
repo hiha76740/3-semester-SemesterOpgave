@@ -4,6 +4,6 @@ namespace BookMyHome.Web.Services
 {
     public interface IUserService
     {
-        public Task<IReadOnlyList<AccessRoleReponse>> GetAllAccessRoles();
+        Task<IReadOnlyList<AccessRoleReponse>> GetAllAccessRoles();
     }
 }
