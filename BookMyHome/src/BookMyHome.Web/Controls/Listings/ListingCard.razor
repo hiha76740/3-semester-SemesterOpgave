@@ -1,0 +1,37 @@
+﻿@inject NavigationManager navigationManager
+@using BookMyHome.ContractsLib.Responses.Accomodations
+<RadzenCard class="rz-my-12 rz-mx-auto" Style="max-width: 350px">
+    <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" Gap="1rem" class="rz-p-4">
+        <! -- Empty spot for accomodation listing photo -->
+    </RadzenStack>
+    <RadzenCard class="rz-background-color-primary-light rz-shadow-0 rz-border-radius-0 rz-p-8" style="margin: 1rem calc(-1 * var(--rz-card-padding));">
+        <RadzenText TextStyle="TextStyle.H6" TagName="TagName.P" class="rz-color-on-primary-light"><strong>@Listing.ListingName</strong></RadzenText>
+        <RadzenRow RowGap="0">
+            <RadzenColumn SizeSM="4">
+                <RadzenText TextStyle="TextStyle.Overline" class="rz-color-on-primary-light rz-display-flex rz-mt-4 rz-mb-0">Land</RadzenText>
+                <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>@Listing.Country</b></RadzenText>
+                <RadzenText TextStyle="TextStyle.Overline" class="rz-color-on-primary-light rz-display-flex rz-mt-4 rz-mb-0">By</RadzenText>
+                <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>@Listing.City</b></RadzenText>
+            </RadzenColumn>
+            <RadzenColumn SizeSM="8">
+                <RadzenText TextStyle="TextStyle.Overline" class="rz-color-on-primary-light rz-display-flex rz-mt-4 rz-mb-0">Pris</RadzenText>
+                <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>@String.Format(new System.Globalization.CultureInfo("da-DK"), "{0:C}", Listing.DailyPrice) / nat</b></RadzenText>
+                <RadzenText TextStyle="TextStyle.Overline" class="rz-color-on-primary-light rz-display-flex rz-mt-4 rz-mb-0">Type</RadzenText>
+                <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>@Listing.AccomodationType</b></RadzenText>
+            </RadzenColumn>
+        </RadzenRow>
+    </RadzenCard>
+    <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.End" Gap="0">
+        <RadzenButton Variant="Variant.Text" Text="Se detaljer" Click="@SeeDetails" />
+    </RadzenStack>
+</RadzenCard>
+
+@code {
+    [Parameter, EditorRequired]
+    public ListingResponse Listing { get; set; }
+
+    private void SeeDetails()
+    {
+        navigationManager.NavigateTo($"/listing/{Listing.ListingId}");
+    }
+}
