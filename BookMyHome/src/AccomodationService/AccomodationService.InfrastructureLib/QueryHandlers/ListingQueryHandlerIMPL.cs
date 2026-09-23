@@ -52,4 +52,23 @@ public class ListingQueryHandlerIMPL(AccomodationDbContext db) : IListingQueries
                 ))
             .ToListAsync();
     }
+
+    async Task<IReadOnlyList<ListingDto>> IListingQueries.GetAllListings()
+    {
+        return await db.Listings
+            .AsNoTracking()
+            .Select(l => new ListingDto(
+                l.Id.Value,
+                l.Accomodation.Id.Value,
+                l.ListingName,
+                l.DailyPrice,
+                l.HouseRules,
+                l.Type.ToString(),
+                l.Accomodation.Address.Street,
+                l.Accomodation.Address.PostalCode,
+                l.Accomodation.Address.City,
+                l.Accomodation.Address.Country
+                ))
+            .ToListAsync();
+    }
 }

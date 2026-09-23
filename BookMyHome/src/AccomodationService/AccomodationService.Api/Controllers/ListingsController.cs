@@ -22,6 +22,38 @@ namespace AccomodationService.Api.Controllers
         ) : ControllerBase
     {
         [Authorize(Roles = "Host, Guest")]
+        [HttpGet("listing")]
+        [EndpointSummary("This endpoint will get a all listings")]
+        [EndpointDescription("Gets all listings or returns not found if no listings was found")]
+        [ProducesResponseType<IReadOnlyList<ListingResponse>>(StatusCodes.Status200OK, "application/json", Description = "Returns all listings")]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Description = "Listings not found")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while receiving listings")]
+        public async Task<ActionResult<IReadOnlyList<ListingResponse>>> GetAllListings()
+        {
+            try
+            {
+                var list = await queries.GetAllListings();
+
+                if (list.Count == 0)
+                    return NotFound("No listings was found");
+
+                var response = new List<ListingResponse>();
+
+                foreach (var item in list)
+                {
+                    response.Add(item.AsReponse());
+                }
+
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+        [Authorize(Roles = "Host, Guest")]
         [HttpGet("{accomodationId:guid}/listings")]
         [EndpointSummary("This endpoint will get a all listings for a specific accomodation")]
         [EndpointDescription("Gets all listings of a accomodation or returns not found if no listings or accomodation was found")]
