@@ -2,7 +2,7 @@
 @inject IListingService Service
 @using BookMyHome.ContractsLib.Responses.Accomodations
 @using BookMyHome.Web.Controls.Listings
-@using BookMyHome.Web.Service_Interfaces
+@using BookMyHome.Web.ServiceInterfaces
 
 <section>
     <h3>Find dit næste ophold</h3>
@@ -50,6 +50,6 @@
 
     async protected override Task OnInitializedAsync()
     {
-        ListingsList = await Service.GetAllListings();
+        ListingsList = await Service.GetAllListingsAsync();
     }
 }
