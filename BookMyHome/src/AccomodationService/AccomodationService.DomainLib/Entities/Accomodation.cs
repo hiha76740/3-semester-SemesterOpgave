@@ -18,7 +18,7 @@ public class Accomodation
 
     public void CreateListing(string listingName, decimal dailyPrice, string houseRules, AccomodationType type)
     {
-        var listing = new Listing(this.Id, listingName, dailyPrice, houseRules, type);
+        var listing = new Listing(this, listingName, dailyPrice, houseRules, type);
 
         _listings.Add(listing);
     }
@@ -61,12 +61,12 @@ public class Accomodation
     }
 
 
-    public static Accomodation Create(HostId hostId, string title, string street, string postalCode, string city)
+    public static Accomodation Create(HostId hostId, string title, string street, string postalCode, string city, string country)
     {
         if (string.IsNullOrWhiteSpace(title))
             throw new DomainException("Title can not be empty");
 
-        var address = new Address(street, postalCode, city);
+        var address = new Address(street, postalCode, city,country);
 
         var accomodation = new Accomodation(hostId, title, address);
 

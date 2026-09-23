@@ -15,14 +15,18 @@ public class ListingQueryHandlerIMPL(AccomodationDbContext db) : IListingQueries
 
         return await db.Listings
             .AsNoTracking()
-            .Where(l => l.AccomodationId == aId && l.Id == lId)
+            .Where(l => l.Accomodation.Id == aId && l.Id == lId)
             .Select(l => new ListingDto(
                 l.Id.Value,
-                l.AccomodationId.Value,
+                l.Accomodation.Id.Value,
                 l.ListingName,
                 l.DailyPrice,
                 l.HouseRules,
-                l.Type.ToString()
+                l.Type.ToString(),
+                l.Accomodation.Address.Street,
+                l.Accomodation.Address.PostalCode,
+                l.Accomodation.Address.City,
+                l.Accomodation.Address.Country
                 ))
             .FirstOrDefaultAsync();
     }
@@ -33,14 +37,18 @@ public class ListingQueryHandlerIMPL(AccomodationDbContext db) : IListingQueries
 
         return await db.Listings
             .AsNoTracking()
-            .Where(l => l.AccomodationId == accomodationId)
+            .Where(l => l.Accomodation.Id == accomodationId)
             .Select(l => new ListingDto(
                 l.Id.Value,
-                l.AccomodationId.Value,
+                l.Accomodation.Id.Value,
                 l.ListingName,
                 l.DailyPrice,
                 l.HouseRules,
-                l.Type.ToString()
+                l.Type.ToString(),
+                l.Accomodation.Address.Street,
+                l.Accomodation.Address.PostalCode,
+                l.Accomodation.Address.City,
+                l.Accomodation.Address.Country
                 ))
             .ToListAsync();
     }

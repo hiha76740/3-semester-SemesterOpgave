@@ -7,8 +7,9 @@ public record Address
     public string Street { get; init; }
     public string PostalCode { get; init; }
     public string City { get; init; }
+    public string Country { get; init; }
 
-    public Address(string street, string postalCode, string city)
+    public Address(string street, string postalCode, string city, string country)
     {
         if (string.IsNullOrWhiteSpace(street))
             throw new DomainException("Street can not be empty");
@@ -19,8 +20,12 @@ public record Address
         if (string.IsNullOrWhiteSpace(city))
             throw new DomainException("City can not be empty");
 
+        if (string.IsNullOrWhiteSpace(country))
+            throw new DomainException("Country can not be empty");
+
         Street = street;
         PostalCode = postalCode;
         City = city;
+        Country = country;
     }
 }

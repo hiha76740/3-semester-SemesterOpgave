@@ -19,6 +19,7 @@ public class CreateAccomodationTests
         var street = "Test street 1";
         var postalCode = "12345";
         var city = "Test city";
+        var country = "Denmark";
 
         var mockAccomodationRepo = new Mock<IAccomodationRepository>();
 
@@ -27,7 +28,8 @@ public class CreateAccomodationTests
             title,
             street,
             postalCode,
-            city
+            city,
+            country
             );
 
         var handler = new CreateAccomodationHandler(mockAccomodationRepo.Object) as ICreateAccomodationHandler;

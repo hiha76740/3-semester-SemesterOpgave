@@ -4,5 +4,6 @@ public record CreateAccomodationRequest(
     string Title,
     string Street,
     string PostalCode,
-    string City
+    string City,
+    string Country
     );

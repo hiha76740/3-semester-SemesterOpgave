@@ -7,7 +7,7 @@ public class Listing
 {
     public ListingId Id { get; init; } = null!;
 
-    public AccomodationId AccomodationId { get; init; } = null!;
+    public Accomodation Accomodation { get; init; } = null!;
 
     public string ListingName { get; init; } = string.Empty;
 
@@ -39,7 +39,7 @@ public class Listing
         HouseRules = newHouseRules;
     }
 
-    internal Listing(AccomodationId accomodationId, string listingName, decimal dailyPrice, string houseRules, AccomodationType type)
+    internal Listing(Accomodation accomodation, string listingName, decimal dailyPrice, string houseRules, AccomodationType type)
     {
         if (string.IsNullOrWhiteSpace(listingName))
             throw new DomainException("listing name can not be empty");
@@ -55,7 +55,7 @@ public class Listing
         DailyPrice = dailyPrice;
         HouseRules = houseRules;
         Type = type;
-        AccomodationId = accomodationId;
+        Accomodation = accomodation;
     }
 
 

@@ -18,7 +18,8 @@ namespace AccomodationService.InfrastructureLib.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     HostId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {

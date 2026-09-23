@@ -16,7 +16,8 @@ public class CreateAccomodationHandler(IAccomodationRepository accomodationRepo)
             hostId,
             command.Street,
             command.PostalCode,
-            command.City
+            command.City,
+            command.Country
             );
 
         if (accomodationExsist == true)
@@ -27,7 +28,8 @@ public class CreateAccomodationHandler(IAccomodationRepository accomodationRepo)
             command.Title,
             command.Street,
             command.PostalCode,
-            command.City
+            command.City,
+            command.Country
             );
 
         await accomodationRepo.CreateAsync(accomodation);

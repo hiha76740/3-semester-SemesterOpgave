@@ -13,8 +13,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AccomodationService.InfrastructureLib.Migrations
 {
     [DbContext(typeof(AccomodationDbContext))]
-    [Migration("20260917163614_AddedAddress")]
-    partial class AddedAddress
+    [Migration("20260923052535_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -47,6 +47,9 @@ namespace AccomodationService.InfrastructureLib.Migrations
                             b1.IsRequired();
 
                             b1.Property<string>("City")
+                                .IsRequired();
+
+                            b1.Property<string>("Country")
                                 .IsRequired();
 
                             b1.Property<string>("PostalCode")
@@ -97,11 +100,13 @@ namespace AccomodationService.InfrastructureLib.Migrations
 
             modelBuilder.Entity("AccomodationService.DomainLib.Entities.Listing", b =>
                 {
-                    b.HasOne("AccomodationService.DomainLib.Entities.Accomodation", null)
+                    b.HasOne("AccomodationService.DomainLib.Entities.Accomodation", "Accomodation")
                         .WithMany("listings")
                         .HasForeignKey("AccomodationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Accomodation");
                 });
 
             modelBuilder.Entity("AccomodationService.DomainLib.Entities.Accomodation", b =>

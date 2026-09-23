@@ -15,7 +15,11 @@ public static class ListingMapper
             dto.ListingName,
             dto.DailyPrice,
             dto.HouseRules,
-            dto.AccomodationType
+            dto.AccomodationType,
+            dto.Street,
+            dto.PostalCode,
+            dto.City,
+            dto.Country
             );
 
         return output;

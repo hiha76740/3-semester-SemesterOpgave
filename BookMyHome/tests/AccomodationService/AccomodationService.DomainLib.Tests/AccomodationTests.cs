@@ -11,13 +11,15 @@ public class AccomodationTests
     private readonly static string Street = "Test street 4";
     private readonly static string PostalCode = "12345";
     private readonly static string City = "Test City";
+    private readonly static string Country = "Denmark";
 
     private static Accomodation CreateAccomodation(
         HostId? hostId = null,
         string? title = null,
         string? street = null,
         string? postalCode = null,
-        string? city = null
+        string? city = null,
+        string? country = null
         )
     {
         return Accomodation.Create(
@@ -25,7 +27,8 @@ public class AccomodationTests
             title ?? Title,
             street ?? Street,
             postalCode ?? PostalCode,
-            city ?? City
+            city ?? City,
+            country ?? Country
             );
     }
 
