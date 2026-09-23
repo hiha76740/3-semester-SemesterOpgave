@@ -9,4 +9,6 @@ public interface IListingQueries
     Task<ListingDto?> GetAccomdationListingByIdAsync(Guid accomodationId, Guid listingId);
 
     Task<IReadOnlyList<ListingDto>> GetAllListings();
+
+    Task<Guid?>GetAccomodationIdByListingId(Guid id);
 }

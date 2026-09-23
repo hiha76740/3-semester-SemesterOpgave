@@ -31,6 +31,17 @@ public class ListingQueryHandlerIMPL(AccomodationDbContext db) : IListingQueries
             .FirstOrDefaultAsync();
     }
 
+    async Task<Guid?> IListingQueries.GetAccomodationIdByListingId(Guid id)
+    {
+        var listingId = new ListingId(id);
+
+        return await db.Listings
+            .AsNoTracking()
+            .Where(l => l.Id == listingId)
+            .Select(l => l.Accomodation.Id.Value)
+            .FirstOrDefaultAsync();
+    }
+
     async Task<IReadOnlyList<ListingDto>> IListingQueries.GetAllAccomdationListingsAsync(Guid id)
     {
         var accomodationId = new AccomodationId(id);

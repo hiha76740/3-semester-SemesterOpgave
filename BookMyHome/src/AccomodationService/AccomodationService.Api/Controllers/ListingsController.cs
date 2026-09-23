@@ -52,6 +52,32 @@ namespace AccomodationService.Api.Controllers
             }
         }
 
+        [Authorize(Roles = "Host, Guest")]
+        [HttpGet("accomodationId")]
+        [EndpointSummary("This endpoint will get a accomodation Id for the request listing")]
+        [EndpointDescription("Gets accomodation id for request listing or returns not found if no accomodation was found")]
+        [ProducesResponseType<Guid>(StatusCodes.Status200OK, "application/json", Description = "Returns accomodationId for requested listing")]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Description = "Accomodation or listing was not found")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while receiving accomodation id")]
+        public async Task<ActionResult<Guid?>> GetAllListings(
+            [Description("Id of the listing you want to find accomodation id for")] Guid listingId)
+        {
+            try
+            {
+                var guid = await queries.GetAccomodationIdByListingId(listingId);
+
+                if (guid == null)
+                    return NotFound("No accomodation was found");
+
+                return Ok(guid);
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
 
         [Authorize(Roles = "Host, Guest")]
         [HttpGet("{accomodationId:guid}/listings")]
