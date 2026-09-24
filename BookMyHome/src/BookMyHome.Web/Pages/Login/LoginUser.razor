@@ -1,25 +1,43 @@
 ﻿@page "/login"
 @inject IAuthService Service
 @inject NavigationManager NavigationManager
-@using BookMyHome.Web.ServiceInterfaces
 
-<RadzenCard class="rz-my-12 rz-mx-auto rz-p-4 rz-p-md-12" style="max-width: 600px;">
-    <RadzenLogin AllowRegister="true"
-                 AllowResetPassword="false"
-                 Login="@(args => Login(args))"
-                 Register="(args => Register())" />
-</RadzenCard>
+@if (error != null)
+{
+    <p>@error</p>
+}
+else
+{
+    <RadzenCard class="rz-my-12 rz-mx-auto rz-p-4 rz-p-md-12" style="max-width: 600px;">
+        <RadzenLogin AllowRegister="true"
+                     AllowResetPassword="false"
+                     Login="@(args => Login(args))"
+                     Register="(args => Register())" />
+    </RadzenCard>
+}
+
+
 
 @code {
 
+    private string? error = null;
+
     private async Task Login(LoginArgs args)
     {
-        var reponse = await Service.Login(args.Username!, args.Password!);
-
-        if (reponse == 200)
+        try
         {
-            NavigationManager.NavigateTo("/");
+            var reponse = await Service.Login(args.Username!, args.Password!);
+
+            if (reponse == 200)
+            {
+                NavigationManager.NavigateTo("/");
+            }
         }
+        catch (Exception ex)
+        {
+            error = ex.Message;
+        }
+
     }
 
     async Task Register()

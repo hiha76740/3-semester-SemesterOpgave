@@ -2,29 +2,52 @@
 @inject IAuthService authService
 @inject IUserService userService
 @inject NavigationManager navigationManager
-@using BookMyHome.ContractsLib.Requests.Users
-@using BookMyHome.ContractsLib.Responses.Users
-@using BookMyHome.Web.Controls.Users
-@using BookMyHome.Web.ServiceInterfaces
 
-<UserFormComponent SubmitCallback="@Create"
-                   AccessRoles="AccessRoles"
-                   SubmitText="Create" />
+
+@if(error != null)
+{
+    
+}
+else
+{
+    <UserFormComponent SubmitCallback="@Create"
+                       AccessRoles="AccessRoles"
+                       SubmitText="Create" />
+}
+
+
 
 @code {
     private IReadOnlyList<AccessRoleReponse> AccessRoles = [];
-
+    private string? error = null;
 
     protected override async Task OnInitializedAsync()
     {
-        AccessRoles = await userService.GetAllAccessRoles();
+        try
+        {
+            AccessRoles = await userService.GetAllAccessRoles();
+        }
+        catch (Exception ex)
+        {
+            error = ex.Message;
+        }
+
     }
 
     private async Task Create(RegisterUserRequest request)
     {
-        var responseCode = await authService.Register(request);
+        try
+        {
+            var responseCode = await authService.Register(request);
 
-        if (responseCode == 200)
-            navigationManager.NavigateTo("/login");
+            if (responseCode == 200)
+                navigationManager.NavigateTo("/login");
+        }
+        catch (Exception ex)
+        {
+            error = ex.Message;
+        }
+
+        
     }
 }
