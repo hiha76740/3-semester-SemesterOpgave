@@ -4,6 +4,7 @@ using BookMyHome.Web;
 using Radzen;
 using BookMyHome.Web.Services;
 using BookMyHome.Web.ServiceInterfaces;
+using BookMyHome.Web.States;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -15,5 +16,6 @@ builder.Services.AddRadzenComponents();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IListingService, ListingService>();
+builder.Services.AddScoped<UserState>();
 
 await builder.Build().RunAsync();
