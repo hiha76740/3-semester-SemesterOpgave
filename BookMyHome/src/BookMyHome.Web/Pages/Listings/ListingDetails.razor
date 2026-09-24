@@ -2,51 +2,81 @@
 @using BookMyHome.ContractsLib.Responses.Accomodations
 @using BookMyHome.Web.ServiceInterfaces
 @inject IListingService service
+@inject NavigationManager navigationManager
 
-<RadzenCard class="rz-my-12 rz-mx-auto" Style="max-width: 450px">
-    <RadzenButton Variant="Variant.Text" class="rz-text-secondary-color" Text="<- Back" />
-    <RadzenColumn>
-        <RadzenText TextStyle="TextStyle.Overline" class="rz-color-on-primary-light rz-display-flex rz-mt-4 rz-mb-0">@listing.ListingName</RadzenText>
-        <RadzenText TextStyle="TextStyle.Overline" class="rz-color-on-primary-light rz-display-flex rz-mt-4 rz-mb-0">@listing.City, @listing.Country</RadzenText>
-    </RadzenColumn>
-    <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" Gap="1rem" class="rz-p-4">
-        <! -- Placeholder for picture -- >
-    </RadzenStack>
-    <RadzenCard class="rz-background-color-primary-light rz-shadow-0 rz-border-radius-0 rz-p-8" style="margin: 1rem calc(-1 * var(--rz-card-padding));">
-        <RadzenText TextStyle="TextStyle.H6" TagName="TagName.P" class="rz-color-on-primary-light"><strong>Listing information</strong></RadzenText>
-        <RadzenRow RowGap="0">
-            <RadzenColumn SizeSM="4">
-                <RadzenText TextStyle="TextStyle.Overline" class="rz-color-on-primary-light rz-display-flex rz-mt-4 rz-mb-0">Type</RadzenText>
-                <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>@listing.AccomodationType</b></RadzenText>
-                <RadzenText TextStyle="TextStyle.Overline" class="rz-color-on-primary-light rz-display-flex rz-mt-4 rz-mb-0">Facilities</RadzenText>
-                <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>Wifi, Parking</b></RadzenText>
-                <RadzenText TextStyle="TextStyle.Overline" class="rz-color-on-primary-light rz-display-flex rz-mt-4 rz-mb-0">House Rules</RadzenText>
-                <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>@listing.HouseRules</b></RadzenText>
-            </RadzenColumn>
-            <RadzenColumn SizeSM="8">
-                <RadzenText TextStyle="TextStyle.Overline" class="rz-color-on-primary-light rz-display-flex rz-mt-4 rz-mb-0">Pris pr. dag</RadzenText>
-                <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>@String.Format(new System.Globalization.CultureInfo("da-DK"), "{0:C}", listing.DailyPrice)</b></RadzenText>
 
-            </RadzenColumn>
-        </RadzenRow>
+@if (listing == null)
+{
+    <p>Indlæser listing...</p>
+}
+else if(error != null)
+{
+    <p>@error</p>
+}
+else
+{
+    <RadzenCard class="rz-my-12 rz-mx-auto" Style="max-width: 450px">
+        <RadzenButton Variant="Variant.Text" class="rz-text-secondary-color" Text="<- Back" Click="@Back"/>
+        <RadzenColumn>
+            <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">@listing.ListingName</RadzenText>
+            <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">@listing.City, @listing.Country</RadzenText>
+        </RadzenColumn>
+        <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" Gap="1rem" class="rz-p-4">
+            <! -- Placeholder for picture -- >
+        </RadzenStack>
+        <RadzenCard class="rz-background-color-primary-light rz-shadow-0 rz-border-radius-0 rz-p-8" style="margin: 1rem calc(-1 * var(--rz-card-padding));">
+            <RadzenText TextStyle="TextStyle.H6" TagName="TagName.P" class="rz-color-on-primary-light"><strong>Listing information</strong></RadzenText>
+            <RadzenRow RowGap="0">
+                <RadzenColumn SizeSM="4">
+                    <RadzenText TextStyle="TextStyle.Overline" class="rz-color-on-primary-light rz-display-flex rz-mt-4 rz-mb-0">Type</RadzenText>
+                    <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>@listing.AccomodationType</b></RadzenText>
+                    <RadzenText TextStyle="TextStyle.Overline" class="rz-color-on-primary-light rz-display-flex rz-mt-4 rz-mb-0">Facilities</RadzenText>
+                    <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>Wifi, Parking</b></RadzenText>
+                    <RadzenText TextStyle="TextStyle.Overline" class="rz-color-on-primary-light rz-display-flex rz-mt-4 rz-mb-0">House Rules</RadzenText>
+                    <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>@listing.HouseRules</b></RadzenText>
+                </RadzenColumn>
+                <RadzenColumn SizeSM="8">
+                    <RadzenText TextStyle="TextStyle.Overline" class="rz-color-on-primary-light rz-display-flex rz-mt-4 rz-mb-0">Pris pr. dag</RadzenText>
+                    <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>@String.Format(new System.Globalization.CultureInfo("da-DK"), "{0:C}", listing.DailyPrice)</b></RadzenText>
+
+                </RadzenColumn>
+            </RadzenRow>
+        </RadzenCard>
+        <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" Gap="0">
+            <RadzenButton Text="Book" ButtonStyle="ButtonStyle.Success" Click="@Book"/>
+        </RadzenStack>
     </RadzenCard>
-    <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" Gap="0">
-        <RadzenButton Text="Book" ButtonStyle="ButtonStyle.Success" />
-    </RadzenStack>
-</RadzenCard>
+}
+
 
 @code {
     [Parameter]
     public Guid Id { get; set; }
 
-    private ListingResponse listing = null!;
+    private Guid? accomodationId = null;
+    private string? error = null;
+    private ListingResponse? listing;
 
     async protected override Task OnInitializedAsync()
     {
-        var accomodationId = await service.GetAccomodationIdByListingId(Id);
-
-        listing = await service.GetListingAsync(accomodationId,Id);
-            
+        try
+        {
+            accomodationId = await service.GetAccomodationIdByListingId(Id);
+            listing = await service.GetListingAsync(accomodationId.Value, Id);
+        }
+        catch (Exception ex)
+        {
+            error = ex.Message;
+        }
     }
 
+    private void Back()
+    {
+        navigationManager.NavigateTo("/listings");
+    }
+
+    private void Book()
+    {
+        navigationManager.NavigateTo("/booking/create");
+    }
 }
