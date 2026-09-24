@@ -11,7 +11,17 @@
 
     <main>
         <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
+            <RadzenProfileMenu>
+                <Template>
+                    <RadzenGravatar Email="user@example.com">
+                    </RadzenGravatar>
+                </Template>
+                <ChildContent>
+                    <RadzenProfileMenuItem Text="Login eller registre dig" Path="/login" Icon="lock_open"></RadzenProfileMenuItem>
+                    <RadzenProfileMenuItem Text="Profil" Path="/user/profile" Icon="account_circle"></RadzenProfileMenuItem>
+                    <RadzenProfileMenuItem Text="Mine bookinger" Path="/bookings" Icon="book"></RadzenProfileMenuItem>
+                </ChildContent>
+            </RadzenProfileMenu>
         </div>
 
         <article class="content px-4">
