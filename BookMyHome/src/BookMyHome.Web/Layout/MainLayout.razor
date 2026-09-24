@@ -1,4 +1,5 @@
 ﻿@inherits LayoutComponentBase
+@inject UserState UserState
 
 <HeadContent>
     <RadzenTheme Theme="material" />
@@ -11,19 +12,28 @@
 
     <main>
         <div class="top-row px-4">
-            <RadzenProfileMenu>
-                <Template>
-                    <RadzenGravatar Email="user@example.com">
-                    </RadzenGravatar>
-                </Template>
-                <ChildContent>
-                    <RadzenProfileMenuItem Text="Login eller registre dig" Path="/login" Icon="lock_open"></RadzenProfileMenuItem>
-                    <RadzenProfileMenuItem Text="Profil" Path="/user/profile" Icon="account_circle"></RadzenProfileMenuItem>
-                    <RadzenProfileMenuItem Text="Mine bookinger" Path="/bookings" Icon="book"></RadzenProfileMenuItem>
-                </ChildContent>
-            </RadzenProfileMenu>
+            @if (UserState.UserId != null)
+            {
+                <RadzenProfileMenu>
+                    <Template>
+                        <RadzenGravatar Email="@UserState.Username">
+                        </RadzenGravatar>
+                    </Template>
+                    <ChildContent>
+                        <RadzenProfileMenuItem Text="Profil" Path="/user/profile" Icon="account_circle"></RadzenProfileMenuItem>
+                        <RadzenProfileMenuItem Text="Mine bookinger" Path="/bookings" Icon="book"></RadzenProfileMenuItem>
+                    </ChildContent>
+                </RadzenProfileMenu>
+            }
+            else
+            {
+                <RadzenProfileMenu>
+                    <ChildContent>
+                        <RadzenProfileMenuItem Text="Login eller registre dig" Path="/login" Icon="lock_open"></RadzenProfileMenuItem>
+                    </ChildContent>
+                </RadzenProfileMenu>
+            }
         </div>
-
         <article class="content px-4">
             @Body
         </article>
