@@ -1,6 +1,8 @@
 ﻿@page "/login"
+@using BookMyHome.Web.States
 @inject IAuthService Service
 @inject NavigationManager NavigationManager
+@inject UserState userState
 
 @if (error != null)
 {
@@ -30,6 +32,14 @@ else
 
             if (reponse == 200)
             {
+                var authUser = await Service.GetAuthUserAsync();
+
+                userState.UserId = authUser.Id;
+                userState.Firstname = authUser.Firstname;
+                userState.Lastname = authUser.Lastname;
+                userState.Username = authUser.Username;
+                userState.Role = authUser.Role;
+
                 NavigationManager.NavigateTo("/");
             }
         }
