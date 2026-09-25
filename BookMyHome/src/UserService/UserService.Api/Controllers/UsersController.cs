@@ -40,5 +40,30 @@ namespace UserService.Api.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpGet("{userId:guid}")]
+        [EndpointSummary("This endpoint will get a specific user")]
+        [EndpointDescription("Gets a specific user, if successful returns user otherwise returns not found")]
+        [ProducesResponseType<UserResponse>(StatusCodes.Status200OK, "application/json", Description = "Returns requested user")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while getting requested user")]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Description = "Requested user was not found")]
+
+        public ActionResult<UserResponse> GetUserById(Guid userId)
+        {
+            try
+            {
+                var user = queries.GetByIdAsync(userId);
+
+                if (user == null)
+                    return NotFound("No user was found with the specified Id");
+
+                return Ok(user);
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
