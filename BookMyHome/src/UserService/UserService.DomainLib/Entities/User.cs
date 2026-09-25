@@ -49,6 +49,9 @@ namespace UserService.DomainLib.Entities
             if (string.IsNullOrWhiteSpace(passwordHash))
                 throw new DomainException("Password Hash can not be empty");
 
+            if (birthdate >= DateOnly.FromDateTime(DateTime.Today).AddYears(-18))
+                throw new DomainException("You need to be 18 years old to create an account");
+
             var address = new Address(street, postalCode, city);
             var pNumber = new PhoneNumber(phoneNumber);
             var emailAddress = new Email(email);
