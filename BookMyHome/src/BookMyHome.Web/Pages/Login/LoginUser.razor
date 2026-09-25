@@ -34,11 +34,13 @@ else
             {
                 var authUser = await Service.GetAuthUserAsync();
 
-                userState.UserId = authUser.Id;
-                userState.Firstname = authUser.Firstname;
-                userState.Lastname = authUser.Lastname;
-                userState.Username = authUser.Username;
-                userState.Role = authUser.Role;
+                userState.SetUser(
+                    authUser.Id,
+                    authUser.Firstname,
+                    authUser.Lastname,
+                    authUser.Username,
+                    authUser.Role
+                );
 
                 NavigationManager.NavigateTo("/");
             }
