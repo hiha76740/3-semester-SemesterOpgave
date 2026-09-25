@@ -1,0 +1,55 @@
+﻿@page "/user/profile"
+@inject UserState UserState
+@inject IUserService Service
+
+<h3>UserProfile</h3>
+
+@if(error != null)
+{
+    <p>@error</p>
+}
+else if(UserState.UserId == null && user == null )
+{
+    <p>Du skal logge ind for at se din profil</p>
+}
+else if (user == null)
+{
+    <p>Indlæser bruger...</p>
+}
+else
+{
+    <p>@user.Firstname</p>
+    <p>@user.Lastname</p>
+    <p>@user.Birthdate</p>
+    <p>@user.Street</p>
+    <p>@user.PostalCode</p>
+    <p>@user.City</p>
+    <p>@user.PhoneNumber</p>
+    <p>@user.Email</p>
+    <p>@user.Username</p>
+}
+
+
+@code {
+    private UserResponse? user = null;
+    private string? error;
+
+    async protected override Task OnInitializedAsync()
+    {
+        try
+        {
+            if (UserState.UserId != null)
+            {
+                user = await Service.GetUserById(UserState.UserId.Value);
+
+
+            }
+        }
+        catch (Exception ex)
+        {
+            error = ex.Message;
+        }
+
+        
+    }
+}
