@@ -5,5 +5,7 @@ namespace BookMyHome.Web.ServiceInterfaces
     public interface IUserService
     {
         Task<IReadOnlyList<AccessRoleReponse>> GetAllAccessRoles();
+
+        Task<UserResponse> GetUserById(Guid id);
     }
 }
