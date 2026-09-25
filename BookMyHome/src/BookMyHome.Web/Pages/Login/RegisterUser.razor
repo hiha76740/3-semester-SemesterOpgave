@@ -1,23 +1,26 @@
 ﻿@page "/register"
+@using BookMyHome.Web.Models
 @inject IAuthService authService
 @inject IUserService userService
 @inject NavigationManager navigationManager
 
 
-@if(error != null)
+@if (error != null)
 {
-    
+
 }
 else
 {
-    <UserFormComponent SubmitCallback="@Create"
-                       AccessRoles="AccessRoles"
-                       SubmitText="Create" />
+    <UserFormComponent model="model" 
+        SubmitCallback="Create" 
+        SubmitText="Registre" 
+        CancelPath="/login"/>
 }
 
 
 
 @code {
+    private UserInputModel model = new();
     private IReadOnlyList<AccessRoleReponse> AccessRoles = [];
     private string? error = null;
 
@@ -34,10 +37,23 @@ else
 
     }
 
-    private async Task Create(RegisterUserRequest request)
+    private async Task Create(UserInputModel model)
     {
         try
         {
+            var request = new RegisterUserRequest(
+            model.FirstName,
+            model.LastName,
+            model.Birthdate,
+            model.Street,
+            model.PostalCode,
+            model.City,
+            model.PhoneNumber,
+            model.Email,
+            model.Password,
+            model.AccessRole
+        );
+
             var responseCode = await authService.Register(request);
 
             if (responseCode == 200)
