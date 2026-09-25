@@ -48,16 +48,16 @@ namespace UserService.Api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while getting requested user")]
         [ProducesResponseType(StatusCodes.Status404NotFound, Description = "Requested user was not found")]
 
-        public ActionResult<UserResponse> GetUserById(Guid userId)
+        public async Task<ActionResult<UserResponse>> GetUserById(Guid userId)
         {
             try
             {
-                var user = queries.GetByIdAsync(userId);
+                var user = await queries.GetByIdAsync(userId);
 
                 if (user == null)
                     return NotFound("No user was found with the specified Id");
 
-                return Ok(user);
+                return Ok(user.AsUserResponse());
 
             }
             catch (Exception ex)

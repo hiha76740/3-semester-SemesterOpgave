@@ -11,5 +11,23 @@ namespace UserService.Api.Mapper
 
             return output;
         }
+
+        public static UserResponse AsUserResponse(this UserDto dto)
+        {
+            var output = new UserResponse(
+                dto.Firstname,
+                dto.Lastname,
+                dto.Birthdate,
+                dto.Street,
+                dto.PostalCode,
+                dto.City,
+                dto.PhoneNumber,
+                dto.Email,
+                dto.Username
+                );
+
+            return output;
+        }
+
     }
 }
