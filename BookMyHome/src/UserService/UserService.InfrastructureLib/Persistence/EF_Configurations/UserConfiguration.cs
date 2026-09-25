@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using UserService.DomainLib.Entities;
+using UserService.DomainLib.ValueObject;
 
 namespace UserService.InfrastructureLib.Persistence.EF_Configurations;
 
@@ -25,12 +26,17 @@ internal class UserConfiguration : IEntityTypeConfiguration<User>
             pn => pn.ToJson()
             );
 
-        builder.ComplexProperty(
-            u => u.Email,
-            e => e.ToJson()
-            );
+        builder.Property(u => u.Email)
+            .HasConversion(
+            email => email.EmailAddress,
+            value => new Email(value));
+
+        builder.HasIndex(u => u.Email)
+            .IsUnique();
 
         builder.Property(u => u.Role)
             .HasConversion<string>();
+
+
     }
 }
