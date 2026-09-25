@@ -1,10 +1,11 @@
 ﻿@using BookMyHome.ContractsLib.Requests.Users
 @using BookMyHome.ContractsLib.Responses.Users
+@using BookMyHome.Web.Models
 @inject NavigationManager navigationManager
 
 
 <RadzenCard class="rz-my-12 rz-mx-auto rz-p-4 rz-p-md-12" style="max-width: 600px;">
-    <RadzenTemplateForm TItem="Registration" Data=@model Submit=@HandleSubmit>
+    <RadzenTemplateForm TItem="UserInputModel" Data=@model Submit=@HandleSubmit>
         <RadzenStack Gap="1rem">
             <article style="">
                 <h4>Generelt</h4>
@@ -37,25 +38,39 @@
                     </RadzenColumn>
                 </RadzenRow>
                 <br />
-                <RadzenRow AlignItems="AlignItems.Center" RowGap="0.25rem">
-                    <RadzenColumn Size="12" SizeMD="4" class="rz-text-align-start rz-text-align-md-end">
-                        <RadzenLabel Text="Indtast kodeord" Component="Password" />
-                    </RadzenColumn>
-                    <RadzenColumn Size="12" SizeMD="8">
-                        <RadzenPassword Name="Password" @bind-Value=@model.Password Style="display: block; width: 100%;" />
-                        <RadzenRequiredValidator Component="Password" Text="Password is required." Style="position: absolute" />
-                    </RadzenColumn>
-                </RadzenRow>
-                <br />
-                <RadzenRow AlignItems="AlignItems.Center" RowGap="0.25rem">
-                    <RadzenColumn Size="12" SizeMD="4" class="rz-text-align-start rz-text-align-md-end">
-                        <RadzenLabel Text="Gentag kodeord" Component="RepeatPassword" />
-                    </RadzenColumn>
-                    <RadzenColumn Size="12" SizeMD="8">
-                        <RadzenPassword Name="RepeatPassword" @bind-Value=@model.RepeatPassword style="display: block; width: 100%;" />
-                        <RadzenCompareValidator Value=@model.Password Component="RepeatPassword" Text="Passwords should be the same" Style="position: absolute" />
-                    </RadzenColumn>
-                </RadzenRow>
+                @if (AccessRoles != null)
+                {   
+                    <RadzenRow AlignItems="AlignItems.Center" RowGap="0.25rem">
+                        <RadzenColumn Size="12" SizeMD="4" class="rz-text-align-start rz-text-align-md-end">
+                            <RadzenLabel Text="Indtast kodeord" Component="Password" />
+                        </RadzenColumn>
+                        <RadzenColumn Size="12" SizeMD="8">
+                            <RadzenPassword Name="Password" @bind-Value=@model.Password Style="display: block; width: 100%;" />
+                            <RadzenRequiredValidator Component="Password" Text="Password is required." Style="position: absolute" />
+                        </RadzenColumn>
+                    </RadzenRow>
+                    <br />
+                    <RadzenRow AlignItems="AlignItems.Center" RowGap="0.25rem">
+                        <RadzenColumn Size="12" SizeMD="4" class="rz-text-align-start rz-text-align-md-end">
+                            <RadzenLabel Text="Gentag kodeord" Component="RepeatPassword" />
+                        </RadzenColumn>
+                        <RadzenColumn Size="12" SizeMD="8">
+                            <RadzenPassword Name="RepeatPassword" @bind-Value=@model.RepeatPassword style="display: block; width: 100%;" />
+                            <RadzenCompareValidator Value=@model.Password Component="RepeatPassword" Text="Passwords should be the same" Style="position: absolute" />
+                        </RadzenColumn>
+                    </RadzenRow>
+                }
+                else
+                {
+                    <RadzenRow AlignItems="AlignItems.Center" RowGap="0.25rem">
+                        <RadzenColumn Size="12" SizeMD="4" class="rz-text-align-start rz-text-align-md-end">
+                            <RadzenLabel Text="Brugernavn" Component="Username" />
+                        </RadzenColumn>
+                        <RadzenColumn Size="12" SizeMD="8">
+                            <RadzenTextBox Name="Username" @bind-Value=@model.Username Style="display: block; width: 100%;" ReadOnly="true" />
+                        </RadzenColumn>
+                    </RadzenRow>
+                }
             </article>
             <article>
                 <h4>Kontakt oplysninger</h4>
@@ -114,21 +129,24 @@
                     </RadzenColumn>
                 </RadzenRow>
             </article>
-            <article>
-                <h4>Adgangs rolle</h4>
-                <RadzenRow AlignItems="AlignItems.Center" RowGap="0.25rem">
-                    <RadzenColumn Size="12" SizeMD="8">
-                        <RadzenRadioButtonList @bind-Value="model.AccessRole" TValue="string">
-                            <Items>
-                                @foreach (var type in AccessRoles)
-                                {
-                                    <RadzenRadioButtonListItem Text="@type.Role" Value="@type.Role" />
-                                }
-                            </Items>
-                        </RadzenRadioButtonList>
-                    </RadzenColumn>
-                </RadzenRow>
-            </article>
+            @if (AccessRoles != null)
+            {
+                <article>
+                    <h4>Adgangs rolle</h4>
+                    <RadzenRow AlignItems="AlignItems.Center" RowGap="0.25rem">
+                        <RadzenColumn Size="12" SizeMD="8">
+                            <RadzenRadioButtonList @bind-Value="model.AccessRole" TValue="string">
+                                <Items>
+                                    @foreach (var type in AccessRoles)
+                                    {
+                                        <RadzenRadioButtonListItem Text="@type.Role" Value="@type.Role" />
+                                    }
+                                </Items>
+                            </RadzenRadioButtonList>
+                        </RadzenColumn>
+                    </RadzenRow>
+                </article>
+            }
             <RadzenRow AlignItems="AlignItems.Center" class="rz-mt-4">
                 <RadzenColumn Size="12" Offset="0" SizeMD="8" OffsetMD="4">
                     <RadzenButton ButtonType="ButtonType.Submit" Text="@SubmitText" ButtonStyle="ButtonStyle.Primary" />
@@ -143,51 +161,27 @@
 
 @code {
     [Parameter, EditorRequired]
-    public IReadOnlyList<AccessRoleReponse> AccessRoles { get; set; }
-
-    [Parameter, EditorRequired]
-    public EventCallback<RegisterUserRequest> SubmitCallback { get; set; }
+    public UserInputModel model { get; set; }
 
     [Parameter]
+    public IReadOnlyList<AccessRoleReponse>? AccessRoles { get; set; } = null;
+
+    [Parameter, EditorRequired]
+    public EventCallback<UserInputModel> SubmitCallback { get; set; }
+
+    [Parameter, EditorRequired]
     public string SubmitText { get; set; } = "Submit";
 
-    class Registration
-    {
-        public string FirstName { get; set; } = string.Empty;
-        public string LastName { get; set; } = string.Empty;
-        public string Email { get; set; } = string.Empty;
-        public string PhoneNumber { get; set; } = string.Empty;
-        public DateOnly Birthdate { get; set; } = DateOnly.FromDateTime(DateTime.Today);
-        public string Street { get; set; } = string.Empty;
-        public string PostalCode { get; set; } = string.Empty;
-        public string City { get; set; } = string.Empty;
-        public string Password { get; set; } = string.Empty;
-        public string RepeatPassword { get; set; } = string.Empty;
-        public string AccessRole { get; set; } = string.Empty;
-    }
-
-    Registration model = new Registration();
+    [Parameter, EditorRequired]
+    public string CancelPath { get; set; } = "/";
 
     private void HandleSubmit()
     {
-        var request = new RegisterUserRequest(
-            model.FirstName,
-            model.LastName,
-            model.Birthdate,
-            model.Street,
-            model.PostalCode,
-            model.City,
-            model.PhoneNumber,
-            model.Email,
-            model.Password,
-            model.AccessRole
-        );
-
-        SubmitCallback.InvokeAsync(request);
+        SubmitCallback.InvokeAsync(model);
     }
 
     private void Cancel()
     {
-        navigationManager.NavigateTo("/login");
+        navigationManager.NavigateTo(CancelPath);
     }
 }
