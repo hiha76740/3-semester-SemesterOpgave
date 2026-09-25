@@ -1,5 +1,7 @@
-﻿@inherits LayoutComponentBase
+﻿@using System.Net
+@inherits LayoutComponentBase
 @inject UserState UserState
+@inject IAuthService service
 
 <HeadContent>
     <RadzenTheme Theme="material" />
@@ -39,3 +41,33 @@
         </article>
     </main>
 </div>
+
+@code{
+    private bool userLoaded;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            var authUser = await service.GetAuthUserAsync();
+
+            UserState.SetUser(
+                authUser.Id,
+                authUser.Firstname,
+                authUser.Lastname,
+                authUser.Username,
+                authUser.Role
+            );
+
+        }
+        catch (HttpRequestException ex)
+        when (ex.StatusCode == HttpStatusCode.Unauthorized)
+        {
+            // do nothing for now
+        }
+        finally
+        {
+            userLoaded = true;
+        }
+    }
+}
