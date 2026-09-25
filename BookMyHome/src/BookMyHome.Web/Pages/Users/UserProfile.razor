@@ -18,19 +18,12 @@ else if (user == null)
 }
 else
 {
-    <p>@user.Firstname</p>
-    <p>@user.Lastname</p>
-    <p>@user.Birthdate</p>
-    <p>@user.Street</p>
-    <p>@user.PostalCode</p>
-    <p>@user.City</p>
-    <p>@user.PhoneNumber</p>
-    <p>@user.Email</p>
-    <p>@user.Username</p>
+    <UserFormComponent model="model" SubmitCallback="UpdateUser" SubmitText="Gem" CancelPath="/"></UserFormComponent>
 }
 
 
 @code {
+    private UserInputModel model = new();
     private UserResponse? user = null;
     private string? error;
 
@@ -42,7 +35,14 @@ else
             {
                 user = await Service.GetUserById(UserState.UserId.Value);
 
-
+                model.FirstName = user.Firstname;
+                model.LastName = user.Lastname;
+                model.Birthdate = user.Birthdate;
+                model.Street = user.Street;
+                model.PostalCode = user.PostalCode;
+                model.City = user.City;
+                model.PhoneNumber = user.PhoneNumber;
+                model.Email = user.Email;
             }
         }
         catch (Exception ex)
@@ -50,6 +50,11 @@ else
             error = ex.Message;
         }
 
+
+    }
+
+    private void UpdateUser(UserInputModel model)
+    {
         
     }
 }
