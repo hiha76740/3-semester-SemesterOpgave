@@ -1,6 +1,7 @@
 ﻿using BookingService.ApplicationLib.Handlers;
 using BookingService.ApplicationLib.Repositories;
 using BookingService.ApplicationLib.Services;
+using BookingService.ApplicationLib.UnitOfWork;
 using BookingService.DomainLib.Entities;
 using BookingService.DomainLib.ValueObjects;
 using BookingService.FacadeLib.Commands.DTOs;
@@ -25,6 +26,7 @@ public class CreateBookingTests
         var mockGuestService = new Mock<IGuestService>();
         var mockAccomodationService = new Mock<IAccomodationService>();
         var mockBookingRepo = new Mock<IBookingRepository>();
+        var mockUnitOfWork = new Mock<IUnitOfWork>();
 
         mockGuestService
             .Setup(s => s.GuestExistAsync(guestId))
@@ -35,8 +37,10 @@ public class CreateBookingTests
             .ReturnsAsync(true);
 
         mockBookingRepo
-            .Setup(r => r.GetAllAsync())
-            .ReturnsAsync(new List<Booking>());
+            .Setup(r => r.HasOverlapingBookingAsync(accomodationId, startDate, endDate))
+            .ReturnsAsync(false);
+
+
 
 
         var command = new CreateBookingCommand(
@@ -46,13 +50,13 @@ public class CreateBookingTests
             endDate,
             price);
 
-        var handler = new CreateBookingHandler(mockGuestService.Object, mockAccomodationService.Object, mockBookingRepo.Object) as ICreateBookingHandler;
+        var handler = new CreateBookingHandler(mockGuestService.Object, mockAccomodationService.Object, mockBookingRepo.Object, mockUnitOfWork.Object) as ICreateBookingHandler;
 
         // Act
         await handler.Handle(command);
 
         // Assert
-        mockBookingRepo.Verify(r => r.CreateAsync(It.IsAny<Booking>()),Times.Once);
+        mockBookingRepo.Verify(r => r.CreateAsync(It.IsAny<Booking>()), Times.Once);
         mockBookingRepo.Verify(r => r.SaveAsync(), Times.Once);
     }
 }

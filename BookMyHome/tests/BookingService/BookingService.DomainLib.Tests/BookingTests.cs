@@ -20,8 +20,7 @@ public class BookingTests
         GuestId? guestId = null,
         decimal? price = null,
         DateOnly? startDate = null,
-        DateOnly? endDate = null,
-        IEnumerable<Booking>? bookings = null
+        DateOnly? endDate = null
         )
     {
         return Booking.Create(
@@ -29,8 +28,7 @@ public class BookingTests
             accomodationId ?? AccomodationId,
             startDate ?? StartDate,
             endDate ?? EndDate,
-            price ?? Price,
-            bookings ?? []
+            price ?? Price
             );
     }
 
@@ -42,23 +40,6 @@ public class BookingTests
 
         // Act
         var booking = CreateBookingWithNoOverlap();
-
-        // Assert
-        Assert.Equal(expected, booking.Status);
-    }
-
-    [Fact]
-    public void Create_GivenCancelledBooking_SetsStatusToBooked()
-    {
-        // Arrange
-        var existingBooking = CreateBookingWithNoOverlap();
-        existingBooking.CancelBooking();
-        var bookingList = new List<Booking> { existingBooking };
-
-        var expected = BookingStatus.Booked;
-
-        // Act
-        var booking = CreateBookingWithNoOverlap(bookings:  bookingList);
 
         // Assert
         Assert.Equal(expected, booking.Status);
@@ -85,25 +66,6 @@ public class BookingTests
 
         // Act & Assert
         Assert.Throws<DomainException>(() => CreateBookingWithNoOverlap(price: price));
-    }
-
-
-    [Theory]
-    [InlineData(0,5)]
-    [InlineData(1,5)]
-    [InlineData(-1,5)]
-    [InlineData(4,5)]
-    public void Create_GivenOverlap_ThrowsException(int start, int end)
-    {
-        // Arrange
-        var existingBooking = CreateBookingWithNoOverlap();
-        var bookingList = new List<Booking>() { existingBooking };
-
-        var startDate = StartDate.AddDays(start);
-        var endDate = startDate.AddDays(end);
-
-        // Act & Assert
-        Assert.Throws<DomainException>(() => CreateBookingWithNoOverlap(startDate: startDate, endDate: endDate, bookings: bookingList));
     }
 
     [Fact]
