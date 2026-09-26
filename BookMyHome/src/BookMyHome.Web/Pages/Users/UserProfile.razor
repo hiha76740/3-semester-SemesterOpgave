@@ -2,13 +2,11 @@
 @inject UserState UserState
 @inject IUserService Service
 
-<h3>UserProfile</h3>
-
-@if(error != null)
+@if (error != null)
 {
     <p>@error</p>
 }
-else if(UserState.UserId == null && user == null )
+else if (UserState.UserId == null && user == null)
 {
     <p>Du skal logge ind for at se din profil</p>
 }
@@ -18,7 +16,10 @@ else if (user == null)
 }
 else
 {
-    <UserFormComponent model="model" SubmitCallback="UpdateUser" SubmitText="Gem" CancelPath="/"></UserFormComponent>
+    <UserFormComponent model="model"
+                       SubmitCallback="UpdateUser"
+                       SubmitText="Gem"
+                       CancelPath="/"></UserFormComponent>
 }
 
 
@@ -43,6 +44,7 @@ else
                 model.City = user.City;
                 model.PhoneNumber = user.PhoneNumber;
                 model.Email = user.Email;
+                model.Username = user.Username;
             }
         }
         catch (Exception ex)
@@ -55,6 +57,6 @@ else
 
     private void UpdateUser(UserInputModel model)
     {
-        
+
     }
 }

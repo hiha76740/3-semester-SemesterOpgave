@@ -13,7 +13,7 @@ using UserService.InfrastructureLib.Persistence;
 namespace UserService.InfrastructureLib.Migrations
 {
     [DbContext(typeof(UserDbContext))]
-    [Migration("20260922070452_Initial")]
+    [Migration("20260925073556_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -33,6 +33,10 @@ namespace UserService.InfrastructureLib.Migrations
 
                     b.Property<DateOnly>("Birthdate")
                         .HasColumnType("date");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -78,18 +82,6 @@ namespace UserService.InfrastructureLib.Migrations
                                 .HasColumnType("nvarchar(max)");
                         });
 
-                    b.ComplexProperty(typeof(Dictionary<string, object>), "Email", "UserService.DomainLib.Entities.User.Email#Email", b1 =>
-                        {
-                            b1.IsRequired();
-
-                            b1.Property<string>("EmailAddress")
-                                .IsRequired();
-
-                            b1
-                                .ToJson("Email")
-                                .HasColumnType("nvarchar(max)");
-                        });
-
                     b.ComplexProperty(typeof(Dictionary<string, object>), "PhoneNumber", "UserService.DomainLib.Entities.User.PhoneNumber#PhoneNumber", b1 =>
                         {
                             b1.IsRequired();
@@ -103,6 +95,9 @@ namespace UserService.InfrastructureLib.Migrations
                         });
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
 
                     b.ToTable("Users");
                 });
