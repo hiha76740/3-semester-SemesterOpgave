@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using System.Data;
 
-namespace BookingService.InfrastructureLib.UnitOfWork
+namespace BookingService.InfrastructureLib.UnitOfWorks
 {
     public class UnitOfWork(BookingDbContext db) : IUnitOfWork
     {
