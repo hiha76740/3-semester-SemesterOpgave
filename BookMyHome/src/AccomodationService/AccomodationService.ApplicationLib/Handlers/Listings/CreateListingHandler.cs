@@ -2,11 +2,11 @@
 using AccomodationService.DomainLib.Entities;
 using AccomodationService.DomainLib.Enums;
 using AccomodationService.DomainLib.ValueObjects;
-using AccomodationService.FacadeLib.Commands.DTOs;
-using AccomodationService.FacadeLib.Commands.Interfaces;
+using AccomodationService.FacadeLib.Commands.DTOs.Listings;
+using AccomodationService.FacadeLib.Commands.Interfaces.Listings;
 using Shared.BookMyHome.SharedKernelLib.Exceptions;
 
-namespace AccomodationService.ApplicationLib.Handlers;
+namespace AccomodationService.ApplicationLib.Handlers.Listings;
 
 public class CreateListingHandler(IAccomodationRepository accomodationRepo) : ICreateListingHandler
 {

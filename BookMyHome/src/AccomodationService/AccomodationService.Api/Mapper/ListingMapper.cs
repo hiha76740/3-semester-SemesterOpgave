@@ -1,4 +1,4 @@
-﻿using AccomodationService.FacadeLib.Commands.DTOs;
+﻿using AccomodationService.FacadeLib.Commands.DTOs.Listings;
 using AccomodationService.FacadeLib.Queries.DTOs;
 using BookMyHome.ContractsLib.Requests.Accomodations;
 using BookMyHome.ContractsLib.Responses.Accomodations;

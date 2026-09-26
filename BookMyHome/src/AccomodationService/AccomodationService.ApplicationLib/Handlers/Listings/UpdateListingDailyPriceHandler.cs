@@ -1,15 +1,15 @@
 ﻿using AccomodationService.ApplicationLib.Repositories;
 using AccomodationService.DomainLib.Entities;
 using AccomodationService.DomainLib.ValueObjects;
-using AccomodationService.FacadeLib.Commands.DTOs;
-using AccomodationService.FacadeLib.Commands.Interfaces;
+using AccomodationService.FacadeLib.Commands.DTOs.Listings;
+using AccomodationService.FacadeLib.Commands.Interfaces.Listings;
 using Shared.BookMyHome.SharedKernelLib.Exceptions;
 
-namespace AccomodationService.ApplicationLib.Handlers;
+namespace AccomodationService.ApplicationLib.Handlers.Listings;
 
-internal class DeleteListingHandler(IAccomodationRepository repo) : IDeleteListingHandler
+public class UpdateListingDailyPriceHandler(IAccomodationRepository repo) : IUpdateListingDailyPriceHandler
 {
-    async Task IDeleteListingHandler.HandleAsync(DeleteListingCommand command)
+    async Task IUpdateListingDailyPriceHandler.HandleAsync(UpdateListingDailyPriceCommand command)
     {
         try
         {
@@ -23,15 +23,15 @@ internal class DeleteListingHandler(IAccomodationRepository repo) : IDeleteListi
                 throw new NotFoundException("Accomodation was not found");
 
             if (accomodation.HostId != hostId)
-                throw new UnauthorizedAccessException("Deletion aborted, Unauthorized Access");
+                throw new UnauthorizedAccessException("Update aborted, Unauthorized Access");
 
-            accomodation.RemoveListing(listingId);
+            accomodation.UpdateListingDailyPrice(listingId, command.Price);
 
             await repo.UpdateAsync(accomodation, listingId, command.RowVersion);
         }
         catch (Exception ex)
         {
-            throw new ApplicationException("Something went wrong doing deletion of listing", ex);
+            throw new ApplicationException(ex.Message, ex);
         }
     }
 }

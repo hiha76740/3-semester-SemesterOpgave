@@ -1,9 +1,9 @@
-﻿using AccomodationService.ApplicationLib.Handlers;
+﻿using AccomodationService.ApplicationLib.Handlers.Accomodations;
 using AccomodationService.ApplicationLib.Repositories;
 using AccomodationService.DomainLib.Entities;
 using AccomodationService.DomainLib.ValueObjects;
-using AccomodationService.FacadeLib.Commands.DTOs;
-using AccomodationService.FacadeLib.Commands.Interfaces;
+using AccomodationService.FacadeLib.Commands.DTOs.Accomodations;
+using AccomodationService.FacadeLib.Commands.Interfaces.Accomodations;
 using Moq;
 
 namespace AccomodationService.ApplicationLib.Tests;

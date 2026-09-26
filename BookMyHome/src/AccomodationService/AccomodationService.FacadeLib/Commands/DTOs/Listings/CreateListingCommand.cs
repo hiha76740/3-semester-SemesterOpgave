@@ -1,4 +1,4 @@
-﻿namespace AccomodationService.FacadeLib.Commands.DTOs;
+﻿namespace AccomodationService.FacadeLib.Commands.DTOs.Listings;
 
 public record CreateListingCommand(
     Guid HostId,

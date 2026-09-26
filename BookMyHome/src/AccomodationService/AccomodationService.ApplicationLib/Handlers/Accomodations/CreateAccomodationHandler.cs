@@ -1,10 +1,10 @@
 ﻿using AccomodationService.ApplicationLib.Repositories;
 using AccomodationService.DomainLib.Entities;
 using AccomodationService.DomainLib.ValueObjects;
-using AccomodationService.FacadeLib.Commands.DTOs;
-using AccomodationService.FacadeLib.Commands.Interfaces;
+using AccomodationService.FacadeLib.Commands.DTOs.Accomodations;
+using AccomodationService.FacadeLib.Commands.Interfaces.Accomodations;
 
-namespace AccomodationService.ApplicationLib.Handlers;
+namespace AccomodationService.ApplicationLib.Handlers.Accomodations;
 
 public class CreateAccomodationHandler(IAccomodationRepository accomodationRepo) : ICreateAccomodationHandler
 {

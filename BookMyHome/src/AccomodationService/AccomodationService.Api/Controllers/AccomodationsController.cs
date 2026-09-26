@@ -1,6 +1,5 @@
 ﻿using AccomodationService.Api.Mapper;
-using AccomodationService.FacadeLib.Commands.DTOs;
-using AccomodationService.FacadeLib.Commands.Interfaces;
+using AccomodationService.FacadeLib.Commands.Interfaces.Accomodations;
 using AccomodationService.FacadeLib.Queries.Interfaces;
 using BookMyHome.ContractsLib.Requests.Accomodations;
 using BookMyHome.ContractsLib.Responses.Accomodations;
