@@ -27,5 +27,9 @@ internal class AccomodationConfiguration : IEntityTypeConfiguration<Accomodation
         builder.ComplexProperty(
             a => a.Address,
             ad => ad.ToJson());
+
+        builder.HasMany(a => a.facilities)
+            .WithMany()
+            .UsingEntity(j => j.ToTable("AccommodationFacilities"));
     }
 }

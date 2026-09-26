@@ -16,5 +16,7 @@ namespace AccomodationService.ApplicationLib.Repositories
         Task<bool> AccomodationExsistByAddress(HostId id, string street, string postalCode, string city, string country);
 
         Task SaveAsync();
+
+        Task<Facility?> GetFacilityByIdAsync(FacilityId id);
     }
 }

@@ -39,6 +39,11 @@ internal class AccomodationRepository(AccomodationDbContext db) : IAccomodationR
             .FirstOrDefaultAsync();
     }
 
+    async Task<Facility?> IAccomodationRepository.GetFacilityByIdAsync(FacilityId id)
+    {
+        return await db.Facilities.FindAsync(id);
+    }
+
     async Task IAccomodationRepository.SaveAsync()
     {
         await db.SaveChangesAsync();

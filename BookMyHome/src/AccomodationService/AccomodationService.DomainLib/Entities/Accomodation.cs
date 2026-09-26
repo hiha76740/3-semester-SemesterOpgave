@@ -15,6 +15,9 @@ public class Accomodation
     private readonly List<Listing> _listings = [];
     public IReadOnlyList<Listing> listings => _listings.AsReadOnly();
 
+    private readonly List<Facility> _facilities = [];
+    public IReadOnlyList<Facility> facilities => _facilities.AsReadOnly();
+
 
     public void CreateListing(string listingName, decimal dailyPrice, string houseRules, AccomodationType type)
     {
@@ -55,6 +58,26 @@ public class Accomodation
         return listing;
     }
 
+
+    public void AddFacility(Facility facility)
+    {
+        var exists = _facilities.Any(f => f.Id == facility.Id);
+
+        if (exists == true)
+            throw new DomainException("Facility is already added to this accomodation");
+
+        _facilities.Add(facility);
+    }
+
+    public void RemoveFacility(Facility facility)
+    {
+        var exists = _facilities.Any(f => f.Name == facility.Name);
+
+        if (exists == false)
+            throw new NotFoundException("Unable to remove facility, was not found");
+
+        _facilities.Remove(facility);
+    }
 
     public static Accomodation Create(HostId hostId, string title, string street, string postalCode, string city, string country)
     {
