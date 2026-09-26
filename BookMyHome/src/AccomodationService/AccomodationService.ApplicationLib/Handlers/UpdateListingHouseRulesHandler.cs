@@ -13,6 +13,7 @@ public class UpdateListingHouseRulesHandler(IAccomodationRepository repo) : IUpd
     {
         var accomodationId = new AccomodationId(command.AccomodationId);
         var hostId = new HostId(command.HostId);
+        var listingId = new ListingId(command.ListingId);
 
         var accomodation = await repo.GetAccomodationWithListingsAsync(accomodationId);
 
@@ -22,8 +23,8 @@ public class UpdateListingHouseRulesHandler(IAccomodationRepository repo) : IUpd
         if (accomodation.HostId != hostId)
             throw new UnauthorizedAccessException("Update aborted, Unauthorized Access");
 
-        accomodation.UpdateListingHouseRules(command.ListingId,command.HouseRules);
+        accomodation.UpdateListingHouseRules(listingId,command.HouseRules);
 
-        await repo.SaveAsync();
+        await repo.UpdateAsync(accomodation, listingId, command.RowVersion);
     }
 }

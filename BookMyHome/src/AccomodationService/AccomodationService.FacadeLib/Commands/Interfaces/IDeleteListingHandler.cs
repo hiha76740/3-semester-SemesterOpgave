@@ -2,7 +2,7 @@
 
 namespace AccomodationService.FacadeLib.Commands.Interfaces;
 
-public interface IDeleteListingByIdHandler
+public interface IDeleteListingHandler
 {
-    Task HandleAsync(DeleteListingByIdCommand command);
+    Task HandleAsync(DeleteListingCommand command);
 }

@@ -2,6 +2,7 @@
 using AccomodationService.DomainLib.Entities;
 using AccomodationService.DomainLib.ValueObjects;
 using AccomodationService.InfrastructureLib.Persistence;
+using BookMyHome.SharedKernelLib.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
 namespace AccomodationService.InfrastructureLib.Repositories;
@@ -41,5 +42,25 @@ internal class AccomodationRepository(AccomodationDbContext db) : IAccomodationR
     async Task IAccomodationRepository.SaveAsync()
     {
         await db.SaveChangesAsync();
+    }
+
+    async Task IAccomodationRepository.UpdateAsync(Accomodation accomodation, ListingId listingId, byte[] originalRowVersion)
+    {
+        var listing = accomodation.listings
+            .Single(l => l.Id == listingId);
+
+        db.Entry(listing)
+            .Property(l => l.RowVersion)
+            .OriginalValue = originalRowVersion;
+
+        try
+        {
+            await db.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException ex)
+        {
+            throw new ConcurrencyConflictException("Listing was changed by another user", ex);
+        }
+
     }
 }

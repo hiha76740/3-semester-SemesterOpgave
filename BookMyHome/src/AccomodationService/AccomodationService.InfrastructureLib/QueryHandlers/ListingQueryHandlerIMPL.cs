@@ -26,7 +26,8 @@ public class ListingQueryHandlerIMPL(AccomodationDbContext db) : IListingQueries
                 l.Accomodation.Address.Street,
                 l.Accomodation.Address.PostalCode,
                 l.Accomodation.Address.City,
-                l.Accomodation.Address.Country
+                l.Accomodation.Address.Country,
+                l.RowVersion
                 ))
             .FirstOrDefaultAsync();
     }
@@ -59,7 +60,8 @@ public class ListingQueryHandlerIMPL(AccomodationDbContext db) : IListingQueries
                 l.Accomodation.Address.Street,
                 l.Accomodation.Address.PostalCode,
                 l.Accomodation.Address.City,
-                l.Accomodation.Address.Country
+                l.Accomodation.Address.Country,
+                l.RowVersion
                 ))
             .ToListAsync();
     }
@@ -78,7 +80,8 @@ public class ListingQueryHandlerIMPL(AccomodationDbContext db) : IListingQueries
                 l.Accomodation.Address.Street,
                 l.Accomodation.Address.PostalCode,
                 l.Accomodation.Address.City,
-                l.Accomodation.Address.Country
+                l.Accomodation.Address.Country,
+                l.RowVersion
                 ))
             .ToListAsync();
     }

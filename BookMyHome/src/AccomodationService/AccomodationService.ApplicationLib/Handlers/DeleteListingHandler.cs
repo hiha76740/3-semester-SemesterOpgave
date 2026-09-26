@@ -7,9 +7,9 @@ using Shared.BookMyHome.SharedKernelLib.Exceptions;
 
 namespace AccomodationService.ApplicationLib.Handlers;
 
-public class UpdateListingDailyPriceHandler(IAccomodationRepository repo) : IUpdateListingDailyPriceHandler
+internal class DeleteListingHandler(IAccomodationRepository repo) : IDeleteListingHandler
 {
-    async Task IUpdateListingDailyPriceHandler.HandleAsync(UpdateListingDailyPriceCommand command)
+    async Task IDeleteListingHandler.HandleAsync(DeleteListingCommand command)
     {
         try
         {
@@ -23,15 +23,15 @@ public class UpdateListingDailyPriceHandler(IAccomodationRepository repo) : IUpd
                 throw new NotFoundException("Accomodation was not found");
 
             if (accomodation.HostId != hostId)
-                throw new UnauthorizedAccessException("Update aborted, Unauthorized Access");
+                throw new UnauthorizedAccessException("Deletion aborted, Unauthorized Access");
 
-            accomodation.UpdateListingDailyPrice(listingId, command.Price);
+            accomodation.RemoveListing(listingId);
 
             await repo.UpdateAsync(accomodation, listingId, command.RowVersion);
         }
         catch (Exception ex)
         {
-            throw new ApplicationException(ex.Message, ex);
+            throw new ApplicationException("Something went wrong doing deletion of listing", ex);
         }
     }
 }

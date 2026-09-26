@@ -17,6 +17,8 @@ public class Listing
 
     public AccomodationType Type { get; init; }
 
+    public byte[] RowVersion { get; private set; } = [];
+
 
 
 

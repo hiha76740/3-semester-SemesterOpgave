@@ -12,7 +12,7 @@ public static class HandlerDI
         services.AddScoped<ICreateListingHandler, CreateListingHandler>();
         services.AddScoped<IUpdateListingDailyPriceHandler, UpdateListingDailyPriceHandler>();
         services.AddScoped<IUpdateListingHouseRulesHandler, UpdateListingHouseRulesHandler>();
-        services.AddScoped<IDeleteListingByIdHandler, DeleteListingByIdHandler>();
+        services.AddScoped<IDeleteListingHandler, DeleteListingHandler>();
 
         return services;
     }

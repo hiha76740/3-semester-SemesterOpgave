@@ -23,29 +23,24 @@ public class Accomodation
         _listings.Add(listing);
     }
 
-    public void RemoveListing(Guid id)
+    public void RemoveListing(ListingId id)
     {
-        var listingId = new ListingId(id);
-
-        var listing = GetListing(listingId);
+        var listing = GetListing(id);
 
         _listings.Remove(listing);
     }
 
-    public void UpdateListingDailyPrice(Guid id, decimal newPrice)
+    public void UpdateListingDailyPrice(ListingId id, decimal newPrice)
     {
-        var listingId = new ListingId(id);
 
-        var listing = GetListing(listingId);
+        var listing = GetListing(id);
 
         listing.UpdateDailyPrice(newPrice);
     }
 
-    public void UpdateListingHouseRules(Guid id, string newHouseRules)
+    public void UpdateListingHouseRules(ListingId id, string newHouseRules)
     {
-        var listingId = new ListingId(id);
-
-        var listing = GetListing(listingId);
+        var listing = GetListing(id);
 
         listing.UpdateHouseRules(newHouseRules);
     }

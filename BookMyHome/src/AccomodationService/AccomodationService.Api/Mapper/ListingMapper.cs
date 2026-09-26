@@ -19,7 +19,8 @@ public static class ListingMapper
             dto.Street,
             dto.PostalCode,
             dto.City,
-            dto.Country
+            dto.Country,
+            dto.RowVersion
             );
 
         return output;

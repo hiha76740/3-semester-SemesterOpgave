@@ -18,7 +18,7 @@ namespace AccomodationService.Api.Controllers
         ICreateListingHandler listingCreate,
         IUpdateListingDailyPriceHandler updateListingDailyPrice,
         IUpdateListingHouseRulesHandler updateListingHouseRules,
-        IDeleteListingByIdHandler deleteListingById
+        IDeleteListingHandler deleteListingById
         ) : ControllerBase
     {
         [Authorize(Roles = "Host, Guest")]
@@ -188,7 +188,8 @@ namespace AccomodationService.Api.Controllers
                     id.Value,
                     accomodationId,
                     listingId,
-                    request.Price
+                    request.Price,
+                    request.RowVersion
                     );
 
                 await updateListingDailyPrice.HandleAsync(command);
@@ -224,7 +225,8 @@ namespace AccomodationService.Api.Controllers
                     id.Value,
                     accomodationId,
                     listingId,
-                    request.HouseRules
+                    request.HouseRules,
+                    request.RowVersion
                     );
 
                 await updateListingHouseRules.HandleAsync(command);
@@ -246,7 +248,8 @@ namespace AccomodationService.Api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while deleting the request listing")]
         public async Task<ActionResult> DeleteListingById(
             [Description("Id of the accomodation the listing is assoicated to")] Guid accomodationId,
-            [Description("Id of the listing you want to delete")] Guid listingId
+            [Description("Id of the listing you want to delete")] Guid listingId,
+            [Description("Original row version")] byte[] RowVersion
             )
         {
             try
@@ -256,10 +259,11 @@ namespace AccomodationService.Api.Controllers
                 if (id == null || HttpContext.User.FindFirstValue(ClaimTypes.Role) != "Host")
                     return BadRequest("Invalid request");
 
-                var command = new DeleteListingByIdCommand(
+                var command = new DeleteListingCommand(
                     id.Value,
                     accomodationId,
-                    listingId
+                    listingId,
+                    RowVersion
                     );
 
                 await deleteListingById.HandleAsync(command);

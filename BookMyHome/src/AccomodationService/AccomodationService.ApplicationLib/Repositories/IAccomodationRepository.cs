@@ -11,6 +11,8 @@ namespace AccomodationService.ApplicationLib.Repositories
 
         Task<Accomodation?> GetAccomodationWithListingsAsync(AccomodationId id);
 
+        Task UpdateAsync(Accomodation accomodation, ListingId listingId, byte[] originalRowVersion);
+
         Task<bool> AccomodationExsistByAddress(HostId id, string street, string postalCode, string city, string country);
 
         Task SaveAsync();
