@@ -20,7 +20,8 @@ namespace BookingService.InfrastructureLib.Migrations
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     GuestId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     AccomodationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Period = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    EndDate = table.Column<DateOnly>(type: "date", nullable: false),
+                    StartDate = table.Column<DateOnly>(type: "date", nullable: false)
                 },
                 constraints: table =>
                 {

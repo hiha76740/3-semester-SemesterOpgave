@@ -13,7 +13,7 @@ using UserService.InfrastructureLib.Persistence;
 namespace UserService.InfrastructureLib.Migrations
 {
     [DbContext(typeof(UserDbContext))]
-    [Migration("20260925073556_Initial")]
+    [Migration("20260926060831_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -62,7 +62,7 @@ namespace UserService.InfrastructureLib.Migrations
 
                     b.Property<string>("Username")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.ComplexProperty(typeof(Dictionary<string, object>), "Address", "UserService.DomainLib.Entities.User.Address#Address", b1 =>
                         {
@@ -97,6 +97,9 @@ namespace UserService.InfrastructureLib.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.HasIndex("Username")
                         .IsUnique();
 
                     b.ToTable("Users");

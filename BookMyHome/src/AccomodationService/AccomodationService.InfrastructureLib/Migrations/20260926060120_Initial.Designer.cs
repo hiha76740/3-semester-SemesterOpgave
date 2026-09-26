@@ -13,7 +13,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AccomodationService.InfrastructureLib.Migrations
 {
     [DbContext(typeof(AccomodationDbContext))]
-    [Migration("20260923052535_Initial")]
+    [Migration("20260926060120_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -86,6 +86,12 @@ namespace AccomodationService.InfrastructureLib.Migrations
                     b.Property<string>("ListingName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
 
                     b.Property<string>("Type")
                         .IsRequired()

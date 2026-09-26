@@ -13,7 +13,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookingService.InfrastructureLib.Migrations
 {
     [DbContext(typeof(BookingDbContext))]
-    [Migration("20260910052551_Initial")]
+    [Migration("20260926060654_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -48,13 +48,13 @@ namespace BookingService.InfrastructureLib.Migrations
                         {
                             b1.IsRequired();
 
-                            b1.Property<DateOnly>("EndDate");
+                            b1.Property<DateOnly>("EndDate")
+                                .HasColumnType("date")
+                                .HasColumnName("EndDate");
 
-                            b1.Property<DateOnly>("StartDate");
-
-                            b1
-                                .ToJson("Period")
-                                .HasColumnType("nvarchar(max)");
+                            b1.Property<DateOnly>("StartDate")
+                                .HasColumnType("date")
+                                .HasColumnName("StartDate");
                         });
 
                     b.HasKey("Id");
