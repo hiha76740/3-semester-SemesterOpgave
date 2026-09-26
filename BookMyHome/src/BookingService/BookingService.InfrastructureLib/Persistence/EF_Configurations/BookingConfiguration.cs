@@ -31,7 +31,14 @@ internal class BookingConfiguration : IEntityTypeConfiguration<Booking>
 
         builder.ComplexProperty(
             b => b.Period,
-            p => p.ToJson());
+            p =>
+            {
+                p.Property(p => p.StartDate)
+                .HasColumnName("StartDate");
+
+                p.Property(p => p.EndDate)
+                .HasColumnName("EndDate");
+            });
 
 
     }
