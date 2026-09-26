@@ -16,13 +16,6 @@
     <Project Path="src/BookingService/BookingService.FacadeLib/BookingService.FacadeLib.csproj" />
     <Project Path="src/BookingService/BookingService.InfrastructureLib/BookingService.InfrastructureLib.csproj" />
   </Folder>
-  <Folder Name="/src/FacilityService/">
-    <Project Path="src/FacilityService/FacilityService.Api/FacilityService.Api.csproj" />
-    <Project Path="src/FacilityService/FacilityService.ApplicationLib/FacilityService.ApplicationLib.csproj" />
-    <Project Path="src/FacilityService/FacilityService.DomainLib/FacilityService.DomainLib.csproj" />
-    <Project Path="src/FacilityService/FacilityService.FacadeLib/FacilityService.FacadeLib.csproj" />
-    <Project Path="src/FacilityService/FacilityService.InfrastructureLib/FacilityService.InfrastructureLib.csproj" />
-  </Folder>
   <Folder Name="/src/Shared/">
     <Project Path="src/Shared/BookMyHome.BuildingBlocksLib/BookMyHome.BuildingBlocksLib.csproj" />
     <Project Path="src/Shared/BookMyHome.ContractsLib/BookMyHome.ContractsLib.csproj" />
@@ -45,10 +38,6 @@
   <Folder Name="/tests/BookingService/">
     <Project Path="tests/BookingService/BookingService.ApplicationLib.Tests/BookingService.ApplicationLib.Tests.csproj" />
     <Project Path="tests/BookingService/BookingService.DomainLib.Tests/BookingService.DomainLib.Tests.csproj" />
-  </Folder>
-  <Folder Name="/tests/FacilityService/">
-    <Project Path="tests/FacilityService/FacilityService.ApplicationLib.Tests/FacilityService.ApplicationLib.Tests.csproj" />
-    <Project Path="tests/FacilityService/FacilityService.DomainLib.Tests/FacilityService.DomainLib.Tests.csproj" />
   </Folder>
   <Folder Name="/tests/UserService/">
     <Project Path="tests/UserService/UserService.ApplicationLib.Tests/UserService.ApplicationLib.Tests.csproj" />
