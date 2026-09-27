@@ -6,6 +6,7 @@ using BookMyHome.ContractsLib.Responses.Bookings;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace BookingService.Api.Controllers
 {
@@ -90,6 +91,33 @@ namespace BookingService.Api.Controllers
             catch (Exception ex)
             {
 
+                return BadRequest(ex);
+            }
+        }
+
+        [Authorize]
+        [HttpGet("availability")]
+        [EndpointSummary("This endpoint will check availability for a specific period and accomodation")]
+        [EndpointDescription("Checks if the period is available for the requsted period and accomodation returns true or false")]
+        [ProducesResponseType<bool>(StatusCodes.Status200OK, "application/json", Description = "Returns true if availible otherwise false")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while validating availablity for requsted accomodation and period")]
+        public async Task<ActionResult<BookingResponse>> GetAvailability(
+            [Required][Description("Id of the accomodation you want to validate for")] Guid id,
+            [Required][Description("Start date of the period you want to validate")] DateOnly startDate,
+            [Required][Description("End date of the period you want to validate")] DateOnly endDate)
+        {
+            try
+            {
+                var result = await queries.Checkavailability(id, startDate, endDate);
+                var response = false;
+
+                if (result == false) 
+                    response = true;
+
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
                 return BadRequest(ex);
             }
         }

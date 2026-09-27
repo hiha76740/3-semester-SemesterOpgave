@@ -1,4 +1,6 @@
 ﻿using BookingService.DomainLib.Entities;
+using BookingService.DomainLib.Enums;
+using BookingService.DomainLib.ValueObjects;
 using BookingService.FacadeLib.Queries.DTOs;
 using BookingService.FacadeLib.Queries.Interfaces;
 using BookingService.InfrastructureLib.Persistence;
@@ -8,6 +10,19 @@ namespace BookingService.InfrastructureLib.QueryHandlers;
 
 public class BookingQueryHandlerIMPL(BookingDbContext db) : IBookingQueries
 {
+    async Task<bool> IBookingQueries.Checkavailability(Guid accomodationId, DateOnly startDate, DateOnly endDate)
+    {
+        var id = new AccomodationId(accomodationId);
+
+        return await db.Bookings
+            .AnyAsync(eb =>
+                      eb.AccomodationId == id &&
+                      eb.Status == BookingStatus.Booked &&
+                      startDate < eb.Period.EndDate &&
+                      eb.Period.StartDate < endDate
+            );
+    }
+
     async Task<IReadOnlyList<BookingDTO>> IBookingQueries.GetAllAsync()
     {
         return await db.Bookings
