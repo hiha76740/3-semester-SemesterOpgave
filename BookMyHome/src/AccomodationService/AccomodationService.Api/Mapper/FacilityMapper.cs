@@ -1,5 +1,7 @@
 ﻿using AccomodationService.FacadeLib.Commands.DTOs.Facilities;
+using AccomodationService.FacadeLib.Queries.DTOs;
 using BookMyHome.ContractsLib.Requests.Accomodations;
+using BookMyHome.ContractsLib.Responses.Accomodations;
 
 namespace AccomodationService.Api.Mapper;
 
@@ -19,6 +21,16 @@ public static class FacilityMapper
         var output = new RemoveFacilityCommand(
             request.AccomodationId,
             request.FacilityId
+            );
+
+        return output;
+    }
+
+    public static FacilityResponse AsResponse(this FacilityDto dto)
+    {
+        var output = new FacilityResponse(
+            dto.Id,
+            dto.Name
             );
 
         return output;
