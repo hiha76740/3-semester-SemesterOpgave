@@ -9,6 +9,8 @@ namespace AccomodationService.ApplicationLib.Repositories
 
         Task<Accomodation?> GetAccomodationByIdAsync(AccomodationId id);
 
+        Task<Accomodation?> GetAccomodationWithFacilitiesAsync(AccomodationId id);
+
         Task<Accomodation?> GetAccomodationWithListingsAsync(AccomodationId id);
 
         Task UpdateAsync(Accomodation accomodation, ListingId listingId, byte[] originalRowVersion);

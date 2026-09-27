@@ -23,7 +23,7 @@ public class RemoveFacilityHandler(IAccomodationRepository repo) : IRemoveFacili
 			//var accomodation = accomodationTask.Result;
 			//var facility = facilityTask.Result;
 
-			var accomodation = await repo.GetAccomodationByIdAsync(accomodationId);
+			var accomodation = await repo.GetAccomodationWithFacilitiesAsync(accomodationId);
 			var facility = await repo.GetFacilityByIdAsync(facilityId);
 
             if (accomodation == null)

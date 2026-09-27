@@ -31,6 +31,14 @@ internal class AccomodationRepository(AccomodationDbContext db) : IAccomodationR
         return await db.Accomodations.FindAsync(id);
     }
 
+    async Task<Accomodation?> IAccomodationRepository.GetAccomodationWithFacilitiesAsync(AccomodationId id)
+    {
+        return await db.Accomodations
+            .Include(a => a.facilities)
+            .Where(a => a.Id == id)
+            .FirstOrDefaultAsync();
+    }
+
     async Task<Accomodation?> IAccomodationRepository.GetAccomodationWithListingsAsync(AccomodationId id)
     {
         return await db.Accomodations

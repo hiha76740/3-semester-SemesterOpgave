@@ -24,7 +24,7 @@ public class AddFacilityHandler(IAccomodationRepository repo) : IAddFacilityHand
 			//var accomodation = accomodationTask.Result;
 			//var facility = facilityTask.Result;
 
-			var accomodation = await repo.GetAccomodationByIdAsync(accomodationId);
+			var accomodation = await repo.GetAccomodationWithFacilitiesAsync(accomodationId);
 			var facility = await repo.GetFacilityByIdAsync(facilityId);
 
 
