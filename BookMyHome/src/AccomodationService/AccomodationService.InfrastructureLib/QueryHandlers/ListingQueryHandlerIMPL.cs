@@ -27,6 +27,7 @@ public class ListingQueryHandlerIMPL(AccomodationDbContext db) : IListingQueries
                 l.Accomodation.Address.PostalCode,
                 l.Accomodation.Address.City,
                 l.Accomodation.Address.Country,
+                l.Accomodation.facilities.Select(f => f.Name).ToArray(),
                 l.RowVersion
                 ))
             .FirstOrDefaultAsync();
@@ -61,6 +62,7 @@ public class ListingQueryHandlerIMPL(AccomodationDbContext db) : IListingQueries
                 l.Accomodation.Address.PostalCode,
                 l.Accomodation.Address.City,
                 l.Accomodation.Address.Country,
+                l.Accomodation.facilities.Select(f => f.Name).ToArray(),
                 l.RowVersion
                 ))
             .ToListAsync();
@@ -81,6 +83,7 @@ public class ListingQueryHandlerIMPL(AccomodationDbContext db) : IListingQueries
                 l.Accomodation.Address.PostalCode,
                 l.Accomodation.Address.City,
                 l.Accomodation.Address.Country,
+                l.Accomodation.facilities.Select(f => f.Name).ToArray(),
                 l.RowVersion
                 ))
             .ToListAsync();

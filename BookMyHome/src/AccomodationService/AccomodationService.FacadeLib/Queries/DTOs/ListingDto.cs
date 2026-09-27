@@ -11,5 +11,6 @@ public record ListingDto(
     string PostalCode,
     string City,
     string Country,
+    string[] facilities,
     byte[] RowVersion
     );
