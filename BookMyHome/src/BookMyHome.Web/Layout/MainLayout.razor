@@ -43,7 +43,6 @@
 </div>
 
 @code{
-    private bool userLoaded;
 
     protected override async Task OnInitializedAsync()
     {
@@ -64,10 +63,6 @@
         when (ex.StatusCode == HttpStatusCode.Unauthorized)
         {
             // do nothing for now
-        }
-        finally
-        {
-            userLoaded = true;
         }
     }
 }
