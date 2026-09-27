@@ -9,7 +9,7 @@ public class BookingService(HttpClient httpClient) : IBookingService
 
     async Task<bool> IBookingService.IsAvailableAsync(Guid accomodationId, DateOnly start, DateOnly end)
     {
-        var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}api/v1/Bookings/availability");
+        var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}api/v1/Bookings/availability?id={accomodationId}&startDate={start}&endDate={end}");
 
         var response = await httpClient.SendAsync(request);
 
