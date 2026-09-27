@@ -107,12 +107,12 @@ namespace AccomodationService.Api.Controllers
         }
 
         [Authorize(Roles = "Host")]
-        [HttpDelete]
+        [HttpDelete("{accomodationId:guid}")]
         [EndpointSummary("This endpoint will remove a facility from the requested accomodation")]
         [EndpointDescription("Removes a facility from the requested accomodation when all required info is given")]
         [ProducesResponseType(StatusCodes.Status200OK, Description = "Facility was removed succesfully")]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while trying to remove facilty from requsted accomodation")]
-        public async Task<ActionResult> RemoveFacility(RemoveFacilityRequest request)
+        public async Task<ActionResult> RemoveFacility(RemoveFacilityRequest request, Guid accomodationId)
         {
             try
             {
@@ -122,7 +122,7 @@ namespace AccomodationService.Api.Controllers
                     return BadRequest("Invalid request");
 
                 await remove.Handle(
-                    request.AsRemoveCommand()
+                    request.AsRemoveCommand(accomodationId)
                     );
 
                 return Ok();

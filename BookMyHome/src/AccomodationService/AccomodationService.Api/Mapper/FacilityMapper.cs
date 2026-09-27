@@ -16,10 +16,10 @@ public static class FacilityMapper
         return output;
     }
 
-    public static RemoveFacilityCommand AsRemoveCommand(this RemoveFacilityRequest request)
+    public static RemoveFacilityCommand AsRemoveCommand(this RemoveFacilityRequest request, Guid accomdationId)
     {
         var output = new RemoveFacilityCommand(
-            request.AccomodationId,
+            accomdationId,
             request.FacilityId
             );
 
