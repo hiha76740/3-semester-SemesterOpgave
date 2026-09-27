@@ -79,12 +79,13 @@ namespace AccomodationService.Api.Controllers
 
 
         [Authorize(Roles = "Host")]
-        [HttpPut]
+        [HttpPut("{accomodationId:guid}")]
         [EndpointSummary("This endpoint will add a facility to the requested accomodation")]
         [EndpointDescription("Adds a facility to the requested accomodation when all required info is given")]
         [ProducesResponseType(StatusCodes.Status200OK, Description = "Facility was added succesfully")]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while trying to add facilty to requsted accomodation")]
-        public async Task<ActionResult> AddFacility(AddFacilityRequest request)
+        public async Task<ActionResult> AddFacility(AddFacilityRequest request,
+             [Description("Id of the accomodation you want to add a facility to")] Guid accomodationId)
         {
             try
             {
@@ -94,7 +95,7 @@ namespace AccomodationService.Api.Controllers
                     return BadRequest("Invalid request");
 
                 await add.Handle(
-                    request.AsAddCommand()
+                    request.AsAddCommand(accomodationId)
                     );
 
                 return Ok();

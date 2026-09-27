@@ -7,10 +7,10 @@ namespace AccomodationService.Api.Mapper;
 
 public static class FacilityMapper
 {
-    public static AddFacilityCommand AsAddCommand(this AddFacilityRequest request)
+    public static AddFacilityCommand AsAddCommand(this AddFacilityRequest request, Guid accomodationId)
     {
         var output = new AddFacilityCommand(
-            request.AccomodationId,
+            accomodationId,
             request.FacilityId);
 
         return output;
