@@ -1,5 +1,6 @@
 ﻿using AccomodationService.ApplicationLib.Repositories;
 using AccomodationService.DomainLib.Entities;
+using AccomodationService.DomainLib.ValueObjects;
 using AccomodationService.FacadeLib.Commands.DTOs.Facilities;
 using AccomodationService.FacadeLib.Commands.Interfaces.Facilities;
 using Shared.BookMyHome.SharedKernelLib.Exceptions;
@@ -12,6 +13,7 @@ public class RemoveFacilityHandler(IAccomodationRepository repo) : IRemoveFacili
     {
 		try
 		{
+			var hostId = new HostId(command.HostId);
 			var accomodationId = new AccomodationId(command.AccomodationId);
 			var facilityId = new FacilityId(command.FacilityId);
 
@@ -31,6 +33,9 @@ public class RemoveFacilityHandler(IAccomodationRepository repo) : IRemoveFacili
 
             if (facility == null)
                 throw new NotFoundException("Facility was not found");
+
+			if (accomodation.HostId != hostId)
+				throw new UnauthorizedAccessException("Only the owner of the accomodation can remove facilities");
 
 			accomodation.RemoveFacility(facility);
 

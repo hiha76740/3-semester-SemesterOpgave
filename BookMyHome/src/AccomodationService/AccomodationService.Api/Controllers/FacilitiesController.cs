@@ -95,7 +95,7 @@ namespace AccomodationService.Api.Controllers
                     return BadRequest("Invalid request");
 
                 await add.Handle(
-                    request.AsAddCommand(accomodationId)
+                    request.AsAddCommand(accomodationId, id.Value)
                     );
 
                 return Ok();
@@ -122,7 +122,7 @@ namespace AccomodationService.Api.Controllers
                     return BadRequest("Invalid request");
 
                 await remove.Handle(
-                    request.AsRemoveCommand(accomodationId)
+                    request.AsRemoveCommand(accomodationId, id.Value)
                     );
 
                 return Ok();

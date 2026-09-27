@@ -7,18 +7,20 @@ namespace AccomodationService.Api.Mapper;
 
 public static class FacilityMapper
 {
-    public static AddFacilityCommand AsAddCommand(this AddFacilityRequest request, Guid accomodationId)
+    public static AddFacilityCommand AsAddCommand(this AddFacilityRequest request, Guid accomodationId, Guid hostId)
     {
         var output = new AddFacilityCommand(
+            hostId,
             accomodationId,
             request.FacilityId);
 
         return output;
     }
 
-    public static RemoveFacilityCommand AsRemoveCommand(this RemoveFacilityRequest request, Guid accomdationId)
+    public static RemoveFacilityCommand AsRemoveCommand(this RemoveFacilityRequest request, Guid accomdationId, Guid hostId)
     {
         var output = new RemoveFacilityCommand(
+            hostId,
             accomdationId,
             request.FacilityId
             );
