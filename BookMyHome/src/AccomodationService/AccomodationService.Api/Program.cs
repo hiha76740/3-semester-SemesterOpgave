@@ -14,6 +14,7 @@ builder.Services.AddHandlerDI();
 builder.Services.AddDatabaseDI(builder.Configuration);
 builder.Services.AddRepositoryDI();
 builder.Services.AddQueriesDI();
+builder.Services.AddServiceDI();
 
 // TODO: replace with call when moved into shared
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

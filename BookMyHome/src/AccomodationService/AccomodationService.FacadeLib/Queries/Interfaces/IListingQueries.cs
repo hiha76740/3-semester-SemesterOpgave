@@ -11,4 +11,6 @@ public interface IListingQueries
     Task<IReadOnlyList<ListingDto>> GetAllListings();
 
     Task<Guid?>GetAccomodationIdByListingId(Guid id);
+
+    Task<IReadOnlyList<ListingDto>> GetAvailableListings(DateOnly start, DateOnly end);
 }

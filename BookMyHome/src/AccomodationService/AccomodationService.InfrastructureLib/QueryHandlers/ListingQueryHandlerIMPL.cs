@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AccomodationService.InfrastructureLib.QueryHandlers;
 
-public class ListingQueryHandlerIMPL(AccomodationDbContext db) : IListingQueries
+public class ListingQueryHandlerIMPL(AccomodationDbContext db, IBookingService bookingService) : IListingQueries
 {
     async Task<ListingDto?> IListingQueries.GetAccomdationListingByIdAsync(Guid accomodationId, Guid listingId)
     {
@@ -87,5 +87,38 @@ public class ListingQueryHandlerIMPL(AccomodationDbContext db) : IListingQueries
                 l.RowVersion
                 ))
             .ToListAsync();
+    }
+
+    async Task<IReadOnlyList<ListingDto>> IListingQueries.GetAvailableListings(DateOnly start, DateOnly end)
+    {
+        var output = new List<ListingDto>();
+
+        var listings = await db.Listings
+            .AsNoTracking()
+            .Select(l => new ListingDto(
+                l.Id.Value,
+                l.Accomodation.Id.Value,
+                l.ListingName,
+                l.DailyPrice,
+                l.HouseRules,
+                l.Type.ToString(),
+                l.Accomodation.Address.Street,
+                l.Accomodation.Address.PostalCode,
+                l.Accomodation.Address.City,
+                l.Accomodation.Address.Country,
+                l.Accomodation.facilities.Select(f => f.Name).ToArray(),
+                l.RowVersion
+                ))
+            .ToListAsync();
+
+        foreach (var l in listings)
+        {
+            var availiable = await bookingService.IsAvailableAsync(l.AccomodationId, start, end);
+
+            if (availiable == true)
+                output.Add(l);
+        }
+
+        return output;
     }
 }
