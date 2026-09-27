@@ -64,7 +64,7 @@ namespace AccomodationService.Api.Controllers
                 var list = await queries.GetAllAccomodationsCurrentUserAsync(id.Value);
 
                 if (list.Count == 0)
-                    return NotFound("No accomodations found");
+                    return NotFound("No accomodations was found");
 
                 var response = new List<AccomodationResponse>();
 
