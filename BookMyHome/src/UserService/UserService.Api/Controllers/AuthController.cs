@@ -132,7 +132,7 @@ namespace UserService.Api.Controllers
         }
 
         [Authorize]
-        [HttpGet("logout")]
+        [HttpPost("logout")]
         [EndpointSummary("This endpoint will log you out")]
         [EndpointDescription("Deletes the access and refresh token and returns NoContent")]
         [ProducesResponseType(StatusCodes.Status200OK, Description = "Deletion of cookies completed succesfully")]
