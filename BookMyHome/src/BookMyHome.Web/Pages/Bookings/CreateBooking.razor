@@ -1,7 +1,10 @@
 ﻿@page "/booking/create"
 
+@inject BookingState BookingState
 
-<h3>CreateBookingPage</h3>
+<p>@BookingState.StartDate</p>
+<p>@BookingState.EndDate</p>
+
 
 @code {
 
