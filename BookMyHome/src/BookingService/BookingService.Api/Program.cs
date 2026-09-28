@@ -76,7 +76,7 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 app.MapHealthChecks("health");
 
 app.UseCors("AllowBlazorOrigin");
