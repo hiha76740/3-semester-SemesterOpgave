@@ -13,8 +13,10 @@ builder.Services.AddOpenApi();
 builder.Services.AddHandlerDI();
 builder.Services.AddDatabaseDI(builder.Configuration);
 builder.Services.AddRepositoryDI();
-builder.Services.AddQueriesDI();
 builder.Services.AddServiceDI();
+builder.Services.AddQueriesDI();
+builder.Services.AddScoped<HttpClient>();
+
 
 // TODO: replace with call when moved into shared
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
