@@ -21,11 +21,11 @@ namespace UserService.Api.Controllers
         ) : ControllerBase
     {
 
+        [HttpPost("register")]
         [EndpointSummary("This endpoint will register a user")]
         [EndpointDescription("Register a user when all required info is given")]
         [ProducesResponseType(StatusCodes.Status200OK, Description = "User was registered succesfully")]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error doing registration of user")]
-        [HttpPost("register")]
         async public Task<ActionResult> Register(RegisterUserRequest request)
         {
             try
@@ -41,11 +41,11 @@ namespace UserService.Api.Controllers
             }
         }
 
+        [HttpPost("login")]
         [EndpointSummary("This endpoint will log in a user")]
         [EndpointDescription("Logs in a user when username and password is correct")]
         [ProducesResponseType(StatusCodes.Status200OK, Description = "User was logged in succesfully")]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error doing log in")]
-        [HttpPost("login")]
         public async Task<ActionResult> Login(LoginRequest request)
         {
             try
@@ -67,11 +67,11 @@ namespace UserService.Api.Controllers
 
 
 
+        [HttpPost("Refresh-token")]
         [EndpointSummary("This endpoint will create a new refresh token")]
         [EndpointDescription("Creates a new refresh token when all required info is given")]
         [ProducesResponseType(StatusCodes.Status200OK, Description = "Refresh token was created succesfully")]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error doing creation of refresh token")]
-        [HttpPost("Refresh-token")]
         public async Task<ActionResult> Refresh()
         {
             try
@@ -103,11 +103,11 @@ namespace UserService.Api.Controllers
 
 
         [Authorize]
+        [HttpGet("Me")]
         [EndpointSummary("This endpoint will get current user information")]
         [EndpointDescription("Get current user information, like username, firstname and lastname")]
         [ProducesResponseType<AuthUserResponse>(StatusCodes.Status200OK, "application/json", Description = "Returns info of current user")]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while getting current user info")]
-        [HttpGet("Me")]
         public async Task<ActionResult<AuthUserResponse>> GetCurrentUserInfo()
         {
             try
@@ -125,12 +125,34 @@ namespace UserService.Api.Controllers
                 return Ok(dto.AsAuthUserReponse());
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                return BadRequest(ex.Message);
             }
         }
+
+        [Authorize]
+        [HttpGet("logout")]
+        [EndpointSummary("This endpoint will log you out")]
+        [EndpointDescription("Deletes the access and refresh token and returns NoContent")]
+        [ProducesResponseType(StatusCodes.Status200OK, Description = "Deletion of cookies completed succesfully")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Description ="Something went wrong while deleting cookies")]
+        public async Task<ActionResult> Logout()
+        {
+            try
+            {
+                Response.Cookies.Delete("accessToken");
+                Response.Cookies.Delete("refreshToken");
+
+                return NoContent();
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
 
         //TODO: move this to shared folder and call in all API's
         private Guid? GetCurrentUserId()
