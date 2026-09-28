@@ -6,7 +6,7 @@ namespace AccomodationService.InfrastructureLib.Services;
 
 public class BookingService(HttpClient httpClient) : IBookingService
 {
-    private readonly string baseUrl = "https://BookMyHome-BookingService:8081/";
+    private readonly string baseUrl = "http://BookMyHome-BookingService:8080/";
 
     async Task<bool> IBookingService.IsAvailableAsync(Guid accomodationId, DateOnly start, DateOnly end)
     {
