@@ -1,12 +1,46 @@
 ﻿@page "/booking/create"
+@using BookMyHome.ContractsLib.Requests.Bookings
 
-@inject BookingState BookingState
+@inject IBookingService Service
+@inject BookingState Booking
+@inject UserState User
 
-<p>@BookingState.AccomodationId</p>
-<p>@BookingState.StartDate</p>
-<p>@BookingState.EndDate</p>
+@if (error != null)
+{
+    <p>@error</p>
+}
 
+<p>@Booking.AccomodationId</p>
+<p>@Booking.StartDate</p>
+<p>@Booking.EndDate</p>
+<p>@Booking.DailyPrice</p>
+<p>@Booking.TotalPrice</p>
+
+<RadzenButton Text="Bekræft" ButtonStyle="ButtonStyle.Success" Click="Submit" />
 
 @code {
+    private string? error = null;
 
+    async private Task Submit()
+    {
+        try
+        {
+            if (User.UserId != null)
+            {
+                var request = new CreateBookingRequest(
+                        User.UserId.Value,
+                        Booking.AccomodationId,
+                        Booking.StartDate,
+                        Booking.EndDate,
+                        Booking.TotalPrice);
+
+                await Service.MakeBooking(request);
+            }
+        }
+        catch (Exception ex)
+        {
+            error = ex.Message;
+        }
+
+    }
 }
