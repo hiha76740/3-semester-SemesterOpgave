@@ -2,6 +2,7 @@
 @inherits LayoutComponentBase
 @inject UserState UserState
 @inject IAuthService service
+@inject NavigationManager navigationManager
 
 <HeadContent>
     <RadzenTheme Theme="material" />
@@ -16,7 +17,7 @@
         <div class="top-row px-4">
             @if (UserState.UserId != null)
             {
-                <RadzenProfileMenu>
+                <RadzenProfileMenu Click="OnProfileMenuClick">
                     <Template>
                         <RadzenGravatar Email="@UserState.Username">
                         </RadzenGravatar>
@@ -24,6 +25,7 @@
                     <ChildContent>
                         <RadzenProfileMenuItem Text="Profil" Path="/user/profile" Icon="account_circle"></RadzenProfileMenuItem>
                         <RadzenProfileMenuItem Text="Mine bookinger" Path="/bookings" Icon="book"></RadzenProfileMenuItem>
+                        <RadzenProfileMenuItem Text="Log ud" Icon="logout" Value="logout"></RadzenProfileMenuItem>
                     </ChildContent>
                 </RadzenProfileMenu>
             }
@@ -63,6 +65,23 @@
         when (ex.StatusCode == HttpStatusCode.Unauthorized)
         {
             // do nothing for now
+        }
+    }
+
+    private async Task OnProfileMenuClick(RadzenProfileMenuItem item)
+    {
+        if (item.Value?.ToString() != "logout")
+            return;
+
+        try
+        {
+            await service.LogOut();
+            UserState.Clear();
+            navigationManager.NavigateTo("/login");
+        }
+        catch
+        {
+            
         }
     }
 }
