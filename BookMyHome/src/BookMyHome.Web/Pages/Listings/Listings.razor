@@ -1,5 +1,6 @@
 ﻿@page "/listings"
 @inject IListingService Service
+@inject BookingState BookingState
 
 <section>
     <h3>Find dit næste ophold</h3>
@@ -7,27 +8,22 @@
     <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Start" Gap="0.5rem" class="rz-p-sm-12">
         <RadzenStack Gap="0.5rem">
             <RadzenLabel Text="Lokation" Component="LocationSearch" />
-            <RadzenTextBox Placeholder="Søg" Style="width: 100%; max-width: 400px;" Name="LocationSearch" />
+            <RadzenTextBox Placeholder="Søg" Style="width: 100%; max-width: 400px;" Name="LocationSearch" Change="@(_ => Search())" @bind-Value="searchFilter" Immediate="true" />
         </RadzenStack>
         <RadzenStack Gap="0.5rem">
             <RadzenLabel Text="Fra" Component="StartDate" />
-            <RadzenDatePicker @bind-Value="@from" DateFormat="dd/MM/yyyy" Name="StartDate" Immediate="true" Change="@(_ => OnChange())" />
+            <RadzenDatePicker @bind-Value="@start" DateFormat="dd/MM/yyyy" Name="StartDate" Immediate="true" Change="@(_ => OnChange())" />
         </RadzenStack>
         <RadzenStack Gap="0.5rem">
             <RadzenLabel Text="Til" Component="EndDate" />
-            <RadzenDatePicker @bind-Value="@to" DateFormat="dd/MM/yyyy" Name="EndDate" Immediate="true" Change="@(_ => OnChange())" />
-            <RadzenCompareValidator Component="EndDate"
-                                    Value="@to"
-                                    Operator="CompareOperator.GreaterThan"
-                                    Text="Slut dato skal være efter start dato">
-            </RadzenCompareValidator>
+            <RadzenDatePicker @bind-Value="@end" DateFormat="dd/MM/yyyy" Name="EndDate" Immediate="true" Change="@(_ => OnChange())" />
         </RadzenStack>
     </RadzenStack>
 </section>
 
 <section>
     <h4>Ledige boliger</h4>
-    @foreach (var listing in ListingsList)
+    @foreach (var listing in FilteredList)
     {
         <ListingCard Listing="@listing" />
     }
@@ -35,18 +31,57 @@
 </section>
 
 @code {
-    private DateOnly from;
-    private DateOnly to;
+    private DateOnly start = DateOnly.FromDateTime(DateTime.Today);
+    private DateOnly end = DateOnly.FromDateTime(DateTime.Today.AddDays(7));
+    private string searchFilter = string.Empty;
 
     public IReadOnlyList<ListingResponse> ListingsList { get; set; } = [];
+    private IReadOnlyList<ListingResponse> FilteredList = [];
 
-    private void OnChange()
+    async private void OnChange()
     {
+        SetBookingStateDates();
 
+        ListingsList = await Service.GetAllAvailiableListingsByPeriod(start, end);
+        ApplyFilters();
     }
+
+    private void Search()
+    {
+        ApplyFilters();
+
+}
 
     async protected override Task OnInitializedAsync()
     {
-        ListingsList = await Service.GetAllListingsAsync();
+        SetBookingStateDates();
+
+        ListingsList = await Service.GetAllAvailiableListingsByPeriod(start,end);
+        ApplyFilters();
+    }
+
+    private void SetBookingStateDates()
+    {
+        BookingState.StartDate = start;
+        BookingState.EndDate = end;
+    }
+
+    private void ApplyFilters()
+    {
+        IEnumerable<ListingResponse> query = ListingsList;
+
+        // Location
+        if (string.IsNullOrWhiteSpace(searchFilter) == false)
+        {
+            query = query
+            .Where(l =>
+                l.Street.Contains(searchFilter, StringComparison.CurrentCultureIgnoreCase) ||
+                l.PostalCode.Contains(searchFilter, StringComparison.CurrentCultureIgnoreCase) ||
+                l.City.Contains(searchFilter, StringComparison.CurrentCultureIgnoreCase)
+            );
+        }
+
+        FilteredList = query.ToList();
+
     }
 }
