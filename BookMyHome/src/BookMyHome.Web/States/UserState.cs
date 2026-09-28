@@ -20,5 +20,15 @@
             Role = role;
             OnChange?.Invoke();
         }
+
+        public void Clear()
+        {
+            UserId = Guid.Empty;
+            Firstname = string.Empty;
+            Lastname = string.Empty;
+            Username = string.Empty;
+            Role = string.Empty;
+            OnChange?.Invoke();
+        }
     }
 }
