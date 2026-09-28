@@ -10,5 +10,7 @@ namespace BookMyHome.Web.ServiceInterfaces
         Task<int> Register(RegisterUserRequest request);
 
         Task<AuthUserResponse> GetAuthUserAsync();
+
+        Task LogOut();
     }
 }
