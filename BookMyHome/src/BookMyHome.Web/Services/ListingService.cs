@@ -16,7 +16,7 @@ namespace BookMyHome.Web.Services
 
             request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
 
-            var response = await httpClient.SendAsync(request);
+            using var response = await httpClient.SendAsync(request);
 
             response.EnsureSuccessStatusCode();
 
@@ -37,7 +37,7 @@ namespace BookMyHome.Web.Services
 
             request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
 
-            var response = await httpClient.SendAsync(request);
+            using var response = await httpClient.SendAsync(request);
 
             response.EnsureSuccessStatusCode();
 
@@ -55,7 +55,7 @@ namespace BookMyHome.Web.Services
 
             request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
 
-            var response = await httpClient.SendAsync(request);
+            using var response = await httpClient.SendAsync(request);
 
             response.EnsureSuccessStatusCode();
 
@@ -73,7 +73,7 @@ namespace BookMyHome.Web.Services
 
             request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
 
-            var response = await httpClient.SendAsync(request);
+            using var response = await httpClient.SendAsync(request);
 
             response.EnsureSuccessStatusCode();
 
