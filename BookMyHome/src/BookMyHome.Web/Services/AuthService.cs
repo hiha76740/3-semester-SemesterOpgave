@@ -1,6 +1,7 @@
 ﻿using BookMyHome.ContractsLib.Requests.Users;
 using BookMyHome.ContractsLib.Responses.Authentication;
 using BookMyHome.Web.ServiceInterfaces;
+using BookMyHome.Web.States;
 using Microsoft.AspNetCore.Components.WebAssembly.Http;
 using System.Net.Http.Json;
 
@@ -17,7 +18,7 @@ namespace BookMyHome.Web.Services
 
             request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
 
-            var response = await httpClient.SendAsync(request);
+            using var response = await httpClient.SendAsync(request);
 
             response.EnsureSuccessStatusCode();
 
@@ -31,20 +32,33 @@ namespace BookMyHome.Web.Services
 
         async Task<int> IAuthService.Login(string username, string password)
         {
-            var request = new HttpRequestMessage(HttpMethod.Post, $"{baseUrl}api/v1/Auth/login");
-
-            request.Content = JsonContent.Create(new LoginRequest(username, password));
+            var request = new HttpRequestMessage(HttpMethod.Post, $"{baseUrl}api/v1/Auth/login")
+            {
+                Content = JsonContent.Create(new LoginRequest(username, password))
+            };
 
             request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
 
-            var response = await httpClient.SendAsync(request);
+            using var response = await httpClient.SendAsync(request);
 
             return (int)response.StatusCode;
         }
 
+        async Task IAuthService.LogOut()
+        {
+            var request = new HttpRequestMessage(HttpMethod.Post, $"{baseUrl}api/v1/Auth/logout");
+
+            request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
+
+            using var response = await httpClient.SendAsync(request);
+
+            response.EnsureSuccessStatusCode();
+
+        }
+
         async Task<int> IAuthService.Register(RegisterUserRequest request)
         {
-            var response = await httpClient.PostAsJsonAsync($"{baseUrl}api/v1/Auth/register", request);
+            using var response = await httpClient.PostAsJsonAsync($"{baseUrl}api/v1/Auth/register", request);
 
             return (int)response.StatusCode;
         }
