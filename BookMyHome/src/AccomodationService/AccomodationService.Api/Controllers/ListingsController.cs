@@ -7,6 +7,7 @@ using BookMyHome.ContractsLib.Responses.Accomodations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 
 namespace AccomodationService.Api.Controllers
@@ -70,6 +71,40 @@ namespace AccomodationService.Api.Controllers
                     return NotFound("No accomodation was found");
 
                 return Ok(guid);
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [Authorize(Roles = "Host, Guest")]
+        [HttpGet("period")]
+        [EndpointSummary("This endpoint will get all listings that are availible in the requested period")]
+        [EndpointDescription("Gets all listings that are availible in the requested period or returns not found if no listings was found")]
+        [ProducesResponseType<ListingResponse>(StatusCodes.Status200OK, "application/json", Description = "Returns list of listings for requested period")]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Description = "Listing was not found")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while receiving listings")]
+        public async Task<ActionResult<ListingResponse>> GetAllAvailibleListingsByPeriod(
+            [Required][Description("Start date of the period you want to find listings for")] DateOnly start,
+            [Required][Description("End date of the period you want to find listings for")] DateOnly end)
+        {
+            try
+            {
+                var list = await queries.GetAvailableListings(start, end);
+
+                if (list.Count == 0)
+                    return NotFound("No availible listings was found");
+
+                var response = new List<ListingResponse>();
+
+                foreach (var item in list)
+                {
+                    response.Add(item.AsReponse());
+                }
+
+                return Ok(response);
 
             }
             catch (Exception ex)
