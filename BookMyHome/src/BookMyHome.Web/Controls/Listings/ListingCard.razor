@@ -1,4 +1,6 @@
 ﻿@inject NavigationManager navigationManager
+@inject BookingState BookingState
+
 @using BookMyHome.ContractsLib.Responses.Accomodations
 <RadzenCard class="rz-my-12 rz-mx-auto" Style="max-width: 350px">
     <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" Gap="1rem" class="rz-p-4">
@@ -32,6 +34,7 @@
 
     private void SeeDetails()
     {
+        BookingState.AccomodationId = Listing.AccomodationId;
         navigationManager.NavigateTo($"/listing/{Listing.ListingId}");
     }
 }
