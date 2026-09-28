@@ -34,6 +34,7 @@
 
     private void SeeDetails()
     {
+        BookingState.DailyPrice = Listing.DailyPrice;
         BookingState.AccomodationId = Listing.AccomodationId;
         navigationManager.NavigateTo($"/listing/{Listing.ListingId}");
     }
