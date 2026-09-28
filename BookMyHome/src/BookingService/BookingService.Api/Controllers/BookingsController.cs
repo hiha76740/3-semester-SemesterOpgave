@@ -95,7 +95,6 @@ namespace BookingService.Api.Controllers
             }
         }
 
-        [Authorize]
         [HttpGet("availability")]
         [EndpointSummary("This endpoint will check availability for a specific period and accomodation")]
         [EndpointDescription("Checks if the period is available for the requsted period and accomodation returns true or false")]
