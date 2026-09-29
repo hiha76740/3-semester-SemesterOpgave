@@ -64,14 +64,14 @@ namespace AccomodationService.Api.Controllers
 
                 var list = await queries.GetAllAccomodationsCurrentUserAsync(id.Value);
 
-                if (list.Count == 0)
-                    return NotFound("No accomodations was found");
-
                 var response = new List<AccomodationResponse>();
 
-                foreach (var item in list)
+                if (list.Count != 0)
                 {
-                    response.Add(item.AsResponse());
+                    foreach (var item in list)
+                    {
+                        response.Add(item.AsResponse());
+                    } 
                 }
 
                 return Ok(response);

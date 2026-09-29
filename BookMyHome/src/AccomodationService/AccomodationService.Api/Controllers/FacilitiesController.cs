@@ -24,7 +24,6 @@ namespace AccomodationService.Api.Controllers
         [EndpointSummary("This endpoint will get all facilities")]
         [EndpointDescription("Gets all facilities or returns not found if no facilities was found")]
         [ProducesResponseType<IReadOnlyList<FacilityResponse>>(StatusCodes.Status200OK, "application/json", Description = "Returns list of all facilites")]
-        [ProducesResponseType(StatusCodes.Status404NotFound, Description = "No facilities was found")]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while receiving all facilities")]
         public async Task<ActionResult<IReadOnlyList<FacilityResponse>>> GetAll()
         {
@@ -32,14 +31,14 @@ namespace AccomodationService.Api.Controllers
             {
                 var list = await queries.GetAllFacilitiesAsync();
 
-                if (list.Count == 0)
-                    return NotFound("No facilties was found");
-
                 var response = new List<FacilityResponse>();
 
-                foreach (var item in list)
+                if (list.Count != 0)
                 {
-                    response.Add(item.AsResponse());
+                    foreach (var item in list)
+                    {
+                        response.Add(item.AsResponse());
+                    } 
                 }
 
                 return Ok(response);

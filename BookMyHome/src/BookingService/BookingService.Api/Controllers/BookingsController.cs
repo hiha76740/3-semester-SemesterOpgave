@@ -42,7 +42,6 @@ namespace BookingService.Api.Controllers
         [EndpointSummary("This endpoint will get all bookings")]
         [EndpointDescription("Gets all bookings or returns not found if no bookings")]
         [ProducesResponseType<IReadOnlyList<BookingResponse>>(StatusCodes.Status200OK, "application/json", Description = "Returns list of all bookings")]
-        [ProducesResponseType(StatusCodes.Status404NotFound, Description = "No bookings was found")]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while receiving all bookings")]
         public async Task<ActionResult<IReadOnlyList<BookingResponse>>> GetAll()
         {
@@ -50,14 +49,14 @@ namespace BookingService.Api.Controllers
             {
                 var list = await queries.GetAllAsync();
 
-                if (list.Count == 0)
-                    return NotFound("No bookings was found");
-
                 var response = new List<BookingResponse>();
 
-                foreach (var item in list)
+                if (list.Count != 0)
                 {
-                    response.Add(item.AsResponse());
+                    foreach (var item in list)
+                    {
+                        response.Add(item.AsResponse());
+                    } 
                 }
 
                 return Ok(response);
