@@ -69,7 +69,7 @@ public class CreateBookingHandler(
         catch (Exception ex)
         {
             //uow.Rollback();
-            throw new ApplicationException("Error while creating booking",ex);
+            throw new ApplicationException(ex.Message);
         }
     }
 }
