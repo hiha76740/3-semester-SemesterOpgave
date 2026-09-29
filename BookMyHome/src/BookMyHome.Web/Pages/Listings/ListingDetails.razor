@@ -1,20 +1,21 @@
 ﻿@page "/listing/{id:guid}"
 @inject IListingService service
 @inject NavigationManager navigationManager
+@inject ListingState listingState
 
 
 @if (listing == null)
 {
     <p>Indlæser listing...</p>
 }
-else if(error != null)
+else if (error != null)
 {
     <p>@error</p>
 }
 else
 {
     <RadzenCard class="rz-my-12 rz-mx-auto" Style="max-width: 450px">
-        <RadzenButton Variant="Variant.Text" class="rz-text-secondary-color" Text="<- Back" Click="@Back"/>
+        <RadzenButton Variant="Variant.Text" class="rz-text-secondary-color" Text="<- Back" Click="@Back" />
         <RadzenColumn>
             <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">@listing.ListingName</RadzenText>
             <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">@listing.City, @listing.Country</RadzenText>
@@ -43,7 +44,7 @@ else
             </RadzenRow>
         </RadzenCard>
         <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" Gap="0">
-            <RadzenButton Text="Book" ButtonStyle="ButtonStyle.Success" Click="@Book"/>
+            <RadzenButton Text="Book" ButtonStyle="ButtonStyle.Success" Click="@Book" />
         </RadzenStack>
     </RadzenCard>
 }
@@ -77,6 +78,18 @@ else
 
     private void Book()
     {
-        navigationManager.NavigateTo("/booking/create");
+        if (listing != null)
+        {
+            listingState.SetState(
+                listing.ListingName,
+                listing.Street,
+                listing.PostalCode,
+                listing.City,
+                listing.Country,
+                listing.AccomodationType);
+
+            navigationManager.NavigateTo("/booking/create");
+        }
+
     }
 }
