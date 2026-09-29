@@ -38,6 +38,24 @@ public class BookingQueryHandlerIMPL(BookingDbContext db) : IBookingQueries
             .ToListAsync();
     }
 
+    async Task<IReadOnlyList<BookingDTO>> IBookingQueries.GetAllUserBookings(Guid id)
+    {
+        var guestId = new GuestId(id);
+
+        return await db.Bookings
+            .AsNoTracking()
+            .Where(b => b.GuestId == guestId)
+            .Select(b => new BookingDTO(
+                b.Id.Value,
+                b.GuestId.Value,
+                b.AccomodationId.Value,
+                b.Period.StartDate,
+                b.Period.EndDate,
+                b.Price
+                ))
+            .ToListAsync();
+    }
+
     async Task<BookingDTO?> IBookingQueries.GetBookingByIdAsync(Guid Id)
     {
         var bookingId = new BookingId(Id);

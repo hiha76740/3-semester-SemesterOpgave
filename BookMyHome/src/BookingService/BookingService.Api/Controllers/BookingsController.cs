@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Security.Claims;
 
 namespace BookingService.Api.Controllers
 {
@@ -119,6 +120,57 @@ namespace BookingService.Api.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+
+        [Authorize(Roles = "Guest")]
+        [HttpGet("user/bookings")]
+        [EndpointSummary("This endpoint will get all bookings for the current user")]
+        [EndpointDescription("Gets all bookings for the current user by token or returns empty list if no booking")]
+        [ProducesResponseType<IReadOnlyList<BookingResponse>>(StatusCodes.Status200OK, "application/json", Description = "Returns list of bookings")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while receiving current user bookings")]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized, Description = "User do not have the correct permission")]
+        public async Task<ActionResult<BookingResponse>> GetUserBookings()
+        {
+            try
+            {
+                var id = GetCurrentUserId();
+
+                if (id == null || HttpContext.User.FindFirstValue(ClaimTypes.Role) != "Guest")
+                    return Unauthorized("Incorrect permission");
+
+                var list = await queries.GetAllUserBookings(id.Value);
+
+                var response = new List<BookingResponse>();
+
+                if (list.Count != 0)
+                {
+                    foreach (var booking in list)
+                    {
+                        response.Add(booking.AsResponse());
+                    }
+                }
+
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        // TODO: Delete this after it has been moved into shared
+        private Guid? GetCurrentUserId()
+        {
+            var stringUserId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var idIsValid = Guid.TryParse(stringUserId, out Guid id);
+
+            if (idIsValid == false)
+                return null;
+
+            return id;
+        }
+
     }
 
 }
