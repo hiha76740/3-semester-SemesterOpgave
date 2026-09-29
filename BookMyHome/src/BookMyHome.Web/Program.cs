@@ -19,5 +19,6 @@ builder.Services.AddScoped<IListingService, ListingService>();
 builder.Services.AddScoped<IBookingService, BookingService>();
 builder.Services.AddScoped<UserState>();
 builder.Services.AddScoped<BookingState>();
+builder.Services.AddScoped<ListingState>();
 
 await builder.Build().RunAsync();
