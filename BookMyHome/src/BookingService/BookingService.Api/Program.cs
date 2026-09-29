@@ -16,6 +16,7 @@ builder.Services.AddRepositoryDI();
 builder.Services.AddUnitOfWorkDI();
 builder.Services.AddQueriesDI();
 builder.Services.AddServicesDI();
+builder.Services.AddScoped<HttpClient>();
 
 // TODO: Move Into shared and call it from there
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
