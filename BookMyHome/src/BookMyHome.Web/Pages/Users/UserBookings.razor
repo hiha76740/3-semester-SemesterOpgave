@@ -3,15 +3,28 @@
 
 @inject IBookingService Service
 @inject UserState User
+@inject DialogService DialogService
 
-@if(Bookings != null)
+@if (Bookings != null)
 {
-    <RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="false" FilterMode="FilterMode.Advanced" AllowSorting="true" PageSize="5" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"
-                    Data="@Bookings" ColumnWidth="300px" LogicalFilterOperator="LogicalFilterOperator.Or" SelectionMode="DataGridSelectionMode.Single">
+    <RadzenDataGrid Data="@Bookings" TItem="BookingResponse">
         <Columns>
             <RadzenDataGridColumn Property="@nameof(BookingResponse.StartDate)" Title="Start dato" Frozen="true" Width="160px" />
             <RadzenDataGridColumn Property="@nameof(BookingResponse.EndDate)" Title="Slut dato" Frozen="true" Width="160px" />
             <RadzenDataGridColumn Property="@nameof(BookingResponse.Price)" Title="Pris" Frozen="true" Width="160px" />
+
+            <RadzenDataGridColumn Titem="BookingResponse"
+                                  Title="Handling"
+                                  Sortable="false"
+                                  Filterable="false">
+                <Template Context="booking">
+                    <RadzenButton Text="Afbestil"
+                                  ButtonType="ButtonType.Button"
+                                  ButtonStyle="ButtonStyle.Danger"
+                                  Size="ButtonSize.Small"
+                                  Click="@(_ => Cancel(booking))" />
+                </Template>
+            </RadzenDataGridColumn>
         </Columns>
     </RadzenDataGrid>
 }
@@ -23,7 +36,7 @@
 
 
     /*
-        Listing navn
+    Listing navn
         Listing type
         By
         Land
@@ -39,5 +52,24 @@
             Bookings = await Service.GetUserBookingsAsync();
         }
 
+    }
+
+    private async Task Cancel(BookingResponse booking)
+    {
+        var result = await DialogService.Confirm(
+            $"Er du sikker på du vil afbestille {booking.Id}? ",
+            "Afbestilling",
+            new ConfirmOptions()
+            {
+                OkButtonText = "Ja, afbestil",
+                CancelButtonText = "Nej",
+                CloseDialogOnEsc = true
+            });
+
+        if (result == true)
+        {
+            await Service.CancelBookingAsync(booking.Id);
+            Bookings = await Service.GetUserBookingsAsync();
+        }
     }
 }
