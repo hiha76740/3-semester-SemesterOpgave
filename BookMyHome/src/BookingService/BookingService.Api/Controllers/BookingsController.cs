@@ -1,4 +1,5 @@
 ﻿using BookingService.Api.Mapper;
+using BookingService.FacadeLib.Commands.DTOs;
 using BookingService.FacadeLib.Commands.Interfaces;
 using BookingService.FacadeLib.Queries.Interfaces;
 using BookMyHome.ContractsLib.Requests.Bookings;
@@ -13,7 +14,10 @@ namespace BookingService.Api.Controllers
 {
     [ApiController]
     [Route("api/v1/[controller]")]
-    public class BookingsController(ICreateBookingHandler create, IBookingQueries queries) : ControllerBase
+    public class BookingsController(
+        ICreateBookingHandler create,
+        ICancelBookingHandler cancel,
+        IBookingQueries queries) : ControllerBase
     {
         [Authorize(Roles = "Guest")]
         [HttpPost]
@@ -154,6 +158,36 @@ namespace BookingService.Api.Controllers
             }
             catch (Exception ex)
             {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+        [Authorize(Roles = "Guest")]
+        [HttpPut("{bookingId:guid}/cancel")]
+        [EndpointSummary("This endpoint will cancel a booking")]
+        [EndpointDescription("Sets the status of the requested booking to cancelled")]
+        [ProducesResponseType(StatusCodes.Status200OK, Description = "Requested booking was cancelled succesfully")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while cancelling the requested booking")]
+        public async Task<ActionResult> MakeBooking(
+            [Description("Id of the booking you want to cancel")] Guid bookingId)
+        {
+            try
+            {
+                var guestId = GetCurrentUserId();
+
+                if (guestId == null || HttpContext.User.FindFirstValue(ClaimTypes.Role) != "Guest")
+                    return Unauthorized("Incorrect permission");
+
+                var command = new CancelBookingCommand(bookingId, guestId.Value);
+
+                await cancel.Handle(command);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+
                 return BadRequest(ex.Message);
             }
         }
