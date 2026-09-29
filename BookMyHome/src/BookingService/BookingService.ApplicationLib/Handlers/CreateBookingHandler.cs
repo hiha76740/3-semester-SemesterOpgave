@@ -42,8 +42,8 @@ public class CreateBookingHandler(
                 throw new NotFoundException("Accomodation not found doing booking creation");
 
 
-            //uow.BeginTransaction(
-            //    IsolationLevel.Serializable);
+            uow.BeginTransaction(
+                IsolationLevel.Serializable);
 
             var overlapExsists = await bookingRepo.HasOverlapingBookingAsync(
                 accomodationId,
@@ -64,12 +64,12 @@ public class CreateBookingHandler(
             await bookingRepo.CreateAsync(booking);
 
             await bookingRepo.SaveAsync();
-            //uow.Commit();
+            uow.Commit();
         }
         catch (Exception ex)
         {
-            //uow.Rollback();
-            throw new ApplicationException(ex.Message);
+            uow.Rollback();
+            throw new ApplicationException(ex.Message,ex);
         }
     }
 }
