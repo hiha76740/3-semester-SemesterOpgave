@@ -41,10 +41,12 @@ public class BookingQueryHandlerIMPL(BookingDbContext db) : IBookingQueries
     async Task<IReadOnlyList<BookingDTO>> IBookingQueries.GetAllUserBookings(Guid id)
     {
         var guestId = new GuestId(id);
+        var list = new List<UserBookingDto>();
+
 
         return await db.Bookings
             .AsNoTracking()
-            .Where(b => b.GuestId == guestId)
+            .Where(b => b.GuestId == guestId && b.Status == BookingStatus.Booked)
             .Select(b => new BookingDTO(
                 b.Id.Value,
                 b.GuestId.Value,

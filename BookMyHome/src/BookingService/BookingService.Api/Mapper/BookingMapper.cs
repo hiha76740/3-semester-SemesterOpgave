@@ -34,5 +34,20 @@ namespace BookingService.Api.Mapper
             return output;
 
         }
+
+        public static UserBookingResponse AsUserBooking(this UserBookingDto dto)
+        {
+            var output = new UserBookingResponse(
+                dto.ListingName,
+                dto.ListingType,
+                dto.City,
+                dto.Country,
+                dto.StartDate,
+                dto.EndDate,
+                dto.Price
+                );
+
+            return output;
+        }
     }
 }
