@@ -7,4 +7,6 @@ public interface IUserQueries
     IReadOnlyList<AccessRoleDto> GetAllAccessRoles();
 
     Task<UserDto?> GetByIdAsync(Guid id);
+
+    Task<bool> CheckIfExistsAsync(Guid id);
 }

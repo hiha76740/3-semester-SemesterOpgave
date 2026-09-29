@@ -9,6 +9,15 @@ namespace UserService.InfrastructureLib.QueryHandlers
 {
     internal class UserQueryIMPLHandler(UserDbContext db) : IUserQueries
     {
+        async Task<bool> IUserQueries.CheckIfExistsAsync(Guid id)
+        {
+            var userId = new UserId(id);
+
+            return await db.Users
+                .AsNoTracking()
+                .AnyAsync(u => u.Id == userId);
+        }
+
         IReadOnlyList<AccessRoleDto> IUserQueries.GetAllAccessRoles()
         {
             return Enum.GetValues<AccessRoles>()
