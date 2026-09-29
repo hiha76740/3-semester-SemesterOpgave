@@ -1,5 +1,7 @@
 ﻿using BookMyHome.ContractsLib.Responses.Users;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using UserService.Api.Mapper;
 using UserService.FacadeLib.Queries.Interfaces;
 
@@ -47,8 +49,8 @@ namespace UserService.Api.Controllers
         [ProducesResponseType<UserResponse>(StatusCodes.Status200OK, "application/json", Description = "Returns requested user")]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while getting requested user")]
         [ProducesResponseType(StatusCodes.Status404NotFound, Description = "Requested user was not found")]
-
-        public async Task<ActionResult<UserResponse>> GetUserById(Guid userId)
+        public async Task<ActionResult<UserResponse>> GetUserById(
+            [Required][Description("Id of the user you want to find")] Guid userId)
         {
             try
             {
@@ -58,6 +60,27 @@ namespace UserService.Api.Controllers
                     return NotFound("No user was found with the specified Id");
 
                 return Ok(user.AsUserResponse());
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("exists")]
+        [EndpointSummary("This endpoint will check if a specific user exists")]
+        [EndpointDescription("Checks if a specific user exists in datbase, if user exists returns true otherwise returns false")]
+        [ProducesResponseType<bool>(StatusCodes.Status200OK, "application/json", Description = "Returns true")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while checking if requested user exists")]
+        public async Task<ActionResult<UserResponse>> CheckIfExists(
+            [Required][Description("Id of the user you want to check")] Guid userId)
+        {
+            try
+            {
+                var exists = await queries.CheckIfExistsAsync(userId);
+
+                return Ok(exists);
 
             }
             catch (Exception ex)
