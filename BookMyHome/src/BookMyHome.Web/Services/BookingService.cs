@@ -10,6 +10,17 @@ public class BookingService(HttpClient httpClient) : IBookingService
 {
     private readonly string baseUrl = "https://localhost:9011/";
 
+    async Task IBookingService.CancelBookingAsync(Guid bookingId)
+    {
+        var request = new HttpRequestMessage(HttpMethod.Put, $"{baseUrl}api/v1/Bookings/{bookingId}/cancel");
+
+        request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
+
+        using var response = await httpClient.SendAsync(request);
+
+        response.EnsureSuccessStatusCode();
+    }
+
     async Task<IReadOnlyList<BookingResponse>> IBookingService.GetUserBookingsAsync()
     {
         var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}api/v1/Bookings/user/bookings");
@@ -28,7 +39,7 @@ public class BookingService(HttpClient httpClient) : IBookingService
         return bookings;
     }
 
-    async Task IBookingService.MakeBooking(CreateBookingRequest CreateRequest)
+    async Task IBookingService.MakeBookingAsync(CreateBookingRequest CreateRequest)
     {
         var request = new HttpRequestMessage(HttpMethod.Post, $"{baseUrl}api/v1/Bookings")
         {
