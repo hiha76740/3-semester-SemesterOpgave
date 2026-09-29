@@ -1,0 +1,43 @@
+﻿@page "/user/bookings"
+@using BookMyHome.ContractsLib.Responses.Bookings
+
+@inject IBookingService Service
+@inject UserState User
+
+@if(Bookings != null)
+{
+    <RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="false" FilterMode="FilterMode.Advanced" AllowSorting="true" PageSize="5" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"
+                    Data="@Bookings" ColumnWidth="300px" LogicalFilterOperator="LogicalFilterOperator.Or" SelectionMode="DataGridSelectionMode.Single">
+        <Columns>
+            <RadzenDataGridColumn Property="@nameof(BookingResponse.StartDate)" Title="Start dato" Frozen="true" Width="160px" />
+            <RadzenDataGridColumn Property="@nameof(BookingResponse.EndDate)" Title="Slut dato" Frozen="true" Width="160px" />
+            <RadzenDataGridColumn Property="@nameof(BookingResponse.Price)" Title="Pris" Frozen="true" Width="160px" />
+        </Columns>
+    </RadzenDataGrid>
+}
+
+
+
+@code {
+    private IReadOnlyList<BookingResponse>? Bookings;
+
+
+    /*
+        Listing navn
+        Listing type
+        By
+        Land
+        Start dato
+        Slut dato
+        Pris
+     */
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (User.UserId != null)
+        {
+            Bookings = await Service.GetUserBookingsAsync();
+        }
+
+    }
+}
