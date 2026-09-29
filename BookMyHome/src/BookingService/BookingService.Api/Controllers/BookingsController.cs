@@ -33,7 +33,7 @@ namespace BookingService.Api.Controllers
             catch (Exception ex)
             {
 
-                return BadRequest(ex);
+                return BadRequest(ex.Message);
             }
         }
 
@@ -65,7 +65,7 @@ namespace BookingService.Api.Controllers
             catch (Exception ex)
             {
 
-                return BadRequest(ex);
+                return BadRequest(ex.Message);
             }
         }
 
@@ -91,7 +91,7 @@ namespace BookingService.Api.Controllers
             catch (Exception ex)
             {
 
-                return BadRequest(ex);
+                return BadRequest(ex.Message);
             }
         }
 
@@ -117,7 +117,7 @@ namespace BookingService.Api.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex);
+                return BadRequest(ex.Message);
             }
         }
     }
