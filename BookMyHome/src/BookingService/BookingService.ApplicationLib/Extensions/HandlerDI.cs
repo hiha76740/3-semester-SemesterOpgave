@@ -9,6 +9,7 @@ public static class HandlerDI
     public static IServiceCollection AddHandlerDI(this IServiceCollection services)
     {
         services.AddScoped<ICreateBookingHandler, CreateBookingHandler>();
+        services.AddScoped<ICancelBookingHandler, CancelBookingHandler>();
 
         return services;
     }

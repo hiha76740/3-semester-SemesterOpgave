@@ -169,7 +169,7 @@ namespace BookingService.Api.Controllers
         [EndpointDescription("Sets the status of the requested booking to cancelled")]
         [ProducesResponseType(StatusCodes.Status200OK, Description = "Requested booking was cancelled succesfully")]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while cancelling the requested booking")]
-        public async Task<ActionResult> MakeBooking(
+        public async Task<ActionResult> CancelBooking(
             [Description("Id of the booking you want to cancel")] Guid bookingId)
         {
             try
