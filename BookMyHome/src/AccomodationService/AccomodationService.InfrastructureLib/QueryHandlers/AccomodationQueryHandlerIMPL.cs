@@ -9,7 +9,14 @@ namespace AccomodationService.InfrastructureLib.QueryHandlers;
 
 public class AccomodationQueryHandlerIMPL(AccomodationDbContext db) : IAccomodationQueries
 {
+    async Task<bool> IAccomodationQueries.CheckIfExistsAsync(Guid id)
+    {
+        var accomodationId = new AccomodationId(id);
 
+        return await db.Accomodations
+            .AsNoTracking()
+            .AnyAsync(a => a.Id == accomodationId);
+    }
 
     async Task<AccomodationDto?> IAccomodationQueries.GetAccomodationByIdAsync(Guid id)
     {
