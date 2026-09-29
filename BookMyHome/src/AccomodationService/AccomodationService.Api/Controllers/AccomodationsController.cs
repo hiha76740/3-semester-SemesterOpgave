@@ -6,6 +6,7 @@ using BookMyHome.ContractsLib.Responses.Accomodations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 
 namespace AccomodationService.Api.Controllers
@@ -88,7 +89,7 @@ namespace AccomodationService.Api.Controllers
         [EndpointDescription("Gets the accomodation for the entered id or returns not found if no accomodation was found")]
         [ProducesResponseType<AccomodationResponse>(StatusCodes.Status200OK, "application/json", Description = "Returns the requested accomodation")]
         [ProducesResponseType(StatusCodes.Status404NotFound, Description = "Requested accomodation not found")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while receiving requsted accomodation")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while receiving requested accomodation")]
         public async Task<ActionResult<AccomodationResponse>> GetById(
             [Description("Id of the accomodation you want to find")] Guid id)
         {
@@ -108,7 +109,27 @@ namespace AccomodationService.Api.Controllers
             }
         }
 
-        
+        [HttpGet("exists")]
+        [EndpointSummary("This endpoint will check if a specific accomodation exists")]
+        [EndpointDescription("Checks if the requested accomodation exists in database or returns false if no accomodation was found")]
+        [ProducesResponseType<bool>(StatusCodes.Status200OK, "application/json", Description = "Returns true if accomodation exists")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while checking requested accomodation")]
+        public async Task<ActionResult<bool>> CheckIfExists(
+            [Required][Description("Id of the accomodation you want to check")] Guid id)
+        {
+            try
+            {
+                var exists = await queries.CheckIfExistsAsync(id);
+
+                return Ok(exists);
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(ex.Message);
+            }
+        }
+
 
         // TODO: Delete this after it has been moved into shared
         private Guid? GetCurrentUserId()
