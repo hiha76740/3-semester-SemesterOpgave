@@ -6,7 +6,6 @@ namespace BookingService.InfrastructureLib.Services;
 
 public class GuestService(HttpClient httpClient) : IGuestService
 {
-    //TODO: change when we learn about calling other services
     private readonly string baseUrl = "http://BookMyHome-UserService:8080/";
 
     async Task<bool> IGuestService.GuestExistAsync(GuestId id)
