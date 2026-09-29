@@ -67,7 +67,7 @@ else
                         Booking.EndDate,
                         Booking.TotalPrice);
 
-                await Service.MakeBooking(request);
+                await Service.MakeBookingAsync(request);
 
                 Booking.Clear();
                 Listing.Clear();
