@@ -5,5 +5,6 @@ public record CreateAccomodationRequest(
     string Street,
     string PostalCode,
     string City,
-    string Country
+    string Country,
+    List<Guid> FacilitiesIds
     );

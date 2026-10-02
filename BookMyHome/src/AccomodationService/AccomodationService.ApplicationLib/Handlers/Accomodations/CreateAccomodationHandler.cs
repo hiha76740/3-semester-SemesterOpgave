@@ -23,13 +23,28 @@ public class CreateAccomodationHandler(IAccomodationRepository accomodationRepo)
         if (accomodationExsist == true)
             throw new InvalidOperationException("You already have a accomodation on this address");
 
+        var facilities = new List<Facility>();
+
+        if (command.FacilitiesIds.Count > 0)
+        {
+            foreach (var facilityId in command.FacilitiesIds)
+            {
+                var facilityKey = new FacilityId(facilityId);
+                var facility = await accomodationRepo.GetFacilityByIdAsync(facilityKey);
+
+                if (facility != null)
+                    facilities.Add(facility);
+            }
+        }
+
         var accomodation = Accomodation.Create(
             hostId,
             command.Title,
             command.Street,
             command.PostalCode,
             command.City,
-            command.Country
+            command.Country,
+            facilities
             );
 
         await accomodationRepo.CreateAsync(accomodation);

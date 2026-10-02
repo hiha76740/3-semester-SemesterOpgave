@@ -79,7 +79,7 @@ public class Accomodation
         _facilities.Remove(facility);
     }
 
-    public static Accomodation Create(HostId hostId, string title, string street, string postalCode, string city, string country)
+    public static Accomodation Create(HostId hostId, string title, string street, string postalCode, string city, string country, List<Facility> facilities)
     {
         if (string.IsNullOrWhiteSpace(title))
             throw new DomainException("Title can not be empty");
@@ -87,6 +87,14 @@ public class Accomodation
         var address = new Address(street, postalCode, city,country);
 
         var accomodation = new Accomodation(hostId, title, address);
+
+        if (facilities.Count > 0)
+        {
+            foreach (var facility in facilities)
+            {
+                accomodation.AddFacility(facility);
+            }
+        }
 
         return accomodation;
     }

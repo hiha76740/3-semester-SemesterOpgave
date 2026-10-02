@@ -13,13 +13,16 @@ public class AccomodationTests
     private readonly static string City = "Test City";
     private readonly static string Country = "Denmark";
 
+    private readonly static List<Facility> FacilitiesIds = [];
+
     private static Accomodation CreateAccomodation(
         HostId? hostId = null,
         string? title = null,
         string? street = null,
         string? postalCode = null,
         string? city = null,
-        string? country = null
+        string? country = null,
+        List<Facility>? facilitiesIds = null
         )
     {
         return Accomodation.Create(
@@ -28,7 +31,8 @@ public class AccomodationTests
             street ?? Street,
             postalCode ?? PostalCode,
             city ?? City,
-            country ?? Country
+            country ?? Country,
+            facilitiesIds ?? FacilitiesIds
             );
     }
 
