@@ -18,6 +18,7 @@ public class CreateBookingTests
         // Arrange
         var guestId = new GuestId(Guid.NewGuid());
         var accomodationId = new AccomodationId(Guid.NewGuid());
+        var listingId = new ListingId(Guid.NewGuid());
         var startDate = DateOnly.FromDateTime(DateTime.UtcNow);
         var endDate = startDate.AddDays(5);
         var price = 5000m;
@@ -25,6 +26,7 @@ public class CreateBookingTests
 
         var mockGuestService = new Mock<IGuestService>();
         var mockAccomodationService = new Mock<IAccomodationService>();
+        var mockListingService = new Mock<IListingService>();
         var mockBookingRepo = new Mock<IBookingRepository>();
         var mockUnitOfWork = new Mock<IUnitOfWork>();
 
@@ -36,6 +38,10 @@ public class CreateBookingTests
             .Setup(s => s.AccomodationExistAsync(accomodationId))
             .ReturnsAsync(true);
 
+        mockListingService
+            .Setup(s => s.ListingExistAsync(listingId))
+            .ReturnsAsync(true);
+
         mockBookingRepo
             .Setup(r => r.HasOverlapingBookingAsync(accomodationId, startDate, endDate))
             .ReturnsAsync(false);
@@ -43,14 +49,17 @@ public class CreateBookingTests
 
 
 
+
+
         var command = new CreateBookingCommand(
             guestId.Value,
             accomodationId.Value,
+            listingId.Value,
             startDate,
             endDate,
             price);
 
-        var handler = new CreateBookingHandler(mockGuestService.Object, mockAccomodationService.Object, mockBookingRepo.Object, mockUnitOfWork.Object) as ICreateBookingHandler;
+        var handler = new CreateBookingHandler(mockGuestService.Object, mockAccomodationService.Object,mockListingService.Object, mockBookingRepo.Object, mockUnitOfWork.Object) as ICreateBookingHandler;
 
         // Act
         await handler.Handle(command);

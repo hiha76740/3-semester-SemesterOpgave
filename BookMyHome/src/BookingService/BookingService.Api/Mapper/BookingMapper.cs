@@ -26,6 +26,7 @@ namespace BookingService.Api.Mapper
             var output = new CreateBookingCommand(
                 request.GuestId,
                 request.AccomodationId,
+                request.ListingId,
                 request.StartDate,
                 request.EndDate,
                 request.Price
@@ -38,6 +39,7 @@ namespace BookingService.Api.Mapper
         public static UserBookingResponse AsUserBooking(this UserBookingDto dto)
         {
             var output = new UserBookingResponse(
+                dto.BookingId,
                 dto.ListingName,
                 dto.ListingType,
                 dto.City,

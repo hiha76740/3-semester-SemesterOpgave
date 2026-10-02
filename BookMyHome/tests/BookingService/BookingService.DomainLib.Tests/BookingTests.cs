@@ -8,7 +8,8 @@ namespace BookingService.DomainLib.Tests;
 public class BookingTests
 {
     private readonly static AccomodationId AccomodationId = new(Guid.Parse("4504e34a-67a5-4cba-b029-8eb0b453b80d"));
-    private readonly static GuestId GuestId = new(Guid.Parse("4504e34a-67a5-4cba-b029-8eb0b693b80d"));
+    private readonly static GuestId GuestId = new(Guid.Parse("4504e34a-67a5-4cba-b030-8eb0b693b80d"));
+    private readonly static ListingId ListingId = new(Guid.Parse("4504e34a-67a5-4cba-b040-8eb0b693b80d"));
     private readonly static decimal Price = 500m;
 
     private readonly static DateOnly StartDate = DateOnly.FromDateTime(DateTime.UtcNow);
@@ -18,6 +19,7 @@ public class BookingTests
     private static Booking CreateBookingWithNoOverlap(
         AccomodationId? accomodationId = null,
         GuestId? guestId = null,
+        ListingId? listingId = null,
         decimal? price = null,
         DateOnly? startDate = null,
         DateOnly? endDate = null
@@ -26,6 +28,7 @@ public class BookingTests
         return Booking.Create(
             guestId ?? GuestId,
             accomodationId ?? AccomodationId,
+            listingId ?? ListingId,
             startDate ?? StartDate,
             endDate ?? EndDate,
             price ?? Price

@@ -1,14 +1,16 @@
-﻿using BookingService.DomainLib.Entities;
+﻿using BookingService.ApplicationLib.Services;
+using BookingService.DomainLib.Entities;
 using BookingService.DomainLib.Enums;
 using BookingService.DomainLib.ValueObjects;
 using BookingService.FacadeLib.Queries.DTOs;
 using BookingService.FacadeLib.Queries.Interfaces;
 using BookingService.InfrastructureLib.Persistence;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Metadata;
 
 namespace BookingService.InfrastructureLib.QueryHandlers;
 
-public class BookingQueryHandlerIMPL(BookingDbContext db) : IBookingQueries
+public class BookingQueryHandlerIMPL(BookingDbContext db, IAccomodationService accomodationService) : IBookingQueries
 {
     async Task<bool> IBookingQueries.Checkavailability(Guid accomodationId, DateOnly startDate, DateOnly endDate)
     {
@@ -31,6 +33,7 @@ public class BookingQueryHandlerIMPL(BookingDbContext db) : IBookingQueries
                 b.Id.Value,
                 b.GuestId.Value,
                 b.AccomodationId.Value,
+                b.ListingId.Value,
                 b.Period.StartDate,
                 b.Period.EndDate,
                 b.Price
@@ -38,24 +41,33 @@ public class BookingQueryHandlerIMPL(BookingDbContext db) : IBookingQueries
             .ToListAsync();
     }
 
-    async Task<IReadOnlyList<BookingDTO>> IBookingQueries.GetAllUserBookings(Guid id)
+    async Task<IReadOnlyList<UserBookingDto>> IBookingQueries.GetAllUserBookings(Guid id)
     {
+        throw new NotImplementedException();
+
         var guestId = new GuestId(id);
         var list = new List<UserBookingDto>();
 
+        var userBookings = new List<UserBookingDto>();
 
-        return await db.Bookings
+        var bookings = await db.Bookings
             .AsNoTracking()
             .Where(b => b.GuestId == guestId && b.Status == BookingStatus.Booked)
             .Select(b => new BookingDTO(
                 b.Id.Value,
                 b.GuestId.Value,
                 b.AccomodationId.Value,
+                b.ListingId.Value,
                 b.Period.StartDate,
                 b.Period.EndDate,
                 b.Price
                 ))
             .ToListAsync();
+
+        foreach (var booking in bookings)
+        {
+            //accomodationService.GetAccomodationSummaryAsync(booking.AccomodationId);
+        }
     }
 
     async Task<BookingDTO?> IBookingQueries.GetBookingByIdAsync(Guid Id)
@@ -69,6 +81,7 @@ public class BookingQueryHandlerIMPL(BookingDbContext db) : IBookingQueries
                 b.Id.Value,
                 b.GuestId.Value,
                 b.AccomodationId.Value,
+                b.ListingId.Value,
                 b.Period.StartDate,
                 b.Period.EndDate,
                 b.Price

@@ -10,6 +10,7 @@ public static class ServicesDI
     {
         services.AddScoped<IGuestService, GuestService>();
         services.AddScoped<IAccomodationService, AccomodationService>();
+        services.AddScoped<IListingService, ListingService>();
 
         return services;
     }

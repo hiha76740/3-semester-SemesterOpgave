@@ -14,6 +14,7 @@ namespace BookingService.ApplicationLib.Handlers;
 public class CreateBookingHandler(
     IGuestService guestService,
     IAccomodationService accomodationService,
+    IListingService listingService,
     IBookingRepository bookingRepo,
     IUnitOfWork uow) : ICreateBookingHandler
 {
@@ -23,20 +24,27 @@ public class CreateBookingHandler(
         {
             var guestId = new GuestId(command.GuestId);
             var accomodationId = new AccomodationId(command.AccomodationId);
+            var listingId = new ListingId(command.ListingId);
 
             var guestExistTask = guestService.GuestExistAsync(guestId);
             var accomodationExistTask = accomodationService.AccomodationExistAsync(accomodationId);
+            var listingExistTask = listingService.ListingExistAsync(listingId);
 
-            await Task.WhenAll(guestExistTask, accomodationExistTask);
+            await Task.WhenAll(guestExistTask, accomodationExistTask, listingExistTask);
 
             var guestExist = await guestExistTask;
             var accomodationExist = await accomodationExistTask;
+            var listingExist = await listingExistTask;
 
             if (guestExist == false)
                 throw new NotFoundException("Guest not found doing booking creation");
 
             if (accomodationExist == false)
                 throw new NotFoundException("Accomodation not found doing booking creation");
+            
+            if (listingExist == false)
+                throw new NotFoundException("Listing not found doing booking creation");
+
 
 
             uow.BeginTransaction(
@@ -53,6 +61,7 @@ public class CreateBookingHandler(
             var booking = Booking.Create(
                 guestId, 
                 accomodationId,
+                listingId,
                 command.StartDate,
                 command.EndDate, 
                 command.Price

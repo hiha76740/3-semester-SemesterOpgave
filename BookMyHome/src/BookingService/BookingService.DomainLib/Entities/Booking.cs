@@ -13,15 +13,16 @@ namespace BookingService.DomainLib.Entities
 
         public GuestId GuestId { get; init; } = null!;
         public AccomodationId AccomodationId { get; init; } = null!;
+        public ListingId ListingId { get; init; } = null!;
 
-        public static Booking Create(GuestId guestId, AccomodationId accomodationId, DateOnly startDate, DateOnly endDate, decimal price)
+        public static Booking Create(GuestId guestId, AccomodationId accomodationId, ListingId listingId, DateOnly startDate, DateOnly endDate, decimal price)
         {
             if (price < 0)
                 throw new DomainException("price can not be less than 0");
 
             var bookingPeriod = new BookingPeriod(startDate, endDate);
 
-            var booking = new Booking(guestId, accomodationId, bookingPeriod, price);
+            var booking = new Booking(guestId, accomodationId,listingId, bookingPeriod, price);
 
             return booking;
         }
@@ -34,11 +35,12 @@ namespace BookingService.DomainLib.Entities
             Status = BookingStatus.Cancelled;
         }
 
-        private Booking(GuestId guestId, AccomodationId accomodationId, BookingPeriod bookingPeriod, decimal price)
+        private Booking(GuestId guestId, AccomodationId accomodationId,ListingId listingId, BookingPeriod bookingPeriod, decimal price)
         {
             Id = new BookingId(Guid.NewGuid());
             GuestId = guestId;
             AccomodationId = accomodationId;
+            ListingId = listingId;
             Period = bookingPeriod;
             Price = price;
             Status = BookingStatus.Booked;

@@ -1,6 +1,7 @@
 ﻿namespace BookMyHome.ContractsLib.Responses.Bookings;
 
 public record UserBookingResponse(
+    Guid BookingId,
     string ListingName, 
     string ListingType,
     string City,

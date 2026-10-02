@@ -26,6 +26,11 @@ internal class BookingConfiguration : IEntityTypeConfiguration<Booking>
             id => id.Value,
             value => new AccomodationId(value));
 
+        builder.Property(b => b.ListingId)
+            .HasConversion(
+            id => id.Value,
+            value => new ListingId(value));
+
         builder.Property(b => b.Status)
             .HasConversion<string>();
 
