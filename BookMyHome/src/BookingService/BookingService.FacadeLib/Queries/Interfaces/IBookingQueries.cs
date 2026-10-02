@@ -10,5 +10,5 @@ public interface IBookingQueries
 
     Task<bool> Checkavailability(Guid accomodationId, DateOnly startDate, DateOnly endDate);
 
-    Task<IReadOnlyList<BookingDTO>> GetAllUserBookings(Guid id);
+    Task<IReadOnlyList<UserBookingDto>> GetAllUserBookings(Guid id);
 }

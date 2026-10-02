@@ -6,7 +6,6 @@ using BookingService.FacadeLib.Queries.DTOs;
 using BookingService.FacadeLib.Queries.Interfaces;
 using BookingService.InfrastructureLib.Persistence;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection.Metadata;
 
 namespace BookingService.InfrastructureLib.QueryHandlers;
 
@@ -43,7 +42,6 @@ public class BookingQueryHandlerIMPL(BookingDbContext db, IAccomodationService a
 
     async Task<IReadOnlyList<UserBookingDto>> IBookingQueries.GetAllUserBookings(Guid id)
     {
-        throw new NotImplementedException();
 
         var guestId = new GuestId(id);
         var list = new List<UserBookingDto>();
@@ -66,8 +64,23 @@ public class BookingQueryHandlerIMPL(BookingDbContext db, IAccomodationService a
 
         foreach (var booking in bookings)
         {
-            //accomodationService.GetAccomodationSummaryAsync(booking.AccomodationId);
+            var summary = await accomodationService.GetAccomodationSummaryAsync(booking.AccomodationId, booking.ListingId);
+
+            var userBooking = new UserBookingDto(
+                booking.Id, 
+                summary.ListingName,
+                summary.ListingType, 
+                summary.Country,
+                summary.Country,
+                booking.StartDate, 
+                booking.EndDate,
+                booking.Price
+                );
+
+            userBookings.Add(userBooking);
         }
+
+        return userBookings;
     }
 
     async Task<BookingDTO?> IBookingQueries.GetBookingByIdAsync(Guid Id)

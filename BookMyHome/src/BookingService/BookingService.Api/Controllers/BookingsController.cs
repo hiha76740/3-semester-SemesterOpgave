@@ -133,7 +133,7 @@ namespace BookingService.Api.Controllers
         [ProducesResponseType<IReadOnlyList<BookingResponse>>(StatusCodes.Status200OK, "application/json", Description = "Returns list of bookings")]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while receiving current user bookings")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized, Description = "User do not have the correct permission")]
-        public async Task<ActionResult<BookingResponse>> GetUserBookings()
+        public async Task<ActionResult<UserBookingResponse>> GetUserBookings()
         {
             try
             {
@@ -144,13 +144,13 @@ namespace BookingService.Api.Controllers
 
                 var list = await queries.GetAllUserBookings(id.Value);
 
-                var response = new List<BookingResponse>();
+                var response = new List<UserBookingResponse>();
 
                 if (list.Count != 0)
                 {
                     foreach (var booking in list)
                     {
-                        response.Add(booking.AsResponse());
+                        response.Add(booking.AsUserBooking());
                     }
                 }
 

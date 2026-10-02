@@ -1,5 +1,6 @@
 ﻿using BookingService.ApplicationLib.Services;
 using BookingService.DomainLib.ValueObjects;
+using BookMyHome.ContractsLib.Responses.Accomodations;
 using System.Net.Http.Json;
 
 namespace BookingService.InfrastructureLib.Services;
@@ -19,5 +20,21 @@ public class AccomodationService(HttpClient httpClient) : IAccomodationService
         var exists = await response.Content.ReadFromJsonAsync<bool>();
 
         return exists;
+    }
+
+    async Task<AccomodationSummaryResponse> IAccomodationService.GetAccomodationSummaryAsync(Guid accomodationId, Guid listingId)
+    {
+        var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}api/v1/Accomodations/summary?accomodationId={accomodationId}&listingId={listingId}");
+
+        var response = await httpClient.SendAsync(request);
+
+        response.EnsureSuccessStatusCode();
+
+        var summary = await response.Content.ReadFromJsonAsync<AccomodationSummaryResponse>();
+
+        if (summary == null)
+            throw new InvalidOperationException("Could not deserialize summary");
+
+        return summary;
     }
 }
