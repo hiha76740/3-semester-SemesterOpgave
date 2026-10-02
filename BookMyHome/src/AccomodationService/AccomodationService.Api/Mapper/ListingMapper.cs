@@ -40,4 +40,16 @@ public static class ListingMapper
 
         return output;
     }
+
+    public static ListingSummaryResponse AsListingSummaryResponse(this ListingSummaryDto dto)
+    {
+        var output = new ListingSummaryResponse(
+            dto.ListingName,
+            dto.ListingType,
+            dto.City,
+            dto.Country
+            );
+
+        return output;
+    }
 }
