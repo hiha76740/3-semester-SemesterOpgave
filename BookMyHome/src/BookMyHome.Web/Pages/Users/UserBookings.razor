@@ -7,13 +7,13 @@
 
 @if (Bookings != null)
 {
-    <RadzenDataGrid Data="@Bookings" TItem="BookingResponse">
+    <RadzenDataGrid Data="@Bookings" TItem="UserBookingResponse">
         <Columns>
-            <RadzenDataGridColumn Property="@nameof(BookingResponse.StartDate)" Title="Start dato" Frozen="true" Width="160px" />
-            <RadzenDataGridColumn Property="@nameof(BookingResponse.EndDate)" Title="Slut dato" Frozen="true" Width="160px" />
-            <RadzenDataGridColumn Property="@nameof(BookingResponse.Price)" Title="Pris" Frozen="true" Width="160px" />
+            <RadzenDataGridColumn Property="@nameof(UserBookingResponse.StartDate)" Title="Start dato" Frozen="true" Width="160px" />
+            <RadzenDataGridColumn Property="@nameof(UserBookingResponse.EndDate)" Title="Slut dato" Frozen="true" Width="160px" />
+            <RadzenDataGridColumn Property="@nameof(UserBookingResponse.Price)" Title="Pris" Frozen="true" Width="160px" />
 
-            <RadzenDataGridColumn Titem="BookingResponse"
+            <RadzenDataGridColumn Titem="UserBookingResponse"
                                   Title="Handling"
                                   Sortable="false"
                                   Filterable="false">
@@ -32,11 +32,11 @@
 
 
 @code {
-    private IReadOnlyList<BookingResponse>? Bookings;
+    private IReadOnlyList<UserBookingResponse>? Bookings;
 
 
     /*
-    Listing navn
+        Listing navn
         Listing type
         By
         Land
@@ -54,10 +54,10 @@
 
     }
 
-    private async Task Cancel(BookingResponse booking)
+    private async Task Cancel(UserBookingResponse booking)
     {
         var result = await DialogService.Confirm(
-            $"Er du sikker på du vil afbestille {booking.Id}? ",
+            $"Er du sikker på du vil afbestille {booking.ListingName}? ",
             "Afbestilling",
             new ConfirmOptions()
             {
@@ -68,7 +68,7 @@
 
         if (result == true)
         {
-            await Service.CancelBookingAsync(booking.Id);
+            await Service.CancelBookingAsync(booking.BookingId);
             Bookings = await Service.GetUserBookingsAsync();
         }
     }
