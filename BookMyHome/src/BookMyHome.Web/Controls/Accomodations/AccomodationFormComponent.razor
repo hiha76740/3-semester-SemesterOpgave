@@ -1,0 +1,116 @@
+﻿@inject NavigationManager NavigationManager
+
+<RadzenCard class="rz-my-12 rz-mx-auto rz-p-4 rz-p-md-12" style="max-width: 600px;">
+    <RadzenTemplateForm TItem="AccomodationInputModel" Data=@Model Submit=@HandleSubmit>
+        <RadzenStack Gap="1rem">
+            <article>
+                <RadzenText TextStyle="TextStyle.DisplayH4">Generelt</RadzenText>
+                <RadzenRow AlignItems="AlignItems.Center" RowGap="0.25rem">
+                    <RadzenColumn Size="12" SizeMD="4" class="rz-text-align-start rz-text-align-md-end">
+                        <RadzenLabel Text="Titel" Component="Title" />
+                    </RadzenColumn>
+                    <RadzenColumn Size="12" SizeMD="8">
+                        <RadzenTextBox Name="Title" @bind-Value=@Model.Title Style="display: block; width: 100%;" />
+                        <RadzenRequiredValidator Component="Title" Text="Title is required." Style="position: absolute" />
+                    </RadzenColumn>
+                </RadzenRow>
+            </article>
+            <article>
+                <RadzenText TextStyle="TextStyle.DisplayH4">Addresse oplysninger</RadzenText>
+                <RadzenRow AlignItems="AlignItems.Center" RowGap="0.25rem">
+                    <RadzenColumn Size="12" SizeMD="4" class="rz-text-align-start rz-text-align-md-end">
+                        <RadzenLabel Text="Addresse" Component="Street" />
+                    </RadzenColumn>
+                    <RadzenColumn Size="12" SizeMD="8">
+                        <RadzenTextBox Name="Street" @bind-Value=@Model.Street Style="display: block; width: 100%;" />
+                        <RadzenRequiredValidator Component="Street" Text="Street is required." Style="position: absolute" />
+                    </RadzenColumn>
+                </RadzenRow>
+                <br />
+                <RadzenRow AlignItems="AlignItems.Center" RowGap="0.25rem">
+                    <RadzenColumn Size="12" SizeMD="4" class="rz-text-align-start rz-text-align-md-end">
+                        <RadzenLabel Text="Postnr." Component="PostalCode" />
+                    </RadzenColumn>
+                    <RadzenColumn Size="12" SizeMD="8">
+                        <RadzenTextBox Name="PostalCode" @bind-Value=@Model.PostalCode Style="display: block; width: 100%;" />
+                        <RadzenRequiredValidator Component="PostalCode" Text="Postal code is required." Style="position: absolute" />
+                        <RadzenNumericRangeValidator Component="PostalCode" Min="1000" Max="9999" Text="Postal code is not valid" Style="position: absolute" />
+                    </RadzenColumn>
+                </RadzenRow>
+                <br />
+                <RadzenRow AlignItems="AlignItems.Center" RowGap="0.25rem">
+                    <RadzenColumn Size="12" SizeMD="4" class="rz-text-align-start rz-text-align-md-end">
+                        <RadzenLabel Text="By" Component="City" />
+                    </RadzenColumn>
+                    <RadzenColumn Size="12" SizeMD="8">
+                        <RadzenTextBox Name="City" @bind-Value=@Model.City Style="display: block; width: 100%;" />
+                        <RadzenRequiredValidator Component="City" Text="City is required." Style="position: absolute" />
+                    </RadzenColumn>
+                </RadzenRow>
+                <br />
+                <RadzenRow AlignItems="AlignItems.Center" RowGap="0.25rem">
+                    <RadzenColumn Size="12" SizeMD="4" class="rz-text-align-start rz-text-align-md-end">
+                        <RadzenLabel Text="Land" Component="Country" />
+                    </RadzenColumn>
+                    <RadzenColumn Size="12" SizeMD="8">
+                        <RadzenTextBox Name="Country" @bind-Value=@Model.Country Style="display: block; width: 100%;" />
+                        <RadzenRequiredValidator Component="Country" Text="Country is required." Style="position: absolute" />
+                    </RadzenColumn>
+                </RadzenRow>
+            </article>
+            <article>
+                <RadzenRow AlignItems="AlignItems.Center" RowGap="0.25rem">
+                    <RadzenColumn Size="12" SizeMD="4" class="rz-text-align-start rz-text-align-md-end">
+                        <RadzenLabel Text="Vælg facilities" Component="DropDownMultipleFacilties" />
+                    </RadzenColumn>
+                    <RadzenColumn Size="12" SizeMD="8">
+                        <RadzenDropDown @bind-Value=@Model.Facilities
+                                        Data=@Facilities
+                                        TextProperty="@nameof(FacilityResponse.Name)"
+                                        ValueProperty="@nameof(FacilityResponse.Id)"
+                                        Name="DropDownMultipleFacilties"
+                                        Multiple=true
+                                        AllowClear=false
+                                        Placeholder="Select facilities"
+                                        Style="width: 100%; max-width: 400px;" />
+                    </RadzenColumn>
+                </RadzenRow>
+            </article>
+            <RadzenRow AlignItems="AlignItems.Center" class="rz-mt-4">
+                <RadzenColumn Size="12" Offset="0" SizeMD="8" OffsetMD="4">
+                    <RadzenButton ButtonType="ButtonType.Submit" Text="@SubmitText" ButtonStyle="ButtonStyle.Primary" />
+                </RadzenColumn>
+                <RadzenColumn Size="12" Offset="0" SizeMD="8" OffsetMD="0">
+                    <RadzenButton ButtonType="ButtonType.Button" Text="Cancel" ButtonStyle="ButtonStyle.Secondary" Click="Cancel" />
+                </RadzenColumn>
+            </RadzenRow>
+        </RadzenStack>
+    </RadzenTemplateForm>
+</RadzenCard>
+
+@code {
+    [Parameter, EditorRequired]
+    public AccomodationInputModel Model { get; set; }
+
+    [Parameter, EditorRequired]
+    public EventCallback<AccomodationInputModel> SubmitCallback { get; set; }
+
+    [Parameter, EditorRequired]
+    public IReadOnlyList<FacilityResponse> Facilities { get; set; }
+
+    [Parameter, EditorRequired]
+    public string SubmitText { get; set; }
+
+    [Parameter, EditorRequired]
+    public string CancelPath { get; set; }
+
+    private void HandleSubmit()
+    {
+        SubmitCallback.InvokeAsync(Model);
+    }
+
+    private void Cancel()
+    {
+        NavigationManager.NavigateTo(CancelPath);
+    }
+}
