@@ -1,0 +1,16 @@
+﻿@page "/accomodations"
+@inject IAccomodationService Service
+
+@foreach (var accomodation in AccomodationsList)
+{
+    <p>@accomodation.Title</p>
+}
+
+@code {
+    public IReadOnlyList<AccomodationResponse> AccomodationsList { get; set; } = [];
+
+    protected override async Task OnInitializedAsync()
+    {
+        AccomodationsList = await Service.GetCurrentUserAccomodationsAsync();
+    }
+}
