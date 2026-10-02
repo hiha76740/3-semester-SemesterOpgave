@@ -17,6 +17,7 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IListingService, ListingService>();
 builder.Services.AddScoped<IBookingService, BookingService>();
+builder.Services.AddScoped<IFacilityService, FacilityService>();
 builder.Services.AddScoped<UserState>();
 builder.Services.AddScoped<BookingState>();
 builder.Services.AddScoped<ListingState>();
