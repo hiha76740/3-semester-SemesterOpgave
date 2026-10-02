@@ -9,6 +9,10 @@
 {
     <RadzenDataGrid Data="@Bookings" TItem="UserBookingResponse">
         <Columns>
+            <RadzenDataGridColumn Property="@nameof(UserBookingResponse.ListingName)" Title="Titel" Width="160px" />
+            <RadzenDataGridColumn Property="@nameof(UserBookingResponse.ListingType)" Title="Bolig type" Frozen="true" Width="160px" />
+            <RadzenDataGridColumn Property="@nameof(UserBookingResponse.City)" Title="By" Frozen="true" Width="160px" />
+            <RadzenDataGridColumn Property="@nameof(UserBookingResponse.Country)" Title="Land" Frozen="true" Width="160px" />
             <RadzenDataGridColumn Property="@nameof(UserBookingResponse.StartDate)" Title="Start dato" Frozen="true" Width="160px" />
             <RadzenDataGridColumn Property="@nameof(UserBookingResponse.EndDate)" Title="Slut dato" Frozen="true" Width="160px" />
             <RadzenDataGridColumn Property="@nameof(UserBookingResponse.Price)" Title="Pris" Frozen="true" Width="160px" />
@@ -34,22 +38,12 @@
 @code {
     private IReadOnlyList<UserBookingResponse>? Bookings;
 
-
-    /*
-        Listing navn
-        Listing type
-        By
-        Land
-        Start dato
-        Slut dato
-        Pris
-     */
-
     protected override async Task OnInitializedAsync()
     {
         if (User.UserId != null)
         {
             Bookings = await Service.GetUserBookingsAsync();
+            Bookings = Bookings.OrderBy(b => b.StartDate).ToList();
         }
 
     }
