@@ -5,9 +5,9 @@ namespace BookMyHome.Web.ServiceInterfaces;
 
 public interface IBookingService
 {
-    Task MakeBookingAsync(CreateBookingRequest request);
+    Task<int> MakeBookingAsync(CreateBookingRequest request);
 
-    Task<IReadOnlyList<BookingResponse>> GetUserBookingsAsync();
+    Task<IReadOnlyList<UserBookingResponse>> GetUserBookingsAsync();
 
     Task CancelBookingAsync(Guid id);
 }
