@@ -70,7 +70,7 @@ public class BookingQueryHandlerIMPL(BookingDbContext db, IAccomodationService a
                 booking.Id, 
                 summary.ListingName,
                 summary.ListingType, 
-                summary.Country,
+                summary.City,
                 summary.Country,
                 booking.StartDate, 
                 booking.EndDate,
