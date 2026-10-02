@@ -1,0 +1,42 @@
+﻿@inject NavigationManager NavigationManager
+
+<RadzenCard class="rz-my-12 rz-mx-auto" Style="max-width: 500px">
+    <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" Gap="1rem" class="rz-p-4">
+        <! -- Empty spot for accomodation listing photo -->
+    </RadzenStack>
+    <RadzenCard class="rz-background-color-primary-light rz-shadow-0 rz-border-radius-0 rz-p-8" style="margin: 1rem calc(-1 * var(--rz-card-padding));">
+        <RadzenText TextStyle="TextStyle.H6" TagName="TagName.P" class="rz-color-on-primary-light"><strong>@Accomodation.Title</strong></RadzenText>
+        &ensp;
+        <RadzenRow RowGap="0">
+            <RadzenColumn SizeSM="4">
+                <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>@($"{Accomodation.Street}, {Accomodation.PostalCode} {Accomodation.City}, {Accomodation.Country} ")</b></RadzenText>
+                &ensp;
+                <RadzenStack Orientation="Orientation.Horizontal" Gap="10px">
+                    @foreach (var facility in Accomodation.Facilities)
+                    {
+                        <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>@facility</b></RadzenText>
+                    }
+                </RadzenStack>
+            </RadzenColumn>
+        </RadzenRow>
+    </RadzenCard>
+    <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.End" Gap="0">
+        <RadzenButton Variant="Variant.Text" Text="Se listings" Click="@GoToListings" />
+        <RadzenButton Variant="Variant.Text" Text="Rediger" Click="@Edit" />
+    </RadzenStack>
+</RadzenCard>
+
+@code {
+    [Parameter, EditorRequired]
+    public AccomodationResponse Accomodation { get; set; }
+
+    private void GoToListings()
+    {
+        NavigationManager.NavigateTo($"/accomodation/{Accomodation.AccomodationId}/listings");
+    }
+
+    private void Edit()
+    {
+        NavigationManager.NavigateTo($"/accomodation/{Accomodation.AccomodationId}");
+    }
+}
