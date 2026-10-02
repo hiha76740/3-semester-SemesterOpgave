@@ -23,7 +23,7 @@ internal class DeleteListingHandler(IAccomodationRepository repo) : IDeleteListi
                 throw new NotFoundException("Accomodation was not found");
 
             if (accomodation.HostId != hostId)
-                throw new UnauthorizedAccessException("Deletion aborted, Unauthorized Access");
+                throw new UnauthorizedAccessException("Deletion aborted, only the owner can delete listings");
 
             accomodation.RemoveListing(listingId);
 

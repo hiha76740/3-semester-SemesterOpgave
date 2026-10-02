@@ -21,7 +21,7 @@ public class UpdateListingHouseRulesHandler(IAccomodationRepository repo) : IUpd
             throw new NotFoundException("Accomodation was not found");
 
         if (accomodation.HostId != hostId)
-            throw new UnauthorizedAccessException("Update aborted, Unauthorized Access");
+            throw new UnauthorizedAccessException("Update aborted, only the owner can update the house rules");
 
         accomodation.UpdateListingHouseRules(listingId,command.HouseRules);
 

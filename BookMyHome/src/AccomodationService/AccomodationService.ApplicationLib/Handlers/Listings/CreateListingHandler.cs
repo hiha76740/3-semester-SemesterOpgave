@@ -21,7 +21,7 @@ public class CreateListingHandler(IAccomodationRepository accomodationRepo) : IC
             throw new NotFoundException("Accomodation not found");
 
         if (accomodation.HostId != hostId)
-            throw new UnauthorizedAccessException("Unauthorized Access");
+            throw new UnauthorizedAccessException("Only the owner can create listings.");
 
         var typeIsValid = Enum.TryParse<AccomodationType>(command.AccomodationType, out var type);
 
