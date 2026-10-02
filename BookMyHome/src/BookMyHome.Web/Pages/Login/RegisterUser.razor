@@ -52,7 +52,11 @@
             var responseCode = await authService.Register(request);
 
             if (responseCode == 200)
+            {
+                await Dialog.Alert("User created successfully", "Information");
                 navigationManager.NavigateTo("/login");
+            }
+            
         }
         catch (Exception ex)
         {
