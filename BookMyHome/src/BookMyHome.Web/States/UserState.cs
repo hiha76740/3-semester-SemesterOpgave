@@ -23,7 +23,7 @@
 
         public void Clear()
         {
-            UserId = Guid.Empty;
+            UserId = null;
             Firstname = string.Empty;
             Lastname = string.Empty;
             Username = string.Empty;
