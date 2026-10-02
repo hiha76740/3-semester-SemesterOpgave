@@ -310,7 +310,26 @@ namespace AccomodationService.Api.Controllers
             }
         }
 
-        
+        [HttpGet("exists")]
+        [EndpointSummary("This endpoint will check if a specific listings exists")]
+        [EndpointDescription("Checks if the requested listing exists in database or returns false if no listing was found")]
+        [ProducesResponseType<bool>(StatusCodes.Status200OK, "application/json", Description = "Returns true if listing exists")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while checking requested listing")]
+        public async Task<ActionResult<bool>> CheckIfExists(
+            [Required][Description("Id of the listing you want to check")] Guid id)
+        {
+            try
+            {
+                var exists = await queries.CheckIfExistsAsync(id);
+
+                return Ok(exists);
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(ex.Message);
+            }
+        }
 
 
         // TODO: Delete this after it has been moved into shared

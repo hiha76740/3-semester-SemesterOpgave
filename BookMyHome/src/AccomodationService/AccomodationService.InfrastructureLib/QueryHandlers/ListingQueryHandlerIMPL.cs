@@ -8,14 +8,23 @@ namespace AccomodationService.InfrastructureLib.QueryHandlers;
 
 public class ListingQueryHandlerIMPL(AccomodationDbContext db, IBookingService bookingService) : IListingQueries
 {
-    async Task<ListingDto?> IListingQueries.GetAccomdationListingByIdAsync(Guid accomodationId, Guid listingId)
+    async Task<bool> IListingQueries.CheckIfExistsAsync(Guid id)
     {
-        var aId = new AccomodationId(accomodationId);
-        var lId = new ListingId(listingId);
+        var listingId = new ListingId(id);
 
         return await db.Listings
             .AsNoTracking()
-            .Where(l => l.Accomodation.Id == aId && l.Id == lId)
+            .AnyAsync(l => l.Id == listingId);
+    }
+
+    async Task<ListingDto?> IListingQueries.GetAccomdationListingByIdAsync(Guid accomodationId, Guid listingId)
+    {
+        var accomodationKey = new AccomodationId(accomodationId);
+        var listingKey = new ListingId(listingId);
+
+        return await db.Listings
+            .AsNoTracking()
+            .Where(l => l.Accomodation.Id == accomodationKey && l.Id == listingKey)
             .Select(l => new ListingDto(
                 l.Id.Value,
                 l.Accomodation.Id.Value,
