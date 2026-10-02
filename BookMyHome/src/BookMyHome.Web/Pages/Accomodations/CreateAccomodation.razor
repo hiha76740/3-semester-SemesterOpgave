@@ -1,7 +1,9 @@
 ﻿@page "/accomodation/create"
+
+@inject IAccomodationService AccomodationService
 @inject IFacilityService FacilityService
 @inject DialogService Dialog
-@inject UserState User
+@inject NavigationManager NavigationManager
 
 <AccomodationFormComponent Model="model"
                            SubmitCallback="Create"
@@ -23,19 +25,32 @@
         catch (Exception ex)
         {
             await Dialog.Alert(ex.Message, "Intial error");
-        }    
+        }
     }
 
     private async Task Create(AccomodationInputModel model)
     {
         try
         {
-            if (User.UserId != null)
+            var request = new CreateAccomodationRequest(
+            model.Title,
+            model.Street,
+            model.PostalCode,
+            model.City,
+            model.Country,
+            model.Facilities
+            );
+
+            var responseCode = await AccomodationService.Create(request);
+
+            if (responseCode == 200)
             {
-                model.HostId = User.UserId.Value;
+                await Dialog.Alert("Accomodation created successfully", "Information");
+                NavigationManager.NavigateTo("/accomodations");
             }
+
             
-        }
+}
         catch (Exception ex)
         {
             await Dialog.Alert(ex.Message, "Create error");
