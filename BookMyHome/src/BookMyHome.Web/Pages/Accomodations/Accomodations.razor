@@ -1,10 +1,21 @@
 ﻿@page "/accomodations"
-@using BookMyHome.Web.Controls.Accomodations
+
 @inject IAccomodationService Service
+@inject NavigationManager NavigationManager
+
+<RadzenStack Orientation="Orientation.Vertical" JustifyContent="JustifyContent.Start">
+    <RadzenText TextStyle="TextStyle.DisplayH3">Mine Boliger</RadzenText>
+    <RadzenText TextStyle="TextStyle.DisplayH5">Administrer dine boliger og deres listings</RadzenText>
+
+</RadzenStack>
+&ensp;
+<RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" Gap="0">
+    <RadzenButton Variant="Variant.Filled" Size="ButtonSize.Large" Text="Opret" Click="Create"></RadzenButton>
+</RadzenStack>
 
 @foreach (var accomodation in AccomodationsList)
 {
-    <AccomodationCard Accomodation="accomodation"/>
+    <AccomodationCard Accomodation="accomodation" />
 }
 
 @code {
@@ -13,5 +24,10 @@
     protected override async Task OnInitializedAsync()
     {
         AccomodationsList = await Service.GetCurrentUserAccomodationsAsync();
+    }
+
+    private void Create()
+    {
+        NavigationManager.NavigateTo("/accomodation/create");
     }
 }
