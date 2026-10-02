@@ -1,6 +1,7 @@
 ﻿@page "/listings"
-@inject IListingService Service
+@inject IListingService ListingService
 @inject BookingState BookingState
+@inject IFacilityService FacilityService
 
 <section>
     <h3>Find dit næste ophold</h3>
@@ -8,7 +9,12 @@
     <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Start" Gap="0.5rem" class="rz-p-sm-12">
         <RadzenStack Gap="0.5rem">
             <RadzenLabel Text="Lokation" Component="LocationSearch" />
-            <RadzenTextBox Placeholder="Søg" Style="width: 100%; max-width: 400px;" Name="LocationSearch" Change="@(_ => Search())" @bind-Value="searchFilter" Immediate="true" />
+            <RadzenTextBox Placeholder="Søg" Style="width: 100%; max-width: 400px;" Name="LocationSearch" Change="@(_ => OnChange())" @bind-Value="sortLocation" Immediate="true" />
+            <RadzenLabel Text="Sorter efter pris" Component="DropDownSortPrice" />
+            <RadzenDropDown @bind-Value=@sortPrice Data=@sortPriceTypes Style="width: 100%; max-width: 400px;" Name="DropDownSortPrice" Change="@(_ => OnChange())" />
+            <RadzenLabel Text="Sorter efter facilities" Component="DropDownMultipleFacilities" />
+            <RadzenDropDown @bind-Value=@sortFacilities Data=@Facilities TextProperty="@nameof(FacilityResponse.Name)" ValueProperty="@nameof(FacilityResponse.Name)" Name="DropDownMultipleFacilties"
+                            Multiple=true AllowClear=true Placeholder="Select facilities" Style="width: 100%; max-width: 400px;" Change="@(_ => OnChange())" />
         </RadzenStack>
         <RadzenStack Gap="0.5rem">
             <RadzenLabel Text="Fra" Component="StartDate" />
@@ -31,32 +37,42 @@
 </section>
 
 @code {
+    private string sortPrice = string.Empty;
+    private string sortLocation = string.Empty;
+    private List<string> sortFacilities = [];
+    private List<string> sortPriceTypes = new() { "", "Højeste til laveste", "Laveste til højeste" };
+
     private DateOnly start = DateOnly.FromDateTime(DateTime.Today);
     private DateOnly end = DateOnly.FromDateTime(DateTime.Today.AddDays(7));
-    private string searchFilter = string.Empty;
+
 
     public IReadOnlyList<ListingResponse> ListingsList { get; set; } = [];
     private IReadOnlyList<ListingResponse> FilteredList = [];
+    private IReadOnlyList<FacilityResponse> Facilities = [];
 
     async private void OnChange()
     {
-        SetBookingStateDates();
 
-        ListingsList = await Service.GetAllAvailiableListingsByPeriod(start, end);
+        if (BookingState.StartDate != start || BookingState.EndDate != end)
+        {
+            if (end < start)
+                end = start.AddDays(7);
+
+
+            SetBookingStateDates();
+            ListingsList = await ListingService.GetAllAvailiableListingsByPeriod(start, end);
+        }
+
         ApplyFilters();
     }
-
-    private void Search()
-    {
-        ApplyFilters();
-
-}
 
     async protected override Task OnInitializedAsync()
     {
         SetBookingStateDates();
 
-        ListingsList = await Service.GetAllAvailiableListingsByPeriod(start,end);
+        ListingsList = await ListingService.GetAllAvailiableListingsByPeriod(start, end);
+        Facilities = await FacilityService.GetAllFacilitiesAsync();
+
         ApplyFilters();
     }
 
@@ -71,14 +87,40 @@
         IEnumerable<ListingResponse> query = ListingsList;
 
         // Location
-        if (string.IsNullOrWhiteSpace(searchFilter) == false)
+        if (string.IsNullOrWhiteSpace(sortLocation) == false)
         {
             query = query
             .Where(l =>
-                l.Street.Contains(searchFilter, StringComparison.CurrentCultureIgnoreCase) ||
-                l.PostalCode.Contains(searchFilter, StringComparison.CurrentCultureIgnoreCase) ||
-                l.City.Contains(searchFilter, StringComparison.CurrentCultureIgnoreCase)
+                l.Street.Contains(sortLocation, StringComparison.CurrentCultureIgnoreCase) ||
+                l.PostalCode.Contains(sortLocation, StringComparison.CurrentCultureIgnoreCase) ||
+                l.City.Contains(sortLocation, StringComparison.CurrentCultureIgnoreCase)
             );
+        }
+
+        // Pris
+        if (string.IsNullOrWhiteSpace(sortPrice) == false)
+        {
+            if (sortPriceTypes.IndexOf(sortPrice) == 1)
+            {
+                query = query.OrderByDescending(l => l.DailyPrice);
+            }
+            else if (sortPriceTypes.IndexOf(sortPrice) == 2)
+            {
+                query = query.OrderBy(l => l.DailyPrice);
+            }
+        }
+
+        if (sortFacilities == null)
+            sortFacilities = [];
+
+        // Facility
+        if (sortFacilities.Count != 0 && ListingsList.Count != 0)
+        {
+            foreach (var facility in sortFacilities)
+            {
+                query = query.Where(l => l.Facilities.Contains(facility));
+            }
+
         }
 
         FilteredList = query.ToList();
