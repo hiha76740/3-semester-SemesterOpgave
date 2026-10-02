@@ -1,7 +1,6 @@
 name: AccomodationService CI
 
 on:
-  workflow_dispatch:
   push:
     branches:
       - main
