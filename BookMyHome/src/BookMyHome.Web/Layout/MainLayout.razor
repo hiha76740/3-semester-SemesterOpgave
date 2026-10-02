@@ -24,7 +24,11 @@
                     </Template>
                     <ChildContent>
                         <RadzenProfileMenuItem Text="Profil" Path="/user/profile" Icon="account_circle"></RadzenProfileMenuItem>
-                        <RadzenProfileMenuItem Text="Mine bookinger" Path="/user/bookings" Icon="book"></RadzenProfileMenuItem>
+                        @if (UserState.Role == "Guest")
+                        {
+                            <RadzenProfileMenuItem Text="Mine bookinger" Path="/user/bookings" Icon="book"></RadzenProfileMenuItem>
+                        }
+
                         <RadzenProfileMenuItem Text="Log ud" Icon="logout" Value="logout"></RadzenProfileMenuItem>
                     </ChildContent>
                 </RadzenProfileMenu>
