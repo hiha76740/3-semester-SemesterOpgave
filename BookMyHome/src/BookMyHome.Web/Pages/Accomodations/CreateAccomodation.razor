@@ -1,8 +1,45 @@
 ﻿@page "/accomodation/create"
+@inject IFacilityService FacilityService
+@inject DialogService Dialog
+@inject UserState User
 
+<AccomodationFormComponent Model="model"
+                           SubmitCallback="Create"
+                           Facilities="Facilities"
+                           SubmitText="Opret"
+                           CancelPath="/accomodations" />
 
-<h3>CreateAccomodationPage</h3>
 
 @code {
+    private AccomodationInputModel model = new();
+    private IReadOnlyList<FacilityResponse> Facilities = [];
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            Facilities = await FacilityService.GetAllFacilitiesAsync();
+        }
+        catch (Exception ex)
+        {
+            await Dialog.Alert(ex.Message, "Intial error");
+        }    
+    }
+
+    private async Task Create(AccomodationInputModel model)
+    {
+        try
+        {
+            if (User.UserId != null)
+            {
+                model.HostId = User.UserId.Value;
+            }
+            
+        }
+        catch (Exception ex)
+        {
+            await Dialog.Alert(ex.Message, "Create error");
+        }
+    }
 
 }
