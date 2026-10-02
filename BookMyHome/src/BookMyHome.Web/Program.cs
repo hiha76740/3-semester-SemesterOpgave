@@ -15,6 +15,7 @@ builder.Services.AddRadzenComponents();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IAccomodationService, AccomodationService>();
 builder.Services.AddScoped<IListingService, ListingService>();
 builder.Services.AddScoped<IBookingService, BookingService>();
 builder.Services.AddScoped<IFacilityService, FacilityService>();
