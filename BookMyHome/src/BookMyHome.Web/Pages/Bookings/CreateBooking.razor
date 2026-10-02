@@ -6,6 +6,7 @@
 @inject UserState User
 @inject ListingState Listing
 @inject NavigationManager NavigationManager
+@inject DialogService Dialog
 
 @if (error != null)
 {
@@ -63,20 +64,29 @@ else
                 var request = new CreateBookingRequest(
                         User.UserId.Value,
                         Booking.AccomodationId,
+                        Listing.Id,
                         Booking.StartDate,
                         Booking.EndDate,
                         Booking.TotalPrice);
 
-                await Service.MakeBookingAsync(request);
+                var statusCode = await Service.MakeBookingAsync(request);
 
-                Booking.Clear();
-                Listing.Clear();
-                NavigationManager.NavigateTo("/listings");
+                if (statusCode == 200)
+                {
+                    await Dialog.Alert("Booking oprettet korrekt", "Booking oprettelse");
+
+                    Booking.Clear();
+                    Listing.Clear();
+                    NavigationManager.NavigateTo("/listings");
+
+                    
+                }
+
             }
         }
         catch (Exception ex)
         {
-            error = ex.Message;
+            await Dialog.Alert(ex.Message);
         }
 
     }
