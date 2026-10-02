@@ -27,7 +27,12 @@ public class AccomodationQueryHandlerIMPL(AccomodationDbContext db) : IAccomodat
             .Where(a => a.Id == accomodationId)
             .Select(a => new AccomodationDto(
                 a.Id.Value,
-                a.Title
+                a.Title,
+                a.Address.Street,
+                a.Address.PostalCode,
+                a.Address.City,
+                a.Address.Country,
+                a.facilities.Select(f => f.Name).ToList()
                 ))
             .FirstOrDefaultAsync();
     }
@@ -56,8 +61,13 @@ public class AccomodationQueryHandlerIMPL(AccomodationDbContext db) : IAccomodat
             .AsNoTracking()
             .Select(a => new AccomodationDto(
             a.Id.Value,
-            a.Title
-            ))
+                a.Title,
+                a.Address.Street,
+                a.Address.PostalCode,
+                a.Address.City,
+                a.Address.Country,
+                a.facilities.Select(f => f.Name).ToList()
+                ))
             .ToListAsync();
     }
 
@@ -69,9 +79,14 @@ public class AccomodationQueryHandlerIMPL(AccomodationDbContext db) : IAccomodat
             .AsNoTracking()
             .Where(a => a.HostId == hostId)
             .Select(a => new AccomodationDto(
-            a.Id.Value,
-            a.Title
-            ))
+                a.Id.Value,
+                a.Title,
+                a.Address.Street,
+                a.Address.PostalCode,
+                a.Address.City,
+                a.Address.Country,
+                a.facilities.Select(f => f.Name).ToList()
+                ))
             .ToListAsync();
     }
 }

@@ -11,7 +11,12 @@ namespace AccomodationService.Api.Mapper
         {
             var output = new AccomodationResponse(
                 Dto.AccomodationId,
-                Dto.Title
+                Dto.Title,
+                Dto.Street,
+                Dto.PostalCode,
+                Dto.City,
+                Dto.Country,
+                Dto.Facilities
                 );
 
             return output;
