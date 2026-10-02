@@ -2,6 +2,7 @@
 {
     public class ListingState
     {
+        public Guid Id { get; set; } = Guid.Empty;
         public string Name { get; set; } = string.Empty;
         public string Street { get; set; } = string.Empty;
         public string PostalCode { get; set; } = string.Empty;
@@ -9,8 +10,9 @@
         public string Country { get; set; } = string.Empty;
         public string Type { get; set; } = string.Empty;
 
-        public void SetState(string listingName, string street, string postalCode, string city, string country, string type)
+        public void SetState(Guid id, string listingName, string street, string postalCode, string city, string country, string type)
         {
+            Id = Id;
             Name = listingName;
             Street = street;
             PostalCode = postalCode;
