@@ -32,9 +32,6 @@ public class CreateBookingHandler(
             var guestExist = await guestExistTask;
             var accomodationExist = await accomodationExistTask;
 
-            //var guestExist = await guestService.GuestExistAsync(guestId);
-            //var accomodationExist = await accomodationService.AccomodationExistAsync(accomodationId);
-
             if (guestExist == false)
                 throw new NotFoundException("Guest not found doing booking creation");
 
