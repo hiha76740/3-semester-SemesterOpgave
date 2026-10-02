@@ -11,10 +11,25 @@
             <RadzenLabel Text="Lokation" Component="LocationSearch" />
             <RadzenTextBox Placeholder="Søg" Style="width: 100%; max-width: 400px;" Name="LocationSearch" Change="@(_ => OnChange())" @bind-Value="sortLocation" Immediate="true" />
             <RadzenLabel Text="Sorter efter pris" Component="DropDownSortPrice" />
-            <RadzenDropDown @bind-Value=@sortPrice Data=@sortPriceTypes Style="width: 100%; max-width: 400px;" Name="DropDownSortPrice" Change="@(_ => OnChange())" />
+
+            <RadzenDropDown @bind-Value=@sortPrice
+                            Data=@sortPriceTypes
+                            Style="width: 100%; max-width: 400px;"
+                            Name="DropDownSortPrice"
+                            Change="@(_ => OnChange())" />
+
             <RadzenLabel Text="Sorter efter facilities" Component="DropDownMultipleFacilities" />
-            <RadzenDropDown @bind-Value=@sortFacilities Data=@Facilities TextProperty="@nameof(FacilityResponse.Name)" ValueProperty="@nameof(FacilityResponse.Name)" Name="DropDownMultipleFacilties"
-                            Multiple=true AllowClear=true Placeholder="Select facilities" Style="width: 100%; max-width: 400px;" Change="@(_ => OnChange())" />
+
+            <RadzenDropDown @bind-Value=@sortFacilities
+                            Data=@Facilities
+                            TextProperty="@nameof(FacilityResponse.Name)"
+                            ValueProperty="@nameof(FacilityResponse.Name)"
+                            Name="DropDownMultipleFacilties"
+                            Multiple=true
+                            AllowClear=true
+                            Placeholder="Select facilities"
+                            Style="width: 100%; max-width: 400px;"
+                            Change="@(_ => OnChange())" />
         </RadzenStack>
         <RadzenStack Gap="0.5rem">
             <RadzenLabel Text="Fra" Component="StartDate" />
@@ -31,7 +46,7 @@
     <h4>Ledige boliger</h4>
     @foreach (var listing in FilteredList)
     {
-        <ListingCard Listing="@listing" />
+        <ListingCardComponent Listing="@listing" />
     }
 
 </section>
