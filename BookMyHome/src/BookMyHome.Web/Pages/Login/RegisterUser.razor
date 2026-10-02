@@ -3,27 +3,21 @@
 @inject IAuthService authService
 @inject IUserService userService
 @inject NavigationManager navigationManager
+@inject DialogService Dialog
 
 
-@if (error != null)
-{
+<UserFormComponent Model="model"
+                   SubmitCallback="Create"
+                   SubmitText="Registre"
+                   AccessRoles="AccessRoles"
+                   CancelPath="/login" />
 
-}
-else
-{
-    <UserFormComponent model="model" 
-        SubmitCallback="Create" 
-        SubmitText="Registre" 
-        AccessRoles="AccessRoles"
-        CancelPath="/login"/>
-}
 
 
 
 @code {
     private UserInputModel model = new();
     private IReadOnlyList<AccessRoleReponse> AccessRoles = [];
-    private string? error = null;
 
     protected override async Task OnInitializedAsync()
     {
@@ -33,7 +27,7 @@ else
         }
         catch (Exception ex)
         {
-            error = ex.Message;
+            await Dialog.Alert(ex.Message, "Initial error");
         }
 
     }
@@ -62,7 +56,7 @@ else
         }
         catch (Exception ex)
         {
-            error = ex.Message;
+            await Dialog.Alert(ex.Message, "Create error");
         }
 
         
