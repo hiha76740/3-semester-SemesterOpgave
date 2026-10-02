@@ -1,7 +1,6 @@
 name: UserService CI
 
 on:
-  workflow_dispatch:
   push:
     branches:
       - main
@@ -48,7 +47,6 @@ jobs:
 
 
   Build-And-Test-Application:
-    needs: Build-And-Test-Domain
     name: Build and Test Application
     runs-on: ubuntu-latest
 
