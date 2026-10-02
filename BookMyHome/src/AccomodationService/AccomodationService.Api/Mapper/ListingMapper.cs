@@ -41,9 +41,9 @@ public static class ListingMapper
         return output;
     }
 
-    public static ListingSummaryResponse AsListingSummaryResponse(this ListingSummaryDto dto)
+    public static AccomodationSummaryResponse AsListingSummaryResponse(this AccomodationSummaryDto dto)
     {
-        var output = new ListingSummaryResponse(
+        var output = new AccomodationSummaryResponse(
             dto.ListingName,
             dto.ListingType,
             dto.City,

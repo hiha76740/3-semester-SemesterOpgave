@@ -121,20 +121,4 @@ public class ListingQueryHandlerIMPL(AccomodationDbContext db, IBookingService b
 
         return output;
     }
-
-    async Task<ListingSummaryDto?> IListingQueries.GetListingSummaryByIdAsync(Guid id)
-    {
-        var listingId = new ListingId(id);
-
-        return await db.Listings
-            .AsNoTracking()
-            .Where(l => l.Id == listingId)
-            .Select(l => new ListingSummaryDto(
-                l.ListingName,
-                l.Type.ToString(),
-                l.Accomodation.Address.City,
-                l.Accomodation.Address.Country
-                ))
-            .FirstOrDefaultAsync();
-    }
 }

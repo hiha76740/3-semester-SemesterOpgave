@@ -32,6 +32,24 @@ public class AccomodationQueryHandlerIMPL(AccomodationDbContext db) : IAccomodat
             .FirstOrDefaultAsync();
     }
 
+    async Task<AccomodationSummaryDto?> IAccomodationQueries.GetAccomodationSummaryAsync(Guid accomodationId, Guid listingId)
+    {
+        var accomodationKey = new AccomodationId(accomodationId);
+        var listingKey = new ListingId(listingId);
+
+        return await db.Accomodations
+            .Where(a => a.Id == accomodationKey)
+            .SelectMany(a => a.listings
+                .Where(l => l.Id == listingKey)
+                .Select(l => new AccomodationSummaryDto(
+                    l.ListingName,
+                    l.Type.ToString(),
+                    a.Address.City,
+                    a.Address.Country
+                    )))
+            .FirstOrDefaultAsync();
+    }
+
     async Task<IReadOnlyList<AccomodationDto>> IAccomodationQueries.GetAllAccomodationsAsync()
     {
         return await db.Accomodations

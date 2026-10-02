@@ -131,7 +131,32 @@ namespace AccomodationService.Api.Controllers
         }
 
 
-       
+        [HttpGet("summary")]
+        [EndpointSummary("This endpoint will get a summary of the requested accomodation")]
+        [EndpointDescription("Gets a summary of a requested accomodation with listing info or returns not found if accomodation or listing was not found")]
+        [ProducesResponseType<AccomodationSummaryResponse>(StatusCodes.Status200OK, "application/json", Description = "Returns a summary of the accomodation with listing info")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while getting summary for requested accomodation")]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Description = "Requested accomodation or listing was not found")]
+        public async Task<ActionResult<AccomodationSummaryResponse>> GetAccomodationSummary(
+           [Required][Description("Id of the accomodation you want to find")] Guid accomodationId,
+           [Required][Description("Id of the listing you want to find")] Guid listingId)
+        {
+            try
+            {
+                var dto = await queries.GetAccomodationSummaryAsync(accomodationId, listingId);
+
+                if (dto == null)
+                    NotFound("Summary could not be created, listing not found");
+
+                return Ok(dto!.AsListingSummaryResponse());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
 
         // TODO: Delete this after it has been moved into shared
         private Guid? GetCurrentUserId()

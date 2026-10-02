@@ -310,29 +310,7 @@ namespace AccomodationService.Api.Controllers
             }
         }
 
-        [HttpGet("summary")]
-        [EndpointSummary("This endpoint will get a summary of the requested listing")]
-        [EndpointDescription("Gets a summary of a requested listing with accomodation info or returns not found if listing was not found")]
-        [ProducesResponseType<ListingSummaryResponse>(StatusCodes.Status200OK, "application/json", Description = "Returns a summary of the listing with accomdation info")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while getting summary for requested listing")]
-        [ProducesResponseType(StatusCodes.Status404NotFound, Description = "Requested listing was not found")]
-        public async Task<ActionResult<ListingSummaryResponse>> GetAccomodationSummary(
-           [Required][Description("Id of the listing you want to check")] Guid id)
-        {
-            try
-            {
-                var dto = await queries.GetListingSummaryByIdAsync(id);
-
-                if (dto == null) 
-                    NotFound("Summary could not be created, listing not found");
-                    
-                return Ok(dto!.AsListingSummaryResponse());
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
+        
 
 
         // TODO: Delete this after it has been moved into shared
