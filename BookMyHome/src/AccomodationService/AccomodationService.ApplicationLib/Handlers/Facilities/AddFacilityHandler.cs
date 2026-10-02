@@ -17,27 +17,18 @@ public class AddFacilityHandler(IAccomodationRepository repo) : IAddFacilityHand
 			var facilityId = new FacilityId(command.FacilityId);
 			var hostId = new HostId(command.HostId);
 
-			//var accomodationTask = repo.GetAccomodationByIdAsync(accomodationId);
-   //         var facilityTask = repo.GetFacilityByIdAsync(facilityId);
-
-
-			//await Task.WhenAll(accomodationTask, facilityTask);
-
-			//var accomodation = accomodationTask.Result;
-			//var facility = facilityTask.Result;
-
 			var accomodation = await repo.GetAccomodationWithFacilitiesAsync(accomodationId);
 			var facility = await repo.GetFacilityByIdAsync(facilityId);
 
 
-            if (accomodation == null)
+			if (accomodation == null)
 				throw new NotFoundException("Accomodation was not found");
 			
 			if (facility == null)
 				throw new NotFoundException("Facility was not found");
 
             if (accomodation.HostId != hostId)
-                throw new UnauthorizedAccessException("Only the owner of the accomodation can remove facilities");
+                throw new UnauthorizedAccessException("Only the owner of the accomodation can add facilities");
 
             accomodation.AddFacility(facility);
 
