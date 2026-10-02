@@ -31,7 +31,8 @@ namespace AccomodationService.Api.Mapper
                 request.Street,
                 request.PostalCode,
                 request.City,
-                request.Country
+                request.Country,
+                request.FacilitiesIds
                 );
 
             return output;
