@@ -171,7 +171,7 @@ namespace AccomodationService.Api.Controllers
         }
 
         [Authorize(Roles = "Host")]
-        [HttpPost("listing")]
+        [HttpPost]
         [EndpointSummary("This endpoint will create a listing for a specific accomodation")]
         [EndpointDescription("Creates a listing of a specific accomodation")]
         [ProducesResponseType(StatusCodes.Status200OK, Description = "Creation of listing for the requested accomodation succesfully completed")]
