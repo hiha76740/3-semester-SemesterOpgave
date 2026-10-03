@@ -1,0 +1,20 @@
+﻿@page "/accomodation/{id:guid}/listings"
+
+@inject IListingService ListingService
+
+@foreach (var listing in Listings)
+{
+    <ListingCardComponent Listing="listing" SeeDetailsNavigation=@($"/listing/{listing.ListingId}/edit") NavigationButtonText="Rediger" />
+}
+
+@code {
+    private IReadOnlyList<ListingResponse> Listings { get; set; } = [];
+
+    [Parameter]
+    public Guid Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Listings = await ListingService.GetAccomodationListings(Id);
+    }
+}
