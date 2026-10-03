@@ -1,4 +1,5 @@
-﻿using BookMyHome.ContractsLib.Responses.Accomodations;
+﻿using BookMyHome.ContractsLib.Requests.Accomodations;
+using BookMyHome.ContractsLib.Responses.Accomodations;
 using BookMyHome.Web.ServiceInterfaces;
 using Microsoft.AspNetCore.Components.WebAssembly.Http;
 using System.Net.Http.Json;
@@ -25,6 +26,32 @@ namespace BookMyHome.Web.Services
                 throw new InvalidOperationException("Could not deserialize listings");
 
             return facilities;
+        }
+
+        async Task IFacilityService.AddFacilityAsync(Guid facilityId, Guid accomodationId)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Put, $"{baseUrl}api/v1/Facilities/{accomodationId}")
+            {
+                Content = JsonContent.Create(new AddFacilityRequest(facilityId))
+            };
+            request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
+
+            using var response = await httpClient.SendAsync(request);
+
+            response.EnsureSuccessStatusCode();
+        }
+
+        async Task IFacilityService.RemoveFacilityAsync(Guid facilityId, Guid accomodationId)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Delete, $"{baseUrl}api/v1/Facilities/{accomodationId}")
+            {
+                Content = JsonContent.Create(new RemoveFacilityRequest(facilityId))
+            };
+            request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
+
+            using var response = await httpClient.SendAsync(request);
+
+            response.EnsureSuccessStatusCode();
         }
     }
 }
