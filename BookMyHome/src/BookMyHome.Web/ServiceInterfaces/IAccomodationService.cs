@@ -6,6 +6,7 @@ namespace BookMyHome.Web.ServiceInterfaces
     public interface IAccomodationService
     {
         Task<int> Create(CreateAccomodationRequest request);
+        Task<AccomodationResponse?> GetAccomodationByIdAsync(Guid id);
         Task<IReadOnlyList<AccomodationResponse>> GetCurrentUserAccomodationsAsync();
     }
 }
