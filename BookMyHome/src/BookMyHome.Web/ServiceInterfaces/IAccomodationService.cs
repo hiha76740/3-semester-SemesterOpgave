@@ -8,5 +8,6 @@ namespace BookMyHome.Web.ServiceInterfaces
         Task<int> Create(CreateAccomodationRequest request);
         Task<AccomodationResponse?> GetAccomodationByIdAsync(Guid id);
         Task<IReadOnlyList<AccomodationResponse>> GetCurrentUserAccomodationsAsync();
+        Task UpdateAccomodationStatusAsync(Guid accomodationId, string status);
     }
 }

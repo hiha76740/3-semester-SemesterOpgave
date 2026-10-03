@@ -59,5 +59,18 @@ namespace BookMyHome.Web.Services
 
             return accomodation;
         }
+
+        async Task IAccomodationService.UpdateAccomodationStatusAsync(Guid accomodationId, string status)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Put, $"{baseUrl}api/v1/Accomodations/{accomodationId}/status")
+            {
+                Content = JsonContent.Create(new UpdateAccomodationStatusRequest(status))
+            };
+            request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
+
+            using var response = await httpClient.SendAsync(request);
+
+            response.EnsureSuccessStatusCode();
+        }
     }
 }
