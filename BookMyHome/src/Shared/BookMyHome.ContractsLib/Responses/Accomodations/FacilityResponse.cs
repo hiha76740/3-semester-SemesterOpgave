@@ -1,3 +1,6 @@
 ﻿namespace BookMyHome.ContractsLib.Responses.Accomodations;
 
-public record FacilityResponse(Guid Id, string Name);
+public record FacilityResponse(
+    Guid Id, 
+    string Name
+    );
