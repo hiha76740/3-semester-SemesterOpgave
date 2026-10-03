@@ -24,6 +24,24 @@ namespace BookMyHome.Web.Services
             return (int)response.StatusCode;
         }
 
+        async Task<AccomodationResponse?> IAccomodationService.GetAccomodationByIdAsync(Guid id)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}api/v1/Accomodations/{id}");
+
+            request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
+
+            using var response = await httpClient.SendAsync(request);
+
+            response.EnsureSuccessStatusCode();
+
+            var accomodation = await response.Content.ReadFromJsonAsync<AccomodationResponse?>();
+
+            if (accomodation == null)
+                throw new InvalidOperationException("Could not deserialize accomodation");
+
+            return accomodation;
+        }
+
         async Task<IReadOnlyList<AccomodationResponse>> IAccomodationService.GetCurrentUserAccomodationsAsync()
         {
             var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}api/v1/Accomodations");
