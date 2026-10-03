@@ -16,7 +16,8 @@ namespace AccomodationService.Api.Mapper
                 Dto.PostalCode,
                 Dto.City,
                 Dto.Country,
-                Dto.Facilities.Select(f => new FacilityResponse(f.Id,f.Name)).ToList()
+                Dto.Facilities.Select(f => new FacilityResponse(f.Id,f.Name)).ToList(),
+                Dto.Status
                 );
 
             return output;
