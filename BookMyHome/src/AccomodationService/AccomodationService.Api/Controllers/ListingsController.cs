@@ -6,6 +6,7 @@ using BookMyHome.ContractsLib.Requests.Accomodations;
 using BookMyHome.ContractsLib.Responses.Accomodations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
@@ -17,8 +18,7 @@ namespace AccomodationService.Api.Controllers
     public class ListingsController(
         IListingQueries queries,
         ICreateListingHandler listingCreate,
-        IUpdateListingDailyPriceHandler updateListingDailyPrice,
-        IUpdateListingHouseRulesHandler updateListingHouseRules,
+        IUpdateListingHandler update,
         IDeleteListingHandler deleteListingById
         ) : ControllerBase
     {
@@ -199,15 +199,15 @@ namespace AccomodationService.Api.Controllers
 
 
         [Authorize(Roles = "Host")]
-        [HttpPut("{accomodationId:guid}/listings/{listingId:guid}/price")]
-        [EndpointSummary("This endpoint will update the daily price on a specific listing")]
-        [EndpointDescription("Updates a listing daily price of a specific accomodation")]
-        [ProducesResponseType(StatusCodes.Status200OK, Description = "Updating of listing daily price for the requested listing succesfully completed")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while updating daily price for the request listing")]
-        public async Task<ActionResult> UpdateListingDailyPrice(
+        [HttpPut("{accomodationId:guid}/listings/{listingId:guid}")]
+        [EndpointSummary("This endpoint will update the requested listing")]
+        [EndpointDescription("Updates listing where information has changed")]
+        [ProducesResponseType(StatusCodes.Status200OK, Description = "Updating of requested listing succesfully completed")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while updating the request listing")]
+        public async Task<ActionResult> UpdateListing(
             [Description("Id of the accomodation the listing is assoicated to")] Guid accomodationId,
             [Description("Id of the listing you want to update the daily price for")] Guid listingId,
-            UpdateListingDailyPriceRequest request)
+            UpdateListingRequest request)
         {
             try
             {
@@ -216,52 +216,18 @@ namespace AccomodationService.Api.Controllers
                 if (id == null || HttpContext.User.FindFirstValue(ClaimTypes.Role) != "Host")
                     return BadRequest("Invalid request");
 
-                var command = new UpdateListingDailyPriceCommand(
+                var command = new UpdateListingCommand(
                     id.Value,
                     accomodationId,
                     listingId,
-                    request.Price,
-                    request.RowVersion
-                    );
-
-                await updateListingDailyPrice.HandleAsync(command);
-
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [Authorize(Roles = "Host")]
-        [HttpPut("{accomodationId:guid}/listings/{listingId:guid}/houserules")]
-        [EndpointSummary("This endpoint will update the house rules on a specific listing")]
-        [EndpointDescription("Updates a listing house rules of a specific accomodation")]
-        [ProducesResponseType(StatusCodes.Status200OK, Description = "Updating of listing house rules for the requested listing succesfully completed")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while updating house rules for the request listing")]
-        public async Task<ActionResult> UpdateListingHouseRules(
-            [Description("Id of the accomodation the listing is assoicated to")] Guid accomodationId,
-            [Description("Id of the listing you want to update the house rules for")] Guid listingId,
-            UpdateListingHouseRulesRequest request)
-        {
-            try
-            {
-                var id = GetCurrentUserId();
-
-                if (id == null || HttpContext.User.FindFirstValue(ClaimTypes.Role) != "Host")
-                    return BadRequest("Invalid request");
-
-                var command = new UpdateListingHouseRulesCommand(
-                    id.Value,
-                    accomodationId,
-                    listingId,
+                    request.ListingName,
+                    request.DailyPrice,
                     request.HouseRules,
+                    request.AccomodationType,
                     request.RowVersion
                     );
 
-                await updateListingHouseRules.HandleAsync(command);
+                await update.HandleAsync(command);
 
                 return Ok();
             }

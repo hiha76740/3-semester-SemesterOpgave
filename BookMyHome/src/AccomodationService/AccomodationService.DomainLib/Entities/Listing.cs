@@ -9,18 +9,32 @@ public class Listing
 
     public Accomodation Accomodation { get; init; } = null!;
 
-    public string ListingName { get; init; } = string.Empty;
+    public string ListingName { get; private set; } = string.Empty;
 
     public decimal DailyPrice { get; private set; }
 
     public string HouseRules { get; private set; } = string.Empty;
 
-    public AccomodationType Type { get; init; }
+    public AccomodationType Type { get; private set; }
 
     public byte[] RowVersion { get; private set; } = [];
 
 
+    internal void UpdateAccomodationType(AccomodationType newType)
+    {
+        if (Type == newType)
+            throw new DomainException("Old and new type can not be the same");
 
+        Type = newType;
+    }
+
+    internal void UpdateListingName(string newlistingName)
+    {
+        if (ListingName == newlistingName)
+            throw new DomainException("Old and new name can not be the same");
+
+        ListingName = newlistingName;
+    }
 
     internal void UpdateDailyPrice(decimal newPrice)
     {

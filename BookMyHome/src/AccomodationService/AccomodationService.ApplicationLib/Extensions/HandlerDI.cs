@@ -14,8 +14,7 @@ public static class HandlerDI
     {
         services.AddScoped<ICreateAccomodationHandler, CreateAccomodationHandler>();
         services.AddScoped<ICreateListingHandler, CreateListingHandler>();
-        services.AddScoped<IUpdateListingDailyPriceHandler, UpdateListingDailyPriceHandler>();
-        services.AddScoped<IUpdateListingHouseRulesHandler, UpdateListingHouseRulesHandler>();
+        services.AddScoped<IUpdateListingHandler, UpdateListingHandler>();
         services.AddScoped<IDeleteListingHandler, DeleteListingHandler>();
         services.AddScoped<IAddFacilityHandler, AddFacilityHandler>();
         services.AddScoped<IRemoveFacilityHandler, RemoveFacilityHandler>();

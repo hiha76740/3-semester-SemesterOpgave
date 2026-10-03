@@ -2,7 +2,7 @@
 
 namespace AccomodationService.FacadeLib.Commands.Interfaces.Listings;
 
-public interface IUpdateListingDailyPriceHandler
+public interface IUpdateListingHandler
 {
-    Task HandleAsync(UpdateListingDailyPriceCommand command);
+    Task HandleAsync(UpdateListingCommand command);
 }

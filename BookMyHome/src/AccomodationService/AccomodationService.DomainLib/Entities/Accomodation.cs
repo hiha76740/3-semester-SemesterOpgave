@@ -34,6 +34,20 @@ public class Accomodation
         _listings.Add(listing);
     }
 
+    public void UpdateAccomodationType(ListingId id, AccomodationType newAccomodationType)
+    {
+        var listing = GetListing(id);
+
+        listing.UpdateAccomodationType(newAccomodationType);
+    }
+
+    public void UpdateListingName(ListingId id, string newListingName)
+    {
+        var listing = GetListing(id);
+
+        listing.UpdateListingName(newListingName);
+    }
+
     public void RemoveListing(ListingId id)
     {
         var listing = GetListing(id);
