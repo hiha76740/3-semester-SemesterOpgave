@@ -1,4 +1,5 @@
-﻿using BookMyHome.ContractsLib.Responses.Accomodations;
+﻿using BookMyHome.ContractsLib.Requests.Accomodations;
+using BookMyHome.ContractsLib.Responses.Accomodations;
 using BookMyHome.Web.ServiceInterfaces;
 using Microsoft.AspNetCore.Components.WebAssembly.Http;
 using System.Globalization;
@@ -46,9 +47,20 @@ namespace BookMyHome.Web.Services
             return list;
         }
 
-        Task<IReadOnlyList<AccomodationTypeResponse>> IListingService.GetAllAccomodationTypes()
+        async Task<IReadOnlyList<AccomodationTypeResponse>> IListingService.GetAllAccomodationTypes()
         {
-            throw new NotImplementedException();
+            var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}api/v1/Accomodations/types");
+
+            using var response = await httpClient.SendAsync(request);
+
+            response.EnsureSuccessStatusCode();
+
+            var list = await response.Content.ReadFromJsonAsync<IReadOnlyList<AccomodationTypeResponse>>();
+
+            if (list == null)
+                throw new InvalidOperationException("Could not deserialize accomodation types");
+
+            return list;
         }
 
         async Task<IReadOnlyList<ListingResponse>> IListingService.GetAllAvailiableListingsByPeriod(DateOnly start, DateOnly end)
@@ -107,6 +119,20 @@ namespace BookMyHome.Web.Services
 
             return listing;
 
+        }
+
+        async Task<int> IListingService.UpdateListing(Guid accomodationId, Guid listingId, UpdateListingRequest updateRequest)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Put, $"{baseUrl}api/v1/Listings/{accomodationId}/listings/{listingId}")
+            {
+                Content = JsonContent.Create(updateRequest)
+            };
+
+            request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
+
+            using var response = await httpClient.SendAsync(request);
+
+            return (int)response.StatusCode;
         }
     }
 }
