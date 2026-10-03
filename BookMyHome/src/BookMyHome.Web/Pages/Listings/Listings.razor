@@ -43,10 +43,10 @@
 </section>
 
 <section>
-    <h4>Ledige boliger</h4>
+    <RadzenText TextStyle="TextStyle.DisplayH4">Ledige boliger</RadzenText>
     @foreach (var listing in FilteredList)
     {
-        <ListingCardComponent Listing="@listing" />
+        <ListingCardComponent Listing="@listing" SeeDetailsNavigation="@($"/listing/{listing.ListingId}")" NavigationButtonText="Se detaljer" />
     }
 
 </section>

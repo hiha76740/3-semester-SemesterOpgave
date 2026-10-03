@@ -23,7 +23,7 @@
         </RadzenRow>
     </RadzenCard>
     <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.End" Gap="0">
-        <RadzenButton Variant="Variant.Text" Text="Se detaljer" Click="@SeeDetails" />
+        <RadzenButton Variant="Variant.Text" Text="@NavigationButtonText" Click="@SeeDetails" />
     </RadzenStack>
 </RadzenCard>
 
@@ -31,10 +31,20 @@
     [Parameter, EditorRequired]
     public ListingResponse Listing { get; set; }
 
+    [Parameter, EditorRequired]
+    public string NavigationButtonText { get; set; }
+
+    [Parameter, EditorRequired]
+    public string SeeDetailsNavigation { get; set; }
+
     private void SeeDetails()
     {
-        BookingState.DailyPrice = Listing.DailyPrice;
-        BookingState.AccomodationId = Listing.AccomodationId;
-        navigationManager.NavigateTo($"/listing/{Listing.ListingId}");
+        if (NavigationButtonText == "Se detaljer")
+        {
+            BookingState.DailyPrice = Listing.DailyPrice;
+            BookingState.AccomodationId = Listing.AccomodationId;
+        }
+        
+        navigationManager.NavigateTo(SeeDetailsNavigation);
     }
 }
