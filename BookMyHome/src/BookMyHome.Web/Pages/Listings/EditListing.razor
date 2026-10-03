@@ -78,6 +78,10 @@
                 await Dialog.Alert("Listing updated successfully", "Information");
                 NavigationManager.NavigateTo($"/accomodation/{model.AccomodationId}/listings");
             }
+            else
+            {
+                await Dialog.Alert($"Error:{responseCode}, Error while updating listing", "Error");
+            }
         }
         catch (Exception ex)
         {
