@@ -32,7 +32,7 @@ public class AccomodationQueryHandlerIMPL(AccomodationDbContext db) : IAccomodat
                 a.Address.PostalCode,
                 a.Address.City,
                 a.Address.Country,
-                a.facilities.Select(f => f.Name).ToList()
+                a.facilities.Select(f => new FacilityDto(f.Id.Value,f.Name)).ToList()
                 ))
             .FirstOrDefaultAsync();
     }
@@ -66,7 +66,7 @@ public class AccomodationQueryHandlerIMPL(AccomodationDbContext db) : IAccomodat
                 a.Address.PostalCode,
                 a.Address.City,
                 a.Address.Country,
-                a.facilities.Select(f => f.Name).ToList()
+                a.facilities.Select(f => new FacilityDto(f.Id.Value, f.Name)).ToList()
                 ))
             .ToListAsync();
     }
@@ -85,7 +85,7 @@ public class AccomodationQueryHandlerIMPL(AccomodationDbContext db) : IAccomodat
                 a.Address.PostalCode,
                 a.Address.City,
                 a.Address.Country,
-                a.facilities.Select(f => f.Name).ToList()
+                a.facilities.Select(f => new FacilityDto(f.Id.Value, f.Name)).ToList()
                 ))
             .ToListAsync();
     }

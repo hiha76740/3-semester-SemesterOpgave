@@ -7,4 +7,4 @@ public record AccomodationDto(
     string PostalCode,
     string City,
     string Country,
-    IReadOnlyList<string> Facilities);
+    IReadOnlyList<FacilityDto> Facilities);

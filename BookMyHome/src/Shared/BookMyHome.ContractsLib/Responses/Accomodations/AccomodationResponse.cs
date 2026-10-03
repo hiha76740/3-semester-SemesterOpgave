@@ -7,5 +7,5 @@ public record AccomodationResponse(
     string PostalCode,
     string City,
     string Country,
-    IReadOnlyList<string> Facilities
+    IReadOnlyList<FacilityResponse> Facilities
     );
