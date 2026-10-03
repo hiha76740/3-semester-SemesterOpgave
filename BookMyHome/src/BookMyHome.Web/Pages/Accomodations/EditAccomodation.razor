@@ -1,0 +1,88 @@
+﻿@page "/accomodation/{id:guid}"
+
+@inject IAccomodationService Service
+@inject IFacilityService FacilityService
+@inject DialogService Dialog
+@inject NavigationManager NavigationManager
+
+<AccomodationFormReadOnlyComponent Model="model"
+                               Facilities="Facilities"
+                               SubmitCallback="Update"
+                               SubmitText="Ok"
+                               CancelPath="/accomodations" />
+
+@code {
+    [Parameter]
+    public Guid Id { get; set; }
+
+    AccomodationInputModel model = new();
+    private AccomodationResponse? response = null;
+    private IReadOnlyList<FacilityResponse> Facilities = [];
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        response = await Service.GetAccomodationByIdAsync(Id);
+        Facilities = await FacilityService.GetAllFacilitiesAsync();
+
+        if (response == null)
+        {
+            await Dialog.Alert("Accomodation not found", "Initial error");
+            return;
+        }
+        model.AccomodationId = response.AccomodationId;
+        model.Title = response.Title;
+        model.Street = response.Street;
+        model.PostalCode = response.PostalCode;
+        model.City = response.City;
+        model.Country = response.Country;
+        model.FacilitiesIds = response.Facilities.Select(f => f.Id).ToList();
+
+
+
+    }
+
+    private async Task Update(AccomodationInputModel model)
+    {
+        if (response == null)
+        {
+            await Dialog.Alert("Initial accomodation not found", "Update error");
+            return;
+        }
+
+        try
+        {
+            foreach (var facility in Facilities)
+            {
+                if (
+                    model.FacilitiesIds
+                    .Contains(facility.Id) == true &&
+                    response.Facilities
+                    .Any(f => f.Id == facility.Id) == false
+                )
+                {
+                    await FacilityService.AddFacilityAsync(facility.Id,model.AccomodationId);
+                }
+                else if (
+                    model.FacilitiesIds
+                    .Contains(facility.Id) == false &&
+                    response.Facilities
+                    .Any(f => f.Id == facility.Id) == true
+                )
+                {
+                    await FacilityService.RemoveFacilityAsync(facility.Id,model.AccomodationId);
+                }
+            }
+
+            await Dialog.Alert("Accomodation updated successfully","Information");
+        }
+        catch (Exception ex)
+        {
+            await Dialog.Alert(ex.Message, "Update error");
+            return;
+        }
+
+        
+    }
+
+}
