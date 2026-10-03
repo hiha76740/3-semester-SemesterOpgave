@@ -10,5 +10,6 @@ namespace BookMyHome.Web.ServiceInterfaces
         Task<Guid> GetAccomodationIdByListingId(Guid listingId);
 
         Task<IReadOnlyList<ListingResponse>> GetAllAvailiableListingsByPeriod(DateOnly start, DateOnly end);
+        Task<IReadOnlyList<ListingResponse>> GetAccomodationListings(Guid accomodationId);
     }
 }
