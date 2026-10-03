@@ -46,6 +46,11 @@ namespace BookMyHome.Web.Services
             return list;
         }
 
+        Task<IReadOnlyList<AccomodationTypeResponse>> IListingService.GetAllAccomodationTypes()
+        {
+            throw new NotImplementedException();
+        }
+
         async Task<IReadOnlyList<ListingResponse>> IListingService.GetAllAvailiableListingsByPeriod(DateOnly start, DateOnly end)
         {
             var from = start.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
