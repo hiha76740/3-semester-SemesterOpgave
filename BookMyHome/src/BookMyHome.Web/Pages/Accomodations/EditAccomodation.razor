@@ -6,10 +6,10 @@
 @inject NavigationManager NavigationManager
 
 <AccomodationFormReadOnlyComponent Model="model"
-                               Facilities="Facilities"
-                               SubmitCallback="Update"
-                               SubmitText="Ok"
-                               CancelPath="/accomodations" />
+                                   Facilities="Facilities"
+                                   SubmitCallback="Update"
+                                   SubmitText="Ok"
+                                   CancelPath="/accomodations" />
 
 @code {
     [Parameter]
@@ -37,9 +37,7 @@
         model.City = response.City;
         model.Country = response.Country;
         model.FacilitiesIds = response.Facilities.Select(f => f.Id).ToList();
-
-
-
+        model.Status = response.Status;
     }
 
     private async Task Update(AccomodationInputModel model)
@@ -52,6 +50,12 @@
 
         try
         {
+            // Status
+            if (model.Status != response.Status)
+                await Service.UpdateAccomodationStatusAsync(model.AccomodationId, model.Status);
+
+
+            // Facilities
             foreach (var facility in Facilities)
             {
                 if (
@@ -61,7 +65,7 @@
                     .Any(f => f.Id == facility.Id) == false
                 )
                 {
-                    await FacilityService.AddFacilityAsync(facility.Id,model.AccomodationId);
+                    await FacilityService.AddFacilityAsync(facility.Id, model.AccomodationId);
                 }
                 else if (
                     model.FacilitiesIds
@@ -70,11 +74,11 @@
                     .Any(f => f.Id == facility.Id) == true
                 )
                 {
-                    await FacilityService.RemoveFacilityAsync(facility.Id,model.AccomodationId);
+                    await FacilityService.RemoveFacilityAsync(facility.Id, model.AccomodationId);
                 }
             }
 
-            await Dialog.Alert("Accomodation updated successfully","Information");
+            await Dialog.Alert("Accomodation updated successfully", "Information");
         }
         catch (Exception ex)
         {
