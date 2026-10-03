@@ -1,0 +1,32 @@
+﻿@page "/listing/{Id:Guid}/edit"
+
+@inject IListingService Service
+@inject DialogService Dialog
+
+
+
+
+@code {
+    [Parameter]
+    public Guid Id { get; set; }
+
+    private ListingResponse? listing = null;
+    private Guid? accomodationId = null;
+
+    private ListingInputModel model = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        try
+        {
+            accomodationId = await Service.GetAccomodationIdByListingId(Id);
+            listing = await Service.GetListingAsync(accomodationId.Value, Id);
+            model.AccomodationId = accomodationId;
+        }
+        catch (Exception ex)
+        {
+            await Dialog.Alert(ex.Message, "Initial error");
+        }
+    }
+}
