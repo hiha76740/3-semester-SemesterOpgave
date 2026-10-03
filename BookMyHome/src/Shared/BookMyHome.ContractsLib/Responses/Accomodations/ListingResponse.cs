@@ -11,6 +11,7 @@ public record ListingResponse(
     string PostalCode,
     string City,
     string Country,
+    string Status,
     string[] Facilities,
     byte[] RowVersion
     );

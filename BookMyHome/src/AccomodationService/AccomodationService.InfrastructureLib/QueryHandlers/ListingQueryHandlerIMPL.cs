@@ -36,6 +36,7 @@ public class ListingQueryHandlerIMPL(AccomodationDbContext db, IBookingService b
                 l.Accomodation.Address.PostalCode,
                 l.Accomodation.Address.City,
                 l.Accomodation.Address.Country,
+                l.Status.ToString(),
                 l.Accomodation.facilities.Select(f => f.Name).ToArray(),
                 l.RowVersion
                 ))
@@ -71,6 +72,7 @@ public class ListingQueryHandlerIMPL(AccomodationDbContext db, IBookingService b
                 l.Accomodation.Address.PostalCode,
                 l.Accomodation.Address.City,
                 l.Accomodation.Address.Country,
+                l.Status.ToString(),
                 l.Accomodation.facilities.Select(f => f.Name).ToArray(),
                 l.RowVersion
                 ))
@@ -92,6 +94,7 @@ public class ListingQueryHandlerIMPL(AccomodationDbContext db, IBookingService b
                 l.Accomodation.Address.PostalCode,
                 l.Accomodation.Address.City,
                 l.Accomodation.Address.Country,
+                l.Status.ToString(),
                 l.Accomodation.facilities.Select(f => f.Name).ToArray(),
                 l.RowVersion
                 ))
@@ -115,6 +118,7 @@ public class ListingQueryHandlerIMPL(AccomodationDbContext db, IBookingService b
                 l.Accomodation.Address.PostalCode,
                 l.Accomodation.Address.City,
                 l.Accomodation.Address.Country,
+                l.Status.ToString(),
                 l.Accomodation.facilities.Select(f => f.Name).ToArray(),
                 l.RowVersion
                 ))

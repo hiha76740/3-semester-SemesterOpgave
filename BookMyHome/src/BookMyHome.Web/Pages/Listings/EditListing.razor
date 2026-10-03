@@ -36,7 +36,13 @@
             model.DailyPrice = listing.DailyPrice;
             model.HouseRules = listing.HouseRules;
             model.AccomodationType = listing.AccomodationType;
+
             model.RowVersion = listing.RowVersion;
+
+            if (listing.Status == "Active")
+                model.Status = true;
+            else
+                model.Status = false;
 
         }
         catch (Exception ex)

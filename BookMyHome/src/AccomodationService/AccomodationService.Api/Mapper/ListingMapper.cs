@@ -20,6 +20,7 @@ public static class ListingMapper
             dto.PostalCode,
             dto.City,
             dto.Country,
+            dto.Status,
             dto.Facilities,
             dto.RowVersion
             );
