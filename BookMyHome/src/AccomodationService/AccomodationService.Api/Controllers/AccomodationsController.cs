@@ -4,6 +4,7 @@ using AccomodationService.FacadeLib.Commands.Interfaces.Accomodations;
 using AccomodationService.FacadeLib.Queries.Interfaces;
 using BookMyHome.ContractsLib.Requests.Accomodations;
 using BookMyHome.ContractsLib.Responses.Accomodations;
+using BookMyHome.ContractsLib.Responses.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel;
@@ -186,6 +187,38 @@ namespace AccomodationService.Api.Controllers
             }
         }
 
+
+        [HttpGet("types")]
+        [EndpointSummary("This endpoint will get all accomodation types")]
+        [EndpointDescription("Gets all accomodation types, if successful returns a list otherwise returns not found")]
+        [ProducesResponseType<IReadOnlyList<AccomodationTypeResponse>>(StatusCodes.Status200OK, Description = "Returns a list of accomodation types ")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while getting accomodation types")]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Description = "No accomodation types was found")]
+
+        public ActionResult<IReadOnlyList<AccomodationTypeResponse>> GetAllAccomodationTypes()
+        {
+            try
+            {
+                var list = queries.GetAllAccomodationTypes();
+
+                if (list == null || list.Count == 0)
+                    return NotFound("No access roles was found");
+
+                var response = new List<AccomodationTypeResponse>();
+
+                foreach (var item in list)
+                {
+                    response.Add(item.AsAccomodationTypeResponse());
+                }
+
+                return Ok(response);
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
 
         // TODO: Delete this after it has been moved into shared

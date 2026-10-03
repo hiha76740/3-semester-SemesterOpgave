@@ -1,4 +1,5 @@
 ﻿using AccomodationService.DomainLib.Entities;
+using AccomodationService.DomainLib.Enums;
 using AccomodationService.DomainLib.ValueObjects;
 using AccomodationService.FacadeLib.Queries.DTOs;
 using AccomodationService.FacadeLib.Queries.Interfaces;
@@ -91,5 +92,11 @@ public class AccomodationQueryHandlerIMPL(AccomodationDbContext db) : IAccomodat
                 a.Status.ToString()
                 ))
             .ToListAsync();
+    }
+
+    IReadOnlyList<AccomodationTypeDto> IAccomodationQueries.GetAllAccomodationTypes()
+    {
+        return Enum.GetValues<AccomodationType>()
+            .Select(t => new AccomodationTypeDto(t.ToString())).ToList();
     }
 }

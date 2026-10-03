@@ -38,5 +38,14 @@ namespace AccomodationService.Api.Mapper
 
             return output;
         }
+
+        public static AccomodationTypeResponse AsAccomodationTypeResponse(this AccomodationTypeDto dto)
+        {
+            var output = new AccomodationTypeResponse(
+                dto.type
+                );
+
+            return output;
+        }
     }
 }

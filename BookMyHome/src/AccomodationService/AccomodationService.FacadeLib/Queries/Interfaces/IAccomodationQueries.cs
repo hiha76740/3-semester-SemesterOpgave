@@ -13,4 +13,5 @@ public interface IAccomodationQueries
     Task<bool> CheckIfExistsAsync(Guid id);
 
     Task<AccomodationSummaryDto?> GetAccomodationSummaryAsync(Guid accomodationId, Guid listingId);
+    IReadOnlyList<AccomodationTypeDto> GetAllAccomodationTypes();
 }
