@@ -19,7 +19,7 @@
 
                     </RadzenColumn>
                     <RadzenColumn Size="12" SizeMD="8">
-                        <RadzenTextBox Name="DailyPrice" @bind-Value=@Model.DailyPrice Style="display: block; width: 100%;" />
+                        <RadzenNumeric Name="DailyPrice" @bind-Value=@Model.DailyPrice Style="display: block; width: 100%;" />
                         <RadzenRequiredValidator Component="DailyPrice" Text="Daily price is required." Style="position: absolute" />
                         <RadzenNumericRangeValidator Component="DailyPrice" Min="0" Text="Daily price is not valid" Style="position: absolute" />
                     </RadzenColumn>
@@ -68,15 +68,18 @@
     public ListingInputModel Model { get; set; }
 
     [Parameter, EditorRequired]
-    public EventCallback<ListingInputModel> { get; set; }
+    public EventCallback<ListingInputModel> SubmitCallback { get; set; }
 
     [Parameter, EditorRequired]
-    public List<AccomodationTypeResponse> AccomodationsTypes { get; set; }
+    public string SubmitText { get; set; }
+
+    [Parameter, EditorRequired]
+    public IReadOnlyList<AccomodationTypeResponse> AccomodationsTypes { get; set; }
 
 
     private void HandleSubmit()
     {
-
+        SubmitCallback.InvokeAsync(Model);
     }
 
     private void Cancel()
