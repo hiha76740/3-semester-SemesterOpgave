@@ -49,11 +49,19 @@
     {
         try
         {
+            var status = "";
+
+            if (model.Status == true)
+                status = "Active";
+            else
+                status = "Inactive";
+
             var request = new UpdateListingRequest(
                 model.ListingName,
                 model.DailyPrice,
                 model.HouseRules,
                 model.AccomodationType,
+                status,
                 model.RowVersion
             );
 

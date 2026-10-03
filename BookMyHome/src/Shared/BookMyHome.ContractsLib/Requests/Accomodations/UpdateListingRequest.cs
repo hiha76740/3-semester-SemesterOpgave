@@ -5,5 +5,6 @@ public record UpdateListingRequest(
     decimal DailyPrice,
     string HouseRules,
     string AccomodationType,
+    string Status,
     byte[] RowVersion
     );

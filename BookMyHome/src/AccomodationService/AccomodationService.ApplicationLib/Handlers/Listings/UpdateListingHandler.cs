@@ -31,10 +31,16 @@ public class UpdateListingHandler(IAccomodationRepository repo) : IUpdateListing
             if (listing == null)
                 throw new NotFoundException("Listing not found");
 
-            var isValid = Enum.TryParse<AccomodationType>(command.AccomodationType, out var accomodationType);
+            var typeIsValid = Enum.TryParse<AccomodationType>(command.AccomodationType, out var accomodationType);
 
-            if (isValid == false)
+           
+            if (typeIsValid == false)
                 throw new NotFoundException("Accomodation Type not found");
+
+            var statusIsValid = Enum.TryParse<ListingStatus>(command.AccomodationType, out var listingStatus);
+
+            if (statusIsValid == false)
+                throw new NotFoundException("Listing status not found");
 
             bool changeMade = false;
 
@@ -63,6 +69,12 @@ public class UpdateListingHandler(IAccomodationRepository repo) : IUpdateListing
             {
                 accomodation.UpdateAccomodationType(listingId, accomodationType);
                 changeMade = true;
+            }
+
+            if (listingStatus != listing.Status)
+            {
+                accomodation.UpdateListingStatus(listingId, listingStatus);
+                changeMade |= true;
             }
 
 

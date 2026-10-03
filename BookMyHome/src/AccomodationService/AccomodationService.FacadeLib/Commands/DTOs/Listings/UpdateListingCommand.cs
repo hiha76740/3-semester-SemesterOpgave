@@ -8,5 +8,6 @@ public record UpdateListingCommand(
     decimal DailyPrice,
     string HouseRules,
     string AccomodationType,
+    string status,
     byte[] RowVersion
     );

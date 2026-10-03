@@ -8,6 +8,7 @@
         public decimal DailyPrice { get; set; } = 0;
         public string HouseRules { get; set; } = string.Empty;
         public string AccomodationType { get; set; } = string.Empty;
+        public bool Status { get; set; } = true;
         public byte[] RowVersion { get; set; } = [];
 
     }

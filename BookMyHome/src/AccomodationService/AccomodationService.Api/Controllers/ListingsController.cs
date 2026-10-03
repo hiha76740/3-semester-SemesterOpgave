@@ -223,6 +223,7 @@ namespace AccomodationService.Api.Controllers
                     request.DailyPrice,
                     request.HouseRules,
                     request.AccomodationType,
+                    request.Status,
                     request.RowVersion
                     );
 

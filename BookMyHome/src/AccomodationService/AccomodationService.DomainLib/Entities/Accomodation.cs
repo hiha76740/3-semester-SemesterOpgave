@@ -18,6 +18,12 @@ public class Accomodation
     private readonly List<Facility> _facilities = [];
     public IReadOnlyList<Facility> facilities => _facilities.AsReadOnly();
 
+    public void UpdateListingStatus(ListingId id, ListingStatus newStatus)
+    {
+        var listing = GetListing(id);
+
+        listing.UpdateStatus(newStatus);
+    }
 
     public void UpdateStatus(AccomodationStatus newStatus)
     {
