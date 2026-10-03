@@ -1,4 +1,5 @@
-﻿using BookMyHome.ContractsLib.Responses.Accomodations;
+﻿using BookMyHome.ContractsLib.Requests.Accomodations;
+using BookMyHome.ContractsLib.Responses.Accomodations;
 
 namespace BookMyHome.Web.ServiceInterfaces
 {
@@ -12,5 +13,6 @@ namespace BookMyHome.Web.ServiceInterfaces
         Task<IReadOnlyList<ListingResponse>> GetAllAvailiableListingsByPeriod(DateOnly start, DateOnly end);
         Task<IReadOnlyList<ListingResponse>> GetAccomodationListings(Guid accomodationId);
         Task<IReadOnlyList<AccomodationTypeResponse>> GetAllAccomodationTypes();
+        Task<int> UpdateListing(Guid accomodationId, Guid listingId, UpdateListingRequest request);
     }
 }
