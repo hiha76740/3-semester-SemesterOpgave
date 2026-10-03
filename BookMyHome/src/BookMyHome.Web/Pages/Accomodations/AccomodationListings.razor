@@ -4,7 +4,9 @@
 
 @foreach (var listing in Listings)
 {
-    <ListingCardComponent Listing="listing" SeeDetailsNavigation=@($"/listing/{listing.ListingId}/edit") NavigationButtonText="Rediger" />
+    <ListingCardComponent Listing="listing"
+                          ButtonNavigationPath=@($"/listing/{listing.ListingId}/edit")
+                          NavigationButtonText="Rediger" />
 }
 
 @code {
