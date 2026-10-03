@@ -64,7 +64,7 @@
                         <RadzenLabel Text="Vælg facilities" Component="DropDownMultipleFacilties" />
                     </RadzenColumn>
                     <RadzenColumn Size="12" SizeMD="8">
-                        <RadzenDropDown @bind-Value=@Model.Facilities
+                        <RadzenDropDown @bind-Value=@Model.FacilitiesIds
                                         Data=@Facilities
                                         TextProperty="@nameof(FacilityResponse.Name)"
                                         ValueProperty="@nameof(FacilityResponse.Id)"

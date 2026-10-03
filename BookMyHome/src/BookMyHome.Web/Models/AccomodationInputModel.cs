@@ -2,12 +2,13 @@
 {
     public class AccomodationInputModel
     {
+        public Guid AccomodationId { get; set; } = Guid.Empty;
         public string Title { get; set; } = string.Empty;
         public string Street { get; set; } = string.Empty;
         public string PostalCode { get; set; } = string.Empty;
         public string City { get; set; } = string.Empty;
         public string Country { get; set; } = string.Empty;
 
-        public List<Guid> Facilities { get; set; } = [];
+        public List<Guid> FacilitiesIds { get; set; } = [];
     }
 }
