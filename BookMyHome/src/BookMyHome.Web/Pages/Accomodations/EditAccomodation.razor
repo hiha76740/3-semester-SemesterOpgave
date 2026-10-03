@@ -37,7 +37,11 @@
         model.City = response.City;
         model.Country = response.Country;
         model.FacilitiesIds = response.Facilities.Select(f => f.Id).ToList();
-        model.Status = response.Status;
+
+        if (response.Status == "Active")
+            model.Status = true;
+        else
+            model.Status = false;
     }
 
     private async Task Update(AccomodationInputModel model)
@@ -50,9 +54,17 @@
 
         try
         {
+
             // Status
-            if (model.Status != response.Status)
-                await Service.UpdateAccomodationStatusAsync(model.AccomodationId, model.Status);
+            var status = "";
+
+            if (model.Status == true)
+                status = "Active";
+            else
+                status = "Inactive";
+
+            if (status != response.Status)
+                await Service.UpdateAccomodationStatusAsync(model.AccomodationId, status);
 
 
             // Facilities
@@ -78,7 +90,8 @@
                 }
             }
 
-            await Dialog.Alert("Accomodation updated successfully", "Information");
+            await Dialog.Alert("Accomodation updated successfully", "Success");
+            NavigationManager.NavigateTo("/accomodations");
         }
         catch (Exception ex)
         {
