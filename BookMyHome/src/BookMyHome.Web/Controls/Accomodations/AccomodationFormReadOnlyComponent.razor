@@ -53,7 +53,7 @@
                         <RadzenLabel Text="Land" Component="Country" />
                     </RadzenColumn>
                     <RadzenColumn Size="12" SizeMD="8">
-                        <RadzenTextBox Name="Country" @bind-Value=@Model.Country Style="display: block; width: 100%;" ReadOnly="true"/>
+                        <RadzenTextBox Name="Country" @bind-Value=@Model.Country Style="display: block; width: 100%;" ReadOnly="true" />
                         <RadzenRequiredValidator Component="Country" Text="Country is required." Style="position: absolute" />
                     </RadzenColumn>
                 </RadzenRow>
@@ -75,6 +75,9 @@
                                         Style="width: 100%; max-width: 400px;" />
                     </RadzenColumn>
                 </RadzenRow>
+            </article>
+            <article>
+                <RadzenSwitch @bind-Value=@status />
             </article>
             <RadzenRow AlignItems="AlignItems.Center" class="rz-mt-4">
                 <RadzenColumn Size="12" Offset="0" SizeMD="8" OffsetMD="4">
@@ -104,8 +107,16 @@
     [Parameter, EditorRequired]
     public string CancelPath { get; set; }
 
+    private bool status;
+
     private void HandleSubmit()
     {
+        if (status == true)
+            Model.Status = "Active";
+
+        else if (status == false)
+            Model.Status = "Inactive";
+
         SubmitCallback.InvokeAsync(Model);
     }
 
