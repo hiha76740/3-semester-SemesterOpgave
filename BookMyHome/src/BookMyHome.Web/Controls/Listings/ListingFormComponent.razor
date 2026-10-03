@@ -1,0 +1,86 @@
+﻿<RadzenCard class="rz-my-12 rz-mx-auto rz-p-4 rz-p-md-12" style="max-width: 600px;">
+    <RadzenTemplateForm TItem="ListingInputModel" Data=@Model Submit=@HandleSubmit>
+        <RadzenStack Gap="1rem">
+            <article>
+                <RadzenText TextStyle="TextStyle.DisplayH4">Generelt</RadzenText>
+                <RadzenRow AlignItems="AlignItems.Center" RowGap="0.25rem">
+                    <RadzenColumn Size="12" SizeMD="4" class="rz-text-align-start rz-text-align-md-end">
+                        <RadzenLabel Text="Listing Titel" Component="ListingName" />
+                    </RadzenColumn>
+                    <RadzenColumn Size="12" SizeMD="8">
+                        <RadzenTextBox Name="ListingName" @bind-Value=@Model.ListingName Style="display: block; width: 100%;" />
+                        <RadzenRequiredValidator Component="ListingName" Text="Listing title is required." Style="position: absolute" />
+                    </RadzenColumn>
+                </RadzenRow>
+                <br />
+                <RadzenRow AlignItems="AlignItems.Center" RowGap="0.25rem">
+                    <RadzenColumn Size="12" SizeMD="4" class="rz-text-align-start rz-text-align-md-end">
+                        <RadzenLabel Text="Daglig pris" Component="DailyPrice" />
+
+                    </RadzenColumn>
+                    <RadzenColumn Size="12" SizeMD="8">
+                        <RadzenTextBox Name="DailyPrice" @bind-Value=@Model.DailyPrice Style="display: block; width: 100%;" />
+                        <RadzenRequiredValidator Component="DailyPrice" Text="Daily price is required." Style="position: absolute" />
+                        <RadzenNumericRangeValidator Component="DailyPrice" Min="0" Text="Daily price is not valid" Style="position: absolute" />
+                    </RadzenColumn>
+                </RadzenRow>
+                <br />
+                <RadzenRow AlignItems="AlignItems.Center" RowGap="0.25rem">
+                    <RadzenColumn Size="12" SizeMD="4" class="rz-text-align-start rz-text-align-md-end">
+                        <RadzenLabel Text="Hus regler" Component="HouseRules" />
+                    </RadzenColumn>
+                    <RadzenColumn Size="12" SizeMD="8">
+                        <RadzenTextBox Name="HouseRules" @bind-Value=@Model.HouseRules Style="display: block; width: 100%;" />
+                        <RadzenRequiredValidator Component="HouseRules" Text="House rules is required." Style="position: absolute" />
+                    </RadzenColumn>
+                </RadzenRow>
+            </article>
+            <article>
+                <RadzenText TextStyle="TextStyle.DisplayH4">Type</RadzenText>
+                <RadzenRow AlignItems="AlignItems.Center" RowGap="0.25rem">
+                    <RadzenColumn Size="12" SizeMD="8">
+                        <RadzenRadioButtonList @bind-Value="Model.AccomodationType" TValue="string">
+                            <Items>
+                                @foreach (var type in AccomodationsTypes)
+                                {
+                                    <RadzenRadioButtonListItem Text="@type.Type" Value="@type.Type" />
+                                }
+                            </Items>
+                        </RadzenRadioButtonList>
+                    </RadzenColumn>
+                </RadzenRow>
+            </article>
+            <br />
+            <RadzenRow AlignItems="AlignItems.Center" class="rz-mt-4">
+                <RadzenColumn Size="12" Offset="0" SizeMD="8" OffsetMD="4">
+                    <RadzenButton ButtonType="ButtonType.Submit" Text="@SubmitText" ButtonStyle="ButtonStyle.Primary" />
+                </RadzenColumn>
+                <RadzenColumn Size="12" Offset="0" SizeMD="8" OffsetMD="0">
+                    <RadzenButton ButtonType="ButtonType.Button" Text="Cancel" ButtonStyle="ButtonStyle.Secondary" Click="Cancel" />
+                </RadzenColumn>
+            </RadzenRow>
+        </RadzenStack>
+    </RadzenTemplateForm>
+</RadzenCard>
+
+@code {
+    [Parameter, EditorRequired]
+    public ListingInputModel Model { get; set; }
+
+    [Parameter, EditorRequired]
+    public EventCallback<ListingInputModel> { get; set; }
+
+    [Parameter, EditorRequired]
+    public List<AccomodationTypeResponse> AccomodationsTypes { get; set; }
+
+
+    private void HandleSubmit()
+    {
+
+    }
+
+    private void Cancel()
+    {
+
+    }
+}
