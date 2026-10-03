@@ -54,7 +54,6 @@
 
         try
         {
-
             // Status
             var status = "";
 
@@ -65,7 +64,6 @@
 
             if (status != response.Status)
                 await Service.UpdateAccomodationStatusAsync(model.AccomodationId, status);
-
 
             // Facilities
             foreach (var facility in Facilities)
