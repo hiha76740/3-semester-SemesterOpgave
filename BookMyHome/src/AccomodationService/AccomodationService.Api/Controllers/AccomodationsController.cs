@@ -1,4 +1,5 @@
 ﻿using AccomodationService.Api.Mapper;
+using AccomodationService.FacadeLib.Commands.DTOs.Accomodations;
 using AccomodationService.FacadeLib.Commands.Interfaces.Accomodations;
 using AccomodationService.FacadeLib.Queries.Interfaces;
 using BookMyHome.ContractsLib.Requests.Accomodations;
@@ -15,7 +16,8 @@ namespace AccomodationService.Api.Controllers
     [ApiController]
     public class AccomodationsController(
         ICreateAccomodationHandler accomodationcreate,
-        IAccomodationQueries queries
+        IAccomodationQueries queries,
+        IUpdateAccomodationStatus updateAccomodationStatus
         ) : ControllerBase
     {
         [Authorize(Roles = "Host")]
@@ -71,10 +73,38 @@ namespace AccomodationService.Api.Controllers
                     foreach (var item in list)
                     {
                         response.Add(item.AsResponse());
-                    } 
+                    }
                 }
 
                 return Ok(response);
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [Authorize(Roles = "Host")]
+        [HttpPut("status")]
+        [EndpointSummary("This endpoint will change the status of the accomodation")]
+        [EndpointDescription("Changes the status of the accomodation to active or inactive or returns not found if no accomodations was found")]
+        [ProducesResponseType(StatusCodes.Status200OK, Description = "Change has been made successfully")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while changing status")]
+        public async Task<ActionResult> ChangeStatus(UpdateAccomodationStatusRequest request)
+        {
+            try
+            {
+                var userId = GetCurrentUserId();
+
+                if (userId == null || HttpContext.User.FindFirstValue(ClaimTypes.Role) != "Host")
+                    return BadRequest("Invalid request");
+
+                var command = new UpdateAccomodationStatusCommand(request.AccomodationId, userId.Value, request.Status);
+
+                await updateAccomodationStatus.HandleAsync(command);
+
+                return Ok();
             }
             catch (Exception ex)
             {

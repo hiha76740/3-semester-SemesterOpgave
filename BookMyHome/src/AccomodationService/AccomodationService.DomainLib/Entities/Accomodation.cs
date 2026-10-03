@@ -19,6 +19,14 @@ public class Accomodation
     public IReadOnlyList<Facility> facilities => _facilities.AsReadOnly();
 
 
+    public void UpdateStatus(AccomodationStatus newStatus)
+    {
+        if (Status == newStatus)
+            throw new DomainException("new and old status can not be the same");
+
+        Status = newStatus;
+    }
+
     public void CreateListing(string listingName, decimal dailyPrice, string houseRules, AccomodationType type)
     {
         var listing = new Listing(this, listingName, dailyPrice, houseRules, type);
