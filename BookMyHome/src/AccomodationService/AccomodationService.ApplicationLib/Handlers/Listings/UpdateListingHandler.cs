@@ -36,22 +36,38 @@ public class UpdateListingHandler(IAccomodationRepository repo) : IUpdateListing
             if (isValid == false)
                 throw new NotFoundException("Accomodation Type not found");
 
-
+            bool changeMade = false;
 
             if (command.ListingName != listing.ListingName)
+            {
                 accomodation.UpdateListingName(listingId, command.ListingName);
+                changeMade = true;
+            }
+
 
             if (command.DailyPrice != listing.DailyPrice)
+            {
                 accomodation.UpdateListingDailyPrice(listingId, command.DailyPrice);
+                changeMade = true;
+            }
+
 
             if (command.HouseRules != listing.HouseRules)
+            {
                 accomodation.UpdateListingHouseRules(listingId, command.HouseRules);
+                changeMade = true;
+            }
+
 
             if (accomodationType != listing.Type)
+            {
                 accomodation.UpdateAccomodationType(listingId, accomodationType);
+                changeMade = true;
+            }
 
 
-            await repo.UpdateAsync(accomodation, listingId, command.RowVersion);
+            if (changeMade == true)
+                await repo.UpdateAsync(accomodation, listingId, command.RowVersion);
 
         }
         catch (Exception ex)
