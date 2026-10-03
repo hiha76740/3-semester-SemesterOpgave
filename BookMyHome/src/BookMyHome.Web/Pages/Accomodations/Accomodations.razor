@@ -2,6 +2,7 @@
 
 @inject IAccomodationService Service
 @inject NavigationManager NavigationManager
+@inject DialogService Dialog
 
 <RadzenStack Orientation="Orientation.Vertical" JustifyContent="JustifyContent.Start">
     <RadzenText TextStyle="TextStyle.DisplayH3">Mine Boliger</RadzenText>
@@ -23,7 +24,15 @@
 
     protected override async Task OnInitializedAsync()
     {
-        AccomodationsList = await Service.GetCurrentUserAccomodationsAsync();
+        try
+        {
+            AccomodationsList = await Service.GetCurrentUserAccomodationsAsync();
+        }
+        catch (Exception ex)
+        {
+            await Dialog.Alert(ex.Message, "Initial error");
+        }
+
     }
 
     private void Create()
