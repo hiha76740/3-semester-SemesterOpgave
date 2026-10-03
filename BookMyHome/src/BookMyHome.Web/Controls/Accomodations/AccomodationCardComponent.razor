@@ -14,7 +14,7 @@
                 <RadzenStack Orientation="Orientation.Horizontal" Gap="10px">
                     @foreach (var facility in Accomodation.Facilities)
                     {
-                        <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>@facility</b></RadzenText>
+                        <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>@facility.Name</b></RadzenText>
                     }
                 </RadzenStack>
             </RadzenColumn>
