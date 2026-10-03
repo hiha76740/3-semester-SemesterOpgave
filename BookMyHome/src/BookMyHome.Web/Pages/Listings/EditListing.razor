@@ -1,9 +1,13 @@
-﻿@page "/listing/{Id:Guid}/edit"
+﻿@page "/listing/{id:guid}/edit"
 
 @inject IListingService Service
 @inject DialogService Dialog
+@inject NavigationManager NavigationManager
 
-<ListingFormComponent Model="model" SubmitCallback="Update" SubmitText="Ok" AccomodationsTypes="AccomodationTypes"></ListingFormComponent>
+<ListingFormComponent Model="model"
+                      SubmitCallback="Update"
+                      SubmitText="Ok"
+                      AccomodationsTypes="AccomodationTypes" />
 
 
 @code {
@@ -24,7 +28,15 @@
             accomodationId = await Service.GetAccomodationIdByListingId(Id);
             listing = await Service.GetListingAsync(accomodationId.Value, Id);
             AccomodationTypes = await Service.GetAllAccomodationTypes();
+
+            model.ListingId = listing.ListingId;
             model.AccomodationId = accomodationId.Value;
+            model.ListingName = listing.ListingName;
+            model.DailyPrice = listing.DailyPrice;
+            model.HouseRules = listing.HouseRules;
+            model.AccomodationType = listing.AccomodationType;
+            model.RowVersion = listing.RowVersion;
+
         }
         catch (Exception ex)
         {
@@ -34,6 +46,27 @@
 
     private async Task Update(ListingInputModel model)
     {
-        
+        try
+        {
+            var request = new UpdateListingRequest(
+                model.ListingName,
+                model.DailyPrice,
+                model.HouseRules,
+                model.AccomodationType,
+                model.RowVersion
+            );
+
+            var responseCode = await Service.UpdateListing(model.AccomodationId, model.ListingId, request);
+
+            if (responseCode == 200)
+            {
+                await Dialog.Alert("Listing updated successfully", "Information");
+                NavigationManager.NavigateTo($"/accomodation/{model.AccomodationId}/listings");
+            }
+        }
+        catch (Exception ex)
+        {
+            await Dialog.Alert(ex.Message, "Update error");
+        }
     }
 }
