@@ -63,6 +63,8 @@
     </RadzenTemplateForm>
 </RadzenCard>
 
+@inject NavigationManager NavigationManager
+
 @code {
     [Parameter, EditorRequired]
     public ListingInputModel Model { get; set; }
@@ -72,6 +74,9 @@
 
     [Parameter, EditorRequired]
     public string SubmitText { get; set; }
+
+    [Parameter, EditorRequired]
+    public string CancelNavigationPath { get; set; }
 
     [Parameter, EditorRequired]
     public IReadOnlyList<AccomodationTypeResponse> AccomodationsTypes { get; set; }
@@ -84,6 +89,6 @@
 
     private void Cancel()
     {
-
+        NavigationManager.NavigateTo(CancelNavigationPath);
     }
 }
