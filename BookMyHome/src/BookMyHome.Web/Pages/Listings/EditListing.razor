@@ -3,7 +3,7 @@
 @inject IListingService Service
 @inject DialogService Dialog
 
-
+<ListingFormComponent Model="model" SubmitCallback="Update" SubmitText="Ok" AccomodationsTypes="AccomodationTypes"></ListingFormComponent>
 
 
 @code {
@@ -12,6 +12,7 @@
 
     private ListingResponse? listing = null;
     private Guid? accomodationId = null;
+    private IReadOnlyList<AccomodationTypeResponse> AccomodationTypes = [];
 
     private ListingInputModel model = new();
 
@@ -22,11 +23,17 @@
         {
             accomodationId = await Service.GetAccomodationIdByListingId(Id);
             listing = await Service.GetListingAsync(accomodationId.Value, Id);
-            model.AccomodationId = accomodationId;
+            AccomodationTypes = await Service.GetAllAccomodationTypes();
+            model.AccomodationId = accomodationId.Value;
         }
         catch (Exception ex)
         {
             await Dialog.Alert(ex.Message, "Initial error");
         }
+    }
+
+    private async Task Update(ListingInputModel model)
+    {
+        
     }
 }
