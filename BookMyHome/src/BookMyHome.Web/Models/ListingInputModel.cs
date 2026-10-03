@@ -3,10 +3,12 @@
     public class ListingInputModel
     {
         public string ListingName { get; set; } = string.Empty;
+        public Guid ListingId { get; set; } = Guid.Empty;
         public Guid AccomodationId { get; set; } = Guid.Empty;
         public decimal DailyPrice { get; set; } = 0;
         public string HouseRules { get; set; } = string.Empty;
         public string AccomodationType { get; set; } = string.Empty;
+        public byte[] RowVersion { get; set; } = [];
 
     }
 }
