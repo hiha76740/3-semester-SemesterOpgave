@@ -23,6 +23,7 @@
         try
         {
             accomodationTypes = await ListingService.GetAllAccomodationTypes();
+            model.AccomodationId = Id;
         }
         catch (Exception ex)
         {
