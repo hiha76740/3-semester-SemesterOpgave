@@ -1,0 +1,58 @@
+﻿@page "/accomodation/{id:guid}/listing/create"
+
+@inject IListingService ListingService
+@inject DialogService Dialog
+@inject NavigationManager NavigationManager
+
+<ListingFormComponent Model="model"
+                      SubmitCallback="Create"
+                      SubmitText="Opret"
+                      AccomodationsTypes="accomodationTypes"
+                      CancelNavigationPath="@($"/accomodation/{Id}/listings")" />
+
+@code {
+    [Parameter]
+    public Guid Id { get; set; }
+
+    private ListingInputModel model = new();
+
+    private IReadOnlyList<AccomodationTypeResponse> accomodationTypes = [];
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            accomodationTypes = await ListingService.GetAllAccomodationTypes();
+        }
+        catch (Exception ex)
+        {
+            await Dialog.Alert(ex.Message, "Initial error");
+        }
+
+    }
+
+    private async Task Create(ListingInputModel model)
+    {
+        try
+        {
+            var request = new CreateListingRequest(
+            model.AccomodationId,
+            model.ListingName,
+            model.DailyPrice,
+            model.HouseRules,
+            model.AccomodationType);
+
+            var responseCode = await ListingService.Create(request);
+
+            if (responseCode == 200)
+            {
+                await Dialog.Alert("Listing created successfully", "Information");
+                NavigationManager.NavigateTo($"/accomodation/{Id}/listings");
+            }
+        }
+        catch (Exception ex)
+        {
+            await Dialog.Alert(ex.Message, "Create error");
+        }
+    }
+}
