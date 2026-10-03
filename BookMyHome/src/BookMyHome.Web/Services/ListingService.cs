@@ -11,6 +11,20 @@ namespace BookMyHome.Web.Services
     {
         private readonly string baseUrl = "https://localhost:9012/";
 
+        async Task<int> IListingService.Create(CreateListingRequest createRequest)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Post, $"{baseUrl}api/v1/Listings")
+            {
+                Content = JsonContent.Create(createRequest)
+            };
+            
+            request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
+
+            using var response = await httpClient.SendAsync(request);
+
+            return (int)response.StatusCode;
+        }
+
         async Task<Guid> IListingService.GetAccomodationIdByListingId(Guid listingId)
         {
             var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}api/v1/Listings/{listingId}/accomodationId");
