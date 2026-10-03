@@ -17,8 +17,18 @@ public class Listing
 
     public AccomodationType Type { get; private set; }
 
+    public ListingStatus Status { get; private set; }
+
     public byte[] RowVersion { get; private set; } = [];
 
+    
+    internal void UpdateStatus(ListingStatus newStatus)
+    {
+        if (Status == newStatus)
+            throw new DomainException("Old and new status can not be the same");
+
+        Status = newStatus;
+    }
 
     internal void UpdateAccomodationType(AccomodationType newType)
     {
@@ -72,6 +82,7 @@ public class Listing
         HouseRules = houseRules;
         Type = type;
         Accomodation = accomodation;
+        Status = ListingStatus.Active;
     }
 
 

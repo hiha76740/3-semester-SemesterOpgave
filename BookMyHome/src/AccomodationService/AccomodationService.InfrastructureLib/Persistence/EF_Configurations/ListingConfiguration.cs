@@ -20,5 +20,8 @@ internal class ListingConfiguration : IEntityTypeConfiguration<Listing>
 
         builder.Property(l => l.RowVersion)
             .IsRowVersion();
+
+        builder.Property(l => l.Status)
+            .HasConversion<string>();
     }
 }
