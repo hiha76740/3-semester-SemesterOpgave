@@ -1,3 +1,3 @@
 ﻿namespace BookMyHome.ContractsLib.Requests.Accomodations;
 
-public record UpdateAccomodationStatusRequest(Guid AccomodationId, string Status);
+public record UpdateAccomodationStatusRequest(string Status);

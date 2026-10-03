@@ -86,12 +86,12 @@ namespace AccomodationService.Api.Controllers
         }
 
         [Authorize(Roles = "Host")]
-        [HttpPut("status")]
+        [HttpPut("{accomodationId:guid}/status")]
         [EndpointSummary("This endpoint will change the status of the accomodation")]
         [EndpointDescription("Changes the status of the accomodation to active or inactive or returns not found if no accomodations was found")]
         [ProducesResponseType(StatusCodes.Status200OK, Description = "Change has been made successfully")]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while changing status")]
-        public async Task<ActionResult> ChangeStatus(UpdateAccomodationStatusRequest request)
+        public async Task<ActionResult> ChangeStatus(Guid accomodationId, UpdateAccomodationStatusRequest request)
         {
             try
             {
@@ -100,7 +100,7 @@ namespace AccomodationService.Api.Controllers
                 if (userId == null || HttpContext.User.FindFirstValue(ClaimTypes.Role) != "Host")
                     return BadRequest("Invalid request");
 
-                var command = new UpdateAccomodationStatusCommand(request.AccomodationId, userId.Value, request.Status);
+                var command = new UpdateAccomodationStatusCommand(accomodationId, userId.Value, request.Status);
 
                 await updateAccomodationStatus.HandleAsync(command);
 
