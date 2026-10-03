@@ -2,15 +2,12 @@
 @inject IListingService service
 @inject NavigationManager navigationManager
 @inject ListingState listingState
+@inject DialogService Dialog
 
 
 @if (listing == null)
 {
     <p>Indlæser listing...</p>
-}
-else if (error != null)
-{
-    <p>@error</p>
 }
 else
 {
@@ -55,7 +52,6 @@ else
     public Guid Id { get; set; }
 
     private Guid? accomodationId = null;
-    private string? error = null;
     private ListingResponse? listing;
 
     async protected override Task OnInitializedAsync()
@@ -67,7 +63,7 @@ else
         }
         catch (Exception ex)
         {
-            error = ex.Message;
+            await Dialog.Alert(ex.Message, "Initial error");
         }
     }
 
