@@ -46,7 +46,9 @@
     <RadzenText TextStyle="TextStyle.DisplayH4">Ledige boliger</RadzenText>
     @foreach (var listing in FilteredList)
     {
-        <ListingCardComponent Listing="@listing" SeeDetailsNavigation="@($"/listing/{listing.ListingId}")" NavigationButtonText="Se detaljer" />
+        <ListingCardComponent Listing="@listing"
+                              ButtonNavigationPath="@($"/listing/{listing.ListingId}")"
+                              NavigationButtonText="Se detaljer" />
     }
 
 </section>
