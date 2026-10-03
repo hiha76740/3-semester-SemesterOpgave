@@ -37,7 +37,7 @@ public class UpdateListingHandler(IAccomodationRepository repo) : IUpdateListing
             if (typeIsValid == false)
                 throw new NotFoundException("Accomodation Type not found");
 
-            var statusIsValid = Enum.TryParse<ListingStatus>(command.AccomodationType, out var listingStatus);
+            var statusIsValid = Enum.TryParse<ListingStatus>(command.status, out var listingStatus);
 
             if (statusIsValid == false)
                 throw new NotFoundException("Listing status not found");
