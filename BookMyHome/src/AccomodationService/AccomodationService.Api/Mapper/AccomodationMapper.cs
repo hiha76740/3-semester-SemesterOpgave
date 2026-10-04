@@ -7,7 +7,7 @@ namespace AccomodationService.Api.Mapper
 {
     public static class AccomodationMapper
     {
-        public static AccomodationResponse AsResponse(this AccomodationDto Dto, string? url)
+        public static AccomodationResponse AsResponse(this AccomodationDto Dto, String? url)
         {
             var output = new AccomodationResponse(
                 Dto.AccomodationId,

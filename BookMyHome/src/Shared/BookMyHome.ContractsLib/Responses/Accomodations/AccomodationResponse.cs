@@ -9,5 +9,5 @@ public record AccomodationResponse(
     string Country,
     IReadOnlyList<FacilityResponse> Facilities,
     string Status,
-    string? ImageUrl
+    String? ImageUrl
     );
