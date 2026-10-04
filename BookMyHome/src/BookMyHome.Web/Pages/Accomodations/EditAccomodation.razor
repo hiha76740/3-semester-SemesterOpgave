@@ -104,10 +104,26 @@
 
     private async Task Upload(IBrowserFile? selectedFile)
     {
-        if (selectedFile == null)
-            return;
+        try
+        {
+            if (selectedFile == null)
+                return;
 
-        await Service.UploadImage(Id, selectedFile);
+            var statusCode = await Service.UploadImage(Id, selectedFile);
+
+            if (statusCode == 200)
+            {
+                await Dialog.Alert("Billede gemt korrekt", "Information");
+                NavigationManager.NavigateTo("/accomodations");
+            }
+            
+
+        }
+        catch (Exception ex)
+        {
+            await Dialog.Alert(ex.Message, "Upload error");
+        }
+
 
     }
 }
