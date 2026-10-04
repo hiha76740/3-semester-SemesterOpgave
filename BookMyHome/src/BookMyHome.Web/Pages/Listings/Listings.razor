@@ -3,13 +3,12 @@
 @inject BookingState BookingState
 @inject IFacilityService FacilityService
 
-<section>
-    <h3>Find dit næste ophold</h3>
-
+<section>  
+    <RadzenText TextStyle="TextStyle.H4" Text="Find dit næste ophold" />
     <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Start" Gap="0.5rem" class="rz-p-sm-12">
         <RadzenStack Gap="0.5rem">
-            <RadzenLabel Text="Lokation" Component="LocationSearch" />
-            <RadzenTextBox Placeholder="Søg" Style="width: 100%; max-width: 400px;" Name="LocationSearch" Change="@(_ => OnChange())" @bind-Value="sortLocation" Immediate="true" />
+            <RadzenLabel Text="Sorter efter lokation" Component="LocationSearch" />
+            <RadzenTextBox Style="width: 100%; max-width: 400px;" Name="LocationSearch" Change="@(_ => OnChange())" @bind-Value="sortLocation" Immediate="true" />
             <RadzenLabel Text="Sorter efter pris" Component="DropDownSortPrice" />
 
             <RadzenDropDown @bind-Value=@sortPrice
@@ -43,7 +42,7 @@
 </section>
 
 <section>
-    <RadzenText TextStyle="TextStyle.DisplayH4">Ledige boliger</RadzenText>
+    <RadzenText TextStyle="TextStyle.DisplayH3">Ledige boliger</RadzenText>
     @foreach (var listing in FilteredList)
     {
         <ListingCardComponent Listing="@listing"
@@ -103,7 +102,7 @@
     {
         IEnumerable<ListingResponse> query = ListingsList;
 
-        // Location
+        // Lokation
         if (string.IsNullOrWhiteSpace(sortLocation) == false)
         {
             query = query
