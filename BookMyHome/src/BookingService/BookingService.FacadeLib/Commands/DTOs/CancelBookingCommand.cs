@@ -1,3 +1,3 @@
 ﻿namespace BookingService.FacadeLib.Commands.DTOs;
 
-public record CancelBookingCommand(Guid BookingId, Guid GuestId); 
+public record CancelBookingCommand(Guid BookingId, Guid UserId); 

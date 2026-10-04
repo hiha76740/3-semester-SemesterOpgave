@@ -22,6 +22,19 @@ public class AccomodationService(HttpClient httpClient) : IAccomodationService
         return exists;
     }
 
+    async Task<Guid> IAccomodationService.GetAccmodationHostIdAsync(AccomodationId accomodationId)
+    {
+        var request = new HttpRequestMessage(HttpMethod.Get, $"api/v1/Accomodations/hostid?accomodationId={accomodationId}");
+
+        var response = await httpClient.SendAsync(request);
+
+        response.EnsureSuccessStatusCode();
+
+        var id = await response.Content.ReadFromJsonAsync<Guid>();
+
+        return id;
+    }
+
     async Task<AccomodationSummaryResponse> IAccomodationService.GetAccomodationSummaryAsync(Guid accomodationId, Guid listingId)
     {
         var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}api/v1/Accomodations/summary?accomodationId={accomodationId}&listingId={listingId}");
