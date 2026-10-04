@@ -74,7 +74,7 @@ namespace BookMyHome.Web.Services
             response.EnsureSuccessStatusCode();
         }
 
-        async Task IAccomodationService.UploadImage(Guid accomodationId, IBrowserFile selectedFile)
+        async Task<int> IAccomodationService.UploadImage(Guid accomodationId, IBrowserFile selectedFile)
         {
             const long maxFileSize = 5 * 1024 * 1024;
 
@@ -93,7 +93,9 @@ namespace BookMyHome.Web.Services
 
             using var response = await httpClient.SendAsync(request);
 
-            response.EnsureSuccessStatusCode();
+            return (int)response.StatusCode;
+
+
         }
     }
 }
