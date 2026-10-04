@@ -7,7 +7,8 @@ public interface IBookingService
 {
     Task<int> MakeBookingAsync(CreateBookingRequest request);
 
-    Task<IReadOnlyList<UserBookingResponse>> GetUserBookingsAsync();
+    Task<IReadOnlyList<BookingSummaryResponse>> GetUserBookingsAsync();
 
     Task CancelBookingAsync(Guid id);
+    Task<IReadOnlyList<BookingSummaryResponse>> GetAccomodationBookingsAsync(Guid id);
 }
