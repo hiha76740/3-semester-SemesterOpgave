@@ -93,6 +93,9 @@ namespace BookMyHome.Web.Services
 
             using var response = await httpClient.SendAsync(request);
 
+            // TODO: find en måde at få fejlen med over hvis der er en.
+            //var error = await response.Content.ReadAsStringAsync();
+
             return (int)response.StatusCode;
 
 
