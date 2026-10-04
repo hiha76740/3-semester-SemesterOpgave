@@ -202,7 +202,7 @@ namespace BookingService.Api.Controllers
 
 
 
-        [Authorize(Roles = "Guest")]
+        [Authorize]
         [HttpPut("{bookingId:guid}/cancel")]
         [EndpointSummary("This endpoint will cancel a booking")]
         [EndpointDescription("Sets the status of the requested booking to cancelled")]
