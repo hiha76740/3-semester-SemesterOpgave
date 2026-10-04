@@ -5,8 +5,13 @@
 <RadzenCard class="rz-my-12 rz-mx-auto rz-p-4 rz-p-md-12" style="max-width: 600px;">
     <RadzenTemplateForm TItem="AccomodationInputModel" Data=@Model Submit=@HandleSubmit>
         <RadzenStack Gap="1rem">
+            <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" Gap="1rem" class="rz-p-4">
+                @if (Model.ImageUrl != null)
+                {
+                    <img src="@Model.ImageUrl" alt="Facility image" style="max-width: 500px; height: auto" />
+                }
+            </RadzenStack>
             <article>
-                <img src="https://localhost:9012/Images/@Model.ImageFileName" alt="Facility image" style="max-width: 600px; height: auto" />
                 <InputFile OnChange="SelectImage"
                            accept="image/png,image/jpeg" />
                 <button class="btn btn-primary" type="button" @onclick="HandleUploadCallback"
