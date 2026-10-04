@@ -21,6 +21,7 @@
         </RadzenRow>
     </RadzenCard>
     <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.End" Gap="0">
+        <RadzenButton Variant="Variant.Text" Text="Se bookings" Click="@Bookings" />
         <RadzenButton Variant="Variant.Text" Text="Se listings" Click="@GoToListings" />
         <RadzenButton Variant="Variant.Text" Text="Rediger" Click="@Edit" />
     </RadzenStack>
@@ -39,4 +40,8 @@
     {
         NavigationManager.NavigateTo($"/accomodation/{Accomodation.AccomodationId}");
     }
+
+    private void Bookings()
+    {
+        NavigationManager.NavigateTo($"/accomodation/{Accomodation.AccomodationId}/bookings");    }
 }
