@@ -20,7 +20,7 @@ public class CancelBookingHandler(IBookingRepository bookingRepo, IAccomodationS
 
         var hostId = await accomodationService.GetAccmodationHostIdAsync(booking.AccomodationId);
 
-        if (booking.GuestId != userId || hostId != command.UserId)
+        if (booking.GuestId != userId && hostId != command.UserId)
             throw new UnauthorizedAccessException("You do not have permission to cancel this booking");
 
         booking.CancelBooking();
