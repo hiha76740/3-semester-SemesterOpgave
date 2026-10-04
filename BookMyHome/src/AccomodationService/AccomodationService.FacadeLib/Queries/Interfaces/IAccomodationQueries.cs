@@ -14,4 +14,6 @@ public interface IAccomodationQueries
 
     Task<AccomodationSummaryDto?> GetAccomodationSummaryAsync(Guid accomodationId, Guid listingId);
     IReadOnlyList<AccomodationTypeDto> GetAllAccomodationTypes();
+
+    Task<Guid?> GetAccomodationHostId(Guid accomdationId);
 }

@@ -39,6 +39,17 @@ public class AccomodationQueryHandlerIMPL(AccomodationDbContext db) : IAccomodat
             .FirstOrDefaultAsync();
     }
 
+    async Task<Guid?> IAccomodationQueries.GetAccomodationHostId(Guid accomdationId)
+    {
+        var accomodationKey = new AccomodationId(accomdationId);
+
+        return await db.Accomodations
+            .AsNoTracking()
+            .Where(a => a.Id == accomodationKey)
+            .Select(a => a.HostId.Value)
+            .FirstOrDefaultAsync();
+    }
+
     async Task<AccomodationSummaryDto?> IAccomodationQueries.GetAccomodationSummaryAsync(Guid accomodationId, Guid listingId)
     {
         var accomodationKey = new AccomodationId(accomodationId);

@@ -4,7 +4,6 @@ using AccomodationService.FacadeLib.Commands.Interfaces.Accomodations;
 using AccomodationService.FacadeLib.Queries.Interfaces;
 using BookMyHome.ContractsLib.Requests.Accomodations;
 using BookMyHome.ContractsLib.Responses.Accomodations;
-using BookMyHome.ContractsLib.Responses.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel;
@@ -220,6 +219,30 @@ namespace AccomodationService.Api.Controllers
             }
         }
 
+
+        [HttpGet("hostid")]
+        [EndpointSummary("This endpoint will get the host id of the requested accomodation")]
+        [EndpointDescription("Gets the host id of the requested accomodation or returns not found if accomodation was not found")]
+        [ProducesResponseType<Guid>(StatusCodes.Status200OK, "application/json", Description = "Returns host id of the requested accomodation")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while getting host id for requested accomodation")]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Description = "Requested accomodation or Id was not found")]
+        public async Task<ActionResult<Guid>> GetAccomodationHostId(
+           [Required][Description("Id of the accomodation you want to find")] Guid accomodationId)
+        {
+            try
+            {
+                var id = await queries.GetAccomodationHostId(accomodationId);
+
+                if (id == null)
+                    NotFound("Id or accomodation not found");
+
+                return Ok(id);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
         // TODO: Delete this after it has been moved into shared
         private Guid? GetCurrentUserId()
