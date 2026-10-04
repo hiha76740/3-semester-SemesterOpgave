@@ -21,9 +21,23 @@ public class BookingService(HttpClient httpClient) : IBookingService
         response.EnsureSuccessStatusCode();
     }
 
-    Task<IReadOnlyList<BookingSummaryResponse>> IBookingService.GetAccomodationBookingsAsync(Guid id)
+    async Task<IReadOnlyList<BookingSummaryResponse>> IBookingService.GetAccomodationBookingsAsync(Guid accomdationId)
     {
-        throw new NotImplementedException();
+        var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}api/v1/Bookings/accomdation/bookings?accomdationId={accomdationId}");
+
+        request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
+
+        using var response = await httpClient.SendAsync(request);
+
+        response.EnsureSuccessStatusCode();
+
+        var bookings = await response.Content.ReadFromJsonAsync<IReadOnlyList<BookingSummaryResponse>>();
+
+        if (bookings == null)
+            throw new InvalidOperationException("Could not deserialize bookings");
+
+        return bookings;
+
     }
 
     async Task<IReadOnlyList<BookingSummaryResponse>> IBookingService.GetUserBookingsAsync()
