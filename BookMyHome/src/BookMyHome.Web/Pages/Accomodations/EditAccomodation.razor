@@ -38,7 +38,7 @@
         model.City = response.City;
         model.Country = response.Country;
         model.FacilitiesIds = response.Facilities.Select(f => f.Id).ToList();
-        model.ImageUrl = response.ImageUrl
+        model.ImageUrl = response.ImageUrl;
 
         if (response.Status == "Active")
             model.Status = true;
