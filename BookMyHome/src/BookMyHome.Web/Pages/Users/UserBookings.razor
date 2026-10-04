@@ -7,17 +7,17 @@
 
 @if (Bookings != null)
 {
-    <RadzenDataGrid Data="@Bookings" TItem="UserBookingResponse">
+    <RadzenDataGrid Data="@Bookings" TItem="BookingSummaryResponse">
         <Columns>
-            <RadzenDataGridColumn Property="@nameof(UserBookingResponse.ListingName)" Title="Titel" Width="160px" />
-            <RadzenDataGridColumn Property="@nameof(UserBookingResponse.ListingType)" Title="Bolig type" Frozen="true" Width="160px" />
-            <RadzenDataGridColumn Property="@nameof(UserBookingResponse.City)" Title="By" Frozen="true" Width="160px" />
-            <RadzenDataGridColumn Property="@nameof(UserBookingResponse.Country)" Title="Land" Frozen="true" Width="160px" />
-            <RadzenDataGridColumn Property="@nameof(UserBookingResponse.StartDate)" Title="Start dato" Frozen="true" Width="160px" />
-            <RadzenDataGridColumn Property="@nameof(UserBookingResponse.EndDate)" Title="Slut dato" Frozen="true" Width="160px" />
-            <RadzenDataGridColumn Property="@nameof(UserBookingResponse.Price)" Title="Pris" Frozen="true" Width="160px" />
+            <RadzenDataGridColumn Property="@nameof(BookingSummaryResponse.ListingName)" Title="Titel" Width="160px" />
+            <RadzenDataGridColumn Property="@nameof(BookingSummaryResponse.ListingType)" Title="Bolig type" Frozen="true" Width="160px" />
+            <RadzenDataGridColumn Property="@nameof(BookingSummaryResponse.City)" Title="By" Frozen="true" Width="160px" />
+            <RadzenDataGridColumn Property="@nameof(BookingSummaryResponse.Country)" Title="Land" Frozen="true" Width="160px" />
+            <RadzenDataGridColumn Property="@nameof(BookingSummaryResponse.StartDate)" Title="Start dato" Frozen="true" Width="160px" />
+            <RadzenDataGridColumn Property="@nameof(BookingSummaryResponse.EndDate)" Title="Slut dato" Frozen="true" Width="160px" />
+            <RadzenDataGridColumn Property="@nameof(BookingSummaryResponse.Price)" Title="Pris" Frozen="true" Width="160px" />
 
-            <RadzenDataGridColumn Titem="UserBookingResponse"
+            <RadzenDataGridColumn Titem="BookingSummaryResponse"
                                   Title="Handling"
                                   Sortable="false"
                                   Filterable="false">
@@ -36,7 +36,7 @@
 
 
 @code {
-    private IReadOnlyList<UserBookingResponse>? Bookings;
+    private IReadOnlyList<BookingSummaryResponse>? Bookings;
 
     protected override async Task OnInitializedAsync()
     {
@@ -48,7 +48,7 @@
 
     }
 
-    private async Task Cancel(UserBookingResponse booking)
+    private async Task Cancel(BookingSummaryResponse booking)
     {
         var result = await DialogService.Confirm(
             $"Er du sikker på du vil afbestille {booking.ListingName}? ",
