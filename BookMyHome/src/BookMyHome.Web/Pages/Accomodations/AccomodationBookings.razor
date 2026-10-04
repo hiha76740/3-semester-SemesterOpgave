@@ -16,7 +16,15 @@
 
     protected override async Task OnInitializedAsync()
     {
-        Bookings = await Service.GetAccomodationBookingsAsync(Id);
+        try
+        {
+            Bookings = await Service.GetAccomodationBookingsAsync(Id);
+        }
+        catch (Exception ex)
+        {
+            await Dialog.Alert(ex.Message, "Initial error");
+        }
+
     }
 
     private async Task Cancel(BookingSummaryResponse booking)
@@ -33,8 +41,16 @@
 
         if (result == true)
         {
-            await Service.CancelBookingAsync(booking.BookingId);
-            Bookings = await Service.GetAccomodationBookingsAsync(Id);
+            try
+            {
+                await Service.CancelBookingAsync(booking.BookingId);
+                Bookings = await Service.GetAccomodationBookingsAsync(Id);
+            }
+            catch (Exception ex)
+            {
+                await Dialog.Alert(ex.Message, "Cancellation error");
+            }
+
         }
     }
 
