@@ -3,6 +3,8 @@
 @inject IListingService ListingService
 @inject NavigationManager NavigationManager
 
+<RadzenText TextStyle="TextStyle.H4" Text="Accomodation listings" />
+<RadzenButton Variant="Variant.Text" class="rz-text-secondary-color" Text="<- Back" Click="@Back" />
 <RadzenButton ButtonStyle="ButtonStyle.Primary" Text="Opret" Click="CreateNavigation" />
 
 @foreach (var listing in Listings)
@@ -26,5 +28,10 @@
     private void CreateNavigation()
     {
         NavigationManager.NavigateTo($"/accomodation/{Id}/listing/create");
+    }
+
+    private void Back()
+    {
+        NavigationManager.NavigateTo($"/accomodations");
     }
 }

@@ -2,8 +2,10 @@
 
 @inject IBookingService Service
 @inject DialogService Dialog
+@inject NavigationManager NavigationManager
 
 <RadzenText TextStyle="TextStyle.H4" Text="Accomodation bookings"/>
+<RadzenButton Variant="Variant.Text" class="rz-text-secondary-color" Text="<- Back" Click="@Back" />
 <BookingSummaryTableComponent Bookings="Bookings" CancelCallback="Cancel" />
 
 @code {
@@ -34,5 +36,10 @@
             await Service.CancelBookingAsync(booking.BookingId);
             Bookings = await Service.GetAccomodationBookingsAsync(Id);
         }
+    }
+
+    private void Back()
+    {
+        NavigationManager.NavigateTo($"/accomodations");
     }
 }
