@@ -24,7 +24,7 @@ public class AccomodationService(HttpClient httpClient) : IAccomodationService
 
     async Task<Guid> IAccomodationService.GetAccmodationHostIdAsync(AccomodationId accomodationId)
     {
-        var request = new HttpRequestMessage(HttpMethod.Get, $"api/v1/Accomodations/hostid?accomodationId={accomodationId}");
+        var request = new HttpRequestMessage(HttpMethod.Get, $"api/v1/Accomodations/hostid?accomodationId={accomodationId.Value}");
 
         var response = await httpClient.SendAsync(request);
 
