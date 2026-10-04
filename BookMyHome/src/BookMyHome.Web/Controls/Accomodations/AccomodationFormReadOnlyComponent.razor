@@ -6,6 +6,7 @@
     <RadzenTemplateForm TItem="AccomodationInputModel" Data=@Model Submit=@HandleSubmit>
         <RadzenStack Gap="1rem">
             <article>
+                <img src="https://localhost:9012/Images/@Model.ImageFileName" alt="Facility image" style="max-width: 600px; height: auto" />
                 <InputFile OnChange="SelectImage"
                            accept="image/png,image/jpeg" />
                 <button class="btn btn-primary" type="button" @onclick="HandleUploadCallback"

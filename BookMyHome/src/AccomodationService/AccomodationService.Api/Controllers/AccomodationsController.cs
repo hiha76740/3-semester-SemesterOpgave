@@ -250,7 +250,7 @@ namespace AccomodationService.Api.Controllers
         [RequestSizeLimit(6 * 1024 * 1024)]
         [EndpointSummary("This endpoint will upload and set a image to the requested accomodation")]
         [EndpointDescription("Uploads and sets the provided image to the requested accomodation or returns not found if accomodation was not found")]
-        [ProducesResponseType<Guid>(StatusCodes.Status200OK, "application/json", Description = "Returns host id of the requested accomodation")]
+        [ProducesResponseType(StatusCodes.Status200OK,Description = "Upload and set of image was done sucessfully")]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while uploading and setting image for requested accomodation")]
         public async Task<ActionResult> UploadAccomodationImage(
            [Description("Id of the accomodation you want to upload and set the image for")] Guid accomodationId,

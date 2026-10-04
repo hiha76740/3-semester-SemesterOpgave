@@ -17,7 +17,8 @@ namespace AccomodationService.Api.Mapper
                 Dto.City,
                 Dto.Country,
                 Dto.Facilities.Select(f => new FacilityResponse(f.Id,f.Name)).ToList(),
-                Dto.Status
+                Dto.Status,
+                Dto.ImageFileName
                 );
 
             return output;

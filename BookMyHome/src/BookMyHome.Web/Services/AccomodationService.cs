@@ -84,7 +84,7 @@ namespace BookMyHome.Web.Services
 
             content.Add(fileContent, "file", selectedFile.Name);
 
-            var request = new HttpRequestMessage(HttpMethod.Put, $"{baseUrl}/api/v1/Accomodations/{accomodationId}/image")
+            var request = new HttpRequestMessage(HttpMethod.Put, $"{baseUrl}api/v1/Accomodations/{accomodationId}/image")
             {
                 Content = content
             };

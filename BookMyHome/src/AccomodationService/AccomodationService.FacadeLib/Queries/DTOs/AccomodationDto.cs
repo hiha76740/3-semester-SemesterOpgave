@@ -8,5 +8,6 @@ public record AccomodationDto(
     string City,
     string Country,
     IReadOnlyList<FacilityDto> Facilities,
-    string Status
+    string Status,
+    string? ImageFileName
     );

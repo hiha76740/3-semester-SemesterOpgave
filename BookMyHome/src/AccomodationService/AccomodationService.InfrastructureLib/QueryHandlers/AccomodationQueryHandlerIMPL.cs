@@ -34,7 +34,8 @@ public class AccomodationQueryHandlerIMPL(AccomodationDbContext db) : IAccomodat
                 a.Address.City,
                 a.Address.Country,
                 a.facilities.Select(f => new FacilityDto(f.Id.Value,f.Name)).ToList(),
-                a.Status.ToString()
+                a.Status.ToString(),
+                a.ImageFileName
                 ))
             .FirstOrDefaultAsync();
     }
@@ -80,7 +81,8 @@ public class AccomodationQueryHandlerIMPL(AccomodationDbContext db) : IAccomodat
                 a.Address.City,
                 a.Address.Country,
                 a.facilities.Select(f => new FacilityDto(f.Id.Value, f.Name)).ToList(),
-                a.Status.ToString()
+                a.Status.ToString(),
+                a.ImageFileName
                 ))
             .ToListAsync();
     }
@@ -100,7 +102,8 @@ public class AccomodationQueryHandlerIMPL(AccomodationDbContext db) : IAccomodat
                 a.Address.City,
                 a.Address.Country,
                 a.facilities.Select(f => new FacilityDto(f.Id.Value, f.Name)).ToList(),
-                a.Status.ToString()
+                a.Status.ToString(),
+                a.ImageFileName
                 ))
             .ToListAsync();
     }

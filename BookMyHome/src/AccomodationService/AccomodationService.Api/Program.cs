@@ -83,6 +83,7 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+// TODO: replace with call
 Directory.CreateDirectory(imageDirectory);
 app.UseStaticFiles(new StaticFileOptions
 {
