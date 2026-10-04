@@ -8,4 +8,5 @@ public record BookingSummaryDto(
     string Country,
     DateOnly StartDate,
     DateOnly EndDate,
-    decimal Price);
+    decimal Price,
+    string BookingStatus);

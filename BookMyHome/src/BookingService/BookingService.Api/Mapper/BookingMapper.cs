@@ -46,7 +46,8 @@ namespace BookingService.Api.Mapper
                 dto.Country,
                 dto.StartDate,
                 dto.EndDate,
-                dto.Price
+                dto.Price,
+                dto.BookingStatus
                 );
 
             return output;

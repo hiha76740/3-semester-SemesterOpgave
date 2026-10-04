@@ -37,7 +37,8 @@ public class BookingQueryHandlerIMPL(BookingDbContext db, IAccomodationService a
                 b.ListingId.Value,
                 b.Period.StartDate,
                 b.Period.EndDate,
-                b.Price
+                b.Price,
+                b.Status.ToString()
                 ))
             .ToListAsync();
     }
@@ -58,7 +59,8 @@ public class BookingQueryHandlerIMPL(BookingDbContext db, IAccomodationService a
                 b.ListingId.Value,
                 b.Period.StartDate,
                 b.Period.EndDate,
-                b.Price
+                b.Price,
+                b.Status.ToString()
                 ))
             .ToListAsync();
 
@@ -74,7 +76,8 @@ public class BookingQueryHandlerIMPL(BookingDbContext db, IAccomodationService a
                 summary.Country,
                 booking.StartDate, 
                 booking.EndDate,
-                booking.Price
+                booking.Price,
+                booking.Status
                 );
 
             userBookings.Add(userBooking);
@@ -99,7 +102,8 @@ public class BookingQueryHandlerIMPL(BookingDbContext db, IAccomodationService a
                 b.ListingId.Value,
                 b.Period.StartDate,
                 b.Period.EndDate,
-                b.Price
+                b.Price,
+                b.Status.ToString()
                 ))
             .ToListAsync();
 
@@ -115,7 +119,8 @@ public class BookingQueryHandlerIMPL(BookingDbContext db, IAccomodationService a
                 summary.Country,
                 booking.StartDate,
                 booking.EndDate,
-                booking.Price
+                booking.Price,
+                booking.Status
                 );
 
             accomdationBookings.Add(userBooking);
@@ -138,7 +143,8 @@ public class BookingQueryHandlerIMPL(BookingDbContext db, IAccomodationService a
                 b.ListingId.Value,
                 b.Period.StartDate,
                 b.Period.EndDate,
-                b.Price
+                b.Price,
+                b.Status.ToString()
                 ))
             .FirstOrDefaultAsync();
     }
