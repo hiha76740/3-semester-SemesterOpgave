@@ -61,7 +61,7 @@ namespace BookingService.Api.Controllers
                     foreach (var item in list)
                     {
                         response.Add(item.AsResponse());
-                    } 
+                    }
                 }
 
                 return Ok(response);
@@ -114,7 +114,7 @@ namespace BookingService.Api.Controllers
                 var result = await queries.Checkavailability(id, startDate, endDate);
                 var response = false;
 
-                if (result == false) 
+                if (result == false)
                     response = true;
 
                 return Ok(response);
@@ -215,7 +215,9 @@ namespace BookingService.Api.Controllers
             {
                 var guestId = GetCurrentUserId();
 
-                if (guestId == null || HttpContext.User.FindFirstValue(ClaimTypes.Role) != "Guest")
+                if (guestId == null ||
+                    HttpContext.User.FindFirstValue(ClaimTypes.Role) != "Guest" ||
+                    HttpContext.User.FindFirstValue(ClaimTypes.Role) != "Host")
                     return Unauthorized("Incorrect permission");
 
                 var command = new CancelBookingCommand(bookingId, guestId.Value);
