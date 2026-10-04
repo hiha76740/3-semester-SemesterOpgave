@@ -73,7 +73,9 @@ namespace AccomodationService.Api.Controllers
                 {
                     foreach (var item in list)
                     {
-                        response.Add(item.AsResponse());
+                        var url = item.ImageFileName == null ? null : $"{Request.Scheme}://{Request.Host}{Request.PathBase}/images/{item.ImageFileName}";
+
+                        response.Add(item.AsResponse(url));
                     }
                 }
 
@@ -131,7 +133,9 @@ namespace AccomodationService.Api.Controllers
                 if (dto == null)
                     return NotFound("No accomodation was found");
 
-                return Ok(dto.AsResponse());
+                var url = dto.ImageFileName == null ? null : $"{Request.Scheme}://{Request.Host}{Request.PathBase}/images/{dto.ImageFileName}";
+
+                return Ok(dto.AsResponse(url));
             }
             catch (Exception ex)
             {

@@ -7,7 +7,7 @@ namespace AccomodationService.Api.Mapper
 {
     public static class AccomodationMapper
     {
-        public static AccomodationResponse AsResponse(this AccomodationDto Dto)
+        public static AccomodationResponse AsResponse(this AccomodationDto Dto, string? url)
         {
             var output = new AccomodationResponse(
                 Dto.AccomodationId,
@@ -18,7 +18,7 @@ namespace AccomodationService.Api.Mapper
                 Dto.Country,
                 Dto.Facilities.Select(f => new FacilityResponse(f.Id,f.Name)).ToList(),
                 Dto.Status,
-                Dto.ImageFileName
+                url
                 );
 
             return output;
