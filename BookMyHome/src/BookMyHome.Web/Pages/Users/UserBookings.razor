@@ -2,7 +2,7 @@
 
 @inject IBookingService Service
 @inject UserState User
-@inject DialogService DialogService
+@inject DialogService Dialog
 
 <BookingSummaryTableComponent 
     Bookings="Bookings" 
@@ -24,7 +24,7 @@
 
     private async Task Cancel(BookingSummaryResponse booking)
     {
-        var result = await DialogService.Confirm(
+        var result = await Dialog.Confirm(
             $"Er du sikker på du vil afbestille {booking.ListingName}? ",
             "Afbestilling",
             new ConfirmOptions()
