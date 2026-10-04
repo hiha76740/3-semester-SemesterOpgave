@@ -23,7 +23,7 @@ public class BookingService(HttpClient httpClient) : IBookingService
 
     async Task<IReadOnlyList<BookingSummaryResponse>> IBookingService.GetAccomodationBookingsAsync(Guid accomdationId)
     {
-        var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}api/v1/Bookings/accomdation/bookings?accomdationId={accomdationId}");
+        var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}api/v1/Bookings/accomodation/bookings?accomdationId={accomdationId}");
 
         request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
 
