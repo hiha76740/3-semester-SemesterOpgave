@@ -1,0 +1,16 @@
+﻿@page "/accomodation/{id:guid}/bookings"
+@using BookMyHome.ContractsLib.Responses.Bookings
+
+@inject IBookingService Service
+
+@code {
+    [Parameter]
+    public Guid Id { get; set; }
+
+    private IReadOnlyList<BookingSummaryResponse> Bookings = [];
+
+    protected override async Task OnInitializedAsync()
+    {
+        Bookings = await Service.GetAccomodationBookingsAsync(Id);
+    }
+}
