@@ -10,7 +10,7 @@ namespace AccomodationService.InfrastructureLib.Services
 
             if (extension != ".jpg" &&
                 extension != ".jpeg" &&
-                extension != ".pgn"
+                extension != ".png"
                 )
                 throw new ArgumentException("Only JPG- and PNG-Pictures are allowed", nameof(extension));
 
