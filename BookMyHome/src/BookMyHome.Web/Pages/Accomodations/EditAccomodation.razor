@@ -116,7 +116,11 @@
                 await Dialog.Alert("Billede gemt korrekt", "Information");
                 NavigationManager.NavigateTo("/accomodations");
             }
-            
+            else
+            {
+                await Dialog.Alert($"Error code: {statusCode.ToString()}");
+            }
+
 
         }
         catch (Exception ex)
