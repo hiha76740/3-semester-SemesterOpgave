@@ -9,6 +9,7 @@ public class AccomodationService(HttpClient httpClient) : IAccomodationService
 {
     private readonly string baseUrl = "http://BookMyHome-AccomodationService:8080/";
 
+
     async Task<bool> IAccomodationService.AccomodationExistAsync(AccomodationId id)
     {
         var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}api/v1/Accomodations/exists?id={id.Value}");
@@ -24,7 +25,7 @@ public class AccomodationService(HttpClient httpClient) : IAccomodationService
 
     async Task<Guid> IAccomodationService.GetAccmodationHostIdAsync(AccomodationId accomodationId)
     {
-        var request = new HttpRequestMessage(HttpMethod.Get, $"api/v1/Accomodations/hostid?accomodationId={accomodationId.Value}");
+        var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}api/v1/Accomodations/hostid?accomodationId={accomodationId.Value}");
 
         var response = await httpClient.SendAsync(request);
 
