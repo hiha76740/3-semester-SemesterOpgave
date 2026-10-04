@@ -24,6 +24,8 @@ public class BookingQueryHandlerIMPL(BookingDbContext db, IAccomodationService a
             );
     }
 
+    
+
     async Task<IReadOnlyList<BookingDTO>> IBookingQueries.GetAllAsync()
     {
         return await db.Bookings
@@ -40,17 +42,15 @@ public class BookingQueryHandlerIMPL(BookingDbContext db, IAccomodationService a
             .ToListAsync();
     }
 
-    async Task<IReadOnlyList<UserBookingDto>> IBookingQueries.GetAllUserBookings(Guid id)
+    async Task<IReadOnlyList<BookingSummaryDto>> IBookingQueries.GetAllUserBookings(Guid id)
     {
 
         var guestId = new GuestId(id);
-        var list = new List<UserBookingDto>();
-
-        var userBookings = new List<UserBookingDto>();
+        var userBookings = new List<BookingSummaryDto>();
 
         var bookings = await db.Bookings
             .AsNoTracking()
-            .Where(b => b.GuestId == guestId && b.Status == BookingStatus.Booked)
+            .Where(b => b.GuestId == guestId)
             .Select(b => new BookingDTO(
                 b.Id.Value,
                 b.GuestId.Value,
@@ -66,7 +66,7 @@ public class BookingQueryHandlerIMPL(BookingDbContext db, IAccomodationService a
         {
             var summary = await accomodationService.GetAccomodationSummaryAsync(booking.AccomodationId, booking.ListingId);
 
-            var userBooking = new UserBookingDto(
+            var userBooking = new BookingSummaryDto(
                 booking.Id, 
                 summary.ListingName,
                 summary.ListingType, 
@@ -81,6 +81,47 @@ public class BookingQueryHandlerIMPL(BookingDbContext db, IAccomodationService a
         }
 
         return userBookings;
+    }
+
+
+    async Task<IReadOnlyList<BookingSummaryDto>> IBookingQueries.GetAllAccomdationBookings(Guid accomdationId)
+    {
+        var accomdationKey = new AccomodationId(accomdationId);
+        var accomdationBookings = new List<BookingSummaryDto>();
+
+        var bookings = await db.Bookings
+            .AsNoTracking()
+            .Where(b => b.AccomodationId == accomdationKey)
+            .Select(b => new BookingDTO(
+                b.Id.Value,
+                b.GuestId.Value,
+                b.AccomodationId.Value,
+                b.ListingId.Value,
+                b.Period.StartDate,
+                b.Period.EndDate,
+                b.Price
+                ))
+            .ToListAsync();
+
+        foreach (var booking in bookings)
+        {
+            var summary = await accomodationService.GetAccomodationSummaryAsync(booking.AccomodationId, booking.ListingId);
+
+            var userBooking = new BookingSummaryDto(
+                booking.Id,
+                summary.ListingName,
+                summary.ListingType,
+                summary.City,
+                summary.Country,
+                booking.StartDate,
+                booking.EndDate,
+                booking.Price
+                );
+
+            accomdationBookings.Add(userBooking);
+        }
+
+        return accomdationBookings;
     }
 
     async Task<BookingDTO?> IBookingQueries.GetBookingByIdAsync(Guid Id)

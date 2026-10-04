@@ -1,6 +1,6 @@
 ﻿namespace BookingService.FacadeLib.Queries.DTOs;
 
-public record UserBookingDto(
+public record BookingSummaryDto(
     Guid BookingId,
     string ListingName,
     string ListingType,

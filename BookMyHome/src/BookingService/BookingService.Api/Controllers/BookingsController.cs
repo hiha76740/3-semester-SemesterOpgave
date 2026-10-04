@@ -130,10 +130,10 @@ namespace BookingService.Api.Controllers
         [HttpGet("user/bookings")]
         [EndpointSummary("This endpoint will get all bookings for the current user")]
         [EndpointDescription("Gets all bookings for the current user by token or returns empty list if no booking")]
-        [ProducesResponseType<IReadOnlyList<BookingResponse>>(StatusCodes.Status200OK, "application/json", Description = "Returns list of bookings")]
+        [ProducesResponseType<IReadOnlyList<BookingSummaryResponse>>(StatusCodes.Status200OK, "application/json", Description = "Returns list of bookings")]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while receiving current user bookings")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized, Description = "User do not have the correct permission")]
-        public async Task<ActionResult<UserBookingResponse>> GetUserBookings()
+        public async Task<ActionResult<BookingSummaryResponse>> GetUserBookings()
         {
             try
             {
@@ -144,13 +144,13 @@ namespace BookingService.Api.Controllers
 
                 var list = await queries.GetAllUserBookings(id.Value);
 
-                var response = new List<UserBookingResponse>();
+                var response = new List<BookingSummaryResponse>();
 
                 if (list.Count != 0)
                 {
                     foreach (var booking in list)
                     {
-                        response.Add(booking.AsUserBooking());
+                        response.Add(booking.AsBookingSummaryResponse());
                     }
                 }
 
@@ -161,6 +161,45 @@ namespace BookingService.Api.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [Authorize(Roles = "Host")]
+        [HttpGet("accomodation/bookings")]
+        [EndpointSummary("This endpoint will get all bookings for the requested accomodation")]
+        [EndpointDescription("Gets all bookings for the requested accomodation by token or returns empty list if no booking")]
+        [ProducesResponseType<IReadOnlyList<BookingSummaryResponse>>(StatusCodes.Status200OK, "application/json", Description = "Returns list of bookings")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while receiving requested accomodation bookings")]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized, Description = "User do not have the correct permission")]
+        public async Task<ActionResult<BookingSummaryResponse>> GetAccomdationBookings(
+            [Required][Description("Id of the accomdation you want to find bookigns for")] Guid accomdationId
+            )
+        {
+            try
+            {
+                var id = GetCurrentUserId();
+
+                if (id == null || HttpContext.User.FindFirstValue(ClaimTypes.Role) != "Host")
+                    return Unauthorized("Incorrect permission");
+
+                var list = await queries.GetAllAccomdationBookings(accomdationId);
+
+                var response = new List<BookingSummaryResponse>();
+
+                if (list.Count != 0)
+                {
+                    foreach (var booking in list)
+                    {
+                        response.Add(booking.AsBookingSummaryResponse());
+                    }
+                }
+
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
 
 
         [Authorize(Roles = "Guest")]

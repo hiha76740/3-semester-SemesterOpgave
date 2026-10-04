@@ -36,9 +36,9 @@ namespace BookingService.Api.Mapper
 
         }
 
-        public static UserBookingResponse AsUserBooking(this UserBookingDto dto)
+        public static BookingSummaryResponse AsBookingSummaryResponse(this BookingSummaryDto dto)
         {
-            var output = new UserBookingResponse(
+            var output = new BookingSummaryResponse(
                 dto.BookingId,
                 dto.ListingName,
                 dto.ListingType,
