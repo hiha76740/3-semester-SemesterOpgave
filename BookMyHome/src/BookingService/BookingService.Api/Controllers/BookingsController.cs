@@ -170,7 +170,7 @@ namespace BookingService.Api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while receiving requested accomodation bookings")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized, Description = "User do not have the correct permission")]
         public async Task<ActionResult<BookingSummaryResponse>> GetAccomdationBookings(
-            [Required][Description("Id of the accomdation you want to find bookigns for")] Guid accomdationId
+            [Required][Description("Id of the accomdation you want to find bookings for")] Guid accomdationId
             )
         {
             try
