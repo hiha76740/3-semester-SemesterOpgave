@@ -1,6 +1,7 @@
 ﻿using BookMyHome.ContractsLib.Requests.Accomodations;
 using BookMyHome.ContractsLib.Responses.Accomodations;
 using BookMyHome.Web.ServiceInterfaces;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components.WebAssembly.Http;
 using System.Net.Http.Json;
 
@@ -66,6 +67,28 @@ namespace BookMyHome.Web.Services
             {
                 Content = JsonContent.Create(new UpdateAccomodationStatusRequest(status))
             };
+            request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
+
+            using var response = await httpClient.SendAsync(request);
+
+            response.EnsureSuccessStatusCode();
+        }
+
+        async Task IAccomodationService.UploadImage(Guid accomodationId, IBrowserFile selectedFile)
+        {
+            const long maxFileSize = 5 * 1024 * 1024;
+
+            using var content = new MultipartFormDataContent();
+
+            var fileContent = new StreamContent(selectedFile.OpenReadStream(maxFileSize));
+
+            content.Add(fileContent, "file", selectedFile.Name);
+
+            var request = new HttpRequestMessage(HttpMethod.Put, $"{baseUrl}/api/v1/Accomodations/{accomodationId}/image")
+            {
+                Content = content
+            };
+
             request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
 
             using var response = await httpClient.SendAsync(request);

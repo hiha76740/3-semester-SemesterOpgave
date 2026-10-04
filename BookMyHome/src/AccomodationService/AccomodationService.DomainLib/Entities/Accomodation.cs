@@ -12,11 +12,21 @@ public class Accomodation
     public AccomodationStatus Status { get; private set; }
     public Address Address { get; init; } = null!;
 
+    public string? ImageFileName { get; private set; }
+
     private readonly List<Listing> _listings = [];
     public IReadOnlyList<Listing> listings => _listings.AsReadOnly();
 
     private readonly List<Facility> _facilities = [];
     public IReadOnlyList<Facility> facilities => _facilities.AsReadOnly();
+
+    public void SetImage(string imageFileName)
+    {
+        if (string.IsNullOrWhiteSpace(imageFileName))
+            throw new DomainException("image file name must have a value");
+
+        ImageFileName = imageFileName;
+    }
 
     public void UpdateListingStatus(ListingId id, ListingStatus newStatus)
     {

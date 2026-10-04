@@ -9,7 +9,8 @@
                                    Facilities="Facilities"
                                    SubmitCallback="Update"
                                    SubmitText="Ok"
-                                   CancelPath="/accomodations" />
+                                   CancelPath="/accomodations"
+                                   UploadCallback="Upload" />
 
 @code {
     [Parameter]
@@ -97,7 +98,15 @@
             return;
         }
 
-        
+
     }
 
+    private async Task Upload(IBrowserFile? selectedFile)
+    {
+        if (selectedFile == null)
+            return;
+
+        await Service.UploadImage(Id, selectedFile);
+
+    }
 }

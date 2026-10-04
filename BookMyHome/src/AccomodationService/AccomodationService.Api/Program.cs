@@ -1,6 +1,9 @@
 using AccomodationService.ApplicationLib.Extensions;
+using AccomodationService.ApplicationLib.Handlers.Services;
 using AccomodationService.InfrastructureLib.Extensions;
+using AccomodationService.InfrastructureLib.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
 using System.Text;
@@ -17,6 +20,9 @@ builder.Services.AddServiceDI();
 builder.Services.AddQueriesDI();
 builder.Services.AddScoped<HttpClient>();
 
+// TODO: replace with extension call
+var imageDirectory = Path.Combine(builder.Environment.ContentRootPath, "Storage", "images");
+builder.Services.AddScoped<IImageStorageService>(serviceProvider => new LocalImageStorageService(imageDirectory));
 
 // TODO: replace with call when moved into shared
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -76,6 +82,13 @@ if (app.Environment.IsDevelopment())
         options.HideModels = true;
     });
 }
+
+Directory.CreateDirectory(imageDirectory);
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(imageDirectory),
+    RequestPath = "/images"
+});
 
 //app.UseHttpsRedirection();
 app.MapHealthChecks("health");

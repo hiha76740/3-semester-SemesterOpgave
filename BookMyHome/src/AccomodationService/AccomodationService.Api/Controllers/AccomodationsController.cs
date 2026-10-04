@@ -17,7 +17,8 @@ namespace AccomodationService.Api.Controllers
     public class AccomodationsController(
         ICreateAccomodationHandler accomodationcreate,
         IAccomodationQueries queries,
-        IUpdateAccomodationStatus updateAccomodationStatus
+        IUpdateAccomodationStatus updateAccomodationStatus,
+        IUploadAccomdationImageHandler imageHandler
         ) : ControllerBase
     {
         [Authorize(Roles = "Host")]
@@ -234,9 +235,59 @@ namespace AccomodationService.Api.Controllers
                 var id = await queries.GetAccomodationHostId(accomodationId);
 
                 if (id == null)
-                    NotFound("Id or accomodation not found");
+                    return NotFound("Id or accomodation not found");
 
                 return Ok(id);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [Authorize(Roles = "Host")]
+        [HttpPut("{accomodationId:guid}/image")]
+        [RequestSizeLimit(6 * 1024 * 1024)]
+        [EndpointSummary("This endpoint will upload and set a image to the requested accomodation")]
+        [EndpointDescription("Uploads and sets the provided image to the requested accomodation or returns not found if accomodation was not found")]
+        [ProducesResponseType<Guid>(StatusCodes.Status200OK, "application/json", Description = "Returns host id of the requested accomodation")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while uploading and setting image for requested accomodation")]
+        public async Task<ActionResult> UploadAccomodationImage(
+           [Description("Id of the accomodation you want to upload and set the image for")] Guid accomodationId,
+           [FromForm] IFormFile file)
+        {
+            try
+            {
+                var userId = GetCurrentUserId();
+
+                if (userId == null || HttpContext.User.FindFirstValue(ClaimTypes.Role) != "Host")
+                    return BadRequest("Invalid request");
+
+
+                const long maxFileSize = 5 * 1024 * 1024;
+
+                if (file.Length == 0)
+                    return BadRequest("Please choose a image file");
+
+                if (file.Length > maxFileSize)
+                    return BadRequest($"Size limit of image is 5 MB.");
+
+                var extension = Path.GetExtension(file.FileName)
+                    .ToLowerInvariant();
+
+                if (extension != ".jpg" &&
+                    extension != ".jpeg" &&
+                    extension != ".png")
+                    return BadRequest("Only jpg- and png-image files are allowed");
+
+                await using var imageStream = file.OpenReadStream();
+
+                var command = new UploadAccomdationImageCommand(userId.Value, accomodationId, imageStream, extension);
+
+                await imageHandler.HandleAsync(command);
+
+                return Ok();
+
             }
             catch (Exception ex)
             {

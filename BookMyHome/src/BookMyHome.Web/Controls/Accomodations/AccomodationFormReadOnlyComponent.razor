@@ -1,8 +1,17 @@
 ﻿@inject NavigationManager NavigationManager
 
+
+
 <RadzenCard class="rz-my-12 rz-mx-auto rz-p-4 rz-p-md-12" style="max-width: 600px;">
     <RadzenTemplateForm TItem="AccomodationInputModel" Data=@Model Submit=@HandleSubmit>
         <RadzenStack Gap="1rem">
+            <article>
+                <InputFile OnChange="SelectImage"
+                           accept="image/png,image/jpeg" />
+                <button class="btn btn-primary" type="button" @onclick="HandleUploadCallback"
+                        disabled="@(selectedFile == null)">Gem billede
+                </button>
+            </article>
             <article>
                 <RadzenText TextStyle="TextStyle.DisplayH4">Generelt</RadzenText>
                 <RadzenRow AlignItems="AlignItems.Center" RowGap="0.25rem">
@@ -107,6 +116,13 @@
     [Parameter, EditorRequired]
     public string CancelPath { get; set; }
 
+
+    [Parameter]
+    public EventCallback<IBrowserFile?> UploadCallback { get; set; }
+
+    private IBrowserFile? selectedFile;
+
+
     private void HandleSubmit()
     {
 
@@ -116,5 +132,15 @@
     private void Cancel()
     {
         NavigationManager.NavigateTo(CancelPath);
+    }
+
+    private void SelectImage(InputFileChangeEventArgs args)
+    {
+        selectedFile = args.File;
+    }
+
+    private void HandleUploadCallback()
+    {
+        UploadCallback.InvokeAsync(selectedFile);
     }
 }
