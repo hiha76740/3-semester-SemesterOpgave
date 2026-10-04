@@ -1,0 +1,39 @@
+    <RadzenDataGrid Data="@Bookings" TItem="BookingSummaryResponse">
+        <Columns>
+            <RadzenDataGridColumn Property="@nameof(BookingSummaryResponse.ListingName)" Title="Titel" Width="160px" />
+            <RadzenDataGridColumn Property="@nameof(BookingSummaryResponse.ListingType)" Title="Bolig type" Frozen="true" Width="160px" />
+            <RadzenDataGridColumn Property="@nameof(BookingSummaryResponse.City)" Title="By" Frozen="true" Width="160px" />
+            <RadzenDataGridColumn Property="@nameof(BookingSummaryResponse.Country)" Title="Land" Frozen="true" Width="160px" />
+            <RadzenDataGridColumn Property="@nameof(BookingSummaryResponse.StartDate)" Title="Start dato" Frozen="true" Width="160px" />
+            <RadzenDataGridColumn Property="@nameof(BookingSummaryResponse.EndDate)" Title="Slut dato" Frozen="true" Width="160px" />
+            <RadzenDataGridColumn Property="@nameof(BookingSummaryResponse.Price)" Title="Pris" Frozen="true" Width="160px" />
+
+            <RadzenDataGridColumn Titem="BookingSummaryResponse"
+                                  Title="Handling"
+                                  Sortable="false"
+                                  Filterable="false">
+                <Template Context="booking">
+                    <RadzenButton Text="Afbestil"
+                                  ButtonType="ButtonType.Button"
+                                  ButtonStyle="ButtonStyle.Danger"
+                                  Size="ButtonSize.Small"
+                                  Click="@(_ => HandleCancel(booking))" />
+                </Template>
+            </RadzenDataGridColumn>
+        </Columns>
+    </RadzenDataGrid>
+
+@code {
+    [Parameter,EditorRequired]
+    public IReadOnlyList<BookingSummaryResponse> Bookings { get; set; }
+
+    [Parameter, EditorRequired]
+    public EventCallback<BookingSummaryResponse> CancelCallback { get; set; }
+
+
+    private void HandleCancel(BookingSummaryResponse booking)
+    {
+        CancelCallback.InvokeAsync(booking);
+    }
+
+}
