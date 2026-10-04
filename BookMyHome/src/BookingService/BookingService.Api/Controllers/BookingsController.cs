@@ -215,10 +215,10 @@ namespace BookingService.Api.Controllers
             {
                 var guestId = GetCurrentUserId();
 
-                //if (guestId == null ||
-                //    HttpContext.User.FindFirstValue(ClaimTypes.Role) != "Guest" ||
-                //    HttpContext.User.FindFirstValue(ClaimTypes.Role) != "Host")
-                //    return Unauthorized("Incorrect permission");
+                if (guestId == null ||
+                    HttpContext.User.FindFirstValue(ClaimTypes.Role) != "Guest" &&
+                    HttpContext.User.FindFirstValue(ClaimTypes.Role) != "Host")
+                    return Unauthorized("Incorrect permission");
 
                 var command = new CancelBookingCommand(bookingId, guestId.Value);
 
