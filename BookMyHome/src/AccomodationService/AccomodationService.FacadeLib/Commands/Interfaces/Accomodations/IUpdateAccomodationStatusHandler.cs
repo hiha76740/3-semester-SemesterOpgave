@@ -2,7 +2,7 @@
 
 namespace AccomodationService.FacadeLib.Commands.Interfaces.Accomodations;
 
-public interface IUpdateAccomodationStatus
+public interface IUpdateAccomodationStatusHandler
 {
     Task HandleAsync(UpdateAccomodationStatusCommand command);
 }
