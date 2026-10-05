@@ -39,7 +39,7 @@ if (app.Environment.IsDevelopment())
 //app.UseHttpsRedirection();
 app.MapHealthChecks("health");
 
-app.UseCors("AllowBlazorOrigin");
+app.UseCors(policyName);
 
 app.UseAuthentication();
 app.UseAuthorization();
