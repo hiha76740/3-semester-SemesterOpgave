@@ -4,7 +4,7 @@
     <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" Gap="1rem" class="rz-p-4">
         @if (Accomodation.ImageUrl != null)
         {
-            <RadzenImage Path="@Accomodation.ImageUrl" Style="width: 15rem;" AlternateText="url image" />
+            <RadzenImage Path="@Accomodation.ImageUrl" Style="max-width: 440px;" AlternateText="url image" />
         }
     </RadzenStack>
     <RadzenCard class="rz-background-color-primary-light rz-shadow-0 rz-border-radius-0 rz-p-8" style="margin: 1rem calc(-1 * var(--rz-card-padding));">
