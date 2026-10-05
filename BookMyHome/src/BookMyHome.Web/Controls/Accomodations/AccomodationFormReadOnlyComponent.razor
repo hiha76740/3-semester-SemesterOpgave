@@ -15,7 +15,8 @@
                 <InputFile OnChange="SelectImage"
                            accept="image/png,image/jpeg" />
                 <button class="btn btn-primary" type="button" @onclick="HandleUploadCallback"
-                        disabled="@(selectedFile == null)">Gem billede
+                        disabled="@(selectedFile == null)">
+                    Gem billede
                 </button>
             </article>
             <article>
@@ -89,10 +90,19 @@
                                         Placeholder="Select facilities"
                                         Style="width: 100%; max-width: 400px;" />
 
+                        
+                    </RadzenColumn>
+                </RadzenRow>
+                <br />
+                <RadzenRow AlignItems="AlignItems.Center" RowGap="0.25rem">
+                    <RadzenColumn Size="12" SizeMD="4" class="rz-text-align-start rz-text-align-md-end">
                         <RadzenLabel Text="Status" Component="AccomdationStatus" />
+                    </RadzenColumn>
+                    <RadzenColumn Size="12" SizeMD="8">
                         <RadzenSwitch @bind-Value=@Model.Status Component="AccomdationStatus" />
                     </RadzenColumn>
                 </RadzenRow>
+
             </article>
             <RadzenRow AlignItems="AlignItems.Center" class="rz-mt-4">
                 <RadzenColumn Size="12" Offset="0" SizeMD="8" OffsetMD="4">
