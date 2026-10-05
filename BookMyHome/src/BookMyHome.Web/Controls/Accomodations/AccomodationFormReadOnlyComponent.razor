@@ -88,11 +88,11 @@
                                         AllowClear=false
                                         Placeholder="Select facilities"
                                         Style="width: 100%; max-width: 400px;" />
+
+                        <RadzenLabel Text="Status" Component="AccomdationStatus" />
+                        <RadzenSwitch @bind-Value=@Model.Status Component="AccomdationStatus" />
                     </RadzenColumn>
                 </RadzenRow>
-            </article>
-            <article>
-                <RadzenSwitch @bind-Value=@Model.Status />
             </article>
             <RadzenRow AlignItems="AlignItems.Center" class="rz-mt-4">
                 <RadzenColumn Size="12" Offset="0" SizeMD="8" OffsetMD="4">
