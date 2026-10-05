@@ -11,6 +11,8 @@ namespace BookMyHome.Web.ServiceInterfaces
         Task<IReadOnlyList<AccomodationResponse>> GetCurrentUserAccomodationsAsync();
         Task UpdateAccomodationStatusAsync(Guid accomodationId, string status);
 
-        Task<int> UploadImage(Guid accomodationId, IBrowserFile selectedFile);
+        Task<int> UploadImageAsync(Guid accomodationId, IBrowserFile selectedFile);
+
+        Task<int> UpdateAccomodationAsync(Guid accomodationId, UpdateAccomodationRequest updateRequest);
     }
 }

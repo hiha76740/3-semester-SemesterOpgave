@@ -8,9 +8,9 @@ using Shared.BookMyHome.SharedKernelLib.Exceptions;
 
 namespace AccomodationService.ApplicationLib.Handlers.Accomodations;
 
-public class UpdateAccomodationStatusHandler(IAccomodationRepository repo) : IUpdateAccomodationStatus
+public class UpdateAccomodationStatusHandler(IAccomodationRepository repo) : IUpdateAccomodationStatusHandler
 {
-    async Task IUpdateAccomodationStatus.HandleAsync(UpdateAccomodationStatusCommand command)
+    async Task IUpdateAccomodationStatusHandler.HandleAsync(UpdateAccomodationStatusCommand command)
     {
         var hostId = new HostId(command.UserId);
         var accomodationId = new AccomodationId(command.AccomodationId);

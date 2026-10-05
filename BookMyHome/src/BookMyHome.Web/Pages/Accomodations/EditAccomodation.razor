@@ -56,7 +56,6 @@
 
         try
         {
-            // Status
             var status = "";
 
             if (model.Status == true)
@@ -64,34 +63,17 @@
             else
                 status = "Inactive";
 
-            if (status != response.Status)
-                await Service.UpdateAccomodationStatusAsync(model.AccomodationId, status);
+            var request = new UpdateAccomodationRequest(status, model.FacilitiesIds);
 
-            // Facilities
-            foreach (var facility in Facilities)
+            var statusCode = await Service.UpdateAccomodationAsync(model.AccomodationId, request);
+
+            if (statusCode == 200)
             {
-                if (
-                    model.FacilitiesIds
-                    .Contains(facility.Id) == true &&
-                    response.Facilities
-                    .Any(f => f.Id == facility.Id) == false
-                )
-                {
-                    await FacilityService.AddFacilityAsync(facility.Id, model.AccomodationId);
-                }
-                else if (
-                    model.FacilitiesIds
-                    .Contains(facility.Id) == false &&
-                    response.Facilities
-                    .Any(f => f.Id == facility.Id) == true
-                )
-                {
-                    await FacilityService.RemoveFacilityAsync(facility.Id, model.AccomodationId);
-                }
+                await Dialog.Alert("Accomodation updated successfully", "Success");
             }
-
-            await Dialog.Alert("Accomodation updated successfully", "Success");
+            
             NavigationManager.NavigateTo("/accomodations");
+            
         }
         catch (Exception ex)
         {
@@ -109,7 +91,7 @@
             if (selectedFile == null)
                 return;
 
-            var statusCode = await Service.UploadImage(Id, selectedFile);
+            var statusCode = await Service.UploadImageAsync(Id, selectedFile);
 
             if (statusCode == 200)
             {

@@ -17,7 +17,8 @@ namespace AccomodationService.Api.Controllers
     public class AccomodationsController(
         ICreateAccomodationHandler accomodationcreate,
         IAccomodationQueries queries,
-        IUpdateAccomodationStatus updateAccomodationStatus,
+        IUpdateAccomodationStatusHandler updateAccomodationStatus,
+        IUpdateAccomodationHandler update,
         IUploadAccomdationImageHandler imageHandler
         ) : ControllerBase
     {
@@ -115,6 +116,40 @@ namespace AccomodationService.Api.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [Authorize(Roles = "Host")]
+        [HttpPut("{accomodationId:guid}")]
+        [EndpointSummary("This endpoint will check and update the requested accomodation")]
+        [EndpointDescription("Checks if any changes are made to the requested accomodation " +
+            "and updates the values or returns not found if no accomodations was found")]
+        [ProducesResponseType(StatusCodes.Status200OK, Description = "Update has been completed successfully")]
+        [ProducesResponseType(StatusCodes.Status204NoContent, Description = "No changes was made")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while updating accomodation")]
+        public async Task<ActionResult> UpdateAccomodation(Guid accomodationId, UpdateAccomodationRequest request)
+        {
+            try
+            {
+                var userId = GetCurrentUserId();
+
+                if (userId == null || HttpContext.User.FindFirstValue(ClaimTypes.Role) != "Host")
+                    return BadRequest("You need to be logged in or have the correct permission");
+
+                var command = new UpdateAccomodationCommand(userId.Value, accomodationId, request.Status, request.FacilitiesIds);
+
+                var changesMade = await update.HandleAsync(command);
+
+                if (changesMade == false)
+                    return NoContent();
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(ex.Message);
+            }
+        }
+
 
         [Authorize(Roles = "Host")]
         [HttpGet("{id:guid}")]
@@ -254,7 +289,7 @@ namespace AccomodationService.Api.Controllers
         [RequestSizeLimit(6 * 1024 * 1024)]
         [EndpointSummary("This endpoint will upload and set a image to the requested accomodation")]
         [EndpointDescription("Uploads and sets the provided image to the requested accomodation or returns not found if accomodation was not found")]
-        [ProducesResponseType(StatusCodes.Status200OK,Description = "Upload and set of image was done sucessfully")]
+        [ProducesResponseType(StatusCodes.Status200OK, Description = "Upload and set of image was done sucessfully")]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while uploading and setting image for requested accomodation")]
         public async Task<ActionResult> UploadAccomodationImage(
            [Description("Id of the accomodation you want to upload and set the image for")] Guid accomodationId,

@@ -18,8 +18,9 @@ public static class HandlerDI
         services.AddScoped<IDeleteListingHandler, DeleteListingHandler>();
         services.AddScoped<IAddFacilityHandler, AddFacilityHandler>();
         services.AddScoped<IRemoveFacilityHandler, RemoveFacilityHandler>();
-        services.AddScoped<IUpdateAccomodationStatus, UpdateAccomodationStatusHandler>();
+        services.AddScoped<IUpdateAccomodationStatusHandler, UpdateAccomodationStatusHandler>();
         services.AddScoped<IUploadAccomdationImageHandler, UploadAccomodationImageHandler>();
+        services.AddScoped<IUpdateAccomodationHandler,  UpdateAccomodationHandler>();
 
         return services;
     }

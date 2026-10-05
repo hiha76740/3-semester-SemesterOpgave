@@ -61,6 +61,20 @@ namespace BookMyHome.Web.Services
             return accomodation;
         }
 
+        async Task<int> IAccomodationService.UpdateAccomodationAsync(Guid accomodationId, UpdateAccomodationRequest updateRequest)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Put, $"{baseUrl}api/v1/Accomodations/{accomodationId}")
+            {
+                Content = JsonContent.Create(updateRequest)
+            };
+
+            request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
+
+            using var response = await httpClient.SendAsync(request);
+
+            return (int)response.StatusCode;
+        }
+
         async Task IAccomodationService.UpdateAccomodationStatusAsync(Guid accomodationId, string status)
         {
             var request = new HttpRequestMessage(HttpMethod.Put, $"{baseUrl}api/v1/Accomodations/{accomodationId}/status")
@@ -74,7 +88,7 @@ namespace BookMyHome.Web.Services
             response.EnsureSuccessStatusCode();
         }
 
-        async Task<int> IAccomodationService.UploadImage(Guid accomodationId, IBrowserFile selectedFile)
+        async Task<int> IAccomodationService.UploadImageAsync(Guid accomodationId, IBrowserFile selectedFile)
         {
             const long maxFileSize = 5 * 1024 * 1024;
 
