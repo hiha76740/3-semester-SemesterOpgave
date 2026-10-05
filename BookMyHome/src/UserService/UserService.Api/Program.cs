@@ -1,3 +1,4 @@
+using BookMyHome.BuildingBlocksLib.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
@@ -20,48 +21,11 @@ builder.Services.AddQueriesDI();
 
 builder.Services.AddHealthChecks();
 
-// TODO: Move Into shared and call it from there
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidIssuer = builder.Configuration["AppSettings:Issuer"],
-            ValidateAudience = true,
-            ValidAudience = builder.Configuration["AppSettings:Audience"],
-            ValidateLifetime = true,
-            IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(builder.Configuration["AppSettings:Token"]!)),
-            ValidateIssuerSigningKey = true,
-            ClockSkew = TimeSpan.Zero
-        };
+builder.Services.AddBookMyHomeAuthentication(builder);
 
-        options.Events = new JwtBearerEvents
-        {
-            OnMessageReceived = ctx =>
-            {
-                ctx.Request.Cookies.TryGetValue("accessToken", out var accessToken);
-                if (string.IsNullOrEmpty(accessToken) == false)
-                    ctx.Token = accessToken;
+var policyName = "AllowBlazorOrigin";
 
-                return Task.CompletedTask;
-            }
-        };
-    });
-
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowBlazorOrigin", policy =>
-    {
-        policy.WithOrigins(
-            "https://localhost:7179",
-            "https://localhost:8082")
-        .AllowAnyHeader()
-        .AllowAnyMethod()
-        .AllowCredentials();
-    });
-});
+builder.Services.AddBookMyHomeCors(policyName);
 
 
 var app = builder.Build();
@@ -80,7 +44,7 @@ if (app.Environment.IsDevelopment())
 //app.UseHttpsRedirection();
 app.MapHealthChecks("health");
 
-app.UseCors("AllowBlazorOrigin");
+app.UseCors(policyName);
 
 app.UseAuthentication();
 app.UseAuthorization();
