@@ -11,7 +11,7 @@ env:
   REGISTRY: ghcr.io
   IMAGE_NAME: "bookmyhome-proxy"
   GITHUB_ACTOR: "hiha76740"
-  DOCKER_IMAGE_CONTEXT: "BookMyHome/src/Proxy/BookMyHome.Yarp"
+  DOCKER_IMAGE_CONTEXT: BookMyHome
 
 jobs:
   Build-and-Deploy-AccomodationService:
