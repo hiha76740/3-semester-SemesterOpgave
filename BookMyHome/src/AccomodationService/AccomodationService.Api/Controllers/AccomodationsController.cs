@@ -273,7 +273,7 @@ namespace AccomodationService.Api.Controllers
             {
                 var id = await queries.GetAccomodationHostId(accomodationId);
 
-                if (id == null)
+                if (id == Guid.Empty)
                     return NotFound("Id or accomodation not found");
 
                 return Ok(id);
