@@ -10,12 +10,12 @@ namespace BookMyHome.Web.Services
     public class ListingService(HttpClient httpClient) : IListingService
     {
         //private readonly string baseUrl = "https://localhost:9012/";
-        private readonly string baseUrl = "https://localhost:8010/accomodations-api/";
+        private readonly string baseUrl = "https://localhost:8010/listings-api/";
 
 
         async Task<int> IListingService.Create(CreateListingRequest createRequest)
         {
-            var request = new HttpRequestMessage(HttpMethod.Post, $"{baseUrl}Listings")
+            var request = new HttpRequestMessage(HttpMethod.Post, $"{baseUrl}")
             {
                 Content = JsonContent.Create(createRequest)
             };
@@ -29,7 +29,7 @@ namespace BookMyHome.Web.Services
 
         async Task<Guid> IListingService.GetAccomodationIdByListingId(Guid listingId)
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}Listings/{listingId}/accomodationId");
+            var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}{listingId}/accomodationId");
 
             request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
 
@@ -47,7 +47,7 @@ namespace BookMyHome.Web.Services
 
         async Task<IReadOnlyList<ListingResponse>> IListingService.GetAccomodationListings(Guid accomodationId)
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}Listings/{accomodationId}/listings");
+            var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}{accomodationId}/listings");
 
             request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
 
@@ -63,28 +63,12 @@ namespace BookMyHome.Web.Services
             return list;
         }
 
-        async Task<IReadOnlyList<AccomodationTypeResponse>> IListingService.GetAllAccomodationTypes()
-        {
-            var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}Accomodations/types");
-
-            using var response = await httpClient.SendAsync(request);
-
-            response.EnsureSuccessStatusCode();
-
-            var list = await response.Content.ReadFromJsonAsync<IReadOnlyList<AccomodationTypeResponse>>();
-
-            if (list == null)
-                throw new InvalidOperationException("Could not deserialize accomodation types");
-
-            return list;
-        }
-
         async Task<IReadOnlyList<ListingResponse>> IListingService.GetAllAvailiableListingsByPeriod(DateOnly start, DateOnly end)
         {
             var from = start.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
             var to = end.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
 
-            var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}Listings/period?start={from}&end={to}");
+            var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}period?start={from}&end={to}");
 
             request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
 
@@ -102,7 +86,7 @@ namespace BookMyHome.Web.Services
 
         async Task<IReadOnlyList<ListingResponse>> IListingService.GetAllListingsAsync()
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}Listings");
+            var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}");
 
             request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
 
@@ -120,7 +104,7 @@ namespace BookMyHome.Web.Services
 
         async Task<ListingResponse> IListingService.GetListingAsync(Guid accomodationId,Guid listingId)
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}Listings/{accomodationId}/listings/{listingId}");
+            var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}{accomodationId}/listings/{listingId}");
 
             request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
 
@@ -139,7 +123,7 @@ namespace BookMyHome.Web.Services
 
         async Task<int> IListingService.UpdateListing(Guid accomodationId, Guid listingId, UpdateListingRequest updateRequest)
         {
-            var request = new HttpRequestMessage(HttpMethod.Put, $"{baseUrl}Listings/{accomodationId}/listings/{listingId}")
+            var request = new HttpRequestMessage(HttpMethod.Put, $"{baseUrl}{accomodationId}/listings/{listingId}")
             {
                 Content = JsonContent.Create(updateRequest)
             };

@@ -14,7 +14,7 @@ public class BookingService(HttpClient httpClient) : IBookingService
 
     async Task IBookingService.CancelBookingAsync(Guid bookingId)
     {
-        var request = new HttpRequestMessage(HttpMethod.Put, $"{baseUrl}Bookings/{bookingId}/cancel");
+        var request = new HttpRequestMessage(HttpMethod.Put, $"{baseUrl}{bookingId}/cancel");
 
         request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
 
@@ -25,7 +25,7 @@ public class BookingService(HttpClient httpClient) : IBookingService
 
     async Task<IReadOnlyList<BookingSummaryResponse>> IBookingService.GetAccomodationBookingsAsync(Guid accomdationId)
     {
-        var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}Bookings/accomodation/bookings?accomdationId={accomdationId}");
+        var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}accomodation/bookings?accomdationId={accomdationId}");
 
         request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
 
@@ -44,7 +44,7 @@ public class BookingService(HttpClient httpClient) : IBookingService
 
     async Task<IReadOnlyList<BookingSummaryResponse>> IBookingService.GetUserBookingsAsync()
     {
-        var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}Bookings/user/bookings");
+        var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}user/bookings");
 
         request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
 
@@ -62,7 +62,7 @@ public class BookingService(HttpClient httpClient) : IBookingService
 
     async Task<int> IBookingService.MakeBookingAsync(CreateBookingRequest CreateRequest)
     {
-        var request = new HttpRequestMessage(HttpMethod.Post, $"{baseUrl}Bookings")
+        var request = new HttpRequestMessage(HttpMethod.Post, $"{baseUrl}")
         {
             Content = JsonContent.Create(CreateRequest)
         };

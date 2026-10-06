@@ -14,5 +14,7 @@ namespace BookMyHome.Web.ServiceInterfaces
         Task<int> UploadImageAsync(Guid accomodationId, IBrowserFile selectedFile);
 
         Task<int> UpdateAccomodationAsync(Guid accomodationId, UpdateAccomodationRequest updateRequest);
+
+        Task<IReadOnlyList<AccomodationTypeResponse>> GetAllAccomodationTypes();
     }
 }

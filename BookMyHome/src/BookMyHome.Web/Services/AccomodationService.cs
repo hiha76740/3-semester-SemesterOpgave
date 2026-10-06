@@ -15,7 +15,7 @@ namespace BookMyHome.Web.Services
 
         async Task<int> IAccomodationService.Create(CreateAccomodationRequest createRequest)
         {
-            var request = new HttpRequestMessage(HttpMethod.Post, $"{baseUrl}Accomodations")
+            var request = new HttpRequestMessage(HttpMethod.Post, $"{baseUrl}")
             {
                 Content = JsonContent.Create(createRequest)
             };
@@ -29,7 +29,7 @@ namespace BookMyHome.Web.Services
 
         async Task<AccomodationResponse?> IAccomodationService.GetAccomodationByIdAsync(Guid id)
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}Accomodations/{id}");
+            var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}{id}");
 
             request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
 
@@ -45,9 +45,25 @@ namespace BookMyHome.Web.Services
             return accomodation;
         }
 
+        async Task<IReadOnlyList<AccomodationTypeResponse>> IAccomodationService.GetAllAccomodationTypes()
+        {
+            var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}types");
+
+            using var response = await httpClient.SendAsync(request);
+
+            response.EnsureSuccessStatusCode();
+
+            var list = await response.Content.ReadFromJsonAsync<IReadOnlyList<AccomodationTypeResponse>>();
+
+            if (list == null)
+                throw new InvalidOperationException("Could not deserialize accomodation types");
+
+            return list;
+        }
+
         async Task<IReadOnlyList<AccomodationResponse>> IAccomodationService.GetCurrentUserAccomodationsAsync()
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}Accomodations");
+            var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}");
 
             request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
 
@@ -65,7 +81,7 @@ namespace BookMyHome.Web.Services
 
         async Task<int> IAccomodationService.UpdateAccomodationAsync(Guid accomodationId, UpdateAccomodationRequest updateRequest)
         {
-            var request = new HttpRequestMessage(HttpMethod.Put, $"{baseUrl}Accomodations/{accomodationId}")
+            var request = new HttpRequestMessage(HttpMethod.Put, $"{baseUrl}{accomodationId}")
             {
                 Content = JsonContent.Create(updateRequest)
             };
@@ -79,7 +95,7 @@ namespace BookMyHome.Web.Services
 
         async Task IAccomodationService.UpdateAccomodationStatusAsync(Guid accomodationId, string status)
         {
-            var request = new HttpRequestMessage(HttpMethod.Put, $"{baseUrl}Accomodations/{accomodationId}/status")
+            var request = new HttpRequestMessage(HttpMethod.Put, $"{baseUrl}{accomodationId}/status")
             {
                 Content = JsonContent.Create(new UpdateAccomodationStatusRequest(status))
             };
@@ -100,7 +116,7 @@ namespace BookMyHome.Web.Services
 
             content.Add(fileContent, "file", selectedFile.Name);
 
-            var request = new HttpRequestMessage(HttpMethod.Put, $"{baseUrl}Accomodations/{accomodationId}/image")
+            var request = new HttpRequestMessage(HttpMethod.Put, $"{baseUrl}{accomodationId}/image")
             {
                 Content = content
             };

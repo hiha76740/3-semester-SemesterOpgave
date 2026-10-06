@@ -1,6 +1,7 @@
 ﻿@page "/listing/{id:guid}/edit"
 
 @inject IListingService Service
+@inject IAccomodationService AccomodationService
 @inject DialogService Dialog
 @inject NavigationManager NavigationManager
 
@@ -28,7 +29,7 @@
         {
             accomodationId = await Service.GetAccomodationIdByListingId(Id);
             listing = await Service.GetListingAsync(accomodationId.Value, Id);
-            AccomodationTypes = await Service.GetAllAccomodationTypes();
+            AccomodationTypes = await AccomodationService.GetAllAccomodationTypes();
 
             model.ListingId = listing.ListingId;
             model.AccomodationId = accomodationId.Value;

@@ -1,6 +1,7 @@
 ﻿@page "/accomodation/{id:guid}/listing/create"
 
 @inject IListingService ListingService
+@inject IAccomodationService AccomodationService
 @inject DialogService Dialog
 @inject NavigationManager NavigationManager
 
@@ -22,7 +23,7 @@
     {
         try
         {
-            accomodationTypes = await ListingService.GetAllAccomodationTypes();
+            accomodationTypes = await AccomodationService.GetAllAccomodationTypes();
             model.AccomodationId = Id;
         }
         catch (Exception ex)

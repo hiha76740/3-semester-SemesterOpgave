@@ -12,7 +12,7 @@ namespace BookMyHome.Web.ServiceInterfaces
 
         Task<IReadOnlyList<ListingResponse>> GetAllAvailiableListingsByPeriod(DateOnly start, DateOnly end);
         Task<IReadOnlyList<ListingResponse>> GetAccomodationListings(Guid accomodationId);
-        Task<IReadOnlyList<AccomodationTypeResponse>> GetAllAccomodationTypes();
+        
         Task<int> UpdateListing(Guid accomodationId, Guid listingId, UpdateListingRequest request);
         Task<int> Create(CreateListingRequest request);
     }
