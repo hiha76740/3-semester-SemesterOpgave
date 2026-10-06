@@ -43,13 +43,14 @@
 
 <section>
     <RadzenText TextStyle="TextStyle.DisplayH3">Ledige boliger</RadzenText>
+    <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" Gap="0">
     @foreach (var listing in FilteredList)
     {
         <ListingCardComponent Listing="@listing"
                               ButtonNavigationPath="@($"/listing/{listing.ListingId}")"
                               NavigationButtonText="Se detaljer" />
     }
-
+    </RadzenStack>
 </section>
 
 @code {
