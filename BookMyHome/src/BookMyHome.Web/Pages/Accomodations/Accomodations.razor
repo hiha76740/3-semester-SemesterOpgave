@@ -14,11 +14,12 @@
     <RadzenButton Variant="Variant.Filled" Size="ButtonSize.Large" Text="Opret" Click="Create"></RadzenButton>
 </RadzenStack>
 
+<RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" Gap="0">
 @foreach (var accomodation in AccomodationsList)
 {
     <AccomodationCardComponent Accomodation="accomodation" />
 }
-
+</RadzenStack>
 @code {
     public IReadOnlyList<AccomodationResponse> AccomodationsList { get; set; } = [];
 
