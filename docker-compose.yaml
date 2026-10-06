@@ -1,4 +1,31 @@
 services:
+
+  BookMyHome-Proxy:
+    image: ghcr.io/hiha76740/bookmyhome-proxy:latest
+    container_name: bookmyhome-proxy
+    restart: unless-stopped
+    ports:
+        - 8000:8080
+        - 8010:8081
+        
+    environment:
+        ASPNETCORE_URLS: "http://+:8080;https://+:8081"
+        
+        ASPNETCORE_Kestrel__Certificates__Default__Path: "/https/bookmyhome.pfx"
+        ASPNETCORE_Kestrel__Certificates__Default__Password: "DinDevelopmentKode123"
+
+    volumes:
+        - ${USERPROFILE}/.aspnet/https:/https:ro
+        
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 60s
+  
   mssql:
     image: mcr.microsoft.com/mssql/server:2025-latest
     container_name: bookmyhome-mssql-server
