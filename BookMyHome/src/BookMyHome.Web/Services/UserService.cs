@@ -13,7 +13,7 @@ namespace BookMyHome.Web.Services
 
         async Task<IReadOnlyList<AccessRoleReponse>> IUserService.GetAllAccessRoles()
         {
-            var response = await httpClient.GetFromJsonAsync<IReadOnlyList<AccessRoleReponse>>($"{baseUrl}api/v1/Users/Roles");
+            var response = await httpClient.GetFromJsonAsync<IReadOnlyList<AccessRoleReponse>>($"{baseUrl}Users/Roles");
 
             if (response == null)
                 return new List<AccessRoleReponse>();
@@ -23,7 +23,7 @@ namespace BookMyHome.Web.Services
 
         async Task<UserResponse> IUserService.GetUserById(Guid id)
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}api/v1/Users/{id}");
+            var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}Users/{id}");
 
             request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
 

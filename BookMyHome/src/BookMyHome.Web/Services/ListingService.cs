@@ -15,7 +15,7 @@ namespace BookMyHome.Web.Services
 
         async Task<int> IListingService.Create(CreateListingRequest createRequest)
         {
-            var request = new HttpRequestMessage(HttpMethod.Post, $"{baseUrl}api/v1/Listings")
+            var request = new HttpRequestMessage(HttpMethod.Post, $"{baseUrl}Listings")
             {
                 Content = JsonContent.Create(createRequest)
             };
@@ -29,7 +29,7 @@ namespace BookMyHome.Web.Services
 
         async Task<Guid> IListingService.GetAccomodationIdByListingId(Guid listingId)
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}api/v1/Listings/{listingId}/accomodationId");
+            var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}Listings/{listingId}/accomodationId");
 
             request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
 
@@ -47,7 +47,7 @@ namespace BookMyHome.Web.Services
 
         async Task<IReadOnlyList<ListingResponse>> IListingService.GetAccomodationListings(Guid accomodationId)
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}api/v1/Listings/{accomodationId}/listings");
+            var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}Listings/{accomodationId}/listings");
 
             request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
 
@@ -65,7 +65,7 @@ namespace BookMyHome.Web.Services
 
         async Task<IReadOnlyList<AccomodationTypeResponse>> IListingService.GetAllAccomodationTypes()
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}api/v1/Accomodations/types");
+            var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}Accomodations/types");
 
             using var response = await httpClient.SendAsync(request);
 
@@ -84,7 +84,7 @@ namespace BookMyHome.Web.Services
             var from = start.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
             var to = end.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
 
-            var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}api/v1/Listings/period?start={from}&end={to}");
+            var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}Listings/period?start={from}&end={to}");
 
             request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
 
@@ -102,7 +102,7 @@ namespace BookMyHome.Web.Services
 
         async Task<IReadOnlyList<ListingResponse>> IListingService.GetAllListingsAsync()
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}api/v1/Listings");
+            var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}Listings");
 
             request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
 
@@ -120,7 +120,7 @@ namespace BookMyHome.Web.Services
 
         async Task<ListingResponse> IListingService.GetListingAsync(Guid accomodationId,Guid listingId)
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}api/v1/Listings/{accomodationId}/listings/{listingId}");
+            var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}Listings/{accomodationId}/listings/{listingId}");
 
             request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
 
@@ -139,7 +139,7 @@ namespace BookMyHome.Web.Services
 
         async Task<int> IListingService.UpdateListing(Guid accomodationId, Guid listingId, UpdateListingRequest updateRequest)
         {
-            var request = new HttpRequestMessage(HttpMethod.Put, $"{baseUrl}api/v1/Listings/{accomodationId}/listings/{listingId}")
+            var request = new HttpRequestMessage(HttpMethod.Put, $"{baseUrl}Listings/{accomodationId}/listings/{listingId}")
             {
                 Content = JsonContent.Create(updateRequest)
             };

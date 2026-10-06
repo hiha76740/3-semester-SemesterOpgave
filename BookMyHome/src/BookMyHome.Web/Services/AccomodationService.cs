@@ -15,7 +15,7 @@ namespace BookMyHome.Web.Services
 
         async Task<int> IAccomodationService.Create(CreateAccomodationRequest createRequest)
         {
-            var request = new HttpRequestMessage(HttpMethod.Post, $"{baseUrl}api/v1/Accomodations")
+            var request = new HttpRequestMessage(HttpMethod.Post, $"{baseUrl}Accomodations")
             {
                 Content = JsonContent.Create(createRequest)
             };
@@ -29,7 +29,7 @@ namespace BookMyHome.Web.Services
 
         async Task<AccomodationResponse?> IAccomodationService.GetAccomodationByIdAsync(Guid id)
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}api/v1/Accomodations/{id}");
+            var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}Accomodations/{id}");
 
             request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
 
@@ -47,7 +47,7 @@ namespace BookMyHome.Web.Services
 
         async Task<IReadOnlyList<AccomodationResponse>> IAccomodationService.GetCurrentUserAccomodationsAsync()
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}api/v1/Accomodations");
+            var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}Accomodations");
 
             request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
 
@@ -65,7 +65,7 @@ namespace BookMyHome.Web.Services
 
         async Task<int> IAccomodationService.UpdateAccomodationAsync(Guid accomodationId, UpdateAccomodationRequest updateRequest)
         {
-            var request = new HttpRequestMessage(HttpMethod.Put, $"{baseUrl}api/v1/Accomodations/{accomodationId}")
+            var request = new HttpRequestMessage(HttpMethod.Put, $"{baseUrl}Accomodations/{accomodationId}")
             {
                 Content = JsonContent.Create(updateRequest)
             };
@@ -79,7 +79,7 @@ namespace BookMyHome.Web.Services
 
         async Task IAccomodationService.UpdateAccomodationStatusAsync(Guid accomodationId, string status)
         {
-            var request = new HttpRequestMessage(HttpMethod.Put, $"{baseUrl}api/v1/Accomodations/{accomodationId}/status")
+            var request = new HttpRequestMessage(HttpMethod.Put, $"{baseUrl}Accomodations/{accomodationId}/status")
             {
                 Content = JsonContent.Create(new UpdateAccomodationStatusRequest(status))
             };
@@ -100,7 +100,7 @@ namespace BookMyHome.Web.Services
 
             content.Add(fileContent, "file", selectedFile.Name);
 
-            var request = new HttpRequestMessage(HttpMethod.Put, $"{baseUrl}api/v1/Accomodations/{accomodationId}/image")
+            var request = new HttpRequestMessage(HttpMethod.Put, $"{baseUrl}Accomodations/{accomodationId}/image")
             {
                 Content = content
             };
