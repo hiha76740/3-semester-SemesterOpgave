@@ -66,35 +66,6 @@ services:
       timeout: 3s
       retries: 3
       start_period: 60s
-      
-  BookMyHome-UserService-failover:
-    depends_on:
-      - mssql
-    image: ghcr.io/hiha76740/bookmyhome-userservice:latest
-    container_name: bookmyhome-userservice-failover
-    restart: unless-stopped
-    ports:
-        - 10000:8080
-        - 10010:8081
-        
-    environment:
-        ASPNETCORE_URLS: "http://+:8080;https://+:8081"
-        
-        ASPNETCORE_Kestrel__Certificates__Default__Path: "/https/bookmyhome.pfx"
-        ASPNETCORE_Kestrel__Certificates__Default__Password: "DinDevelopmentKode123"
-
-    volumes:
-        - ${USERPROFILE}/.aspnet/https:/https:ro
-
-    labels:
-      com.centurylinklabs.watchtower.enable: "true"
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
-      interval: 30s
-      timeout: 3s
-      retries: 3
-      start_period: 60s
-      
 
 
   BookMyHome-BookingService:
@@ -125,33 +96,6 @@ services:
       retries: 3
       start_period: 60s
 
-  BookMyHome-BookingService-failover:
-    depends_on:
-      - mssql
-    image: ghcr.io/hiha76740/bookmyhome-bookingservice:latest
-    container_name: bookmyhome-bookingservice-failover
-    restart: unless-stopped
-    ports:
-        - 10001:8080
-        - 10011:8081
-        
-    environment:
-        ASPNETCORE_URLS: "http://+:8080;https://+:8081"
-        
-        ASPNETCORE_Kestrel__Certificates__Default__Path: "/https/bookmyhome.pfx"
-        ASPNETCORE_Kestrel__Certificates__Default__Password: "DinDevelopmentKode123"
-
-    volumes:
-        - ${USERPROFILE}/.aspnet/https:/https:ro
-        
-    labels:
-      com.centurylinklabs.watchtower.enable: "true"
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
-      interval: 30s
-      timeout: 3s
-      retries: 3
-      start_period: 60s
 
   BookMyHome-AccomodationService:
     depends_on:
@@ -183,35 +127,6 @@ services:
       retries: 3
       start_period: 60s
 
-  BookMyHome-AccomodationService-failover:
-    depends_on:
-      - mssql
-    image: ghcr.io/hiha76740/bookmyhome-accomodationservice:latest
-    container_name: bookmyhome-accomodationservice-failover
-    restart: unless-stopped
-    ports:
-        - 10002:8080
-        - 10012:8081
-        
-        
-    environment:
-        ASPNETCORE_URLS: "http://+:8080;https://+:8081"
-        
-        ASPNETCORE_Kestrel__Certificates__Default__Path: "/https/bookmyhome.pfx"
-        ASPNETCORE_Kestrel__Certificates__Default__Password: "DinDevelopmentKode123"
-
-    volumes:
-        - ${USERPROFILE}/.aspnet/https:/https:ro
-        - BookMyHome-Images:/app/Storage/images
-
-    labels:
-      com.centurylinklabs.watchtower.enable: "true"
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
-      interval: 30s
-      timeout: 3s
-      retries: 3
-      start_period: 60s
 
 
   watchtower:
