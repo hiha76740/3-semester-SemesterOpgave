@@ -8,7 +8,9 @@ namespace BookMyHome.Web.Services
 {
     public class FacilityService(HttpClient httpClient) : IFacilityService
     {
-        private readonly string baseUrl = "https://localhost:9012/";
+        //private readonly string baseUrl = "https://localhost:9012/";
+        private readonly string baseUrl = "https://localhost:8010/accomodations-api/";
+
 
         async Task<IReadOnlyList<FacilityResponse>> IFacilityService.GetAllFacilitiesAsync()
         {
