@@ -2,11 +2,15 @@
     <RadzenTemplateForm TItem="ListingInputModel" Data=@Model Submit=@HandleSubmit>
         <RadzenStack Gap="1rem">
             <article>
-                <RadzenText TextStyle="TextStyle.DisplayH4">Rediger listing</RadzenText>
+                <RadzenText TextStyle="TextStyle.DisplayH4">@FormTitle</RadzenText>
                 <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" Gap="1rem" class="rz-p-4">
                     @if (Model.ImageUrl != null)
                     {
                         <img src="@Model.ImageUrl" alt="Facility image" style="max-width: 500px; height: auto" />
+                    }
+                    else if (Model.ImageFile != null)
+                    {
+                        
                     }
                 </RadzenStack>
                 <article>
@@ -17,7 +21,7 @@
                         Gem billede
                     </button>
                 </article>
-                
+                <br />
                 <RadzenRow AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Center" RowGap="0.25rem">
                     <RadzenColumn Size="12" SizeMD="4" class="rz-text-align-start rz-text-align-md-end">
                         <RadzenLabel Text="Listing Titel" Component="ListingName" />
@@ -51,17 +55,17 @@
                 </RadzenRow>
             </article>
             <article>
-                
+
                 <RadzenRow AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Center" RowGap="0.25rem">
                     <RadzenColumn Size="12" SizeMD="4" class="rz-text-align-start rz-text-align-md-end">
-                        <RadzenLabel Text="Type"/>
+                        <RadzenLabel Text="Type" />
                     </RadzenColumn>
                     <RadzenColumn Size="12" SizeMD="8">
                         <RadzenRadioButtonList @bind-Value="Model.AccomodationType" TValue="string">
                             <Items>
                                 @foreach (var type in AccomodationsTypes)
                                 {
-                                    <RadzenRadioButtonListItem Text="@type.Type" Value="@type.Type"/>
+                                    <RadzenRadioButtonListItem Text="@type.Type" Value="@type.Type" />
                                 }
                             </Items>
                         </RadzenRadioButtonList>
@@ -76,16 +80,16 @@
                         <RadzenSwitch @bind-Value=@Model.Status Component="ListingStatus" />
                     </RadzenColumn>
                 </RadzenRow>
-            
-            <br />
+
+                <br />
                 <RadzenRow AlignItems="AlignItems.Start" class="rz-mt-4">
-                <RadzenColumn Size="12" Offset="0" SizeMD="8" OffsetMD="4">
-                    <RadzenButton ButtonType="ButtonType.Submit" Text="@SubmitText" ButtonStyle="ButtonStyle.Primary" Size="ButtonSize.Large" />
-                </RadzenColumn>
-                <RadzenColumn Size="12" Offset="0" SizeMD="8" OffsetMD="0">
-                    <RadzenButton ButtonType="ButtonType.Button" Text="Cancel" ButtonStyle="ButtonStyle.Secondary" Click="Cancel" />
-                </RadzenColumn>
-            </RadzenRow>
+                    <RadzenColumn Size="12" Offset="0" SizeMD="8" OffsetMD="4">
+                        <RadzenButton ButtonType="ButtonType.Submit" Text="@SubmitText" ButtonStyle="ButtonStyle.Primary" Size="ButtonSize.Large" />
+                    </RadzenColumn>
+                    <RadzenColumn Size="12" Offset="0" SizeMD="8" OffsetMD="0">
+                        <RadzenButton ButtonType="ButtonType.Button" Text="Cancel" ButtonStyle="ButtonStyle.Secondary" Click="Cancel" />
+                    </RadzenColumn>
+                </RadzenRow>
             </article>
         </RadzenStack>
     </RadzenTemplateForm>
@@ -96,6 +100,9 @@
 @code {
     [Parameter, EditorRequired]
     public ListingInputModel Model { get; set; }
+
+    [Parameter, EditorRequired]
+    public string FormTitle { get; set; }
 
     [Parameter, EditorRequired]
     public EventCallback<ListingInputModel> SubmitCallback { get; set; }
@@ -127,7 +134,7 @@
 
     private void SelectImage(InputFileChangeEventArgs args)
     {
-        selectedFile = args.File;
+        Model.ImageFile = args.File;
     }
 
     private void HandleUploadCallback()

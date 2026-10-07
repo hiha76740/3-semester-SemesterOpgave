@@ -1,4 +1,6 @@
-﻿namespace BookMyHome.Web.Models
+﻿using Microsoft.AspNetCore.Components.Forms;
+
+namespace BookMyHome.Web.Models
 {
     public class ListingInputModel
     {
@@ -11,7 +13,9 @@
         public bool Status { get; set; } = true;
         public byte[] RowVersion { get; set; } = [];
 
-        public string? ImageUrl { get; set; } = string.Empty;
+        public string? ImageUrl { get; set; } = null;
+
+        public IBrowserFile? ImageFile { get; set; } = null;
 
     }
 }
