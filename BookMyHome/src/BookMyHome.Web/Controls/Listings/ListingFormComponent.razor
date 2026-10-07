@@ -3,6 +3,21 @@
         <RadzenStack Gap="1rem">
             <article>
                 <RadzenText TextStyle="TextStyle.DisplayH4">Rediger listing</RadzenText>
+                <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" Gap="1rem" class="rz-p-4">
+                    @if (Model.ImageUrl != null)
+                    {
+                        <img src="@Model.ImageUrl" alt="Facility image" style="max-width: 500px; height: auto" />
+                    }
+                </RadzenStack>
+                <article>
+                    <InputFile OnChange="SelectImage"
+                               accept="image/png,image/jpeg" />
+                    <button class="btn btn-primary" type="button" @onclick="HandleUploadCallback"
+                            disabled="@(selectedFile == null)">
+                        Gem billede
+                    </button>
+                </article>
+                
                 <RadzenRow AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Center" RowGap="0.25rem">
                     <RadzenColumn Size="12" SizeMD="4" class="rz-text-align-start rz-text-align-md-end">
                         <RadzenLabel Text="Listing Titel" Component="ListingName" />
@@ -94,6 +109,11 @@
     [Parameter, EditorRequired]
     public IReadOnlyList<AccomodationTypeResponse> AccomodationsTypes { get; set; }
 
+    [Parameter]
+    public EventCallback<IBrowserFile?> UploadCallback { get; set; }
+
+    private IBrowserFile? selectedFile;
+
 
     private void HandleSubmit()
     {
@@ -103,5 +123,15 @@
     private void Cancel()
     {
         NavigationManager.NavigateTo(CancelNavigationPath);
+    }
+
+    private void SelectImage(InputFileChangeEventArgs args)
+    {
+        selectedFile = args.File;
+    }
+
+    private void HandleUploadCallback()
+    {
+        UploadCallback.InvokeAsync(selectedFile);
     }
 }
