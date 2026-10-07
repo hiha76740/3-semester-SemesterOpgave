@@ -306,7 +306,8 @@ namespace AccomodationService.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Description = "Upload and set of image was done sucessfully")]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while uploading and setting image for requested accomodation")]
         public async Task<ActionResult> UploadAccomodationImage(
-           [Description("Id of the accomodation you want to upload and set the image for")] Guid listingId,
+           [Required][Description("Id of the accomodation the requested listing is associated to")] Guid accomodationId,
+           [Description("Id of the listing you want to upload and set the image for")] Guid listingId,
            [FromForm] IFormFile file)
         {
             try
@@ -335,7 +336,7 @@ namespace AccomodationService.Api.Controllers
 
                 await using var imageStream = file.OpenReadStream();
 
-                var command = new UploadListingImageCommand(userId.Value, listingId, imageStream, extension);
+                var command = new UploadListingImageCommand(userId.Value, accomodationId, listingId, imageStream, extension);
 
                 await imageHandler.HandleAsync(command);
 

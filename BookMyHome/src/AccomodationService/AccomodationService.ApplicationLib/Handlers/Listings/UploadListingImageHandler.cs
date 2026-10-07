@@ -2,20 +2,21 @@
 using AccomodationService.ApplicationLib.Repositories;
 using AccomodationService.DomainLib.Entities;
 using AccomodationService.DomainLib.ValueObjects;
-using AccomodationService.FacadeLib.Commands.DTOs.Accomodations;
-using AccomodationService.FacadeLib.Commands.Interfaces.Accomodations;
+using AccomodationService.FacadeLib.Commands.DTOs.Listings;
+using AccomodationService.FacadeLib.Commands.Interfaces.Listings;
 using Shared.BookMyHome.SharedKernelLib.Exceptions;
 
-namespace AccomodationService.ApplicationLib.Handlers.Accomodations;
+namespace AccomodationService.ApplicationLib.Handlers.Listings;
 
-public class UploadAccomodationImageHandler(IAccomodationRepository repo, IImageStorageService imageStorage) : IUploadAccomdationImageHandler
+public class UploadListingImageHandler(IAccomodationRepository repo, IImageStorageService imageStorage) : IUploadListingImageHandler
 {
-    async Task IUploadAccomdationImageHandler.HandleAsync(UploadAccomdationImageCommand command)
+    async Task IUploadListingImageHandler.HandleAsync(UploadListingImageCommand command)
     {
-        var accomdationId = new AccomodationId(command.AccomodationId);
+        var listingId = new ListingId(command.ListingId);
+        var accomodationId = new AccomodationId(command.AccomodationId);
         var hostId = new HostId(command.UserId);
 
-        var accomodation = await repo.GetAccomodationByIdAsync(accomdationId);
+        var accomodation = await repo.GetAccomodationWithListingsAsync(accomodationId);
 
         if (accomodation == null)
             throw new NotFoundException("Upload of image aborted, Accomodation not found");
@@ -25,7 +26,7 @@ public class UploadAccomodationImageHandler(IAccomodationRepository repo, IImage
 
         var fileName = await imageStorage.SaveAsync(command.ImageStream, command.Extension);
 
-        accomodation.SetImage(fileName);
+        accomodation.SetListingImage(listingId, fileName);
 
         await repo.SaveAsync();
     }

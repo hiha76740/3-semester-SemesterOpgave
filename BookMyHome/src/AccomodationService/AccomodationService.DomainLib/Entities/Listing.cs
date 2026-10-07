@@ -19,7 +19,17 @@ public class Listing
 
     public ListingStatus Status { get; private set; }
 
+    public string? ImageFileName { get; private set; }
+
     public byte[] RowVersion { get; private set; } = [];
+
+    internal void SetImage(string imageFileName)
+    {
+        if (string.IsNullOrWhiteSpace(imageFileName))
+            throw new DomainException("image file name must have a value");
+
+        ImageFileName = imageFileName;
+    }
 
     
     internal void UpdateStatus(ListingStatus newStatus)

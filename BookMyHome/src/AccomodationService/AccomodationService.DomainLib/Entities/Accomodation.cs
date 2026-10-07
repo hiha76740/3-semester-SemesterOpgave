@@ -20,6 +20,13 @@ public class Accomodation
     private readonly List<Facility> _facilities = [];
     public IReadOnlyList<Facility> facilities => _facilities.AsReadOnly();
 
+    public void SetListingImage(ListingId id, string imageFileName)
+    {
+        var listing = GetListing(id);
+
+        listing.SetImage(imageFileName);
+    }
+
     public void SetImage(string imageFileName)
     {
         if (string.IsNullOrWhiteSpace(imageFileName))

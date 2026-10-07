@@ -21,6 +21,7 @@ public static class HandlerDI
         services.AddScoped<IUpdateAccomodationStatusHandler, UpdateAccomodationStatusHandler>();
         services.AddScoped<IUploadAccomdationImageHandler, UploadAccomodationImageHandler>();
         services.AddScoped<IUpdateAccomodationHandler,  UpdateAccomodationHandler>();
+        services.AddScoped<IUploadListingImageHandler, UploadListingImageHandler>();
 
         return services;
     }
