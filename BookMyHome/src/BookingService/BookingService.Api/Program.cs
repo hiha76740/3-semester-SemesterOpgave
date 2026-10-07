@@ -18,9 +18,6 @@ builder.Services.AddScoped<HttpClient>();
 
 builder.Services.AddBookMyHomeAuthentication(builder);
 
-var policyName = "AllowBlazorOrigin";
-builder.Services.AddBookMyHomeCors(policyName);
-
 builder.Services.AddHealthChecks();
 
 var app = builder.Build();
@@ -38,8 +35,6 @@ if (app.Environment.IsDevelopment())
 
 //app.UseHttpsRedirection();
 app.MapHealthChecks("health");
-
-app.UseCors(policyName);
 
 app.UseAuthentication();
 app.UseAuthorization();
