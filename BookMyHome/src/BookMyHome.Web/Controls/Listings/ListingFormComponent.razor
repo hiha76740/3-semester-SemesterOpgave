@@ -2,8 +2,8 @@
     <RadzenTemplateForm TItem="ListingInputModel" Data=@Model Submit=@HandleSubmit>
         <RadzenStack Gap="1rem">
             <article>
-                <RadzenText TextStyle="TextStyle.DisplayH4">Generelt</RadzenText>
-                <RadzenRow AlignItems="AlignItems.Center" RowGap="0.25rem">
+                <RadzenText TextStyle="TextStyle.DisplayH4">Rediger listing</RadzenText>
+                <RadzenRow AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Center" RowGap="0.25rem">
                     <RadzenColumn Size="12" SizeMD="4" class="rz-text-align-start rz-text-align-md-end">
                         <RadzenLabel Text="Listing Titel" Component="ListingName" />
                     </RadzenColumn>
@@ -13,7 +13,7 @@
                     </RadzenColumn>
                 </RadzenRow>
                 <br />
-                <RadzenRow AlignItems="AlignItems.Center" RowGap="0.25rem">
+                <RadzenRow AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Center" RowGap="0.25rem">
                     <RadzenColumn Size="12" SizeMD="4" class="rz-text-align-start rz-text-align-md-end">
                         <RadzenLabel Text="Daglig pris" Component="DailyPrice" />
 
@@ -25,7 +25,7 @@
                     </RadzenColumn>
                 </RadzenRow>
                 <br />
-                <RadzenRow AlignItems="AlignItems.Center" RowGap="0.25rem">
+                <RadzenRow AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Center" RowGap="0.25rem">
                     <RadzenColumn Size="12" SizeMD="4" class="rz-text-align-start rz-text-align-md-end">
                         <RadzenLabel Text="Hus regler" Component="HouseRules" />
                     </RadzenColumn>
@@ -36,32 +36,42 @@
                 </RadzenRow>
             </article>
             <article>
-                <RadzenText TextStyle="TextStyle.DisplayH4">Type</RadzenText>
-                <RadzenRow AlignItems="AlignItems.Center" RowGap="0.25rem">
+                
+                <RadzenRow AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Center" RowGap="0.25rem">
+                    <RadzenColumn Size="12" SizeMD="4" class="rz-text-align-start rz-text-align-md-end">
+                        <RadzenLabel Text="Type"/>
+                    </RadzenColumn>
                     <RadzenColumn Size="12" SizeMD="8">
                         <RadzenRadioButtonList @bind-Value="Model.AccomodationType" TValue="string">
                             <Items>
                                 @foreach (var type in AccomodationsTypes)
                                 {
-                                    <RadzenRadioButtonListItem Text="@type.Type" Value="@type.Type" />
+                                    <RadzenRadioButtonListItem Text="@type.Type" Value="@type.Type"/>
                                 }
                             </Items>
                         </RadzenRadioButtonList>
                     </RadzenColumn>
                 </RadzenRow>
-            </article>
-            <article>
-                <RadzenSwitch @bind-Value=@Model.Status />
-            </article>
+                <br />
+                <RadzenRow AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Center" RowGap="0.25rem">
+                    <RadzenColumn Size="12" SizeMD="4" class="rz-text-align-start rz-text-align-md-end">
+                        <RadzenLabel Text="Status" Component="ListingStatus" />
+                    </RadzenColumn>
+                    <RadzenColumn Size="12" SizeMD="8">
+                        <RadzenSwitch @bind-Value=@Model.Status Component="ListingStatus" />
+                    </RadzenColumn>
+                </RadzenRow>
+            
             <br />
-            <RadzenRow AlignItems="AlignItems.Center" class="rz-mt-4">
+                <RadzenRow AlignItems="AlignItems.Start" class="rz-mt-4">
                 <RadzenColumn Size="12" Offset="0" SizeMD="8" OffsetMD="4">
-                    <RadzenButton ButtonType="ButtonType.Submit" Text="@SubmitText" ButtonStyle="ButtonStyle.Primary" />
+                    <RadzenButton ButtonType="ButtonType.Submit" Text="@SubmitText" ButtonStyle="ButtonStyle.Primary" Size="ButtonSize.Large" />
                 </RadzenColumn>
                 <RadzenColumn Size="12" Offset="0" SizeMD="8" OffsetMD="0">
                     <RadzenButton ButtonType="ButtonType.Button" Text="Cancel" ButtonStyle="ButtonStyle.Secondary" Click="Cancel" />
                 </RadzenColumn>
             </RadzenRow>
+            </article>
         </RadzenStack>
     </RadzenTemplateForm>
 </RadzenCard>
