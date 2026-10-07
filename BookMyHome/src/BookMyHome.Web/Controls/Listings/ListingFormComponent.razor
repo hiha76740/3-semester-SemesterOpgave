@@ -6,20 +6,17 @@
                 <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" Gap="1rem" class="rz-p-4">
                     @if (Model.ImageUrl != null)
                     {
-                        <img src="@Model.ImageUrl" alt="Facility image" style="max-width: 500px; height: auto" />
+                        <RadzenImage Path="@Model.ImageUrl" AlternateText="Facility image" Style="max-width: 500px; height: auto;" />
                     }
                     else if (Model.ImageFile != null)
                     {
-                        
+                        <RadzenImage Path="@imagePreview"
+                                     AlternateText="Forhåndsvisning af valgt billede"
+                                     Style="max-width: 500px; height: auto;" />
                     }
                 </RadzenStack>
                 <article>
-                    <InputFile OnChange="SelectImage"
-                               accept="image/png,image/jpeg" />
-                    <button class="btn btn-primary" type="button" @onclick="HandleUploadCallback"
-                            disabled="@(selectedFile == null)">
-                        Gem billede
-                    </button>
+                    <InputFile OnChange="OnImageSelected" accept="image/png,image/jpeg" />
                 </article>
                 <br />
                 <RadzenRow AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Center" RowGap="0.25rem">
@@ -116,11 +113,7 @@
     [Parameter, EditorRequired]
     public IReadOnlyList<AccomodationTypeResponse> AccomodationsTypes { get; set; }
 
-    [Parameter]
-    public EventCallback<IBrowserFile?> UploadCallback { get; set; }
-
-    private IBrowserFile? selectedFile;
-
+    private string? imagePreview;
 
     private void HandleSubmit()
     {
@@ -132,13 +125,15 @@
         NavigationManager.NavigateTo(CancelNavigationPath);
     }
 
-    private void SelectImage(InputFileChangeEventArgs args)
+    private async Task OnImageSelected(InputFileChangeEventArgs args)
     {
         Model.ImageFile = args.File;
-    }
 
-    private void HandleUploadCallback()
-    {
-        UploadCallback.InvokeAsync(selectedFile);
+        using var stream = args.File.OpenReadStream(5 * 1024 * 1024);
+        using var memory = new MemoryStream();
+
+        await stream.CopyToAsync(memory);
+
+        imagePreview = $"data:{args.File.ContentType};base64,{Convert.ToBase64String(memory.ToArray())}";
     }
 }
