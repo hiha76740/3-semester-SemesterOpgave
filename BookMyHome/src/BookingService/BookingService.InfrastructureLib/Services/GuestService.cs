@@ -6,11 +6,11 @@ namespace BookingService.InfrastructureLib.Services;
 
 public class GuestService(HttpClient httpClient) : IGuestService
 {
-    private readonly string baseUrl = "http://BookMyHome-UserService:8080/";
+    private readonly string baseUrl = "http://bookmyhome-proxy:8080/users-api/";
 
     async Task<bool> IGuestService.GuestExistAsync(GuestId id)
     {
-        var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}api/v1/Users/exists?userId={id.Value}");
+        var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}exists?userId={id.Value}");
 
         var response = await httpClient.SendAsync(request);
 

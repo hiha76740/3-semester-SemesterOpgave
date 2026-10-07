@@ -7,12 +7,12 @@ namespace BookingService.InfrastructureLib.Services;
 
 public class AccomodationService(HttpClient httpClient) : IAccomodationService
 {
-    private readonly string baseUrl = "http://BookMyHome-AccomodationService:8080/";
+    private readonly string baseUrl = "http://bookmyhome-proxy:8080/accomodations-api/";
 
 
     async Task<bool> IAccomodationService.AccomodationExistAsync(AccomodationId id)
     {
-        var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}api/v1/Accomodations/exists?id={id.Value}");
+        var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}exists?id={id.Value}");
 
         var response = await httpClient.SendAsync(request);
 
@@ -25,7 +25,7 @@ public class AccomodationService(HttpClient httpClient) : IAccomodationService
 
     async Task<Guid> IAccomodationService.GetAccmodationHostIdAsync(AccomodationId accomodationId)
     {
-        var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}api/v1/Accomodations/hostid?accomodationId={accomodationId.Value}");
+        var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}hostid?accomodationId={accomodationId.Value}");
 
         var response = await httpClient.SendAsync(request);
 
@@ -38,7 +38,7 @@ public class AccomodationService(HttpClient httpClient) : IAccomodationService
 
     async Task<AccomodationSummaryResponse> IAccomodationService.GetAccomodationSummaryAsync(Guid accomodationId, Guid listingId)
     {
-        var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}api/v1/Accomodations/summary?accomodationId={accomodationId}&listingId={listingId}");
+        var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}summary?accomodationId={accomodationId}&listingId={listingId}");
 
         var response = await httpClient.SendAsync(request);
 

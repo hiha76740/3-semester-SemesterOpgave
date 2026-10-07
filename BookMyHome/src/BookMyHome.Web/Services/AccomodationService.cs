@@ -9,7 +9,6 @@ namespace BookMyHome.Web.Services
 {
     public class AccomodationService(HttpClient httpClient) : IAccomodationService
     {
-        //private readonly string baseUrl = "https://localhost:9012/";
         private readonly string baseUrl = "https://localhost:8010/accomodations-api/";
 
 

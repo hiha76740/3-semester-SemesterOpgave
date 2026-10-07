@@ -8,7 +8,6 @@ namespace BookMyHome.Web.Services;
 
 public class BookingService(HttpClient httpClient) : IBookingService
 {
-    //private readonly string baseUrl = "https://localhost:9011/";
     private readonly string baseUrl = "https://localhost:8010/bookings-api/";
 
 

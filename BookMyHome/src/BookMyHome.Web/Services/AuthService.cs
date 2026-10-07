@@ -9,7 +9,6 @@ namespace BookMyHome.Web.Services
 {
     public class AuthService(HttpClient httpClient) : IAuthService
     {
-        //private readonly string baseUrl = "https://localhost:9010/";
         private readonly string baseUrl = "https://localhost:8010/auth-api/";
 
 

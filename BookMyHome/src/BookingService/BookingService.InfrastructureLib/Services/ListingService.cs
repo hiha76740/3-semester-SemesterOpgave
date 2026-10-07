@@ -6,11 +6,11 @@ namespace BookingService.InfrastructureLib.Services;
 
 public class ListingService(HttpClient httpClient) : IListingService
 {
-    private readonly string baseUrl = "http://BookMyHome-AccomodationService:8080/";
+    private readonly string baseUrl = "http://bookmyhome-proxy:8080/listings-api/";
 
     async Task<bool> IListingService.ListingExistAsync(ListingId id)
     {
-        var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}/api/v1/Listings/exists?id={id.Value}");
+        var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}exists?id={id.Value}");
 
         var response = await httpClient.SendAsync(request);
 
