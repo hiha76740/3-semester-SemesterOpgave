@@ -11,5 +11,7 @@
         public bool Status { get; set; } = true;
         public byte[] RowVersion { get; set; } = [];
 
+        public string? ImageUrl { get; set; } = string.Empty;
+
     }
 }
