@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-
-namespace BookMyHome.BuildingBlocksLib.DependencyInjection;
+﻿namespace BookMyHome.Yarp.Extensions;
 
 public static class CorsDI
 {
@@ -22,4 +20,3 @@ public static class CorsDI
         return services;
     }
 }
-

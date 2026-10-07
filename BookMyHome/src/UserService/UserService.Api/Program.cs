@@ -1,8 +1,5 @@
 using BookMyHome.BuildingBlocksLib.DependencyInjection;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
-using System.Text;
 using UserService.Api.DependencyInjection;
 using UserService.ApplicationLib.Extensions;
 using UserService.InfrastructureLib.Extensions;
@@ -21,9 +18,6 @@ builder.Services.AddQueriesDI();
 
 builder.Services.AddHealthChecks();
 
-string corsPolicyName = "AllowBlazorOrigin";
-
-builder.Services.AddBookMyHomeCors(corsPolicyName);
 builder.Services.AddBookMyHomeAuthentication(builder);
 
 
@@ -43,7 +37,6 @@ if (app.Environment.IsDevelopment())
 //app.UseHttpsRedirection();
 app.MapHealthChecks("health");
 
-app.UseCors(corsPolicyName);
 app.UseAuthentication();
 app.UseAuthorization();
 
