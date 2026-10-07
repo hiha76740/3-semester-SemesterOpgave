@@ -13,5 +13,6 @@ public record ListingResponse(
     string Country,
     string Status,
     string[] Facilities,
-    byte[] RowVersion
+    byte[] RowVersion,
+    string? ImageUrl
     );

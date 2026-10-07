@@ -7,7 +7,7 @@ namespace AccomodationService.Api.Mapper;
 
 public static class ListingMapper
 {
-    public static ListingResponse AsReponse(this ListingDto dto)
+    public static ListingResponse AsReponse(this ListingDto dto, string? url)
     {
         var output = new ListingResponse(
             dto.ListingId,
@@ -22,7 +22,8 @@ public static class ListingMapper
             dto.Country,
             dto.Status,
             dto.Facilities,
-            dto.RowVersion
+            dto.RowVersion,
+            url
             );
 
         return output;

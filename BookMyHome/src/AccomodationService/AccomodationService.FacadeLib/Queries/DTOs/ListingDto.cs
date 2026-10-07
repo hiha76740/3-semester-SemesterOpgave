@@ -13,5 +13,6 @@ public record ListingDto(
     string Country,
     string Status,
     string[] Facilities,
-    byte[] RowVersion
+    byte[] RowVersion,
+    string? ImageFileName
     );

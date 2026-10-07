@@ -40,7 +40,9 @@ namespace AccomodationService.Api.Controllers
                 {
                     foreach (var item in list)
                     {
-                        response.Add(item.AsReponse());
+                        var url = item.ImageFileName == null ? null : $"https://localhost:8010/images/{item.ImageFileName}";
+
+                        response.Add(item.AsReponse(url));
                     }
                 }
 
@@ -98,7 +100,9 @@ namespace AccomodationService.Api.Controllers
                 {
                     foreach (var item in list)
                     {
-                        response.Add(item.AsReponse());
+                        var url = item.ImageFileName == null ? null : $"https://localhost:8010/images/{item.ImageFileName}";
+
+                        response.Add(item.AsReponse(url));
                     }
                 }
 
@@ -131,7 +135,9 @@ namespace AccomodationService.Api.Controllers
                 {
                     foreach (var item in list)
                     {
-                        response.Add(item.AsReponse());
+                        var url = item.ImageFileName == null ? null : $"https://localhost:8010/images/{item.ImageFileName}";
+
+                        response.Add(item.AsReponse(url));
                     }
                 }
 
@@ -162,7 +168,9 @@ namespace AccomodationService.Api.Controllers
                 if (dto == null)
                     return NotFound("The requested listing was not found");
 
-                return Ok(dto.AsReponse());
+                var url = dto.ImageFileName == null ? null : $"https://localhost:8010/images/{dto.ImageFileName}";
+
+                return Ok(dto.AsReponse(url));
             }
             catch (Exception ex)
             {

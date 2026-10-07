@@ -38,7 +38,8 @@ public class ListingQueryHandlerIMPL(AccomodationDbContext db, IBookingService b
                 l.Accomodation.Address.Country,
                 l.Status.ToString(),
                 l.Accomodation.facilities.Select(f => f.Name).ToArray(),
-                l.RowVersion
+                l.RowVersion,
+                l.ImageFileName
                 ))
             .FirstOrDefaultAsync();
     }
@@ -74,7 +75,8 @@ public class ListingQueryHandlerIMPL(AccomodationDbContext db, IBookingService b
                 l.Accomodation.Address.Country,
                 l.Status.ToString(),
                 l.Accomodation.facilities.Select(f => f.Name).ToArray(),
-                l.RowVersion
+                l.RowVersion,
+                l.ImageFileName
                 ))
             .ToListAsync();
     }
@@ -96,7 +98,8 @@ public class ListingQueryHandlerIMPL(AccomodationDbContext db, IBookingService b
                 l.Accomodation.Address.Country,
                 l.Status.ToString(),
                 l.Accomodation.facilities.Select(f => f.Name).ToArray(),
-                l.RowVersion
+                l.RowVersion,
+                l.ImageFileName
                 ))
             .ToListAsync();
     }
@@ -120,7 +123,8 @@ public class ListingQueryHandlerIMPL(AccomodationDbContext db, IBookingService b
                 l.Accomodation.Address.Country,
                 l.Status.ToString(),
                 l.Accomodation.facilities.Select(f => f.Name).ToArray(),
-                l.RowVersion
+                l.RowVersion,
+                l.ImageFileName
                 ))
             .ToListAsync();
 
