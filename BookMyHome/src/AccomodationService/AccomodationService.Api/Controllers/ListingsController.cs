@@ -18,7 +18,8 @@ namespace AccomodationService.Api.Controllers
         IListingQueries queries,
         ICreateListingHandler listingCreate,
         IUpdateListingHandler update,
-        IDeleteListingHandler deleteListingById
+        IDeleteListingHandler deleteListingById,
+        IUploadListingImageHandler imageHandler
         ) : ControllerBase
     {
         [Authorize(Roles = "Host, Guest")]
@@ -293,6 +294,56 @@ namespace AccomodationService.Api.Controllers
             catch (Exception ex)
             {
 
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [Authorize(Roles = "Host")]
+        [HttpPut("{listingId:guid}/image")]
+        [RequestSizeLimit(6 * 1024 * 1024)]
+        [EndpointSummary("This endpoint will upload and set a image to the requested accomodation")]
+        [EndpointDescription("Uploads and sets the provided image to the requested accomodation or returns not found if accomodation was not found")]
+        [ProducesResponseType(StatusCodes.Status200OK, Description = "Upload and set of image was done sucessfully")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while uploading and setting image for requested accomodation")]
+        public async Task<ActionResult> UploadAccomodationImage(
+           [Description("Id of the accomodation you want to upload and set the image for")] Guid listingId,
+           [FromForm] IFormFile file)
+        {
+            try
+            {
+                var userId = GetCurrentUserId();
+
+                if (userId == null || HttpContext.User.FindFirstValue(ClaimTypes.Role) != "Host")
+                    return BadRequest("Invalid request");
+
+
+                const long maxFileSize = 5 * 1024 * 1024;
+
+                if (file.Length == 0)
+                    return BadRequest("Please choose a image file");
+
+                if (file.Length > maxFileSize)
+                    return BadRequest($"Size limit of image is 5 MB.");
+
+                var extension = Path.GetExtension(file.FileName)
+                    .ToLowerInvariant();
+
+                if (extension != ".jpg" &&
+                    extension != ".jpeg" &&
+                    extension != ".png")
+                    return BadRequest("Only jpg- and png-image files are allowed");
+
+                await using var imageStream = file.OpenReadStream();
+
+                var command = new UploadListingImageCommand(userId.Value, listingId, imageStream, extension);
+
+                await imageHandler.HandleAsync(command);
+
+                return Ok();
+
+            }
+            catch (Exception ex)
+            {
                 return BadRequest(ex.Message);
             }
         }
