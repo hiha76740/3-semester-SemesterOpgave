@@ -1,4 +1,6 @@
-﻿namespace BookMyHome.Yarp.Extensions;
+﻿using Microsoft.Extensions.DependencyInjection;
+
+namespace BookMyHome.BuildingBlocksLib.DependencyInjection;
 
 public static class CorsDI
 {
