@@ -35,8 +35,6 @@ services:
       - ACCEPT_EULA=Y
       - MSSQL_SA_PASSWORD=6!8GSPTuHGHsmFfwrH!
       - MSSQL_PID=Developer
-    ports:
-      - "5010:1433"
     volumes:
       - mssql-userdb-data:/var/opt/mssql
     restart: unless-stopped
@@ -75,8 +73,6 @@ services:
       - ACCEPT_EULA=Y
       - MSSQL_SA_PASSWORD=6!8GSPTuHGHsmFfwrH!
       - MSSQL_PID=Developer
-    ports:
-      - "5020:1433"
     volumes:
       - mssql-bookingdb-data:/var/opt/mssql
     restart: unless-stopped
@@ -115,8 +111,6 @@ services:
       - ACCEPT_EULA=Y
       - MSSQL_SA_PASSWORD=6!8GSPTuHGHsmFfwrH!
       - MSSQL_PID=Developer
-    ports:
-      - "5030:1433"
     volumes:
       - mssql-Accomodationdb-data:/var/opt/mssql
     restart: unless-stopped
