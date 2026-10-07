@@ -13,8 +13,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookingService.InfrastructureLib.Migrations
 {
     [DbContext(typeof(BookingDbContext))]
-    [Migration("20261002103344_AddedListingId")]
-    partial class AddedListingId
+    [Migration("20261007103645_Intial")]
+    partial class Intial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

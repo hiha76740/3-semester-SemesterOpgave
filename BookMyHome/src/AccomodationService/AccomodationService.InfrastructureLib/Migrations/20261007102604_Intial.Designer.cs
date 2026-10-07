@@ -13,8 +13,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AccomodationService.InfrastructureLib.Migrations
 {
     [DbContext(typeof(AccomodationDbContext))]
-    [Migration("20261003150149_AddedListingStatus")]
-    partial class AddedListingStatus
+    [Migration("20261007102604_Intial")]
+    partial class Intial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -48,6 +48,9 @@ namespace AccomodationService.InfrastructureLib.Migrations
 
                     b.Property<Guid>("HostId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ImageFileName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -167,6 +170,9 @@ namespace AccomodationService.InfrastructureLib.Migrations
 
                     b.Property<string>("HouseRules")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageFileName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ListingName")

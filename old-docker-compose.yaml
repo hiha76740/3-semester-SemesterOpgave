@@ -28,7 +28,7 @@ services:
   
  
  
-  mssql-UserDB:
+ mssql-UserDB:
     image: mcr.microsoft.com/mssql/server:2025-latest
     container_name: mssql-UserDB
     environment:
@@ -36,7 +36,7 @@ services:
       - MSSQL_SA_PASSWORD=6!8GSPTuHGHsmFfwrH!
       - MSSQL_PID=Developer
     ports:
-      - "5010:1433"
+      - "5000:1433"
     volumes:
       - mssql-userdb-data:/var/opt/mssql
     restart: unless-stopped
@@ -47,6 +47,9 @@ services:
     image: ghcr.io/hiha76740/bookmyhome-userservice:latest
     container_name: bookmyhome-userservice
     restart: unless-stopped
+    ports:
+        - 9000:8080
+        - 9010:8081
         
     environment:
         ASPNETCORE_URLS: "http://+:8080;https://+:8081"
@@ -76,7 +79,7 @@ services:
       - MSSQL_SA_PASSWORD=6!8GSPTuHGHsmFfwrH!
       - MSSQL_PID=Developer
     ports:
-      - "5020:1433"
+      - "5001:1433"
     volumes:
       - mssql-bookingdb-data:/var/opt/mssql
     restart: unless-stopped
@@ -87,6 +90,9 @@ services:
     image: ghcr.io/hiha76740/bookmyhome-bookingservice:latest
     container_name: bookmyhome-bookingservice
     restart: unless-stopped
+    ports:
+        - 9001:8080
+        - 9011:8081
         
     environment:
         ASPNETCORE_URLS: "http://+:8080;https://+:8081"
@@ -116,7 +122,7 @@ services:
       - MSSQL_SA_PASSWORD=6!8GSPTuHGHsmFfwrH!
       - MSSQL_PID=Developer
     ports:
-      - "5030:1433"
+      - "5002:1433"
     volumes:
       - mssql-Accomodationdb-data:/var/opt/mssql
     restart: unless-stopped
@@ -128,6 +134,9 @@ services:
     image: ghcr.io/hiha76740/bookmyhome-accomodationservice:latest
     container_name: bookmyhome-accomodationservice
     restart: unless-stopped
+    ports:
+        - 9002:8080
+        - 9012:8081   
         
     environment:
         ASPNETCORE_URLS: "http://+:8080;https://+:8081"

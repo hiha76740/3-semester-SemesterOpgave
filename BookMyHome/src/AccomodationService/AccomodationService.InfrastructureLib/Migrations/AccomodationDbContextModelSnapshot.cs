@@ -169,6 +169,9 @@ namespace AccomodationService.InfrastructureLib.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ImageFileName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ListingName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
