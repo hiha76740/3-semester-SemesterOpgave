@@ -1,5 +1,6 @@
 ﻿using BookMyHome.ContractsLib.Requests.Accomodations;
 using BookMyHome.ContractsLib.Responses.Accomodations;
+using Microsoft.AspNetCore.Components.Forms;
 
 namespace BookMyHome.Web.ServiceInterfaces
 {
@@ -15,5 +16,6 @@ namespace BookMyHome.Web.ServiceInterfaces
         
         Task<int> UpdateListing(Guid accomodationId, Guid listingId, UpdateListingRequest request);
         Task<int> Create(CreateListingRequest request);
+        Task<int> UploadImageAsync(Guid id, IBrowserFile selectedFile);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using BookMyHome.ContractsLib.Requests.Accomodations;
 using BookMyHome.ContractsLib.Responses.Accomodations;
 using BookMyHome.Web.ServiceInterfaces;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components.WebAssembly.Http;
 using System.Globalization;
 using System.Net.Http.Json;
@@ -131,6 +132,31 @@ namespace BookMyHome.Web.Services
             request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
 
             using var response = await httpClient.SendAsync(request);
+
+            return (int)response.StatusCode;
+        }
+
+        async Task<int> IListingService.UploadImageAsync(Guid listingId, IBrowserFile selectedFile)
+        {
+            const long maxFileSize = 5 * 1024 * 1024;
+
+            using var content = new MultipartFormDataContent();
+
+            var fileContent = new StreamContent(selectedFile.OpenReadStream(maxFileSize));
+
+            content.Add(fileContent, "file", selectedFile.Name);
+
+            var request = new HttpRequestMessage(HttpMethod.Put, $"{baseUrl}{listingId}/image")
+            {
+                Content = content
+            };
+
+            request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
+
+            using var response = await httpClient.SendAsync(request);
+
+            // TODO: find en måde at få fejlen med over hvis der er en.
+            //var error = await response.Content.ReadAsStringAsync();
 
             return (int)response.StatusCode;
         }
