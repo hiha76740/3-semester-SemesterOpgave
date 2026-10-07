@@ -30,7 +30,7 @@ services:
  
   mssql-UserDB:
     image: mcr.microsoft.com/mssql/server:2025-latest
-    container_name: mssql-UserDB
+    container_name: mssql-userdb
     environment:
       - ACCEPT_EULA=Y
       - MSSQL_SA_PASSWORD=6!8GSPTuHGHsmFfwrH!
@@ -39,11 +39,36 @@ services:
       - mssql-userdb-data:/var/opt/mssql
     restart: unless-stopped
  
-  BookMyHome-UserService:
+  BookMyHome-UserService1:
     depends_on:
       - mssql-UserDB
     image: ghcr.io/hiha76740/bookmyhome-userservice:latest
-    container_name: bookmyhome-userservice
+    container_name: bookmyhome-userservice1
+    restart: unless-stopped
+        
+    environment:
+        ASPNETCORE_URLS: "http://+:8080;https://+:8081"
+        
+        ASPNETCORE_Kestrel__Certificates__Default__Path: "/https/bookmyhome.pfx"
+        ASPNETCORE_Kestrel__Certificates__Default__Password: "DinDevelopmentKode123"
+
+    volumes:
+        - ${USERPROFILE}/.aspnet/https:/https:ro
+
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 60s
+      
+  BookMyHome-UserService2:
+    depends_on:
+      - mssql-UserDB
+    image: ghcr.io/hiha76740/bookmyhome-userservice:latest
+    container_name: bookmyhome-userservice2
     restart: unless-stopped
         
     environment:
@@ -65,10 +90,9 @@ services:
       start_period: 60s
   
   
-  
   mssql-BookingDB:
     image: mcr.microsoft.com/mssql/server:2025-latest
-    container_name: mssql-BookingDB
+    container_name: mssql-bookingdb
     environment:
       - ACCEPT_EULA=Y
       - MSSQL_SA_PASSWORD=6!8GSPTuHGHsmFfwrH!
@@ -77,11 +101,11 @@ services:
       - mssql-bookingdb-data:/var/opt/mssql
     restart: unless-stopped
 
-  BookMyHome-BookingService:
+  BookMyHome-BookingService1:
     depends_on:
       - mssql-BookingDB
     image: ghcr.io/hiha76740/bookmyhome-bookingservice:latest
-    container_name: bookmyhome-bookingservice
+    container_name: bookmyhome-bookingservice1
     restart: unless-stopped
         
     environment:
@@ -103,10 +127,35 @@ services:
       start_period: 60s
 
 
+  BookMyHome-BookingService2:
+    depends_on:
+      - mssql-BookingDB
+    image: ghcr.io/hiha76740/bookmyhome-bookingservice:latest
+    container_name: bookmyhome-bookingservice2
+    restart: unless-stopped
+        
+    environment:
+        ASPNETCORE_URLS: "http://+:8080;https://+:8081"
+        
+        ASPNETCORE_Kestrel__Certificates__Default__Path: "/https/bookmyhome.pfx"
+        ASPNETCORE_Kestrel__Certificates__Default__Password: "DinDevelopmentKode123"
+
+    volumes:
+        - ${USERPROFILE}/.aspnet/https:/https:ro
+        
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 60s
+
 
   mssql-AccomodationDB:
     image: mcr.microsoft.com/mssql/server:2025-latest
-    container_name: mssql-AccomodationDB
+    container_name: mssql-accomodationdb
     environment:
       - ACCEPT_EULA=Y
       - MSSQL_SA_PASSWORD=6!8GSPTuHGHsmFfwrH!
@@ -116,11 +165,11 @@ services:
     restart: unless-stopped
 
 
-  BookMyHome-AccomodationService:
+  BookMyHome-AccomodationService1:
     depends_on:
       - mssql-AccomodationDB
     image: ghcr.io/hiha76740/bookmyhome-accomodationservice:latest
-    container_name: bookmyhome-accomodationservice
+    container_name: bookmyhome-accomodationservice1
     restart: unless-stopped
         
     environment:
@@ -141,9 +190,32 @@ services:
       timeout: 3s
       retries: 3
       start_period: 60s
+      
+  BookMyHome-AccomodationService2:
+    depends_on:
+      - mssql-AccomodationDB
+    image: ghcr.io/hiha76740/bookmyhome-accomodationservice:latest
+    container_name: bookmyhome-accomodationservice2
+    restart: unless-stopped
+        
+    environment:
+        ASPNETCORE_URLS: "http://+:8080;https://+:8081"
+        
+        ASPNETCORE_Kestrel__Certificates__Default__Path: "/https/bookmyhome.pfx"
+        ASPNETCORE_Kestrel__Certificates__Default__Password: "DinDevelopmentKode123"
 
+    volumes:
+        - ${USERPROFILE}/.aspnet/https:/https:ro
+        - BookMyHome-Images:/app/Storage/images
 
-
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 60s
 
 
   watchtower:
