@@ -9,7 +9,8 @@
                       SubmitCallback="Update"
                       SubmitText="Ok"
                       AccomodationsTypes="AccomodationTypes"
-                      CancelNavigationPath="@($"/accomodation/{model.AccomodationId}/listings")" />
+                      CancelNavigationPath="@($"/accomodation/{model.AccomodationId}/listings")"
+                      UploadCallback="Upload"/>
 
 
 @code {
@@ -87,6 +88,31 @@
         catch (Exception ex)
         {
             await Dialog.Alert(ex.Message, "Update error");
+        }
+    }
+
+    private async Task Upload(IBrowserFile? selectedFile)
+    {
+        try
+        {
+            if (selectedFile == null)
+                return;
+
+            var statusCode = await Service.UploadImageAsync(Id, selectedFile);
+
+            if (statusCode == 200)
+            {
+                await Dialog.Alert("Billede gemt korrekt", "Information");
+                NavigationManager.NavigateTo("/accomodations");
+            }
+            else
+            {
+                await Dialog.Alert($"Error code: {statusCode.ToString()}");
+            }
+        }
+        catch (Exception ex)
+        {
+            await Dialog.Alert(ex.Message, "Upload error");
         }
     }
 }
