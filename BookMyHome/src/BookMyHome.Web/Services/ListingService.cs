@@ -19,20 +19,43 @@ namespace BookMyHome.Web.Services
 
 
             var requestContent = JsonContent.Create(createRequest);
-
             content.Add(requestContent, "data");
 
 
             if (imageFile != null)
             {
                 const long maxFileSize = 5 * 1024 * 1024;
-
                 var fileContent = new StreamContent(imageFile.OpenReadStream(maxFileSize));
-
                 content.Add(fileContent, "file", imageFile.Name);
             }
 
             var request = new HttpRequestMessage(HttpMethod.Post, $"{baseUrl}")
+            {
+                Content = content
+            };
+
+            request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
+
+            using var response = await httpClient.SendAsync(request);
+
+            return (int)response.StatusCode;
+        }
+
+        async Task<int> IListingService.UpdateListing(Guid accomodationId, Guid listingId, UpdateListingRequest updateRequest, IBrowserFile? imageFile)
+        {
+            using var content = new MultipartFormDataContent();
+
+            var requestContent = JsonContent.Create(updateRequest);
+            content.Add(requestContent, "data");
+
+            if (imageFile != null)
+            {
+                const long maxFileSize = 5 * 1024 * 1024;
+                var fileContent = new StreamContent(imageFile.OpenReadStream(maxFileSize));
+                content.Add(fileContent, "file", imageFile.Name);
+            }
+
+            var request = new HttpRequestMessage(HttpMethod.Put, $"{baseUrl}{accomodationId}/listings/{listingId}")
             {
                 Content = content
             };
@@ -138,43 +161,6 @@ namespace BookMyHome.Web.Services
 
         }
 
-        async Task<int> IListingService.UpdateListing(Guid accomodationId, Guid listingId, UpdateListingRequest updateRequest)
-        {
-            var request = new HttpRequestMessage(HttpMethod.Put, $"{baseUrl}{accomodationId}/listings/{listingId}")
-            {
-                Content = JsonContent.Create(updateRequest)
-            };
-
-            request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
-
-            using var response = await httpClient.SendAsync(request);
-
-            return (int)response.StatusCode;
-        }
-
-        async Task<int> IListingService.UploadImageAsync(Guid listingId, IBrowserFile selectedFile)
-        {
-            const long maxFileSize = 5 * 1024 * 1024;
-
-            using var content = new MultipartFormDataContent();
-
-            var fileContent = new StreamContent(selectedFile.OpenReadStream(maxFileSize));
-
-            content.Add(fileContent, "file", selectedFile.Name);
-
-            var request = new HttpRequestMessage(HttpMethod.Put, $"{baseUrl}{listingId}/image")
-            {
-                Content = content
-            };
-
-            request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
-
-            using var response = await httpClient.SendAsync(request);
-
-            // TODO: find en måde at få fejlen med over hvis der er en.
-            //var error = await response.Content.ReadAsStringAsync();
-
-            return (int)response.StatusCode;
-        }
+        
     }
 }

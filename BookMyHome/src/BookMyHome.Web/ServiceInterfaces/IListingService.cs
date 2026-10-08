@@ -14,8 +14,7 @@ namespace BookMyHome.Web.ServiceInterfaces
         Task<IReadOnlyList<ListingResponse>> GetAllAvailiableListingsByPeriod(DateOnly start, DateOnly end);
         Task<IReadOnlyList<ListingResponse>> GetAccomodationListings(Guid accomodationId);
         
-        Task<int> UpdateListing(Guid accomodationId, Guid listingId, UpdateListingRequest request);
+        Task<int> UpdateListing(Guid accomodationId, Guid listingId, UpdateListingRequest request, IBrowserFile? imageFile);
         Task<int> Create(CreateListingRequest request, IBrowserFile? imageFile);
-        Task<int> UploadImageAsync(Guid id, IBrowserFile selectedFile);
     }
 }
