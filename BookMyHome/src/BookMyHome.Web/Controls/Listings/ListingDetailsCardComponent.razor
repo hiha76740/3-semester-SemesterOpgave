@@ -1,0 +1,61 @@
+﻿<RadzenCard class="rz-my-12 rz-mx-auto" Style="max-width: 500px">
+    <RadzenButton Variant="Variant.Text" class="rz-text-secondary-color" Text="<- Back" Click="@Back" />
+    <RadzenColumn>
+        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">@Listing.ListingName</RadzenText>
+        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">@Listing.City, @Listing.Country</RadzenText>
+    </RadzenColumn>
+    <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" Gap="1rem" class="rz-p-4">
+        @if (Listing.ImageUrl != null)
+        {
+            <RadzenImage Path="@Listing.ImageUrl" Style="max-width: 440px;" AlternateText="url image" />
+        }
+    </RadzenStack>
+    <RadzenCard class="rz-background-color-primary-light rz-shadow-0 rz-border-radius-0 rz-p-8" style="margin: 1rem calc(-1 * var(--rz-card-padding));">
+        <RadzenText TextStyle="TextStyle.H6" TagName="TagName.P" class="rz-color-on-primary-light"><strong>Listing information</strong></RadzenText>
+        <RadzenRow RowGap="0">
+            <RadzenColumn SizeSM="4">
+                <RadzenText TextStyle="TextStyle.Overline" class="rz-color-on-primary-light rz-display-flex rz-mt-4 rz-mb-0">Type</RadzenText>
+                <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>@Listing.AccomodationType</b></RadzenText>
+                <RadzenText TextStyle="TextStyle.Overline" class="rz-color-on-primary-light rz-display-flex rz-mt-4 rz-mb-0">Faciliteter</RadzenText>
+                @foreach (var facility in Listing.Facilities)
+                {
+                    <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>@facility</b></RadzenText>
+                }
+                <RadzenText TextStyle="TextStyle.Overline" class="rz-color-on-primary-light rz-display-flex rz-mt-4 rz-mb-0">House Rules</RadzenText>
+                <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>@Listing.HouseRules</b></RadzenText>
+            </RadzenColumn>
+            <RadzenColumn SizeSM="8">
+                <RadzenText TextStyle="TextStyle.Overline" class="rz-color-on-primary-light rz-display-flex rz-mt-4 rz-mb-0">Pris pr. dag</RadzenText>
+                <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>@String.Format(new System.Globalization.CultureInfo("da-DK"), "{0:C}", Listing.DailyPrice)</b></RadzenText>
+            </RadzenColumn>
+        </RadzenRow>
+    </RadzenCard>
+    <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" Gap="0">
+        <RadzenButton Text="Book" ButtonStyle="ButtonStyle.Success" Click="@Book" />
+    </RadzenStack>
+</RadzenCard>
+
+@code {
+    [Parameter, EditorRequired]
+    public ListingResponse Listing { get; set; }
+
+    [Parameter, EditorRequired]
+    public EventCallback HandleBook { get; set; }
+
+    [Parameter, EditorRequired]
+    public EventCallback BackNavigation { get; set; }
+
+
+
+    private void Back()
+    {
+        BackNavigation.InvokeAsync();
+    }
+
+    private void Book()
+    {
+        HandleBook.InvokeAsync();
+    }
+
+
+}
