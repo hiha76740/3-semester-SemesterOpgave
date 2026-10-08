@@ -9,11 +9,8 @@ namespace BookMyHome.Web.ServiceInterfaces
         Task<int> Create(CreateAccomodationRequest request, IBrowserFile? imageFile);
         Task<AccomodationResponse?> GetAccomodationByIdAsync(Guid id);
         Task<IReadOnlyList<AccomodationResponse>> GetCurrentUserAccomodationsAsync();
-        Task UpdateAccomodationStatusAsync(Guid accomodationId, string status);
 
-        Task<int> UploadImageAsync(Guid accomodationId, IBrowserFile selectedFile);
-
-        Task<int> UpdateAccomodationAsync(Guid accomodationId, UpdateAccomodationRequest updateRequest);
+        Task<int> UpdateAccomodationAsync(Guid accomodationId, UpdateAccomodationRequest updateRequest, IBrowserFile? imageFile);
 
         Task<IReadOnlyList<AccomodationTypeResponse>> GetAllAccomodationTypes();
     }
