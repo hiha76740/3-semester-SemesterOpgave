@@ -1,9 +1,12 @@
 ﻿@inject NavigationManager navigationManager
 @inject BookingState BookingState
 
-<RadzenCard class="rz-my-12 rz-mx-auto" Style="max-width: 350px">
+<RadzenCard class="rz-my-12 rz-mx-auto" Style="max-width: 500px">
     <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" Gap="1rem" class="rz-p-4">
-        <! -- Empty spot for accomodation listing photo -->
+        @if (Listing.ImageUrl != null)
+        {
+            <RadzenImage Path="@Listing.ImageUrl" Style="max-width: 440px;" AlternateText="url image" />
+        }
     </RadzenStack>
     <RadzenCard class="rz-background-color-primary-light rz-shadow-0 rz-border-radius-0 rz-p-8" style="margin: 1rem calc(-1 * var(--rz-card-padding));">
         <RadzenText TextStyle="TextStyle.H6" TagName="TagName.P" class="rz-color-on-primary-light"><strong>@Listing.ListingName</strong></RadzenText>
