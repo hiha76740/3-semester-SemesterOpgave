@@ -6,14 +6,16 @@
             <article>
                 <RadzenText TextStyle="TextStyle.DisplayH3">@FormTitle</RadzenText>
                 <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" Gap="1rem" class="rz-p-4">
-                    @if (Model.ImageUrl != null)
-                    {
-                        <RadzenImage Path="@Model.ImageUrl" AlternateText="Accomodation image" Style="max-width: 500px; height: auto;" />
-                    }
-                    else if (Model.ImageFile != null)
+                    @if (Model.ImageFile != null)
                     {
                         <RadzenImage Path="@imagePreview"
                                      AlternateText="Forhåndsvisning af valgt billede"
+                                     Style="max-width: 500px; height: auto;" />
+                    }
+                    else if (Model.ImageUrl != null)
+                    {
+                        <RadzenImage Path="@Model.ImageUrl"
+                                     AlternateText="Accomodation image"
                                      Style="max-width: 500px; height: auto;" />
                     }
                 </RadzenStack>
