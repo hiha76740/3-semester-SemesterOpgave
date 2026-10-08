@@ -1,4 +1,5 @@
 ﻿using AccomodationService.ApplicationLib.Handlers.Accomodations;
+using AccomodationService.ApplicationLib.Handlers.Services;
 using AccomodationService.ApplicationLib.Repositories;
 using AccomodationService.DomainLib.Entities;
 using AccomodationService.DomainLib.ValueObjects;
@@ -24,6 +25,8 @@ public class CreateAccomodationTests
 
         var mockAccomodationRepo = new Mock<IAccomodationRepository>();
 
+        var mockImageStorage = new Mock<IImageStorageService>();
+
         var command = new CreateAccomodationCommand(
             hostId.Value,
             title,
@@ -31,13 +34,15 @@ public class CreateAccomodationTests
             postalCode,
             city,
             country,
-            facilities
+            facilities,
+            null,
+            null
             );
 
-        var handler = new CreateAccomodationHandler(mockAccomodationRepo.Object) as ICreateAccomodationHandler;
+        var handler = new CreateAccomodationHandler(mockAccomodationRepo.Object, mockImageStorage.Object) as ICreateAccomodationHandler;
 
         // Act
-        await handler.Handle(command);
+        await handler.HandleAsync(command);
 
         // Assert
         mockAccomodationRepo.Verify(r => r.CreateAsync(It.IsAny<Accomodation>()), Times.Once);

@@ -1,4 +1,5 @@
-﻿using AccomodationService.ApplicationLib.Repositories;
+﻿using AccomodationService.ApplicationLib.Handlers.Services;
+using AccomodationService.ApplicationLib.Repositories;
 using AccomodationService.DomainLib.Entities;
 using AccomodationService.DomainLib.Enums;
 using AccomodationService.DomainLib.ValueObjects;
@@ -8,7 +9,7 @@ using Shared.BookMyHome.SharedKernelLib.Exceptions;
 
 namespace AccomodationService.ApplicationLib.Handlers.Listings;
 
-public class CreateListingHandler(IAccomodationRepository accomodationRepo) : ICreateListingHandler
+public class CreateListingHandler(IAccomodationRepository accomodationRepo, IImageStorageService imageStorage) : ICreateListingHandler
 {
     async Task ICreateListingHandler.HandleAsync(CreateListingCommand command)
     {
@@ -28,12 +29,19 @@ public class CreateListingHandler(IAccomodationRepository accomodationRepo) : IC
         if (typeIsValid == false)
             throw new NotFoundException("Accomodation Type is not valid");
 
-        accomodation.CreateListing(
+        var listingId = accomodation.CreateListing(
             command.ListingName,
             command.DailyPrice,
             command.HouseRules,
             type
             );
+
+        if (command.ImageStream != null && command.Extension != null)
+        {
+            var fileName = await imageStorage.SaveAsync(command.ImageStream, command.Extension);
+
+            accomodation.SetListingImage(listingId, fileName);
+        }
 
         await accomodationRepo.SaveAsync();
     }

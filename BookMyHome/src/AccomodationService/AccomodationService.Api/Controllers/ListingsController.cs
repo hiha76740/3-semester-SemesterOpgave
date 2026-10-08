@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
+using System.Text.Json;
 
 namespace AccomodationService.Api.Controllers
 {
@@ -181,11 +182,15 @@ namespace AccomodationService.Api.Controllers
 
         [Authorize(Roles = "Host")]
         [HttpPost]
+        [RequestSizeLimit(6 * 1024 * 1024)]
         [EndpointSummary("This endpoint will create a listing for a specific accomodation")]
         [EndpointDescription("Creates a listing of a specific accomodation")]
         [ProducesResponseType(StatusCodes.Status200OK, Description = "Creation of listing for the requested accomodation succesfully completed")]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while creating listing for requsted accomodation")]
-        public async Task<ActionResult> CreateListingAsync(CreateListingRequest request)
+        public async Task<ActionResult> CreateListingAsync(
+            [Required][FromForm] string data,
+            [FromForm] IFormFile? file
+            )
         {
             try
             {
@@ -194,7 +199,39 @@ namespace AccomodationService.Api.Controllers
                 if (userId == null)
                     return BadRequest("Invalid request");
 
-                await listingCreate.HandleAsync(request.AsCreateListingCommand(userId.Value));
+                var request = JsonSerializer.Deserialize<CreateListingRequest>(data, new JsonSerializerOptions(JsonSerializerDefaults.Web));
+
+                if (request == null)
+                    return BadRequest("Could not deserialize data");
+
+                Stream? imageStream = null;
+                string? extension = null;
+
+                if (file != null)
+                {
+                    const long maxFileSize = 5 * 1024 * 1024;
+
+                    if (file.Length == 0)
+                        return BadRequest("Please choose a image file");
+
+                    if (file.Length > maxFileSize)
+                        return BadRequest($"Size limit of image is 5 MB.");
+
+                    extension = Path.GetExtension(file.FileName)
+                        .ToLowerInvariant();
+
+                    if (extension != ".jpg" &&
+                        extension != ".jpeg" &&
+                        extension != ".png")
+                        return BadRequest("Only jpg- and png-image files are allowed");
+
+                    imageStream = file.OpenReadStream();
+                }
+
+                await listingCreate.HandleAsync(request.AsCreateListingCommand(userId.Value, imageStream, extension));
+
+                if (imageStream != null)
+                    await imageStream.DisposeAsync();
 
                 return Ok();
             }

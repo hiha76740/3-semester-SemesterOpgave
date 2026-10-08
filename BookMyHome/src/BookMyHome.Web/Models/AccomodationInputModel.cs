@@ -1,4 +1,6 @@
-﻿namespace BookMyHome.Web.Models
+﻿using Microsoft.AspNetCore.Components.Forms;
+
+namespace BookMyHome.Web.Models
 {
     public class AccomodationInputModel
     {
@@ -9,7 +11,9 @@
         public string City { get; set; } = string.Empty;
         public string Country { get; set; } = string.Empty;
         public bool Status { get; set; } = true;
-        public string? ImageUrl { get; set; } = string.Empty;
+        public string? ImageUrl { get; set; } = null;
+
+        public IBrowserFile? ImageFile { get; set; } = null;
 
         public List<Guid> FacilitiesIds { get; set; } = [];
     }

@@ -9,7 +9,8 @@
                            SubmitCallback="Create"
                            Facilities="Facilities"
                            SubmitText="Opret"
-                           CancelPath="/accomodations" />
+                           CancelPath="/accomodations"
+                           FormTitle="Opret accomodation"/>
 
 
 @code {
@@ -41,7 +42,7 @@
             model.FacilitiesIds
             );
 
-            var responseCode = await AccomodationService.Create(request);
+            var responseCode = await AccomodationService.Create(request, model.ImageFile);
 
             if (responseCode == 200)
             {
@@ -50,7 +51,7 @@
             }
 
             
-}
+        }
         catch (Exception ex)
         {
             await Dialog.Alert(ex.Message, "Create error");

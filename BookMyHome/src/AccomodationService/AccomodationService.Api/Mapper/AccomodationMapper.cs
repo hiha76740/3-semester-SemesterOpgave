@@ -25,7 +25,7 @@ namespace AccomodationService.Api.Mapper
         }
 
 
-        public static CreateAccomodationCommand CreateRequestAsCommand(this CreateAccomodationRequest request, Guid id)
+        public static CreateAccomodationCommand CreateRequestAsCommand(this CreateAccomodationRequest request, Guid id, Stream? imageStream = null, string? extension = null)
         {
             var output = new CreateAccomodationCommand(
                 id,
@@ -34,7 +34,9 @@ namespace AccomodationService.Api.Mapper
                 request.PostalCode,
                 request.City,
                 request.Country,
-                request.FacilitiesIds
+                request.FacilitiesIds,
+                imageStream,
+                extension
                 );
 
             return output;

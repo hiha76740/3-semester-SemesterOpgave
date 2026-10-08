@@ -4,5 +4,5 @@ namespace AccomodationService.FacadeLib.Commands.Interfaces.Accomodations;
 
 public interface ICreateAccomodationHandler
 {
-    Task Handle(CreateAccomodationCommand command);
+    Task HandleAsync(CreateAccomodationCommand command);
 }

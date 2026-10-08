@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
+using System.Text.Json;
 
 namespace AccomodationService.Api.Controllers
 {
@@ -25,10 +26,13 @@ namespace AccomodationService.Api.Controllers
         [Authorize(Roles = "Host")]
         [HttpPost]
         [EndpointSummary("This endpoint will create a accomodation")]
-        [EndpointDescription("Creates a accomodation when all required info is given")]
+        [EndpointDescription("Creates a accomodation when all required info is given, picture can be set if wanted")]
         [ProducesResponseType(StatusCodes.Status200OK, Description = "Accomodation was created succesfully")]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error doing creation of accomodation")]
-        public async Task<ActionResult> CreateAccomodation(CreateAccomodationRequest request)
+        public async Task<ActionResult> CreateAccomodation(
+            [Required][FromForm] string data,
+            [FromForm] IFormFile? file
+            )
         {
             try
             {
@@ -37,8 +41,37 @@ namespace AccomodationService.Api.Controllers
                 if (id == null || HttpContext.User.FindFirstValue(ClaimTypes.Role) != "Host")
                     return BadRequest("Invalid request");
 
-                await accomodationcreate.Handle(
-                    request.CreateRequestAsCommand(id.Value)
+                var request = JsonSerializer.Deserialize<CreateAccomodationRequest>(data, new JsonSerializerOptions(JsonSerializerDefaults.Web));
+
+                if (request == null)
+                    return BadRequest("Could not deserialize data");
+
+                Stream? imageStream = null;
+                string? extension = null;
+
+                if (file != null)
+                {
+                    const long maxFileSize = 5 * 1024 * 1024;
+
+                    if (file.Length == 0)
+                        return BadRequest("Please choose a image file");
+
+                    if (file.Length > maxFileSize)
+                        return BadRequest($"Size limit of image is 5 MB.");
+
+                    extension = Path.GetExtension(file.FileName)
+                        .ToLowerInvariant();
+
+                    if (extension != ".jpg" &&
+                        extension != ".jpeg" &&
+                        extension != ".png")
+                        return BadRequest("Only jpg- and png-image files are allowed");
+
+                    imageStream = file.OpenReadStream();
+                }
+
+                await accomodationcreate.HandleAsync(
+                    request.CreateRequestAsCommand(id.Value, imageStream, extension)
                     );
 
                 return Ok();

@@ -29,7 +29,7 @@ public static class ListingMapper
         return output;
     }
 
-    public static CreateListingCommand AsCreateListingCommand(this CreateListingRequest request, Guid hostId)
+    public static CreateListingCommand AsCreateListingCommand(this CreateListingRequest request, Guid hostId, Stream? imageStream = null, string? extension = null)
     {
         var output = new CreateListingCommand(
             hostId,
@@ -37,7 +37,9 @@ public static class ListingMapper
             request.ListingName,
             request.DailyPrice,
             request.HouseRules,
-            request.AccomodationType
+            request.AccomodationType,
+            imageStream,
+            extension
             );
 
         return output;

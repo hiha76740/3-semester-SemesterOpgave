@@ -45,7 +45,7 @@
             model.HouseRules,
             model.AccomodationType);
 
-            var responseCode = await ListingService.Create(request);
+            var responseCode = await ListingService.Create(request,model.ImageFile);
 
             if (responseCode == 200)
             {

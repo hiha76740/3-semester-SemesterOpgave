@@ -1,4 +1,5 @@
-﻿using AccomodationService.ApplicationLib.Repositories;
+﻿using AccomodationService.ApplicationLib.Handlers.Services;
+using AccomodationService.ApplicationLib.Repositories;
 using AccomodationService.DomainLib.Entities;
 using AccomodationService.DomainLib.ValueObjects;
 using AccomodationService.FacadeLib.Commands.DTOs.Accomodations;
@@ -6,9 +7,9 @@ using AccomodationService.FacadeLib.Commands.Interfaces.Accomodations;
 
 namespace AccomodationService.ApplicationLib.Handlers.Accomodations;
 
-public class CreateAccomodationHandler(IAccomodationRepository accomodationRepo) : ICreateAccomodationHandler
+public class CreateAccomodationHandler(IAccomodationRepository accomodationRepo, IImageStorageService imageStorage) : ICreateAccomodationHandler
 {
-    async Task ICreateAccomodationHandler.Handle(CreateAccomodationCommand command)
+    async Task ICreateAccomodationHandler.HandleAsync(CreateAccomodationCommand command)
     {
         var hostId = new HostId(command.HostId);
 
@@ -46,6 +47,14 @@ public class CreateAccomodationHandler(IAccomodationRepository accomodationRepo)
             command.Country,
             facilities
             );
+
+
+        if (command.ImageStream != null && command.Extension != null)
+        {
+            var fileName = await imageStorage.SaveAsync(command.ImageStream, command.Extension);
+
+            accomodation.SetImage(fileName);
+        }
 
         await accomodationRepo.CreateAsync(accomodation);
 

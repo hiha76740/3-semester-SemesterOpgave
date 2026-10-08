@@ -6,5 +6,7 @@ public record CreateListingCommand(
     string ListingName,
     decimal DailyPrice,
     string HouseRules,
-    string AccomodationType
+    string AccomodationType,
+    Stream? ImageStream = null, 
+    string? Extension = null
     );

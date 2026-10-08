@@ -4,6 +4,22 @@
     <RadzenTemplateForm TItem="AccomodationInputModel" Data=@Model Submit=@HandleSubmit>
         <RadzenStack Gap="1rem">
             <article>
+                <RadzenText TextStyle="TextStyle.DisplayH3">@FormTitle</RadzenText>
+                <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" Gap="1rem" class="rz-p-4">
+                    @if (Model.ImageUrl != null)
+                    {
+                        <RadzenImage Path="@Model.ImageUrl" AlternateText="Accomodation image" Style="max-width: 500px; height: auto;" />
+                    }
+                    else if (Model.ImageFile != null)
+                    {
+                        <RadzenImage Path="@imagePreview"
+                                     AlternateText="Forhåndsvisning af valgt billede"
+                                     Style="max-width: 500px; height: auto;" />
+                    }
+                </RadzenStack>
+                <article>
+                    <InputFile OnChange="OnImageSelected" accept="image/png,image/jpeg" />
+                </article>
                 <RadzenText TextStyle="TextStyle.DisplayH4">Generelt</RadzenText>
                 <RadzenRow AlignItems="AlignItems.Center" RowGap="0.25rem">
                     <RadzenColumn Size="12" SizeMD="4" class="rz-text-align-start rz-text-align-md-end">
@@ -104,6 +120,11 @@
     [Parameter, EditorRequired]
     public string CancelPath { get; set; }
 
+    [Parameter, EditorRequired]
+    public string FormTitle { get; set; }
+
+    private string? imagePreview;
+
     private void HandleSubmit()
     {
         SubmitCallback.InvokeAsync(Model);
@@ -112,5 +133,17 @@
     private void Cancel()
     {
         NavigationManager.NavigateTo(CancelPath);
+    }
+
+    private async Task OnImageSelected(InputFileChangeEventArgs args)
+    {
+        Model.ImageFile = args.File;
+
+        using var stream = args.File.OpenReadStream(5 * 1024 * 1024);
+        using var memory = new MemoryStream();
+
+        await stream.CopyToAsync(memory);
+
+        imagePreview = $"data:{args.File.ContentType};base64,{Convert.ToBase64String(memory.ToArray())}";
     }
 }

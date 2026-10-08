@@ -50,11 +50,13 @@ public class Accomodation
         Status = newStatus;
     }
 
-    public void CreateListing(string listingName, decimal dailyPrice, string houseRules, AccomodationType type)
+    public ListingId CreateListing(string listingName, decimal dailyPrice, string houseRules, AccomodationType type)
     {
         var listing = new Listing(this, listingName, dailyPrice, houseRules, type);
 
         _listings.Add(listing);
+
+        return listing.Id;
     }
 
     public void UpdateAccomodationType(ListingId id, AccomodationType newAccomodationType)

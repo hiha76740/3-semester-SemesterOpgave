@@ -7,5 +7,7 @@ public record CreateAccomodationCommand(
     string PostalCode, 
     string City,
     string Country,
-    List<Guid> FacilitiesIds
+    List<Guid> FacilitiesIds,
+    Stream? ImageStream,
+    string? Extension
     );

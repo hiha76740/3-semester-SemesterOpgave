@@ -12,11 +12,28 @@ namespace BookMyHome.Web.Services
         private readonly string baseUrl = "https://localhost:8010/accomodations-api/";
 
 
-        async Task<int> IAccomodationService.Create(CreateAccomodationRequest createRequest)
+        async Task<int> IAccomodationService.Create(CreateAccomodationRequest createRequest, IBrowserFile? imageFile)
         {
+            using var content = new MultipartFormDataContent();
+
+
+            var requestContent = JsonContent.Create(createRequest);
+
+            content.Add(requestContent,"data");
+
+
+            if (imageFile != null)
+            {
+                const long maxFileSize = 5 * 1024 * 1024;
+
+                var fileContent = new StreamContent(imageFile.OpenReadStream(maxFileSize));
+
+                content.Add(fileContent, "file", imageFile.Name);
+            }
+
             var request = new HttpRequestMessage(HttpMethod.Post, $"{baseUrl}")
             {
-                Content = JsonContent.Create(createRequest)
+                Content = content
             };
 
             request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
