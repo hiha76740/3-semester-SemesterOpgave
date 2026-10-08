@@ -31,7 +31,7 @@ namespace BookingService.Api.Controllers
 
             try
             {
-                await create.Handle(request.CreateRequestAsCommand());
+                await create.HandleAsync(request.CreateRequestAsCommand());
 
                 return Ok();
             }

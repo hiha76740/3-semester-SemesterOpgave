@@ -18,7 +18,7 @@ public class CreateBookingHandler(
     IBookingRepository bookingRepo,
     IUnitOfWork uow) : ICreateBookingHandler
 {
-    async Task ICreateBookingHandler.Handle(CreateBookingCommand command)
+    async Task ICreateBookingHandler.HandleAsync(CreateBookingCommand command)
     {
         try
         {

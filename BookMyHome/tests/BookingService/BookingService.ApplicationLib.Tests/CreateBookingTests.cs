@@ -62,7 +62,7 @@ public class CreateBookingTests
         var handler = new CreateBookingHandler(mockGuestService.Object, mockAccomodationService.Object,mockListingService.Object, mockBookingRepo.Object, mockUnitOfWork.Object) as ICreateBookingHandler;
 
         // Act
-        await handler.Handle(command);
+        await handler.HandleAsync(command);
 
         // Assert
         mockBookingRepo.Verify(r => r.CreateAsync(It.IsAny<Booking>()), Times.Once);

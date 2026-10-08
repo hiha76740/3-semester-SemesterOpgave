@@ -4,5 +4,5 @@ namespace BookingService.FacadeLib.Commands.Interfaces;
 
 public interface ICreateBookingHandler
 {
-    Task Handle(CreateBookingCommand command);
+    Task HandleAsync(CreateBookingCommand command);
 }
