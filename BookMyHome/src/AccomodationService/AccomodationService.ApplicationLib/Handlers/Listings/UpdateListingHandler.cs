@@ -1,4 +1,5 @@
-﻿using AccomodationService.ApplicationLib.Repositories;
+﻿using AccomodationService.ApplicationLib.Handlers.Services;
+using AccomodationService.ApplicationLib.Repositories;
 using AccomodationService.DomainLib.Entities;
 using AccomodationService.DomainLib.Enums;
 using AccomodationService.DomainLib.ValueObjects;
@@ -8,9 +9,9 @@ using Shared.BookMyHome.SharedKernelLib.Exceptions;
 
 namespace AccomodationService.ApplicationLib.Handlers.Listings;
 
-public class UpdateListingHandler(IAccomodationRepository repo) : IUpdateListingHandler
+public class UpdateListingHandler(IAccomodationRepository repo, IImageStorageService imageStorage) : IUpdateListingHandler
 {
-    async Task IUpdateListingHandler.HandleAsync(UpdateListingCommand command)
+    async Task<bool> IUpdateListingHandler.HandleAsync(UpdateListingCommand command)
     {
         try
         {
@@ -33,7 +34,7 @@ public class UpdateListingHandler(IAccomodationRepository repo) : IUpdateListing
 
             var typeIsValid = Enum.TryParse<AccomodationType>(command.AccomodationType, out var accomodationType);
 
-           
+
             if (typeIsValid == false)
                 throw new NotFoundException("Accomodation Type not found");
 
@@ -78,8 +79,18 @@ public class UpdateListingHandler(IAccomodationRepository repo) : IUpdateListing
             }
 
 
+            if (command.imageStream != null && command.extension != null)
+            {
+                var fileName = await imageStorage.SaveAsync(command.imageStream, command.extension);
+                accomodation.SetListingImage(listingId, fileName);
+                changeMade = true;
+            }
+
             if (changeMade == true)
                 await repo.UpdateAsync(accomodation, listingId, command.RowVersion);
+
+            return changeMade;
+
 
         }
         catch (Exception ex)

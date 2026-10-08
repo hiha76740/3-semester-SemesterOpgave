@@ -9,5 +9,7 @@ public record UpdateListingCommand(
     string HouseRules,
     string AccomodationType,
     string status,
-    byte[] RowVersion
+    byte[] RowVersion,
+    Stream? imageStream,
+    string? extension
     );

@@ -74,7 +74,7 @@
                 model.RowVersion
             );
 
-            var responseCode = await Service.UpdateListing(model.AccomodationId, model.ListingId, request);
+            var responseCode = await Service.UpdateListing(model.AccomodationId, model.ListingId, request, model.ImageFile);
 
             if (responseCode == 200)
             {

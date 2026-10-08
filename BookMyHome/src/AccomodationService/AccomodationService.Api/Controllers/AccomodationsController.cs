@@ -128,7 +128,9 @@ namespace AccomodationService.Api.Controllers
         [EndpointDescription("Changes the status of the accomodation to active or inactive or returns not found if no accomodations was found")]
         [ProducesResponseType(StatusCodes.Status200OK, Description = "Change has been made successfully")]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while changing status")]
-        public async Task<ActionResult> ChangeStatus(Guid accomodationId, UpdateAccomodationStatusRequest request)
+        public async Task<ActionResult> ChangeStatus(
+            [Description("Id of the accomodation you want to update")] Guid accomodationId,
+            UpdateAccomodationStatusRequest request)
         {
             try
             {
@@ -158,7 +160,10 @@ namespace AccomodationService.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Description = "Update has been completed successfully")]
         [ProducesResponseType(StatusCodes.Status204NoContent, Description = "No changes was made")]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while updating accomodation")]
-        public async Task<ActionResult> UpdateAccomodation(Guid accomodationId, UpdateAccomodationRequest request)
+        public async Task<ActionResult> UpdateAccomodation(
+            [Description("Id of the accomodation you want to update")] Guid accomodationId,
+            [Required][FromForm] string data,
+            [FromForm] IFormFile? file)
         {
             try
             {
@@ -167,7 +172,37 @@ namespace AccomodationService.Api.Controllers
                 if (userId == null || HttpContext.User.FindFirstValue(ClaimTypes.Role) != "Host")
                     return BadRequest("You need to be logged in or have the correct permission");
 
-                var command = new UpdateAccomodationCommand(userId.Value, accomodationId, request.Status, request.FacilitiesIds);
+                var request = JsonSerializer.Deserialize<UpdateAccomodationRequest>(data, new JsonSerializerOptions(JsonSerializerDefaults.Web));
+
+                if (request == null)
+                    return BadRequest("Could not deserialize data");
+
+
+                Stream? imageStream = null;
+                string? extension = null;
+
+                if (file != null)
+                {
+                    const long maxFileSize = 5 * 1024 * 1024;
+
+                    if (file.Length == 0)
+                        return BadRequest("Please choose a image file");
+
+                    if (file.Length > maxFileSize)
+                        return BadRequest($"Size limit of image is 5 MB.");
+
+                    extension = Path.GetExtension(file.FileName)
+                        .ToLowerInvariant();
+
+                    if (extension != ".jpg" &&
+                        extension != ".jpeg" &&
+                        extension != ".png")
+                        return BadRequest("Only jpg- and png-image files are allowed");
+
+                    imageStream = file.OpenReadStream();
+                }
+
+                var command = new UpdateAccomodationCommand(userId.Value, accomodationId, request.Status, request.FacilitiesIds, imageStream, extension);
 
                 var changesMade = await update.HandleAsync(command);
 

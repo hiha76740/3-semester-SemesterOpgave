@@ -9,8 +9,7 @@
                                    Facilities="Facilities"
                                    SubmitCallback="Update"
                                    SubmitText="Ok"
-                                   CancelPath="/accomodations"
-                                   UploadCallback="Upload" />
+                                   CancelPath="/accomodations" />
 
 @code {
     [Parameter]
@@ -65,15 +64,15 @@
 
             var request = new UpdateAccomodationRequest(status, model.FacilitiesIds);
 
-            var statusCode = await Service.UpdateAccomodationAsync(model.AccomodationId, request);
+            var statusCode = await Service.UpdateAccomodationAsync(model.AccomodationId, request, model.ImageFile);
 
             if (statusCode == 200)
             {
                 await Dialog.Alert("Accomodation updated successfully", "Success");
             }
-            
+
             NavigationManager.NavigateTo("/accomodations");
-            
+
         }
         catch (Exception ex)
         {
@@ -84,32 +83,4 @@
 
     }
 
-    private async Task Upload(IBrowserFile? selectedFile)
-    {
-        try
-        {
-            if (selectedFile == null)
-                return;
-
-            var statusCode = await Service.UploadImageAsync(Id, selectedFile);
-
-            if (statusCode == 200)
-            {
-                await Dialog.Alert("Billede gemt korrekt", "Information");
-                NavigationManager.NavigateTo("/accomodations");
-            }
-            else
-            {
-                await Dialog.Alert($"Error code: {statusCode.ToString()}");
-            }
-
-
-        }
-        catch (Exception ex)
-        {
-            await Dialog.Alert(ex.Message, "Upload error");
-        }
-
-
-    }
 }

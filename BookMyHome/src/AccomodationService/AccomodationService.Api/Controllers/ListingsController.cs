@@ -252,7 +252,9 @@ namespace AccomodationService.Api.Controllers
         public async Task<ActionResult> UpdateListing(
             [Description("Id of the accomodation the listing is assoicated to")] Guid accomodationId,
             [Description("Id of the listing you want to update the daily price for")] Guid listingId,
-            UpdateListingRequest request)
+            [Required][FromForm] string data,
+            [FromForm] IFormFile? file
+            )
         {
             try
             {
@@ -260,6 +262,35 @@ namespace AccomodationService.Api.Controllers
 
                 if (id == null || HttpContext.User.FindFirstValue(ClaimTypes.Role) != "Host")
                     return BadRequest("Invalid request");
+
+                var request = JsonSerializer.Deserialize<UpdateListingRequest>(data, new JsonSerializerOptions(JsonSerializerDefaults.Web));
+
+                if (request == null)
+                    return BadRequest("Could not deserialize data");
+
+                Stream? imageStream = null;
+                string? extension = null;
+
+                if (file != null)
+                {
+                    const long maxFileSize = 5 * 1024 * 1024;
+
+                    if (file.Length == 0)
+                        return BadRequest("Please choose a image file");
+
+                    if (file.Length > maxFileSize)
+                        return BadRequest($"Size limit of image is 5 MB.");
+
+                    extension = Path.GetExtension(file.FileName)
+                        .ToLowerInvariant();
+
+                    if (extension != ".jpg" &&
+                        extension != ".jpeg" &&
+                        extension != ".png")
+                        return BadRequest("Only jpg- and png-image files are allowed");
+
+                    imageStream = file.OpenReadStream();
+                }
 
                 var command = new UpdateListingCommand(
                     id.Value,
@@ -270,10 +301,15 @@ namespace AccomodationService.Api.Controllers
                     request.HouseRules,
                     request.AccomodationType,
                     request.Status,
-                    request.RowVersion
+                    request.RowVersion,
+                    imageStream,
+                    extension
                     );
 
-                await update.HandleAsync(command);
+                var changesMade = await update.HandleAsync(command);
+
+                if (changesMade == false)
+                    return NoContent();
 
                 return Ok();
             }
