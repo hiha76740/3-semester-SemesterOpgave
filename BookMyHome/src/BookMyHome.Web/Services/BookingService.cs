@@ -53,7 +53,7 @@ public class BookingService(HttpClient httpClient) : IBookingService
 
         var bookings = await response.Content.ReadFromJsonAsync<IReadOnlyList<BookingSummaryResponse>>();
 
-        if ( bookings == null )
+        if (bookings == null)
             throw new InvalidOperationException("Could not deserialize bookings");
 
         return bookings;
