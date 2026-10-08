@@ -12,7 +12,7 @@
 
         public void SetState(Guid id, string listingName, string street, string postalCode, string city, string country, string type)
         {
-            Id = Id;
+            Id = id;
             Name = listingName;
             Street = street;
             PostalCode = postalCode;
