@@ -41,14 +41,13 @@ public class CreateBookingHandler(
 
             if (accomodationExist == false)
                 throw new NotFoundException("Accomodation not found doing booking creation");
-            
+
             if (listingExist == false)
                 throw new NotFoundException("Listing not found doing booking creation");
 
 
 
-            //uow.BeginTransaction(
-            //    IsolationLevel.Serializable);
+            uow.BeginTransaction(IsolationLevel.Serializable);
 
             var overlapExsists = await bookingRepo.HasOverlapingBookingAsync(
                 accomodationId,
@@ -59,23 +58,23 @@ public class CreateBookingHandler(
                 throw new OverlapFoundException("Booking overlap found, booking aborted");
 
             var booking = Booking.Create(
-                guestId, 
+                guestId,
                 accomodationId,
                 listingId,
                 command.StartDate,
-                command.EndDate, 
+                command.EndDate,
                 command.Price
                 );
 
             await bookingRepo.CreateAsync(booking);
 
             await bookingRepo.SaveAsync();
-            //uow.Commit();
+            uow.Commit();
         }
         catch (Exception ex)
         {
-            //uow.Rollback();
-            throw new ApplicationException(ex.Message,ex);
+            uow.Rollback();
+            throw new ApplicationException(ex.Message, ex);
         }
     }
 }
