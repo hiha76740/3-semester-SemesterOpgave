@@ -5,6 +5,8 @@ using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.AddServiceDefaults();
+
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
@@ -21,6 +23,8 @@ builder.Services.AddBookMyHomeAuthentication(builder);
 builder.Services.AddHealthChecks();
 
 var app = builder.Build();
+
+app.MapDefaultEndpoints();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

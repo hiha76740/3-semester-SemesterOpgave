@@ -1,0 +1,55 @@
+var builder = DistributedApplication.CreateBuilder(args);
+
+
+
+var accomodationDatabaseServer = builder.AddSqlServer("accomodationSqlServer")
+    .WithDataVolume()
+    .WithLifetime(ContainerLifetime.Persistent);
+
+var accomodationDb = accomodationDatabaseServer.AddDatabase("AccomodationDB");
+
+var accomodationService = builder.AddProject<Projects.AccomodationService_Api>("accomodationservice-api")
+    .WithReference(accomodationDb)
+    .WaitFor(accomodationDb);
+
+
+var bookingDatabaseServer = builder.AddSqlServer("bookingSqlServer")
+    .WithDataVolume()
+    .WithLifetime(ContainerLifetime.Persistent);
+
+var bookingDb = bookingDatabaseServer.AddDatabase("BookingDB");
+
+
+var bookingService = builder.AddProject<Projects.BookingService_Api>("bookingservice-api")
+    .WithReference(bookingDb)
+    .WaitFor(bookingDb);
+
+
+var userDatabaseServer = builder.AddSqlServer("userSqlServer")
+    .WithDataVolume()
+    .WithLifetime(ContainerLifetime.Persistent);
+
+var userDb = userDatabaseServer .AddDatabase("UserDB");
+
+var userService = builder.AddProject<Projects.UserService_Api>("userservice-api")
+    .WithReference(userDb)
+    .WaitFor(userDb);
+
+var reverseProxy = builder.AddProject<Projects.BookMyHome_Yarp>("bookmyhome-yarp")
+    .WithReference(accomodationService)
+    .WithReference(bookingService)
+    .WithReference(userService)
+    .WaitFor(accomodationService)
+    .WaitFor(bookingService)
+    .WaitFor(userService);
+
+
+var frontend = builder.AddProject<Projects.BookMyHome_Web>("frontend")
+    .WithReference(reverseProxy)
+    .WaitFor(reverseProxy);
+
+
+
+
+
+builder.Build().Run();

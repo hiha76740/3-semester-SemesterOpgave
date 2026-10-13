@@ -23,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Aspire\BookMyHome.ServiceDefaults\BookMyHome.ServiceDefaults.csproj" />
     <ProjectReference Include="..\UserService.FacadeLib\UserService.FacadeLib.csproj" />
     <ProjectReference Include="..\UserService.InfrastructureLib\UserService.InfrastructureLib.csproj" />
     <ProjectReference Include="..\UserService.ApplicationLib\UserService.ApplicationLib.csproj" />
