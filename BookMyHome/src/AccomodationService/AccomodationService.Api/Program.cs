@@ -19,6 +19,7 @@ builder.Services.AddRepositoryDI();
 builder.Services.AddServiceDI(imageDirectory);
 builder.Services.AddQueriesDI();
 builder.Services.AddScoped<HttpClient>();
+builder.Services.AddDaprClient();
 builder.Services.AddBookMyHomeAuthentication(builder);
 
 builder.Services.AddHealthChecks();

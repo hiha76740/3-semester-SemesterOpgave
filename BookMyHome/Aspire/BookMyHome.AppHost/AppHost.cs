@@ -8,7 +8,8 @@ var accomodationDatabaseServer = builder.AddSqlServer("accomodationSqlServer")
 
 var accomodationDb = accomodationDatabaseServer.AddDatabase("AccomodationDB");
 
-var accomodationService = builder.AddProject<Projects.AccomodationService_Api>("accomodationservice-api")
+var accomodationService = builder.AddProject<Projects.AccomodationService_Api>("accomodationservice")
+    .WithDaprSidecar()
     .WithReference(accomodationDb)
     .WaitFor(accomodationDb);
 
@@ -20,7 +21,8 @@ var bookingDatabaseServer = builder.AddSqlServer("bookingSqlServer")
 var bookingDb = bookingDatabaseServer.AddDatabase("BookingDB");
 
 
-var bookingService = builder.AddProject<Projects.BookingService_Api>("bookingservice-api")
+var bookingService = builder.AddProject<Projects.BookingService_Api>("bookingservice")
+    .WithDaprSidecar()
     .WithReference(bookingDb)
     .WaitFor(bookingDb);
 
@@ -31,7 +33,8 @@ var userDatabaseServer = builder.AddSqlServer("userSqlServer")
 
 var userDb = userDatabaseServer .AddDatabase("UserDB");
 
-var userService = builder.AddProject<Projects.UserService_Api>("userservice-api")
+var userService = builder.AddProject<Projects.UserService_Api>("userservice")
+    .WithDaprSidecar()
     .WithReference(userDb)
     .WaitFor(userDb);
 

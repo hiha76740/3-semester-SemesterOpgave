@@ -17,6 +17,7 @@ builder.Services.AddUnitOfWorkDI();
 builder.Services.AddQueriesDI();
 builder.Services.AddServicesDI();
 builder.Services.AddScoped<HttpClient>();
+builder.Services.AddDaprClient();
 
 builder.Services.AddBookMyHomeAuthentication(builder);
 
