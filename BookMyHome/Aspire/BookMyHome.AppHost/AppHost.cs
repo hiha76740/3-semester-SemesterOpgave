@@ -48,6 +48,7 @@ var reverseProxy = builder.AddProject<Projects.BookMyHome_Yarp>("bookmyhome-yarp
 
 
 var frontend = builder.AddProject<Projects.BookMyHome_Web>("frontend")
+    .WithHttpsEndpoint(port: 21007)
     .WithReference(reverseProxy)
     .WaitFor(reverseProxy);
 
