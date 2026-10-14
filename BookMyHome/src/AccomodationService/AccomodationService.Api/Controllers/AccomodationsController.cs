@@ -20,9 +20,11 @@ namespace AccomodationService.Api.Controllers
         IAccomodationQueries queries,
         IUpdateAccomodationStatusHandler updateAccomodationStatus,
         IUpdateAccomodationHandler update,
-        IUploadAccomdationImageHandler imageHandler
+        IUploadAccomdationImageHandler imageHandler,
+        IConfiguration appsettings
         ) : ControllerBase
     {
+
         [Authorize(Roles = "Host")]
         [HttpPost]
         [EndpointSummary("This endpoint will create a accomodation")]
@@ -107,9 +109,7 @@ namespace AccomodationService.Api.Controllers
                 {
                     foreach (var item in list)
                     {
-
-                        //var url = item.ImageFileName == null ? null : $"https://localhost:8010/images/{item.ImageFileName}";
-                        var url = item.ImageFileName == null ? null : $"{Request.Scheme}://{Request.Host}/images/{item.ImageFileName}";
+                        var url = item.ImageFileName == null ? null : $"{appsettings["ImageBaseUrl"]}/images/{item.ImageFileName}";
 
 
                         response.Add(item.AsResponse(url));

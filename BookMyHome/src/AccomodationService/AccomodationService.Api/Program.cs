@@ -21,6 +21,8 @@ builder.Services.AddQueriesDI();
 builder.Services.AddDaprClient();
 builder.Services.AddBookMyHomeAuthentication(builder);
 
+builder.Services.AddSingleton(builder.Configuration);
+
 builder.Services.AddHealthChecks();
 
 var app = builder.Build();
