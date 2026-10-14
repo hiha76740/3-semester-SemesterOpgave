@@ -107,7 +107,10 @@ namespace AccomodationService.Api.Controllers
                 {
                     foreach (var item in list)
                     {
-                        var url = item.ImageFileName == null ? null : $"https://localhost:8010/images/{item.ImageFileName}";
+
+                        //var url = item.ImageFileName == null ? null : $"https://localhost:8010/images/{item.ImageFileName}";
+                        var url = item.ImageFileName == null ? null : $"{Request.Scheme}://{Request.Host}/images/{item.ImageFileName}";
+
 
                         response.Add(item.AsResponse(url));
                     }
@@ -236,7 +239,9 @@ namespace AccomodationService.Api.Controllers
                 if (dto == null)
                     return NotFound("No accomodation was found");
 
-                var url = dto.ImageFileName == null ? null : $"https://localhost:8010/images/{dto.ImageFileName}";
+                //var url = dto.ImageFileName == null ? null : $"https://localhost:8010/images/{dto.ImageFileName}";
+                var url = dto.ImageFileName == null ? null : $"{Request.Scheme}://{Request.Host}/images/{dto.ImageFileName}";
+
 
                 return Ok(dto.AsResponse(url));
             }
