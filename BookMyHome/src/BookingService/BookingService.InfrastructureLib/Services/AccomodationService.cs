@@ -1,20 +1,18 @@
 ﻿using BookingService.ApplicationLib.Services;
 using BookingService.DomainLib.ValueObjects;
 using BookMyHome.ContractsLib.Responses.Accomodations;
+using Dapr.Client;
 using System.Net.Http.Json;
 
 namespace BookingService.InfrastructureLib.Services;
 
-public class AccomodationService(HttpClient httpClient) : IAccomodationService
+public class AccomodationService(DaprClient daprClient) : IAccomodationService
 {
-    private readonly string baseUrl = "http://bookmyhome-proxy:8080/accomodations-api/";
-
+    private readonly HttpClient client = daprClient.CreateInvokableHttpClient(appId: "accomodationservice");
 
     async Task<bool> IAccomodationService.AccomodationExistAsync(AccomodationId id)
     {
-        var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}exists?id={id.Value}");
-
-        var response = await httpClient.SendAsync(request);
+        using var response = await client.GetAsync($"exists?id={id.Value}");
 
         response.EnsureSuccessStatusCode();
 
@@ -25,9 +23,7 @@ public class AccomodationService(HttpClient httpClient) : IAccomodationService
 
     async Task<Guid> IAccomodationService.GetAccmodationHostIdAsync(AccomodationId accomodationId)
     {
-        var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}hostid?accomodationId={accomodationId.Value}");
-
-        var response = await httpClient.SendAsync(request);
+        using var response = await client.GetAsync($"hostid?accomodationId={accomodationId.Value}");
 
         response.EnsureSuccessStatusCode();
 
@@ -38,9 +34,7 @@ public class AccomodationService(HttpClient httpClient) : IAccomodationService
 
     async Task<AccomodationSummaryResponse> IAccomodationService.GetAccomodationSummaryAsync(Guid accomodationId, Guid listingId)
     {
-        var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}summary?accomodationId={accomodationId}&listingId={listingId}");
-
-        var response = await httpClient.SendAsync(request);
+        using var response = await client.GetAsync($"summary?accomodationId={accomodationId}&listingId={listingId}");
 
         response.EnsureSuccessStatusCode();
 

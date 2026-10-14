@@ -1,18 +1,17 @@
 ﻿using BookingService.ApplicationLib.Services;
 using BookingService.DomainLib.ValueObjects;
+using Dapr.Client;
 using System.Net.Http.Json;
 
 namespace BookingService.InfrastructureLib.Services;
 
-public class GuestService(HttpClient httpClient) : IGuestService
+public class GuestService(DaprClient daprClient) : IGuestService
 {
-    private readonly string baseUrl = "http://bookmyhome-proxy:8080/users-api/";
+    private readonly HttpClient client = daprClient.CreateInvokableHttpClient(appId: "userservice");
 
     async Task<bool> IGuestService.GuestExistAsync(GuestId id)
     {
-        var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}exists?userId={id.Value}");
-
-        var response = await httpClient.SendAsync(request);
+        var response = await client.GetAsync($"exists?userId={id.Value}");
 
         response.EnsureSuccessStatusCode();
 
