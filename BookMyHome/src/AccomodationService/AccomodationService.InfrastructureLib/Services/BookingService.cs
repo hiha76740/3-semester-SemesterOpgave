@@ -1,21 +1,20 @@
 ﻿using AccomodationService.FacadeLib.Queries.Interfaces;
+using Dapr.Client;
 using System.Globalization;
 using System.Net.Http.Json;
 
 namespace AccomodationService.InfrastructureLib.Services;
 
-public class BookingService(HttpClient httpClient) : IBookingService
+public class BookingService(DaprClient daprClient) : IBookingService
 {
-    private readonly string baseUrl = "http://bookmyhome-proxy:8080/bookings-api/";
+    private readonly HttpClient client = daprClient.CreateInvokableHttpClient(appId: "bookingservice");
 
     async Task<bool> IBookingService.IsAvailableAsync(Guid accomodationId, DateOnly start, DateOnly end)
     {
         var from = start.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
         var to = end.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
 
-        var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}availability?id={accomodationId}&startDate={from}&endDate={to}");
-
-        var response = await httpClient.SendAsync(request);
+        using var response = await client.GetAsync($"availability?id={accomodationId}&startDate={from}&endDate={to}");
 
         response.EnsureSuccessStatusCode();
 
