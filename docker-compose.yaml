@@ -1,5 +1,25 @@
 services:
 
+  BookMyHome-Frontend:
+    image: ghcr.io/hiha76740/bookmyhome-frontend:latest
+    container_name: bookmyhome-frontend
+    restart: unless-stopped
+    ports:
+        - 8090:80
+        - 8091:443
+        
+    volumes:
+        - ./certs:/etc/nginx/certs:ro
+        
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:443/"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 60s
+
   BookMyHome-Proxy:
     image: ghcr.io/hiha76740/bookmyhome-proxy:latest
     container_name: bookmyhome-proxy
