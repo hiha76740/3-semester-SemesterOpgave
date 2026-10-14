@@ -14,7 +14,7 @@ env:
   DOCKER_IMAGE_CONTEXT: BookMyHome
 
 jobs:
-  Build-and-Deploy-AccomodationService:
+  Build-and-Deploy-ReverseProxy:
     name: Build and Deploy Proxy
     runs-on: ubuntu-latest
     permissions:
