@@ -239,9 +239,7 @@ namespace AccomodationService.Api.Controllers
                 if (dto == null)
                     return NotFound("No accomodation was found");
 
-                //var url = dto.ImageFileName == null ? null : $"https://localhost:8010/images/{dto.ImageFileName}";
-                var url = dto.ImageFileName == null ? null : $"{Request.Scheme}://{Request.Host}/images/{dto.ImageFileName}";
-
+                var url = dto.ImageFileName == null ? null : $"{appsettings["ImageBaseUrl"]}/images/{dto.ImageFileName}";
 
                 return Ok(dto.AsResponse(url));
             }
