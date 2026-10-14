@@ -10,7 +10,7 @@ namespace BookMyHome.Web.Services
 {
     public class ListingService(HttpClient httpClient) : IListingService
     {
-        private readonly string baseUrl = "https://localhost:8010/listings-api/";
+        private readonly string baseUrl = "listings-api";
 
 
         async Task<int> IListingService.Create(CreateListingRequest createRequest, IBrowserFile? imageFile)
@@ -29,7 +29,7 @@ namespace BookMyHome.Web.Services
                 content.Add(fileContent, "file", imageFile.Name);
             }
 
-            var request = new HttpRequestMessage(HttpMethod.Post, $"{baseUrl}")
+            var request = new HttpRequestMessage(HttpMethod.Post, $"/{baseUrl}")
             {
                 Content = content
             };
@@ -55,7 +55,7 @@ namespace BookMyHome.Web.Services
                 content.Add(fileContent, "file", imageFile.Name);
             }
 
-            var request = new HttpRequestMessage(HttpMethod.Put, $"{baseUrl}{accomodationId}/listings/{listingId}")
+            var request = new HttpRequestMessage(HttpMethod.Put, $"{baseUrl}/{accomodationId}/listings/{listingId}")
             {
                 Content = content
             };
@@ -69,7 +69,7 @@ namespace BookMyHome.Web.Services
 
         async Task<Guid> IListingService.GetAccomodationIdByListingId(Guid listingId)
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}{listingId}/accomodationId");
+            var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}/{listingId}/accomodationId");
 
             request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
 
@@ -87,7 +87,7 @@ namespace BookMyHome.Web.Services
 
         async Task<IReadOnlyList<ListingResponse>> IListingService.GetAccomodationListings(Guid accomodationId)
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}{accomodationId}/listings");
+            var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}/{accomodationId}/listings");
 
             request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
 
@@ -108,7 +108,7 @@ namespace BookMyHome.Web.Services
             var from = start.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
             var to = end.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
 
-            var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}period?start={from}&end={to}");
+            var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}/period?start={from}&end={to}");
 
             request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
 
@@ -144,7 +144,7 @@ namespace BookMyHome.Web.Services
 
         async Task<ListingResponse> IListingService.GetListingAsync(Guid accomodationId,Guid listingId)
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}{accomodationId}/listings/{listingId}");
+            var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}/{accomodationId}/listings/{listingId}");
 
             request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
 

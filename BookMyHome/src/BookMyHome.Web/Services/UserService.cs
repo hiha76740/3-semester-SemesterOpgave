@@ -7,12 +7,12 @@ namespace BookMyHome.Web.Services
 {
     public class UserService(HttpClient httpClient) : IUserService
     {
-        private readonly string baseUrl = "https://localhost:8010/users-api/";
+        private readonly string baseUrl = "users-api";
 
 
         async Task<IReadOnlyList<AccessRoleReponse>> IUserService.GetAllAccessRoles()
         {
-            var response = await httpClient.GetFromJsonAsync<IReadOnlyList<AccessRoleReponse>>($"{baseUrl}Roles");
+            var response = await httpClient.GetFromJsonAsync<IReadOnlyList<AccessRoleReponse>>($"{baseUrl}/Roles");
 
             if (response == null)
                 return new List<AccessRoleReponse>();
@@ -22,7 +22,7 @@ namespace BookMyHome.Web.Services
 
         async Task<UserResponse> IUserService.GetUserById(Guid id)
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}{id}");
+            var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}/{id}");
 
             request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
 

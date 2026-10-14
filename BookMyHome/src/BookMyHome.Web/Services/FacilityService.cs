@@ -8,7 +8,7 @@ namespace BookMyHome.Web.Services
 {
     public class FacilityService(HttpClient httpClient) : IFacilityService
     {
-        private readonly string baseUrl = "https://localhost:8010/facilities-api/";
+        private readonly string baseUrl = "facilities-api";
 
 
         async Task<IReadOnlyList<FacilityResponse>> IFacilityService.GetAllFacilitiesAsync()
@@ -31,7 +31,7 @@ namespace BookMyHome.Web.Services
 
         async Task IFacilityService.AddFacilityAsync(Guid facilityId, Guid accomodationId)
         {
-            var request = new HttpRequestMessage(HttpMethod.Put, $"{baseUrl}{accomodationId}")
+            var request = new HttpRequestMessage(HttpMethod.Put, $"{baseUrl}/{accomodationId}")
             {
                 Content = JsonContent.Create(new AddFacilityRequest(facilityId))
             };
@@ -44,7 +44,7 @@ namespace BookMyHome.Web.Services
 
         async Task IFacilityService.RemoveFacilityAsync(Guid facilityId, Guid accomodationId)
         {
-            var request = new HttpRequestMessage(HttpMethod.Delete, $"{baseUrl}{accomodationId}")
+            var request = new HttpRequestMessage(HttpMethod.Delete, $"{baseUrl}/{accomodationId}")
             {
                 Content = JsonContent.Create(new RemoveFacilityRequest(facilityId))
             };

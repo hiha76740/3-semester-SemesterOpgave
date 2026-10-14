@@ -9,7 +9,7 @@ namespace BookMyHome.Web.Services
 {
     public class AccomodationService(HttpClient httpClient) : IAccomodationService
     {
-        private readonly string baseUrl = "https://localhost:8010/accomodations-api/";
+        private readonly string baseUrl = "accomodations-api";
 
 
         async Task<int> IAccomodationService.Create(CreateAccomodationRequest createRequest, IBrowserFile? imageFile)
@@ -55,7 +55,7 @@ namespace BookMyHome.Web.Services
             }
 
 
-            var request = new HttpRequestMessage(HttpMethod.Put, $"{baseUrl}{accomodationId}")
+            var request = new HttpRequestMessage(HttpMethod.Put, $"{baseUrl}/{accomodationId}")
             {
                 Content = content
             };
@@ -69,7 +69,7 @@ namespace BookMyHome.Web.Services
 
         async Task<AccomodationResponse?> IAccomodationService.GetAccomodationByIdAsync(Guid id)
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}{id}");
+            var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}/{id}");
 
             request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
 
@@ -87,7 +87,7 @@ namespace BookMyHome.Web.Services
 
         async Task<IReadOnlyList<AccomodationTypeResponse>> IAccomodationService.GetAllAccomodationTypes()
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}types");
+            var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}/types");
 
             using var response = await httpClient.SendAsync(request);
 

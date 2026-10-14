@@ -9,12 +9,12 @@ namespace BookMyHome.Web.Services
 {
     public class AuthService(HttpClient httpClient) : IAuthService
     {
-        private readonly string baseUrl = "https://localhost:8010/auth-api/";
+        private readonly string baseUrl = "auth-api";
 
 
         async Task<AuthUserResponse> IAuthService.GetAuthUserAsync()
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}Me");
+            var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}/Me");
 
             request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
 
@@ -32,7 +32,7 @@ namespace BookMyHome.Web.Services
 
         async Task<int> IAuthService.Login(string username, string password)
         {
-            var request = new HttpRequestMessage(HttpMethod.Post, $"{baseUrl}login")
+            var request = new HttpRequestMessage(HttpMethod.Post, $"{baseUrl}/login")
             {
                 Content = JsonContent.Create(new LoginRequest(username, password))
             };
@@ -46,7 +46,7 @@ namespace BookMyHome.Web.Services
 
         async Task IAuthService.LogOut()
         {
-            var request = new HttpRequestMessage(HttpMethod.Post, $"{baseUrl}logout");
+            var request = new HttpRequestMessage(HttpMethod.Post, $"{baseUrl}/logout");
 
             request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
 
@@ -58,7 +58,7 @@ namespace BookMyHome.Web.Services
 
         async Task<int> IAuthService.Register(RegisterUserRequest request)
         {
-            using var response = await httpClient.PostAsJsonAsync($"{baseUrl}register", request);
+            using var response = await httpClient.PostAsJsonAsync($"{baseUrl}/register", request);
 
             return (int)response.StatusCode;
         }
