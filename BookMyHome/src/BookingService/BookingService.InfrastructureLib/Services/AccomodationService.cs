@@ -10,9 +10,11 @@ public class AccomodationService(DaprClient daprClient) : IAccomodationService
 {
     private readonly HttpClient client = daprClient.CreateInvokableHttpClient(appId: "accomodationservice");
 
+    private readonly string baseUrl = "api/v1/Accomodations";
+
     async Task<bool> IAccomodationService.AccomodationExistAsync(AccomodationId id)
     {
-        using var response = await client.GetAsync($"exists?id={id.Value}");
+        using var response = await client.GetAsync($"{baseUrl}/exists?id={id.Value}");
 
         response.EnsureSuccessStatusCode();
 
@@ -23,7 +25,7 @@ public class AccomodationService(DaprClient daprClient) : IAccomodationService
 
     async Task<Guid> IAccomodationService.GetAccmodationHostIdAsync(AccomodationId accomodationId)
     {
-        using var response = await client.GetAsync($"hostid?accomodationId={accomodationId.Value}");
+        using var response = await client.GetAsync($"{baseUrl}/hostid?accomodationId={accomodationId.Value}");
 
         response.EnsureSuccessStatusCode();
 
@@ -34,7 +36,7 @@ public class AccomodationService(DaprClient daprClient) : IAccomodationService
 
     async Task<AccomodationSummaryResponse> IAccomodationService.GetAccomodationSummaryAsync(Guid accomodationId, Guid listingId)
     {
-        using var response = await client.GetAsync($"summary?accomodationId={accomodationId}&listingId={listingId}");
+        using var response = await client.GetAsync($"{baseUrl}/summary?accomodationId={accomodationId}&listingId={listingId}");
 
         response.EnsureSuccessStatusCode();
 

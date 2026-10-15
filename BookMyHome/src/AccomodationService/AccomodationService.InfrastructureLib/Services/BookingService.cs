@@ -8,13 +8,14 @@ namespace AccomodationService.InfrastructureLib.Services;
 public class BookingService(DaprClient daprClient) : IBookingService
 {
     private readonly HttpClient client = daprClient.CreateInvokableHttpClient(appId: "bookingservice");
+    private readonly string baseUrl = "api/v1/Bookings";
 
     async Task<bool> IBookingService.IsAvailableAsync(Guid accomodationId, DateOnly start, DateOnly end)
     {
         var from = start.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
         var to = end.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
 
-        using var response = await client.GetAsync($"availability?id={accomodationId}&startDate={from}&endDate={to}");
+        using var response = await client.GetAsync($"{baseUrl}/availability?id={accomodationId}&startDate={from}&endDate={to}");
 
         response.EnsureSuccessStatusCode();
 

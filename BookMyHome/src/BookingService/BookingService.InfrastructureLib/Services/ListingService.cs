@@ -9,10 +9,12 @@ public class ListingService(DaprClient daprClient) : IListingService
 {
     private readonly HttpClient client = daprClient.CreateInvokableHttpClient(appId: "accomodationservice");
 
+    private readonly string baseUrl = "api/v1/Listings";
+
 
     async Task<bool> IListingService.ListingExistAsync(ListingId id)
     {
-        var response = await client.GetAsync($"exists?id={id.Value}");
+        var response = await client.GetAsync($"{baseUrl}/exists?id={id.Value}");
 
         response.EnsureSuccessStatusCode();
 

@@ -9,9 +9,11 @@ public class GuestService(DaprClient daprClient) : IGuestService
 {
     private readonly HttpClient client = daprClient.CreateInvokableHttpClient(appId: "userservice");
 
+    private readonly string baseUrl = "api/v1/Users";
+
     async Task<bool> IGuestService.GuestExistAsync(GuestId id)
     {
-        var response = await client.GetAsync($"exists?userId={id.Value}");
+        var response = await client.GetAsync($"{baseUrl}/exists?userId={id.Value}");
 
         response.EnsureSuccessStatusCode();
 
