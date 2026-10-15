@@ -20,7 +20,8 @@ namespace AccomodationService.Api.Controllers
         ICreateListingHandler listingCreate,
         IUpdateListingHandler update,
         IDeleteListingHandler deleteListingById,
-        IUploadListingImageHandler imageHandler
+        IUploadListingImageHandler imageHandler,
+        IConfiguration appsettings
         ) : ControllerBase
     {
         [Authorize(Roles = "Host, Guest")]
@@ -41,7 +42,7 @@ namespace AccomodationService.Api.Controllers
                 {
                     foreach (var item in list)
                     {
-                        var url = item.ImageFileName == null ? null : $"https://localhost:8010/images/{item.ImageFileName}";
+                        var url = item.ImageFileName == null ? null : $"{appsettings["ImageBaseUrl"]}/images/{item.ImageFileName}";
 
                         response.Add(item.AsReponse(url));
                     }
@@ -101,7 +102,7 @@ namespace AccomodationService.Api.Controllers
                 {
                     foreach (var item in list)
                     {
-                        var url = item.ImageFileName == null ? null : $"https://localhost:8010/images/{item.ImageFileName}";
+                        var url = item.ImageFileName == null ? null : $"{appsettings["ImageBaseUrl"]}/images/{item.ImageFileName}";
 
                         response.Add(item.AsReponse(url));
                     }
@@ -136,7 +137,7 @@ namespace AccomodationService.Api.Controllers
                 {
                     foreach (var item in list)
                     {
-                        var url = item.ImageFileName == null ? null : $"https://localhost:8010/images/{item.ImageFileName}";
+                        var url = item.ImageFileName == null ? null : $"{appsettings["ImageBaseUrl"]}/images/{item.ImageFileName}";
 
                         response.Add(item.AsReponse(url));
                     }
@@ -169,7 +170,7 @@ namespace AccomodationService.Api.Controllers
                 if (dto == null)
                     return NotFound("The requested listing was not found");
 
-                var url = dto.ImageFileName == null ? null : $"https://localhost:8010/images/{dto.ImageFileName}";
+                var url = dto.ImageFileName == null ? null : $"{appsettings["ImageBaseUrl"]}/images/{dto.ImageFileName}";
 
                 return Ok(dto.AsReponse(url));
             }
