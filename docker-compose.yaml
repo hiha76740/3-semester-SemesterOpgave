@@ -94,8 +94,14 @@ services:
       - "8080"
       - "--app-protocol"
       - "http"
+      - "--placement-host-address"
+      - "placement:50006"
+      - "--scheduler-host-address"
+      - "scheduler:50007"
     depends_on:
       - BookMyHome-UserService1
+      - placement
+      - scheduler
     network_mode: "service:BookMyHome-UserService1"
     restart: unless-stopped  
     
@@ -134,8 +140,14 @@ services:
       - "8080"
       - "--app-protocol"
       - "http"
+      - "--placement-host-address"
+      - "placement:50006"
+      - "--scheduler-host-address"
+      - "scheduler:50007"
     depends_on:
       - BookMyHome-UserService2
+      - placement
+      - scheduler
     network_mode: "service:BookMyHome-UserService2"
     restart: unless-stopped
   
@@ -187,8 +199,14 @@ services:
       - "8080"
       - "--app-protocol"
       - "http"
+      - "--placement-host-address"
+      - "placement:50006"
+      - "--scheduler-host-address"
+      - "scheduler:50007"
     depends_on:
       - BookMyHome-BookingService1
+      - placement
+      - scheduler
     network_mode: "service:BookMyHome-BookingService1"
     restart: unless-stopped
 
@@ -228,8 +246,14 @@ services:
       - "8080"
       - "--app-protocol"
       - "http"
+      - "--placement-host-address"
+      - "placement:50006"
+      - "--scheduler-host-address"
+      - "scheduler:50007"
     depends_on:
       - BookMyHome-BookingService2
+      - placement
+      - scheduler
     network_mode: "service:BookMyHome-BookingService2"
     restart: unless-stopped
     
@@ -282,8 +306,14 @@ services:
       - "8080"
       - "--app-protocol"
       - "http"
+      - "--placement-host-address"
+      - "placement:50006"
+      - "--scheduler-host-address"
+      - "scheduler:50007"
     depends_on:
       - BookMyHome-AccomodationService1
+      - placement
+      - scheduler
     network_mode: "service:BookMyHome-AccomodationService1"
     restart: unless-stopped
   
@@ -323,9 +353,28 @@ services:
       - "8080"
       - "--app-protocol"
       - "http"
+      - "--placement-host-address"
+      - "placement:50006"
+      - "--scheduler-host-address"
+      - "scheduler:50007"
     depends_on:
       - BookMyHome-AccomodationService2
+      - placement
+      - scheduler
     network_mode: "service:BookMyHome-AccomodationService2"
+    restart: unless-stopped
+
+  placement:
+    image: daprio/placement:1.18.0
+    command: ["./placement", "--port", "50006"]
+    restart: unless-stopped
+
+  scheduler:
+    image: daprio/scheduler:1.18.0
+    command: ["./scheduler", "--port", "50007", "--etcd-data-dir", "/data"]
+    user: root
+    volumes:
+      - dapr-scheduler-data:/data
     restart: unless-stopped
 
   watchtower:
@@ -345,3 +394,4 @@ volumes:
     mssql-bookingdb-data:
     mssql-Accomodationdb-data:
     BookMyHome-Images:
+    dapr-scheduler-data:
