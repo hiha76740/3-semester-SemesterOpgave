@@ -83,7 +83,22 @@ services:
       timeout: 3s
       retries: 3
       start_period: 60s
-      
+  
+  BookMyHome-UserService1-dapr:
+    image: daprio/daprd:1.18.0
+    command:
+      - "./daprd"
+      - "--app-id"
+      - "userservice"
+      - "--app-port"
+      - "8080"
+      - "--app-protocol"
+      - "http"
+    depends_on:
+      - BookMyHome-UserService1
+    network_mode: "service:BookMyHome-UserService1"
+    restart: unless-stopped  
+    
   BookMyHome-UserService2:
     depends_on:
       - mssql-UserDB
@@ -108,6 +123,21 @@ services:
       timeout: 3s
       retries: 3
       start_period: 60s
+  
+  BookMyHome-UserService2-dapr:
+    image: daprio/daprd:1.18.0
+    command:
+      - "./daprd"
+      - "--app-id"
+      - "userservice"
+      - "--app-port"
+      - "8080"
+      - "--app-protocol"
+      - "http"
+    depends_on:
+      - BookMyHome-UserService2
+    network_mode: "service:BookMyHome-UserService2"
+    restart: unless-stopped
   
   
   mssql-BookingDB:
@@ -147,6 +177,22 @@ services:
       start_period: 60s
 
 
+  BookMyHome-BookingService1-dapr:
+    image: daprio/daprd:1.18.0
+    command:
+      - "./daprd"
+      - "--app-id"
+      - "bookingservice"
+      - "--app-port"
+      - "8080"
+      - "--app-protocol"
+      - "http"
+    depends_on:
+      - BookMyHome-BookingService1
+    network_mode: "service:BookMyHome-BookingService1"
+    restart: unless-stopped
+
+
   BookMyHome-BookingService2:
     depends_on:
       - mssql-BookingDB
@@ -172,7 +218,22 @@ services:
       retries: 3
       start_period: 60s
 
-
+  BookMyHome-BookingService2-dapr:
+    image: daprio/daprd:1.18.0
+    command:
+      - "./daprd"
+      - "--app-id"
+      - "bookingservice"
+      - "--app-port"
+      - "8080"
+      - "--app-protocol"
+      - "http"
+    depends_on:
+      - BookMyHome-BookingService2
+    network_mode: "service:BookMyHome-BookingService2"
+    restart: unless-stopped
+    
+    
   mssql-AccomodationDB:
     image: mcr.microsoft.com/mssql/server:2025-latest
     container_name: mssql-accomodationdb
@@ -210,7 +271,22 @@ services:
       timeout: 3s
       retries: 3
       start_period: 60s
-      
+  
+  BookMyHome-AccomodationService1-dapr:
+    image: daprio/daprd:1.18.0
+    command:
+      - "./daprd"
+      - "--app-id"
+      - "accomodationservice"
+      - "--app-port"
+      - "8080"
+      - "--app-protocol"
+      - "http"
+    depends_on:
+      - BookMyHome-AccomodationService1
+    network_mode: "service:BookMyHome-AccomodationService1"
+    restart: unless-stopped
+  
   BookMyHome-AccomodationService2:
     depends_on:
       - mssql-AccomodationDB
@@ -236,7 +312,21 @@ services:
       timeout: 3s
       retries: 3
       start_period: 60s
-
+  
+  BookMyHome-AccomodationService2-dapr:
+    image: daprio/daprd:1.18.0
+    command:
+      - "./daprd"
+      - "--app-id"
+      - "accomodationservice"
+      - "--app-port"
+      - "8080"
+      - "--app-protocol"
+      - "http"
+    depends_on:
+      - BookMyHome-AccomodationService2
+    network_mode: "service:BookMyHome-AccomodationService2"
+    restart: unless-stopped
 
   watchtower:
     image: nickfedor/watchtower
