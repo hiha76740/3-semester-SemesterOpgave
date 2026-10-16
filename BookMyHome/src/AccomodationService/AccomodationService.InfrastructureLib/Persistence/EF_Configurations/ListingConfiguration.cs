@@ -23,5 +23,8 @@ internal class ListingConfiguration : IEntityTypeConfiguration<Listing>
 
         builder.Property(l => l.Status)
             .HasConversion<string>();
+
+        builder.Property(l => l.DailyPrice)
+            .HasPrecision(18, 2);
     }
 }
