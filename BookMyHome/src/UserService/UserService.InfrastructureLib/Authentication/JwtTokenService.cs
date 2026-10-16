@@ -21,14 +21,14 @@ public class JwtTokenService(IConfiguration configuration) : ITokenService
         };
 
         var key = new SymmetricSecurityKey(
-            Encoding.UTF8.GetBytes(configuration.GetValue<string>("AppSettings:Token")!));
+            Encoding.UTF8.GetBytes(configuration.GetValue<string>("Jwt:Key")!));
 
         // 512bits 64byts = 64 char
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512);
 
         var tokenDescriptor = new JwtSecurityToken(
-            issuer: configuration.GetValue<string>("AppSettings:Issuer"),
-            audience: configuration.GetValue<string>("AppSettings:Audience"),
+            issuer: configuration.GetValue<string>("Jwt:Issuer"),
+            audience: configuration.GetValue<string>("Jwt:Audience"),
             claims: claims,
             expires: DateTime.UtcNow.AddDays(1),
             signingCredentials: creds
@@ -42,12 +42,12 @@ public class JwtTokenService(IConfiguration configuration) : ITokenService
         var tokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
-            ValidIssuer = configuration["AppSettings:Issuer"],
+            ValidIssuer = configuration["Jwt:Issuer"],
             ValidateAudience = true,
-            ValidAudience = configuration["AppSettings:Audience"],
+            ValidAudience = configuration["Jwt:Audience"],
             ValidateLifetime = false,
             IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(configuration["AppSettings:Token"]!)),
+                Encoding.UTF8.GetBytes(configuration["Jwt:Key"]!)),
             ValidateIssuerSigningKey = true,
             ClockSkew = TimeSpan.Zero
         };
