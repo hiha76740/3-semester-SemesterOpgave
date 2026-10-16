@@ -12,6 +12,7 @@
 *.env
 *.key
 *.crt
+.env
 BookMyHome/src/AccomodationService/AccomodationService.Api/Storage
 
 # User-specific files (MonoDevelop/Xamarin Studio)
