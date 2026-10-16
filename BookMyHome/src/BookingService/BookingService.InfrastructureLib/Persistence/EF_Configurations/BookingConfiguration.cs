@@ -34,6 +34,9 @@ internal class BookingConfiguration : IEntityTypeConfiguration<Booking>
         builder.Property(b => b.Status)
             .HasConversion<string>();
 
+        builder.Property(b => b.Price)
+            .HasPrecision(18, 2);
+
         builder.ComplexProperty(
             b => b.Period,
             p =>
