@@ -1,5 +1,7 @@
 services:
 
+# -------- Frontend --------
+
   BookMyHome-Frontend:
     image: ghcr.io/hiha76740/bookmyhome-frontend:latest
     container_name: bookmyhome-frontend
@@ -20,6 +22,8 @@ services:
       retries: 3
       start_period: 60s
 
+# -------- Proxy --------
+
   BookMyHome-Proxy:
     image: ghcr.io/hiha76740/bookmyhome-proxy:latest
     container_name: bookmyhome-proxy
@@ -32,7 +36,7 @@ services:
         ASPNETCORE_URLS: "http://+:8080;https://+:8081"
         
         ASPNETCORE_Kestrel__Certificates__Default__Path: "/https/bookmyhome.pfx"
-        ASPNETCORE_Kestrel__Certificates__Default__Password: $"{ASPNETCORE_KESTREL__CERTIFICATES__DEFAULT__PASSWORD}"
+        ASPNETCORE_Kestrel__Certificates__Default__Password: "${ASPNETCORE_KESTREL__CERTIFICATES__DEFAULT__PASSWORD}"
 
     volumes:
         - ${USERPROFILE}/.aspnet/https:/https:ro
@@ -46,20 +50,22 @@ services:
       retries: 3
       start_period: 60s
   
- 
+ # -------- User DB --------
  
   mssql-UserDB:
     image: mcr.microsoft.com/mssql/server:2025-latest
     container_name: mssql-userdb
     environment:
-      - ACCEPT_EULA=Y
-      - MSSQL_SA_PASSWORD="${MSSQL_SA_PASSWORD}"
-      - MSSQL_PID=Developer
+      ACCEPT_EULA: Y
+      MSSQL_SA_PASSWORD: "${USERDB_SA_PASSWORD}"
+      MSSQL_PID: Developer
     volumes:
       - mssql-userdb-data:/var/opt/mssql
     restart: unless-stopped
     ports:
         - 9001:1433
+ 
+ # -------- User Service 1 --------
  
   BookMyHome-UserService1:
     depends_on:
@@ -73,7 +79,10 @@ services:
         ASPNETCORE_URLS: "http://+:8080;https://+:8081"
         ConnectionStrings__UserDB: "${USER_DB_CONNECTION_STRING:?Connection string mangler}"
         ASPNETCORE_Kestrel__Certificates__Default__Path: "/https/bookmyhome.pfx"
-        ASPNETCORE_Kestrel__Certificates__Default__Password: $"{ASPNETCORE_KESTREL__CERTIFICATES__DEFAULT__PASSWORD}"
+        ASPNETCORE_Kestrel__Certificates__Default__Password: "${ASPNETCORE_KESTREL__CERTIFICATES__DEFAULT__PASSWORD}"
+        Jwt__Key: "${JWT_KEY}"
+        Jwt__Issuer: "${JWT_ISSUER}"
+        Jwt__Audience: "${JWT_AUDIENCE}"
 
     volumes:
         - ${USERPROFILE}/.aspnet/https:/https:ro
@@ -107,7 +116,9 @@ services:
       - scheduler
     network_mode: "service:BookMyHome-UserService1"
     restart: unless-stopped  
-    
+ 
+# -------- User Service 2 -------- 
+
   BookMyHome-UserService2:
     depends_on:
       - mssql-UserDB
@@ -119,7 +130,10 @@ services:
         ASPNETCORE_URLS: "http://+:8080;https://+:8081"
         ConnectionStrings__UserDB: "${USER_DB_CONNECTION_STRING:?Connection string mangler}"
         ASPNETCORE_Kestrel__Certificates__Default__Path: "/https/bookmyhome.pfx"
-        ASPNETCORE_Kestrel__Certificates__Default__Password: $"{ASPNETCORE_KESTREL__CERTIFICATES__DEFAULT__PASSWORD}"
+        ASPNETCORE_Kestrel__Certificates__Default__Password: "${ASPNETCORE_KESTREL__CERTIFICATES__DEFAULT__PASSWORD}"
+        Jwt__Key: "${JWT_KEY}"
+        Jwt__Issuer: "${JWT_ISSUER}"
+        Jwt__Audience: "${JWT_AUDIENCE}"
 
     volumes:
         - ${USERPROFILE}/.aspnet/https:/https:ro
@@ -154,14 +168,15 @@ services:
     network_mode: "service:BookMyHome-UserService2"
     restart: unless-stopped
   
+  # -------- Booking DB --------
   
   mssql-BookingDB:
     image: mcr.microsoft.com/mssql/server:2025-latest
     container_name: mssql-bookingdb
     environment:
-      - ACCEPT_EULA=Y
-      - MSSQL_SA_PASSWORD=6!8GSPTuHGHsmFfwrH!
-      - MSSQL_PID=Developer
+      ACCEPT_EULA: Y
+      MSSQL_SA_PASSWORD: "${BOOKINGDB_SA_PASSWORD}"
+      MSSQL_PID: Developer
     volumes:
       - mssql-bookingdb-data:/var/opt/mssql
     restart: unless-stopped
@@ -179,7 +194,10 @@ services:
         ASPNETCORE_URLS: "http://+:8080;https://+:8081"
         ConnectionStrings__BookingDB: "${BOOKING_DB_CONNECTION_STRING:?Connection string mangler}"
         ASPNETCORE_Kestrel__Certificates__Default__Path: "/https/bookmyhome.pfx"
-        ASPNETCORE_Kestrel__Certificates__Default__Password: $"{ASPNETCORE_KESTREL__CERTIFICATES__DEFAULT__PASSWORD}"
+        ASPNETCORE_Kestrel__Certificates__Default__Password: "${ASPNETCORE_KESTREL__CERTIFICATES__DEFAULT__PASSWORD}"
+        Jwt__Key: "${JWT_KEY}"
+        Jwt__Issuer: "${JWT_ISSUER}"
+        Jwt__Audience: "${JWT_AUDIENCE}"
 
     volumes:
         - ${USERPROFILE}/.aspnet/https:/https:ro
@@ -193,6 +211,7 @@ services:
       retries: 3
       start_period: 60s
 
+# -------- Booking Service 1 --------
 
   BookMyHome-BookingService1-dapr:
     image: daprio/daprd:1.18.0
@@ -216,6 +235,8 @@ services:
     restart: unless-stopped
 
 
+# -------- Booking Service 2 --------
+
   BookMyHome-BookingService2:
     depends_on:
       - mssql-BookingDB
@@ -227,7 +248,10 @@ services:
         ASPNETCORE_URLS: "http://+:8080;https://+:8081"
         ConnectionStrings__BookingDB: "${BOOKING_DB_CONNECTION_STRING:?Connection string mangler}"
         ASPNETCORE_Kestrel__Certificates__Default__Path: "/https/bookmyhome.pfx"
-        ASPNETCORE_Kestrel__Certificates__Default__Password: $"{ASPNETCORE_KESTREL__CERTIFICATES__DEFAULT__PASSWORD}"
+        ASPNETCORE_Kestrel__Certificates__Default__Password: "${ASPNETCORE_KESTREL__CERTIFICATES__DEFAULT__PASSWORD}"
+        Jwt__Key: "${JWT_KEY}"
+        Jwt__Issuer: "${JWT_ISSUER}"
+        Jwt__Audience: "${JWT_AUDIENCE}"
 
     volumes:
         - ${USERPROFILE}/.aspnet/https:/https:ro
@@ -262,21 +286,23 @@ services:
     network_mode: "service:BookMyHome-BookingService2"
     restart: unless-stopped
     
-    
+# -------- Accomodation DB --------  
+  
   mssql-AccomodationDB:
     image: mcr.microsoft.com/mssql/server:2025-latest
     container_name: mssql-accomodationdb
     environment:
-      - ACCEPT_EULA=Y
-      - MSSQL_SA_PASSWORD=6!8GSPTuHGHsmFfwrH!
-      - MSSQL_PID=Developer
+      ACCEPT_EULA: Y
+      MSSQL_SA_PASSWORD: "${ACCOMODATIONDB_SA_PASSWORD}"
+      MSSQL_PID: Developer
     volumes:
       - mssql-Accomodationdb-data:/var/opt/mssql
     restart: unless-stopped
     ports:
         - 9003:1433
 
-
+# -------- Accomodation Service 1 --------   
+ 
   BookMyHome-AccomodationService1:
     depends_on:
       - mssql-AccomodationDB
@@ -288,7 +314,10 @@ services:
         ASPNETCORE_URLS: "http://+:8080;https://+:8081"
         ConnectionStrings__AccomodationDB: "${ACCOMODATION_DB_CONNECTION_STRING:?Connection string mangler}"
         ASPNETCORE_Kestrel__Certificates__Default__Path: "/https/bookmyhome.pfx"
-        ASPNETCORE_Kestrel__Certificates__Default__Password: $"{ASPNETCORE_KESTREL__CERTIFICATES__DEFAULT__PASSWORD}"
+        ASPNETCORE_Kestrel__Certificates__Default__Password: "${ASPNETCORE_KESTREL__CERTIFICATES__DEFAULT__PASSWORD}"
+        Jwt__Key: "${JWT_KEY}"
+        Jwt__Issuer: "${JWT_ISSUER}"
+        Jwt__Audience: "${JWT_AUDIENCE}"
 
     volumes:
         - ${USERPROFILE}/.aspnet/https:/https:ro
@@ -324,6 +353,8 @@ services:
     network_mode: "service:BookMyHome-AccomodationService1"
     restart: unless-stopped
   
+# -------- Accomodation Service 2 --------      
+
   BookMyHome-AccomodationService2:
     depends_on:
       - mssql-AccomodationDB
@@ -335,7 +366,10 @@ services:
         ASPNETCORE_URLS: "http://+:8080;https://+:8081"
         ConnectionStrings_AccomodationDB: "${ACCOMODATION_DB_CONNECTION_STRING:?Connection string mangler}"
         ASPNETCORE_Kestrel__Certificates__Default__Path: "/https/bookmyhome.pfx"
-        ASPNETCORE_Kestrel__Certificates__Default__Password: $"{ASPNETCORE_KESTREL__CERTIFICATES__DEFAULT__PASSWORD}"
+        ASPNETCORE_Kestrel__Certificates__Default__Password: "${ASPNETCORE_KESTREL__CERTIFICATES__DEFAULT__PASSWORD}"
+        Jwt__Key: "${JWT_KEY}"
+        Jwt__Issuer: "${JWT_ISSUER}"
+        Jwt__Audience: "${JWT_AUDIENCE}"
 
     volumes:
         - ${USERPROFILE}/.aspnet/https:/https:ro
@@ -371,6 +405,8 @@ services:
     network_mode: "service:BookMyHome-AccomodationService2"
     restart: unless-stopped
 
+# -------- Dapr Services --------    
+
   placement:
     image: daprio/placement:1.18.0
     command: ["./placement", "--port", "50006"]
@@ -383,6 +419,8 @@ services:
     volumes:
       - dapr-scheduler-data:/data
     restart: unless-stopped
+
+# -------- watchtower --------    
 
   watchtower:
     image: nickfedor/watchtower
