@@ -3,29 +3,37 @@
 @inject BookingState BookingState
 @inject IFacilityService FacilityService
 
-<RadzenText TextStyle="TextStyle.H4" Text="Find dit næste ophold" />
-<RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Start" Gap="1rem">
-    <ListingDateComponent OnChangeCallback="@OnDateChange" />
+@if (ListingsList == null)
+{
+    <RadzenText TextStyle="TextStyle.Body1" Text="Indlæser listing..." />
+}
+else
+{
+    <RadzenText TextStyle="TextStyle.H4" Text="Find dit næste ophold" />
+    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Start" Gap="1rem">
+        <ListingDateComponent OnChangeCallback="@OnDateChange" />
 
-    <ListingFilterComponent ListingsList="@ListingsList"
-                            Facilities="@Facilities"
-                            FilteredListChangedCallback="@OnFilteredListChanged" />
-</RadzenStack>
+        <ListingFilterComponent ListingsList="@ListingsList"
+                                Facilities="@Facilities"
+                                FilteredListChangedCallback="@OnFilteredListChanged" />
+    </RadzenStack>
 
+    <br />
+    <RadzenText TextStyle="TextStyle.DisplayH3">Ledige boliger</RadzenText>
+    <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" Gap="0">
+        @foreach (var listing in FilteredList)
+        {
+            <ListingCardComponent Listing="@listing"
+                                  ButtonNavigationPath="@($"/listing/{listing.ListingId}")"
+                                  NavigationButtonText="Se detaljer" />
+        }
+    </RadzenStack>
+}
 
-<RadzenText TextStyle="TextStyle.DisplayH3">Ledige boliger</RadzenText>
-<RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" Gap="0">
-    @foreach (var listing in FilteredList)
-    {
-        <ListingCardComponent Listing="@listing"
-                              ButtonNavigationPath="@($"/listing/{listing.ListingId}")"
-                              NavigationButtonText="Se detaljer" />
-    }
-</RadzenStack>
 
 @code {
 
-    public IReadOnlyList<ListingResponse> ListingsList { get; set; } = [];
+    public IReadOnlyList<ListingResponse>? ListingsList { get; set; }
     private IReadOnlyList<ListingResponse> FilteredList = [];
     private IReadOnlyList<FacilityResponse> Facilities = [];
 
