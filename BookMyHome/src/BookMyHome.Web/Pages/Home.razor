@@ -1,7 +1,169 @@
 ﻿@page "/"
 
-<PageTitle>Home</PageTitle>
+@inject NavigationManager Navigation
 
-<h1>Hello, world!</h1>
+<PageTitle>BookMyHome – Find dit næste ophold</PageTitle>
 
-Welcome to your new app.
+<RadzenStack Gap="3rem" class="home-page">
+
+    @* Introduktion *@
+    <RadzenCard class="hero">
+        <RadzenStack Gap="1.5rem"
+                     AlignItems="AlignItems.Center"
+                     class="hero-content">
+
+            <RadzenText Text="Velkommen til BookMyHome"
+                        TextStyle="TextStyle.H3"
+                        TagName="TagName.H1" />
+
+            <RadzenText Text="Find et sted, hvor du kan føle dig hjemme."
+                        TextStyle="TextStyle.H5"
+                        TagName="TagName.P" />
+
+            <RadzenText Text="Udforsk hyggelige huse, lejligheder og slotte til dit næste ophold."
+                        TextStyle="TextStyle.Body1" />
+
+            <RadzenButton Text="Find dit næste ophold"
+                          Icon="search"
+                          ButtonStyle="ButtonStyle.Primary"
+                          Size="ButtonSize.Large"
+                          Click="@(() => Navigation.NavigateTo("/Listings"))" />
+
+        </RadzenStack>
+    </RadzenCard>
+
+    @* Boligtyper *@
+    <RadzenStack Gap="1.5rem">
+
+        <RadzenText Text="Hvilket ophold drømmer du om?"
+                    TextStyle="TextStyle.H4"
+                    TagName="TagName.H2"
+                    class="section-title" />
+
+        <RadzenRow Gap="1rem" RowGap="1rem">
+
+            <RadzenColumn Size="12" SizeMD="4">
+                <RadzenCard class="feature-card">
+                    <RadzenStack Gap="1rem"
+                                 AlignItems="AlignItems.Center">
+
+                        <RadzenIcon Icon="holiday_village"
+                                    class="feature-icon" />
+
+                        <RadzenText Text="Hus"
+                                    TextStyle="TextStyle.H5"
+                                    TagName="TagName.H3" />
+
+                        <RadzenText Text="Plads til afslapning og hyggelige stunder med dem, du holder af."
+                                    TextStyle="TextStyle.Body1" />
+
+                    </RadzenStack>
+                </RadzenCard>
+            </RadzenColumn>
+
+            <RadzenColumn Size="12" SizeMD="4">
+                <RadzenCard class="feature-card">
+                    <RadzenStack Gap="1rem"
+                                 AlignItems="AlignItems.Center">
+
+                        <RadzenIcon Icon="apartment"
+                                    class="feature-icon" />
+
+                        <RadzenText Text="Lejlighed"
+                                    TextStyle="TextStyle.H5"
+                                    TagName="TagName.H3" />
+
+                        <RadzenText Text="En god base til at opleve byen og udforske nye steder."
+                                    TextStyle="TextStyle.Body1" />
+
+                    </RadzenStack>
+                </RadzenCard>
+            </RadzenColumn>
+
+            <RadzenColumn Size="12" SizeMD="4">
+                <RadzenCard class="feature-card">
+                    <RadzenStack Gap="1rem"
+                                 AlignItems="AlignItems.Center">
+
+                        <RadzenIcon Icon="castle"
+                                    class="feature-icon" />
+
+                        <RadzenText Text="Slot"
+                                    TextStyle="TextStyle.H5"
+                                    TagName="TagName.H3" />
+
+                        <RadzenText Text="Gør opholdet til noget særligt med historiske og stemningsfulde rammer."
+                                    TextStyle="TextStyle.Body1" />
+
+                    </RadzenStack>
+                </RadzenCard>
+            </RadzenColumn>
+
+        </RadzenRow>
+    </RadzenStack>
+
+    @* Sådan fungerer det *@
+    <RadzenCard class="steps-section">
+        <RadzenStack Gap="2rem">
+
+            <RadzenText Text="Dit næste ophold starter her"
+                        TextStyle="TextStyle.H4"
+                        TagName="TagName.H2"
+                        class="section-title" />
+
+            <RadzenRow Gap="1rem" RowGap="2rem">
+
+                <RadzenColumn Size="12" SizeMD="4">
+                    <RadzenStack Gap="0.75rem"
+                                 AlignItems="AlignItems.Center"
+                                 class="step">
+
+                        <RadzenIcon Icon="search" class="step-icon" />
+
+                        <RadzenText Text="1. Find din bolig"
+                                    TextStyle="TextStyle.H6"
+                                    TagName="TagName.H3" />
+
+                        <RadzenText Text="Se de tilgængelige ophold, og find et sted, der passer til dig."
+                                    TextStyle="TextStyle.Body1" />
+
+                    </RadzenStack>
+                </RadzenColumn>
+
+                <RadzenColumn Size="12" SizeMD="4">
+                    <RadzenStack Gap="0.75rem"
+                                 AlignItems="AlignItems.Center"
+                                 class="step">
+
+                        <RadzenIcon Icon="date_range" class="step-icon" />
+
+                        <RadzenText Text="2. Vælg dine datoer"
+                                    TextStyle="TextStyle.H6"
+                                    TagName="TagName.H3" />
+
+                        <RadzenText Text="Vælg, hvornår du vil afsted, og book dit ophold."
+                                    TextStyle="TextStyle.Body1" />
+
+                    </RadzenStack>
+                </RadzenColumn>
+
+                <RadzenColumn Size="12" SizeMD="4">
+                    <RadzenStack Gap="0.75rem"
+                                 AlignItems="AlignItems.Center"
+                                 class="step">
+
+                        <RadzenIcon Icon="luggage" class="step-icon" />
+
+                        <RadzenText Text="3. Glæd dig til turen"
+                                    TextStyle="TextStyle.H6"
+                                    TagName="TagName.H3" />
+
+                        <RadzenText Text="Pak tasken, og gør dig klar til nye oplevelser."
+                                    TextStyle="TextStyle.Body1" />
+
+                    </RadzenStack>
+                </RadzenColumn>
+            </RadzenRow>
+        </RadzenStack>
+    </RadzenCard>
+</RadzenStack>
