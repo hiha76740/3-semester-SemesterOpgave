@@ -20,6 +20,7 @@ builder.Services.AddBookMyHomeState();
 
 builder.Services.AddAuthorizationCore();
 builder.Services.AddCascadingAuthenticationState();
+
 builder.Services.AddScoped<CustomAuthenticationStateProvider>();
 
 builder.Services.AddScoped<AuthenticationStateProvider>(serviceProvider =>
