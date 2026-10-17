@@ -1,0 +1,67 @@
+﻿@page "/booking/create"
+
+@inject IBookingService Service
+@inject BookingState Booking
+@inject UserState User
+@inject ListingState Listing
+@inject NavigationManager NavigationManager
+@inject DialogService Dialog
+
+
+<BookingFormComponent Model="Model"
+                      SubmitCallback="Submit"
+                      Booking="Booking"
+                      User="User"
+                      Listing="Listing"
+                      CancelNavigationPath="/listings" />
+
+
+@code {
+    private BookingInputModel Model = new();
+
+    protected override void OnInitialized()
+    {
+        if (User.UserId != null)
+        {
+            Model.GuestId = User.UserId.Value;
+            Model.AccomodationId = Booking.AccomodationId;
+            Model.ListingId = Listing.Id;
+            Model.StartDate = Booking.StartDate;
+            Model.EndDate = Booking.EndDate;
+            Model.Price = Booking.TotalPrice;
+        }
+        
+    }
+
+    async private Task Submit(BookingInputModel model)
+    {
+        try
+        {
+            var request = new CreateBookingRequest(
+                    model.GuestId,
+                    model.AccomodationId,
+                    model.ListingId,
+                    model.StartDate,
+                    model.EndDate,
+                    model.Price);
+
+            var statusCode = await Service.MakeBookingAsync(request);
+
+            if (statusCode == 200)
+            {
+                await Dialog.Alert("Booking oprettet korrekt", "Booking oprettelse");
+
+                Booking.Clear();
+                Listing.Clear();
+                NavigationManager.NavigateTo("/listings");
+
+                    
+            }
+        }
+        catch (Exception ex)
+        {
+            await Dialog.Alert(ex.Message);
+        }
+
+    }
+}
