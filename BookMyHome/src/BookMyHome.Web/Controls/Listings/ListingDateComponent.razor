@@ -1,0 +1,38 @@
+@inject BookingState BookingState
+
+    <RadzenStack Gap="0.5rem">
+        <RadzenLabel Text="Fra" Component="StartDate" />
+        <RadzenDatePicker @bind-Value="@start" DateFormat="dd/MM/yyyy" Name="StartDate" Immediate="true" Change="@(_ => OnChange())" />
+    </RadzenStack>
+    <RadzenStack Gap="0.5rem">
+        <RadzenLabel Text="Til" Component="EndDate" />
+        <RadzenDatePicker @bind-Value="@end" DateFormat="dd/MM/yyyy" Name="EndDate" Immediate="true" Change="@(_ => OnChange())" />
+    </RadzenStack>
+
+@code {
+    [Parameter, EditorRequired]
+    public EventCallback OnChangeCallback { get; set; }
+
+    private DateOnly start = DateOnly.FromDateTime(DateTime.Today);
+    private DateOnly end = DateOnly.FromDateTime(DateTime.Today.AddDays(7));
+
+    private async Task OnChange()
+    {
+
+        if (BookingState.StartDate != start || BookingState.EndDate != end)
+        {
+            if (end < start)
+                end = start.AddDays(7);
+
+
+            SetBookingStateDates();
+            await OnChangeCallback.InvokeAsync();
+        }
+    }
+
+    private void SetBookingStateDates()
+    {
+        BookingState.StartDate = start;
+        BookingState.EndDate = end;
+    }
+}
