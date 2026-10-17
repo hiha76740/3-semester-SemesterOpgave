@@ -1,6 +1,7 @@
 ﻿namespace BookMyHome.ContractsLib.Responses.Users;
 
 public record UserResponse(
+    Guid Id,
     string Firstname,
     string Lastname,
     DateOnly Birthdate,

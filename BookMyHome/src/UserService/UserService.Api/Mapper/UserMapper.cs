@@ -15,6 +15,7 @@ namespace UserService.Api.Mapper
         public static UserResponse AsUserResponse(this UserDto dto)
         {
             var output = new UserResponse(
+                dto.Id,
                 dto.Firstname,
                 dto.Lastname,
                 dto.Birthdate,
