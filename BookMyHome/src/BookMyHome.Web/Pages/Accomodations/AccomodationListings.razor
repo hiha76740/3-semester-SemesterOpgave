@@ -1,6 +1,6 @@
 ﻿@page "/accomodation/{id:guid}/listings"
 
-@inject IListingService ListingService
+@inject IListingService Service
 @inject NavigationManager NavigationManager
 
 <RadzenText TextStyle="TextStyle.H4" Text="Accomodation listings" />
@@ -22,7 +22,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        Listings = await ListingService.GetAccomodationListings(Id);
+        Listings = await Service.GetAccomodationListings(Id);
     }
 
     private void CreateNavigation()

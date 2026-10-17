@@ -1,8 +1,7 @@
 ﻿@page "/register"
-@using BookMyHome.Web.Models
-@inject IAuthService authService
-@inject IUserService userService
-@inject NavigationManager navigationManager
+@inject IAuthService AuthService
+@inject IUserService UserService
+@inject NavigationManager NavigationManager
 @inject DialogService Dialog
 
 
@@ -23,7 +22,7 @@
     {
         try
         {
-            AccessRoles = await userService.GetAllAccessRoles();
+            AccessRoles = await UserService.GetAllAccessRoles();
         }
         catch (Exception ex)
         {
@@ -49,12 +48,12 @@
             model.AccessRole
         );
 
-            var responseCode = await authService.Register(request);
+            var responseCode = await AuthService.Register(request);
 
             if (responseCode == 200)
             {
                 await Dialog.Alert("User created successfully", "Information");
-                navigationManager.NavigateTo("/login");
+                NavigationManager.NavigateTo("/login");
             }
             
         }

@@ -1,7 +1,7 @@
 ﻿@page "/listing/{id:guid}"
-@inject IListingService service
-@inject NavigationManager navigationManager
-@inject ListingState listingState
+@inject IListingService Service
+@inject NavigationManager NavigationManager
+@inject ListingState ListingState
 @inject DialogService Dialog
 
 
@@ -28,8 +28,8 @@ else
     {
         try
         {
-            accomodationId = await service.GetAccomodationIdByListingId(Id);
-            listing = await service.GetListingAsync(accomodationId.Value, Id);
+            accomodationId = await Service.GetAccomodationIdByListingId(Id);
+            listing = await Service.GetListingAsync(accomodationId.Value, Id);
         }
         catch (Exception ex)
         {
@@ -39,14 +39,14 @@ else
 
     private void Back()
     {
-        navigationManager.NavigateTo("/listings");
+        NavigationManager.NavigateTo("/listings");
     }
 
     private void Book()
     {
         if (listing != null)
         {
-            listingState.SetState(
+            ListingState.SetState(
                 listing.ListingId,
                 listing.ListingName,
                 listing.Street,
@@ -55,7 +55,7 @@ else
                 listing.Country,
                 listing.AccomodationType);
 
-            navigationManager.NavigateTo("/booking/create");
+            NavigationManager.NavigateTo("/booking/create");
         }
 
     }
