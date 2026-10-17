@@ -56,7 +56,6 @@ namespace AccomodationService.Api.Controllers
             }
         }
 
-        [Authorize(Roles = "Host, Guest")]
         [HttpGet("{listingId}/accomodationId")]
         [EndpointSummary("This endpoint will get a accomodation Id for the request listing")]
         [EndpointDescription("Gets accomodation id for request listing or returns not found if no accomodation was found")]
@@ -82,7 +81,6 @@ namespace AccomodationService.Api.Controllers
             }
         }
 
-        [Authorize(Roles = "Host, Guest")]
         [HttpGet("period")]
         [EndpointSummary("This endpoint will get all listings that are availible in the requested period")]
         [EndpointDescription("Gets all listings that are availible in the requested period or returns empty list if no listings was found")]
@@ -152,7 +150,6 @@ namespace AccomodationService.Api.Controllers
             }
         }
 
-        [Authorize(Roles = "Host, Guest")]
         [HttpGet("{accomodationId:guid}/listings/{listingId:guid}")]
         [EndpointSummary("This endpoint will get a specific listing for a specific accomodation")]
         [EndpointDescription("Gets a specific listing of a accomodation or returns not found if no listing or accomodation was found")]

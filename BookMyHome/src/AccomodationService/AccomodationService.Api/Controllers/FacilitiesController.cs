@@ -19,7 +19,6 @@ namespace AccomodationService.Api.Controllers
         ) : ControllerBase
     {
 
-        [Authorize]
         [HttpGet]
         [EndpointSummary("This endpoint will get all facilities")]
         [EndpointDescription("Gets all facilities or returns not found if no facilities was found")]
