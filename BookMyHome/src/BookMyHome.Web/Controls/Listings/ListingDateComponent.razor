@@ -16,6 +16,11 @@
     private DateOnly start = DateOnly.FromDateTime(DateTime.Today);
     private DateOnly end = DateOnly.FromDateTime(DateTime.Today.AddDays(7));
 
+    protected override void OnParametersSet()
+    {
+        SetBookingStateDates();
+    }
+
     private async Task OnChange()
     {
 
