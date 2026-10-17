@@ -1,36 +1,56 @@
 ﻿@page "/booking/create"
+@attribute [Authorize(Roles = ("Guest"))]
+
 
 @inject IBookingService Service
 @inject BookingState Booking
-@inject UserState User
 @inject ListingState Listing
 @inject NavigationManager NavigationManager
 @inject DialogService Dialog
-
+@inject CustomAuthenticationStateProvider AuthStateProvider
 
 <BookingSummaryComponent Model="Model"
-                      SubmitCallback="Submit"
-                      Booking="Booking"
-                      User="User"
-                      Listing="Listing"
-                      CancelNavigationPath="/listings" />
+                         SubmitCallback="Submit"
+                         Booking="Booking"
+                         UserFullName="UserFullName"
+                         Listing="Listing"
+                         CancelNavigationPath="/listings" />
 
 
 @code {
     private BookingInputModel Model = new();
+    private string UserFullName = string.Empty;
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        if (User.UserId != null)
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user.Identity?.IsAuthenticated == true)
         {
-            Model.GuestId = User.UserId.Value;
-            Model.AccomodationId = Booking.AccomodationId;
-            Model.ListingId = Listing.Id;
-            Model.StartDate = Booking.StartDate;
-            Model.EndDate = Booking.EndDate;
-            Model.Price = Booking.TotalPrice;
+            var firstName = user.FindFirst(ClaimTypes.GivenName)?.Value;
+            var lastName = user.FindFirst(ClaimTypes.Surname)?.Value;
+
+            UserFullName = $"{firstName} {lastName}";
+
+            var guestIdText = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (Guid.TryParse(guestIdText, out var userId) == true)
+            {
+                Model.GuestId = userId;
+                Model.AccomodationId = Booking.AccomodationId;
+                Model.ListingId = Listing.Id;
+                Model.StartDate = Booking.StartDate;
+                Model.EndDate = Booking.EndDate;
+                Model.Price = Booking.TotalPrice;
+            }
+            else
+            {
+                await Dialog.Alert("User Id er ikke valid");
+                return;
+            }
         }
-        
+
     }
 
     async private Task Submit(BookingInputModel model)

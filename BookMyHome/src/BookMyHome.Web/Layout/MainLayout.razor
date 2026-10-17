@@ -1,8 +1,8 @@
-﻿@using System.Net
-@inherits LayoutComponentBase
-@inject UserState UserState
-@inject IAuthService service
-@inject NavigationManager navigationManager
+﻿@inherits LayoutComponentBase
+@inject IAuthService Service
+@inject NavigationManager NavigationManager
+@inject CustomAuthenticationStateProvider AuthStateProvider
+
 
 <HeadContent>
     <RadzenTheme Theme="material" />
@@ -15,32 +15,34 @@
 
     <main>
         <div class="top-row px-4">
-            @if (UserState.UserId != null)
-            {
-                <RadzenProfileMenu Click="OnProfileMenuClick">
-                    <Template>
-                        <RadzenGravatar Email="@UserState.Username">
-                        </RadzenGravatar>
-                    </Template>
-                    <ChildContent>
-                        <RadzenProfileMenuItem Text="Profil" Path="/user/profile" Icon="account_circle"></RadzenProfileMenuItem>
-                        @if (UserState.Role == "Guest")
-                        {
-                            <RadzenProfileMenuItem Text="Mine bookinger" Path="/user/bookings" Icon="book"></RadzenProfileMenuItem>
-                        }
 
-                        <RadzenProfileMenuItem Text="Log ud" Icon="logout" Value="logout"></RadzenProfileMenuItem>
-                    </ChildContent>
-                </RadzenProfileMenu>
-            }
-            else
-            {
-                <RadzenProfileMenu>
-                    <ChildContent>
-                        <RadzenProfileMenuItem Text="Login eller registre dig" Path="/login" Icon="lock_open"></RadzenProfileMenuItem>
-                    </ChildContent>
-                </RadzenProfileMenu>
-            }
+            <AuthorizeView>
+                <Authorized Context="auth">
+                    <RadzenProfileMenu Click="OnProfileMenuClick">
+                        <Template>
+                            <RadzenGravatar Email="@Username">
+                            </RadzenGravatar>
+                        </Template>
+                        <ChildContent>
+                            <RadzenProfileMenuItem Text="Profil" Path="/user/profile" Icon="account_circle"></RadzenProfileMenuItem>
+
+                            <AuthorizeView Roles="Guest">
+                                <RadzenProfileMenuItem Text="Mine bookinger" Path="/user/bookings" Icon="book"></RadzenProfileMenuItem>
+                            </AuthorizeView>
+
+                            <RadzenProfileMenuItem Text="Log ud" Icon="logout" Value="logout"></RadzenProfileMenuItem>
+                        </ChildContent>
+                    </RadzenProfileMenu>
+                </Authorized>
+
+                <NotAuthorized>
+                    <RadzenProfileMenu>
+                        <ChildContent>
+                            <RadzenProfileMenuItem Text="Login eller registre dig" Path="/login" Icon="lock_open"></RadzenProfileMenuItem>
+                        </ChildContent>
+                    </RadzenProfileMenu>
+                </NotAuthorized>
+            </AuthorizeView>
         </div>
         <article class="content px-4">
             @Body
@@ -52,19 +54,21 @@
 
 @code {
 
+    private string? Username = string.Empty;
+
     protected override async Task OnInitializedAsync()
     {
         try
         {
-            var authUser = await service.GetAuthUserAsync();
+            var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+            var user = authState.User;
 
-            UserState.SetUser(
-                authUser.Id,
-                authUser.Firstname,
-                authUser.Lastname,
-                authUser.Username,
-                authUser.Role
-            );
+            if (user.Identity?.IsAuthenticated == true)
+            {
+                Username = user.FindFirst(ClaimTypes.Name)?.Value;
+            }
+
+
 
         }
         catch (HttpRequestException ex)
@@ -81,9 +85,11 @@
 
         try
         {
-            await service.LogOut();
-            UserState.Clear();
-            navigationManager.NavigateTo("/login");
+            await Service.LogOut(); 
+
+            await AuthStateProvider.RefreshAuthenticationState();
+
+            NavigationManager.NavigateTo("/login");
         }
         catch
         {

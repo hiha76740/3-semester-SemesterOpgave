@@ -1,23 +1,22 @@
 ﻿@page "/login"
 
+
 @inject IAuthService Service
 @inject NavigationManager NavigationManager
-@inject UserState UserState
 @inject DialogService Dialog
+@inject CustomAuthenticationStateProvider AuthStateProvider
 
 
 <RadzenCard class="rz-my-12 rz-mx-auto rz-p-4 rz-p-md-12" style="max-width: 600px;">
     <RadzenLogin AllowRegister="true"
                  AllowResetPassword="false"
-                 Login="@(args => Login(args))"
+                 Login="@(args => Authenticate(args))"
                  Register="(args => Register())" />
 </RadzenCard>
 
 @code {
 
-    private string? error = null;
-
-    private async Task Login(LoginArgs args)
+    private async Task Authenticate(LoginArgs args)
     {
         try
         {
@@ -25,17 +24,13 @@
 
             if (reponse == 200)
             {
-                var authUser = await Service.GetAuthUserAsync();
-
-                UserState.SetUser(
-                    authUser.Id,
-                    authUser.Firstname,
-                    authUser.Lastname,
-                    authUser.Username,
-                    authUser.Role
-                );
+                await AuthStateProvider.RefreshAuthenticationState();
 
                 NavigationManager.NavigateTo("/");
+            }
+            else
+            {
+                await Dialog.Alert("User or password was incorrect", "Login error");
             }
         }
         catch (Exception ex)

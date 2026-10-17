@@ -1,4 +1,5 @@
 ﻿@page "/accomodation/{id:guid}"
+@attribute [Authorize(Roles = ("Host"))]
 
 @inject IAccomodationService Service
 @inject IFacilityService FacilityService

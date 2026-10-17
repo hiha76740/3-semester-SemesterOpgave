@@ -5,7 +5,7 @@
     <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" Gap="1rem" class="rz-p-4">
         <RadzenStack Gap="0">
             <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">Fulde navn</RadzenText>
-            <RadzenText TextStyle="TextStyle.Body1"><b>@(User.Firstname + " " + User.Lastname)</b></RadzenText>
+            <RadzenText TextStyle="TextStyle.Body1"><b>@(UserFullName)</b></RadzenText>
             <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0">Periode</RadzenText>
             <RadzenText TextStyle="TextStyle.Body1"><b>@($"{Booking.StartDate} - {Booking.EndDate}")</b></RadzenText>
         </RadzenStack>
@@ -44,7 +44,7 @@
     public BookingState Booking { get; set; }
 
     [Parameter, EditorRequired]
-    public UserState User { get; set; }
+    public string UserFullName { get; set; }
 
     [Parameter, EditorRequired]
     public ListingState Listing { get; set; }

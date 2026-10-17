@@ -1,4 +1,5 @@
 ﻿@page "/accomodations"
+@attribute [Authorize(Roles = ("Host"))]
 
 @inject IAccomodationService Service
 @inject NavigationManager NavigationManager

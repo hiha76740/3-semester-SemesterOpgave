@@ -1,6 +1,15 @@
 ﻿<Router AppAssembly="@typeof(App).Assembly" NotFoundPage="typeof(Pages.NotFound)">
     <Found Context="routeData">
-        <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)"/>
+        <AuthorizeRouteView RouteData="@routeData"
+                            DefaultLayout="@typeof(MainLayout)">
+            <Authorizing>
+                <p>Kontrollerer login...</p>
+            </Authorizing>
+
+            <NotAuthorized>
+                <p>Du har ikke adgang til denne side. Det kan skyldes, at du ikke er logget ind, eller at din bruger ikke har den nødvendige rolle.</p>
+            </NotAuthorized>
+        </AuthorizeRouteView>
         <FocusOnNavigate RouteData="@routeData" Selector="h1" />
     </Found>
 </Router>

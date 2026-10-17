@@ -1,12 +1,12 @@
 ﻿@page "/user/bookings"
+@attribute [Authorize(Roles = ("Guest"))]
+
 
 @inject IBookingService Service
-@inject UserState User
 @inject DialogService Dialog
 
-<BookingSummaryTableComponent 
-    Bookings="Bookings" 
-    CancelCallback="Cancel"/>
+<BookingSummaryTableComponent Bookings="Bookings"
+                              CancelCallback="Cancel" />
 
 
 @code {
@@ -14,12 +14,8 @@
 
     protected override async Task OnInitializedAsync()
     {
-        if (User.UserId != null)
-        {
-            Bookings = await Service.GetUserBookingsAsync();
-            Bookings = Bookings.OrderBy(b => b.StartDate).ToList();
-        }
-
+        Bookings = await Service.GetUserBookingsAsync();
+        Bookings = Bookings.OrderBy(b => b.StartDate).ToList();
     }
 
     private async Task Cancel(BookingSummaryResponse booking)
