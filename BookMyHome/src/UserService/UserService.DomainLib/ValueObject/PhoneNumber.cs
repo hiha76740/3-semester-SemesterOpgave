@@ -4,13 +4,13 @@ namespace UserService.DomainLib.ValueObject;
 
 public record PhoneNumber
 {
-    public string Number { get; init; }
+    public string Value { get; init; }
 
-    public PhoneNumber(string number)
+    public PhoneNumber(string value)
     {
-        if (string.IsNullOrWhiteSpace(number))
+        if (string.IsNullOrWhiteSpace(value))
             throw new DomainException("Phone Number can not be empty");
 
-        Number = number;
+        Value = value;
     }
 }

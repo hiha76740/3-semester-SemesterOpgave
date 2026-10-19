@@ -28,7 +28,7 @@ internal class UserConfiguration : IEntityTypeConfiguration<User>
 
         builder.Property(u => u.Email)
             .HasConversion(
-            email => email.EmailAddress,
+            email => email.Value,
             value => new Email(value));
 
         builder.HasIndex(u => u.Email)

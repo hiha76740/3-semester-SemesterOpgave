@@ -38,8 +38,8 @@ namespace UserService.InfrastructureLib.QueryHandlers
                     u.Address.Street,
                     u.Address.PostalCode,
                     u.Address.City,
-                    u.PhoneNumber.Number,
-                    u.Email.EmailAddress,
+                    u.PhoneNumber.Value,
+                    u.Email.Value,
                     u.Username
                     ))
                 .FirstOrDefaultAsync();

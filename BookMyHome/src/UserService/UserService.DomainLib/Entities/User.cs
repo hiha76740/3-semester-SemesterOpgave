@@ -134,7 +134,7 @@ namespace UserService.DomainLib.Entities
             Address = address;
             PhoneNumber = phoneNumber;
             Email = email;
-            Username = email.EmailAddress;
+            Username = email.Value;
             PasswordHash = passwordHash;
             Role = role;
         }

@@ -4,16 +4,16 @@ namespace UserService.DomainLib.ValueObject;
 
 public record Email
 {
-    public string EmailAddress { get; init; }
+    public string Value { get; init; }
 
-    public Email(string emailAddress)
+    public Email(string value)
     {
-        if (emailAddress.Contains("@") == false)
+        if (value.Contains("@") == false)
             throw new DomainException("Email is not valid");
 
-        if (string.IsNullOrWhiteSpace(emailAddress))
+        if (string.IsNullOrWhiteSpace(value))
             throw new DomainException("Email address can not be empty");
 
-        EmailAddress = emailAddress.ToLower();
+        Value = value.ToLower();
     }
 }
