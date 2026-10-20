@@ -18,10 +18,9 @@ public static class UserHelper
 
     public static bool IsValidRole(ClaimsPrincipal user, string role)
     {
-        if (user.FindFirstValue(ClaimTypes.Role) != role)
-            return false;
-
-        else
+        if (user.FindFirstValue(ClaimTypes.Role) == role)
             return true;
+
+        return false;
     }
 }
