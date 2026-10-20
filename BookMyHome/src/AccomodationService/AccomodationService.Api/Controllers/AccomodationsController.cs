@@ -2,6 +2,7 @@
 using AccomodationService.FacadeLib.Commands.DTOs.Accomodations;
 using AccomodationService.FacadeLib.Commands.Interfaces.Accomodations;
 using AccomodationService.FacadeLib.Queries.Interfaces;
+using BookMyHome.BuildingBlocksLib.Helpers;
 using BookMyHome.ContractsLib.Requests.Accomodations;
 using BookMyHome.ContractsLib.Responses.Accomodations;
 using Microsoft.AspNetCore.Authorization;
@@ -38,9 +39,9 @@ namespace AccomodationService.Api.Controllers
         {
             try
             {
-                var id = GetCurrentUserId();
+                var userId = UserHelper.GetCurrentUserId(HttpContext.User);
 
-                if (id == null || HttpContext.User.FindFirstValue(ClaimTypes.Role) != "Host")
+                if (userId == null || HttpContext.User.FindFirstValue(ClaimTypes.Role) != "Host")
                     return BadRequest("Invalid request");
 
                 var request = JsonSerializer.Deserialize<CreateAccomodationRequest>(data, new JsonSerializerOptions(JsonSerializerDefaults.Web));
@@ -73,7 +74,7 @@ namespace AccomodationService.Api.Controllers
                 }
 
                 await accomodationcreate.HandleAsync(
-                    request.CreateRequestAsCommand(id.Value, imageStream, extension)
+                    request.CreateRequestAsCommand(userId.Value, imageStream, extension)
                     );
 
                 return Ok();
@@ -96,12 +97,12 @@ namespace AccomodationService.Api.Controllers
         {
             try
             {
-                var id = GetCurrentUserId();
+                var userId = UserHelper.GetCurrentUserId(HttpContext.User);
 
-                if (id == null || HttpContext.User.FindFirstValue(ClaimTypes.Role) != "Host")
+                if (userId == null || HttpContext.User.FindFirstValue(ClaimTypes.Role) != "Host")
                     return BadRequest("Invalid request");
 
-                var list = await queries.GetAllAccomodationsCurrentUserAsync(id.Value);
+                var list = await queries.GetAllAccomodationsCurrentUserAsync(userId.Value);
 
                 var response = new List<AccomodationResponse>();
 
@@ -137,7 +138,7 @@ namespace AccomodationService.Api.Controllers
         {
             try
             {
-                var userId = GetCurrentUserId();
+                var userId = UserHelper.GetCurrentUserId(HttpContext.User);
 
                 if (userId == null || HttpContext.User.FindFirstValue(ClaimTypes.Role) != "Host")
                     return BadRequest("Invalid request");
@@ -170,7 +171,7 @@ namespace AccomodationService.Api.Controllers
         {
             try
             {
-                var userId = GetCurrentUserId();
+                var userId = UserHelper.GetCurrentUserId(HttpContext.User);
 
                 if (userId == null || HttpContext.User.FindFirstValue(ClaimTypes.Role) != "Host")
                     return BadRequest("You need to be logged in or have the correct permission");
@@ -368,7 +369,7 @@ namespace AccomodationService.Api.Controllers
         {
             try
             {
-                var userId = GetCurrentUserId();
+                var userId = UserHelper.GetCurrentUserId(HttpContext.User);
 
                 if (userId == null || HttpContext.User.FindFirstValue(ClaimTypes.Role) != "Host")
                     return BadRequest("Invalid request");
@@ -403,19 +404,6 @@ namespace AccomodationService.Api.Controllers
             {
                 return BadRequest(ex.Message);
             }
-        }
-
-        // TODO: Delete this after it has been moved into shared
-        private Guid? GetCurrentUserId()
-        {
-            var stringUserId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            var idIsValid = Guid.TryParse(stringUserId, out Guid id);
-
-            if (idIsValid == false)
-                return null;
-
-            return id;
         }
     }
 }

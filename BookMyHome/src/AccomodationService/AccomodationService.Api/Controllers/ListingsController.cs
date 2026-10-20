@@ -2,13 +2,13 @@
 using AccomodationService.FacadeLib.Commands.DTOs.Listings;
 using AccomodationService.FacadeLib.Commands.Interfaces.Listings;
 using AccomodationService.FacadeLib.Queries.Interfaces;
+using BookMyHome.BuildingBlocksLib.Helpers;
 using BookMyHome.ContractsLib.Requests.Accomodations;
 using BookMyHome.ContractsLib.Responses.Accomodations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Security.Claims;
 using System.Text.Json;
 
 namespace AccomodationService.Api.Controllers
@@ -192,10 +192,10 @@ namespace AccomodationService.Api.Controllers
         {
             try
             {
-                var userId = GetCurrentUserId();
+                var userId = UserHelper.GetCurrentUserId(HttpContext.User);
 
                 if (userId == null)
-                    return BadRequest("Invalid request");
+                    return BadRequest("User id not valid");
 
                 var request = JsonSerializer.Deserialize<CreateListingRequest>(data, new JsonSerializerOptions(JsonSerializerDefaults.Web));
 
@@ -256,10 +256,10 @@ namespace AccomodationService.Api.Controllers
         {
             try
             {
-                var id = GetCurrentUserId();
+                var userId = UserHelper.GetCurrentUserId(HttpContext.User);
 
-                if (id == null || HttpContext.User.FindFirstValue(ClaimTypes.Role) != "Host")
-                    return BadRequest("Invalid request");
+                if (userId == null || UserHelper.IsValidRole(HttpContext.User, "Host") == false)
+                    return Unauthorized("Incorrect permission");
 
                 var request = JsonSerializer.Deserialize<UpdateListingRequest>(data, new JsonSerializerOptions(JsonSerializerDefaults.Web));
 
@@ -291,7 +291,7 @@ namespace AccomodationService.Api.Controllers
                 }
 
                 var command = new UpdateListingCommand(
-                    id.Value,
+                    userId.Value,
                     accomodationId,
                     listingId,
                     request.ListingName,
@@ -332,13 +332,13 @@ namespace AccomodationService.Api.Controllers
         {
             try
             {
-                var id = GetCurrentUserId();
+                var userId = UserHelper.GetCurrentUserId(HttpContext.User);
 
-                if (id == null || HttpContext.User.FindFirstValue(ClaimTypes.Role) != "Host")
-                    return BadRequest("Invalid request");
+                if (userId == null || UserHelper.IsValidRole(HttpContext.User, "Host") == false)
+                    return Unauthorized("Incorrect permission");
 
                 var command = new DeleteListingCommand(
-                    id.Value,
+                    userId.Value,
                     accomodationId,
                     listingId,
                     RowVersion
@@ -391,10 +391,10 @@ namespace AccomodationService.Api.Controllers
         {
             try
             {
-                var userId = GetCurrentUserId();
+                var userId = UserHelper.GetCurrentUserId(HttpContext.User);
 
-                if (userId == null || HttpContext.User.FindFirstValue(ClaimTypes.Role) != "Host")
-                    return BadRequest("Invalid request");
+                if (userId == null || UserHelper.IsValidRole(HttpContext.User, "Host") == false)
+                    return Unauthorized("Incorrect permission");
 
 
                 const long maxFileSize = 5 * 1024 * 1024;
@@ -426,20 +426,6 @@ namespace AccomodationService.Api.Controllers
             {
                 return BadRequest(ex.Message);
             }
-        }
-
-
-        // TODO: Delete this after it has been moved into shared
-        private Guid? GetCurrentUserId()
-        {
-            var stringUserId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            var idIsValid = Guid.TryParse(stringUserId, out Guid id);
-
-            if (idIsValid == false)
-                return null;
-
-            return id;
         }
     }
 }

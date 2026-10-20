@@ -1,12 +1,12 @@
 ﻿using AccomodationService.Api.Mapper;
 using AccomodationService.FacadeLib.Commands.Interfaces.Facilities;
 using AccomodationService.FacadeLib.Queries.Interfaces;
+using BookMyHome.BuildingBlocksLib.Helpers;
 using BookMyHome.ContractsLib.Requests.Accomodations;
 using BookMyHome.ContractsLib.Responses.Accomodations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel;
-using System.Security.Claims;
 
 namespace AccomodationService.Api.Controllers
 {
@@ -87,13 +87,13 @@ namespace AccomodationService.Api.Controllers
         {
             try
             {
-                var id = GetCurrentUserId();
+                var userId = UserHelper.GetCurrentUserId(HttpContext.User);
 
-                if (id == null || HttpContext.User.FindFirstValue(ClaimTypes.Role) != "Host")
-                    return BadRequest("Invalid request");
+                if (userId == null || UserHelper.IsValidRole(HttpContext.User, "Host") == false)
+                    return Unauthorized("Incorrect permission");
 
                 await add.Handle(
-                    request.AsAddCommand(accomodationId, id.Value)
+                    request.AsAddCommand(accomodationId, userId.Value)
                     );
 
                 return Ok();
@@ -114,13 +114,13 @@ namespace AccomodationService.Api.Controllers
         {
             try
             {
-                var id = GetCurrentUserId();
+                var userId = UserHelper.GetCurrentUserId(HttpContext.User);
 
-                if (id == null || HttpContext.User.FindFirstValue(ClaimTypes.Role) != "Host")
-                    return BadRequest("Invalid request");
+                if (userId == null || UserHelper.IsValidRole(HttpContext.User, "Host") == false)
+                    return Unauthorized("Incorrect permission");
 
                 await remove.Handle(
-                    request.AsRemoveCommand(accomodationId, id.Value)
+                    request.AsRemoveCommand(accomodationId, userId.Value)
                     );
 
                 return Ok();
@@ -129,19 +129,6 @@ namespace AccomodationService.Api.Controllers
             {
                 return BadRequest(ex.Message);
             }
-        }
-
-        // TODO: Delete this after it has been moved into shared
-        private Guid? GetCurrentUserId()
-        {
-            var stringUserId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            var idIsValid = Guid.TryParse(stringUserId, out Guid id);
-
-            if (idIsValid == false)
-                return null;
-
-            return id;
         }
     }
 }

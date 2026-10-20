@@ -1,8 +1,8 @@
-﻿using BookMyHome.ContractsLib.Requests.Users;
+﻿using BookMyHome.BuildingBlocksLib.Helpers;
+using BookMyHome.ContractsLib.Requests.Users;
 using BookMyHome.ContractsLib.Responses.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 using UserService.Api.Mapper;
 using UserService.Api.Services;
 using UserService.FacadeLib.Commands.Interfaces;
@@ -112,10 +112,10 @@ namespace UserService.Api.Controllers
         {
             try
             {
-                var userId = GetCurrentUserId();
+                var userId = UserHelper.GetCurrentUserId(HttpContext.User);
 
                 if (userId == null)
-                    return BadRequest("Invalid request");
+                    return BadRequest("User id not valid");
 
                 var dto = await authQueries.GetCurrentUserInfo(userId.Value);
 
@@ -151,20 +151,6 @@ namespace UserService.Api.Controllers
             {
                 return BadRequest(ex.Message);
             }
-        }
-
-
-        //TODO: move this to shared folder and call in all API's
-        private Guid? GetCurrentUserId()
-        {
-            var stringUserId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            var idIsValid = Guid.TryParse(stringUserId, out Guid id);
-
-            if (idIsValid == false)
-                return null;
-
-            return id;
-        }
+        }      
     }
 }

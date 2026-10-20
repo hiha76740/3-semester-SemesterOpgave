@@ -2,13 +2,13 @@
 using BookingService.FacadeLib.Commands.DTOs;
 using BookingService.FacadeLib.Commands.Interfaces;
 using BookingService.FacadeLib.Queries.Interfaces;
+using BookMyHome.BuildingBlocksLib.Helpers;
 using BookMyHome.ContractsLib.Requests.Bookings;
 using BookMyHome.ContractsLib.Responses.Bookings;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Security.Claims;
 
 namespace BookingService.Api.Controllers
 {
@@ -137,12 +137,12 @@ namespace BookingService.Api.Controllers
         {
             try
             {
-                var id = GetCurrentUserId();
+                var userId = UserHelper.GetCurrentUserId(HttpContext.User);
 
-                if (id == null || HttpContext.User.FindFirstValue(ClaimTypes.Role) != "Guest")
+                if (userId == null || UserHelper.IsValidRole(HttpContext.User, "Guest") == false)
                     return Unauthorized("Incorrect permission");
 
-                var list = await queries.GetAllUserBookings(id.Value);
+                var list = await queries.GetAllUserBookings(userId.Value);
 
                 var response = new List<BookingSummaryResponse>();
 
@@ -175,9 +175,9 @@ namespace BookingService.Api.Controllers
         {
             try
             {
-                var id = GetCurrentUserId();
+                var userId = UserHelper.GetCurrentUserId(HttpContext.User);
 
-                if (id == null || HttpContext.User.FindFirstValue(ClaimTypes.Role) != "Host")
+                if (userId == null || UserHelper.IsValidRole(HttpContext.User, "Host") == false)
                     return Unauthorized("Incorrect permission");
 
                 var list = await queries.GetAllAccomdationBookings(accomdationId);
@@ -213,11 +213,12 @@ namespace BookingService.Api.Controllers
         {
             try
             {
-                var guestId = GetCurrentUserId();
+                var guestId = UserHelper.GetCurrentUserId(HttpContext.User);
 
                 if (guestId == null ||
-                    HttpContext.User.FindFirstValue(ClaimTypes.Role) != "Guest" &&
-                    HttpContext.User.FindFirstValue(ClaimTypes.Role) != "Host")
+                    UserHelper.IsValidRole(HttpContext.User,"Guest") == false &&
+                    UserHelper.IsValidRole(HttpContext.User, "Host") == false
+                    )
                     return Unauthorized("Incorrect permission");
 
                 var command = new CancelBookingCommand(bookingId, guestId.Value);
@@ -232,20 +233,5 @@ namespace BookingService.Api.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
-        // TODO: Delete this after it has been moved into shared
-        private Guid? GetCurrentUserId()
-        {
-            var stringUserId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            var idIsValid = Guid.TryParse(stringUserId, out Guid id);
-
-            if (idIsValid == false)
-                return null;
-
-            return id;
-        }
-
     }
-
 }
