@@ -9,7 +9,7 @@ namespace UserService.Api.Services
             context.Response.Cookies.Append("accessToken", token.AccessToken,
                new CookieOptions
                {
-                   Expires = DateTimeOffset.UtcNow.AddMinutes(5),
+                   Expires = DateTimeOffset.UtcNow.AddMinutes(60),
                    HttpOnly = true,
                    IsEssential = true,
                    Secure = true,
