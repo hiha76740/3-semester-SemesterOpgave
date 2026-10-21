@@ -26,7 +26,7 @@ namespace UserService.Api.Controllers
         [EndpointDescription("Register a user when all required info is given")]
         [ProducesResponseType(StatusCodes.Status200OK, Description = "User was registered succesfully")]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error doing registration of user")]
-        async public Task<ActionResult> Register(RegisterUserRequest request)
+        public async Task<ActionResult> Register(RegisterUserRequest request)
         {
             try
             {
