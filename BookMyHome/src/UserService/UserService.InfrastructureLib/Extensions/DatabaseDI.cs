@@ -9,9 +9,12 @@ public static class DatabaseDI
 {
     public static IServiceCollection AddDatabaseDI(this IServiceCollection services, IConfiguration configuration)
     {
-        var conn = configuration.GetConnectionString("UserDB");
         services.AddDbContext<UserDbContext>(options =>
-        options.UseSqlServer(conn));
+        options.UseMySQL(
+            configuration.GetConnectionString("UserDB")
+            ?? throw new InvalidOperationException(
+                "Connection string 'UserDB' mangler."
+                )));
 
         return services;
     }

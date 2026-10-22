@@ -18,13 +18,10 @@ internal class UserConfiguration : IEntityTypeConfiguration<User>
             );
 
         builder.ComplexProperty(
-            u => u.Address,
-            a => a.ToJson());
+            u => u.Address);
 
         builder.ComplexProperty(
-            u => u.PhoneNumber,
-            pn => pn.ToJson()
-            );
+            u => u.PhoneNumber);
 
         builder.Property(u => u.Email)
             .HasConversion(

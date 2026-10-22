@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using UserService.InfrastructureLib.Persistence;
 
@@ -19,76 +18,70 @@ namespace UserService.InfrastructureLib.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "10.0.13")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
-
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+                .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("UserService.DomainLib.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("char(36)");
 
                     b.Property<DateOnly>("Birthdate")
                         .HasColumnType("date");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("PasswordHash")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("RefreshToken")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<DateTime?>("RefreshTokenExpiryTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Role")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Username")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("varchar(255)");
 
                     b.ComplexProperty(typeof(Dictionary<string, object>), "Address", "UserService.DomainLib.Entities.User.Address#Address", b1 =>
                         {
                             b1.IsRequired();
 
                             b1.Property<string>("City")
-                                .IsRequired();
+                                .IsRequired()
+                                .HasColumnType("longtext");
 
                             b1.Property<string>("PostalCode")
-                                .IsRequired();
+                                .IsRequired()
+                                .HasColumnType("longtext");
 
                             b1.Property<string>("Street")
-                                .IsRequired();
-
-                            b1
-                                .ToJson("Address")
-                                .HasColumnType("nvarchar(max)");
+                                .IsRequired()
+                                .HasColumnType("longtext");
                         });
 
                     b.ComplexProperty(typeof(Dictionary<string, object>), "PhoneNumber", "UserService.DomainLib.Entities.User.PhoneNumber#PhoneNumber", b1 =>
                         {
                             b1.IsRequired();
 
-                            b1.Property<string>("Number")
-                                .IsRequired();
-
-                            b1
-                                .ToJson("PhoneNumber")
-                                .HasColumnType("nvarchar(max)");
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasColumnType("longtext");
                         });
 
                     b.HasKey("Id");

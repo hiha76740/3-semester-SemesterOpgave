@@ -3,7 +3,7 @@ var builder = DistributedApplication.CreateBuilder(args);
 
 
 var accomodationDatabaseServer = builder.AddSqlServer("accomodationSqlServer")
-    .WithDataVolume()
+    .WithDataVolume("bookmyhome-accomodationdb-data-dev")
     .WithLifetime(ContainerLifetime.Persistent);
 
 var accomodationDb = accomodationDatabaseServer.AddDatabase("AccomodationDB");
@@ -15,7 +15,7 @@ var accomodationService = builder.AddProject<Projects.AccomodationService_Api>("
 
 
 var bookingDatabaseServer = builder.AddSqlServer("bookingSqlServer")
-    .WithDataVolume()
+    .WithDataVolume("bookmyhome-bookingdb-data-dev")
     .WithLifetime(ContainerLifetime.Persistent);
 
 var bookingDb = bookingDatabaseServer.AddDatabase("BookingDB");
@@ -27,11 +27,11 @@ var bookingService = builder.AddProject<Projects.BookingService_Api>("bookingser
     .WaitFor(bookingDb);
 
 
-var userDatabaseServer = builder.AddSqlServer("userSqlServer")
-    .WithDataVolume()
+var userMySql = builder.AddMySql("userMySql")
+    .WithDataVolume("bookmyhome-userdb-data-dev")
     .WithLifetime(ContainerLifetime.Persistent);
 
-var userDb = userDatabaseServer .AddDatabase("UserDB");
+var userDb = userMySql.AddDatabase("UserDB");
 
 var userService = builder.AddProject<Projects.UserService_Api>("userservice")
     .WithDaprSidecar()
