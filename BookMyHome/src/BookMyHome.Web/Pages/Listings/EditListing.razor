@@ -30,7 +30,7 @@
         try
         {
             accomodationId = await Service.GetAccomodationIdByListingId(Id);
-            listing = await Service.GetListingAsync(accomodationId.Value, Id);
+            listing = await Service.GetListingDetailsAsync(accomodationId.Value, Id);
             AccomodationTypes = await AccomodationService.GetAllAccomodationTypes();
 
             model.ListingId = listing.ListingId;

@@ -30,7 +30,7 @@ else
         try
         {
             accomodationId = await Service.GetAccomodationIdByListingId(Id);
-            listing = await Service.GetListingAsync(accomodationId.Value, Id);
+            listing = await Service.GetListingDetailsAsync(accomodationId.Value, Id);
         }
         catch (Exception ex)
         {

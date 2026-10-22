@@ -142,9 +142,9 @@ namespace BookMyHome.Web.Services
             return listings;
         }
 
-        async Task<ListingResponse> IListingService.GetListingAsync(Guid accomodationId,Guid listingId)
+        async Task<ListingResponse> IListingService.GetListingDetailsAsync(Guid accomodationId,Guid listingId)
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}/{accomodationId}/listings/{listingId}");
+            var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}/details/{accomodationId}/listings/{listingId}");
 
             request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
 

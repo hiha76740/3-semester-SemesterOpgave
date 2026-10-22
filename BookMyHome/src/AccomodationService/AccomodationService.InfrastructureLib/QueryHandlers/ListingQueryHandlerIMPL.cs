@@ -17,7 +17,7 @@ public class ListingQueryHandlerIMPL(AccomodationDbContext db, IBookingService b
             .AnyAsync(l => l.Id == listingId);
     }
 
-    async Task<ListingDto?> IListingQueries.GetAccomdationListingByIdAsync(Guid accomodationId, Guid listingId)
+    async Task<ListingDto?> IListingQueries.GetListingDetailsByIdAsync(Guid accomodationId, Guid listingId)
     {
         var accomodationKey = new AccomodationId(accomodationId);
         var listingKey = new ListingId(listingId);
