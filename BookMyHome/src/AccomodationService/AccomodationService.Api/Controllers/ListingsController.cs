@@ -116,7 +116,7 @@ namespace AccomodationService.Api.Controllers
         }
 
 
-        [Authorize(Roles = "Host, Guest")]
+        [Authorize(Roles = "Host")]
         [HttpGet("{accomodationId:guid}/listings")]
         [EndpointSummary("This endpoint will get a all listings for a specific accomodation")]
         [EndpointDescription("Gets all listings of a accomodation or returns empty list if no listings was found")]
@@ -150,19 +150,19 @@ namespace AccomodationService.Api.Controllers
             }
         }
 
-        [HttpGet("{accomodationId:guid}/listings/{listingId:guid}")]
-        [EndpointSummary("This endpoint will get a specific listing for a specific accomodation")]
+        [HttpGet("details/{accomodationId:guid}/listings/{listingId:guid}")]
+        [EndpointSummary("This endpoint will get details of a specific listing for a specific accomodation")]
         [EndpointDescription("Gets a specific listing of a accomodation or returns not found if no listing or accomodation was found")]
         [ProducesResponseType<ListingResponse>(StatusCodes.Status200OK, "application/json", Description = "Returns specific listing for the requested accomodation")]
         [ProducesResponseType(StatusCodes.Status404NotFound, Description = "Listing or accomodation not found")]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while receiving listing for requsted accomodation")]
-        public async Task<ActionResult<ListingResponse>> GetAccomodationListingByIdAsync(
+        public async Task<ActionResult<ListingResponse>> GetListingDetailsByIdAsync(
             [Description("Id of the accomodation you want to find listing for")] Guid accomodationId,
             [Description("Id of the listing you want to find")] Guid listingId)
         {
             try
             {
-                var dto = await queries.GetAccomdationListingByIdAsync(accomodationId, listingId);
+                var dto = await queries.GetListingDetailsByIdAsync(accomodationId, listingId);
 
                 if (dto == null)
                     return NotFound("The requested listing was not found");
