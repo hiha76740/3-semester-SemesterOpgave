@@ -52,24 +52,23 @@ services:
   
  # -------- User DB --------
  
-  mssql-UserDB:
-    image: mcr.microsoft.com/mssql/server:2025-latest
-    container_name: mssql-userdb
+  mysql-UserDB:
+    image: mysql:latest
+    container_name: mysql-userdb
     environment:
-      ACCEPT_EULA: Y
-      MSSQL_SA_PASSWORD: "${USERDB_SA_PASSWORD}"
-      MSSQL_PID: Developer
+      - MYSQL_ROOT_PASSWORD="${USERDB_SA_PASSWORD}"
+      - MYSQL_DATABASE=UserDB
     volumes:
-      - mssql-userdb-data:/var/opt/mssql
+      - mysql-userdb-data:/var/lib/mysql
     restart: unless-stopped
     ports:
-        - 9001:1433
+        - 9001:3306
  
  # -------- User Service 1 --------
  
   BookMyHome-UserService1:
     depends_on:
-      - mssql-UserDB
+      - mysql-UserDB
     image: ghcr.io/hiha76740/bookmyhome-userservice:latest
     container_name: bookmyhome-userservice1
       
@@ -123,7 +122,7 @@ services:
 
   BookMyHome-UserService2:
     depends_on:
-      - mssql-UserDB
+      - mysql-UserDB
     image: ghcr.io/hiha76740/bookmyhome-userservice:latest
     container_name: bookmyhome-userservice2
     restart: unless-stopped
@@ -447,7 +446,7 @@ services:
         
 
 volumes:
-    mssql-userdb-data:
+    mysql-userdb-data:
     mssql-bookingdb-data:
     mssql-Accomodationdb-data:
     BookMyHome-Images:
