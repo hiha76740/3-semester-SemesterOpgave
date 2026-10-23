@@ -20,6 +20,10 @@
     <Project Path="src/BookingService/BookingService.FacadeLib/BookingService.FacadeLib.csproj" />
     <Project Path="src/BookingService/BookingService.InfrastructureLib/BookingService.InfrastructureLib.csproj" />
   </Folder>
+  <Folder Name="/src/EmailService/">
+    <Project Path="src/EmailService/EmailService.ApplicationLib/EmailService.ApplicationLib.csproj" />
+    <Project Path="src/EmailService/EmailService.InfrastructureLib/EmailService.InfrastructureLib.csproj" />
+  </Folder>
   <Folder Name="/src/Proxy/">
     <Project Path="src/Proxy/BookMyHome.Yarp/BookMyHome.Yarp.csproj" />
   </Folder>
