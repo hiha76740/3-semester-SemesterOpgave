@@ -20,12 +20,12 @@ public class CreateBookingHandler(
 {
     async Task ICreateBookingHandler.HandleAsync(CreateBookingCommand command)
     {
+        var guestId = new GuestId(command.GuestId);
+        var accomodationId = new AccomodationId(command.AccomodationId);
+        var listingId = new ListingId(command.ListingId);
+
         try
         {
-            var guestId = new GuestId(command.GuestId);
-            var accomodationId = new AccomodationId(command.AccomodationId);
-            var listingId = new ListingId(command.ListingId);
-
             var guestExistTask = guestService.GuestExistAsync(guestId);
             var accomodationExistTask = accomodationService.AccomodationExistAsync(accomodationId);
             var listingExistTask = listingService.ListingExistAsync(listingId);
@@ -44,9 +44,16 @@ public class CreateBookingHandler(
 
             if (listingExist == false)
                 throw new NotFoundException("Listing not found doing booking creation");
+        }
+        catch (Exception ex)
+        {
+            throw new ApplicationException(ex.Message, ex);
+        }
 
 
 
+        try
+        {
             uow.BeginTransaction(IsolationLevel.Serializable);
 
             var overlapExsists = await bookingRepo.HasOverlapingBookingAsync(
