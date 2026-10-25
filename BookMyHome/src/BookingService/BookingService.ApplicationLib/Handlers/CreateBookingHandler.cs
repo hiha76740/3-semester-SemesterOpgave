@@ -46,6 +46,10 @@ public class CreateBookingHandler(
             if (accomodationExist == false)
                 throw new NotFoundException("Accomodation not found doing booking creation");
         }
+        catch (NotFoundException)
+        {
+            throw;
+        }
         catch (Exception ex)
         {
             throw new ApplicationException(ex.Message, ex);
