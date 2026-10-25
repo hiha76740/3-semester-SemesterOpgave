@@ -6,6 +6,9 @@ using BookingService.DomainLib.Entities;
 using BookingService.DomainLib.ValueObjects;
 using BookingService.FacadeLib.Commands.DTOs;
 using BookingService.FacadeLib.Commands.Interfaces;
+using BookMyHome.ContractsLib.Events;
+using BookMyHome.ContractsLib.Responses.Accomodations;
+using BookMyHome.ContractsLib.Responses.Users;
 using Shared.BookMyHome.SharedKernelLib.Exceptions;
 using System.Data;
 
@@ -16,7 +19,8 @@ public class CreateBookingHandler(
     IAccomodationService accomodationService,
     IListingService listingService,
     IBookingRepository bookingRepo,
-    IUnitOfWork uow) : ICreateBookingHandler
+    IUnitOfWork uow,
+    IIntegrationEventPublisher eventPublisher) : ICreateBookingHandler
 {
     async Task ICreateBookingHandler.HandleAsync(CreateBookingCommand command)
     {
@@ -24,26 +28,23 @@ public class CreateBookingHandler(
         var accomodationId = new AccomodationId(command.AccomodationId);
         var listingId = new ListingId(command.ListingId);
 
+        UserEmailItemResponse? guestEmailResponse = null;
+        ListingEmailItemResponse? listingEmailResonse = null;
+
         try
         {
-            var guestExistTask = guestService.GuestExistAsync(guestId);
+            var guestEmailTask = guestService.GetGuestEmailItemAsync(guestId);
             var accomodationExistTask = accomodationService.AccomodationExistAsync(accomodationId);
-            var listingExistTask = listingService.ListingExistAsync(listingId);
+            var listingEmailTask = listingService.GetListingEmailItemAsync(listingId);
 
-            await Task.WhenAll(guestExistTask, accomodationExistTask, listingExistTask);
+            await Task.WhenAll(guestEmailTask, accomodationExistTask, listingEmailTask);
 
-            var guestExist = await guestExistTask;
+            guestEmailResponse = await guestEmailTask ?? throw new NotFoundException("Guest not found doing booking creation");
+            listingEmailResonse = await listingEmailTask ?? throw new NotFoundException("Listing not found doing booking creation");
             var accomodationExist = await accomodationExistTask;
-            var listingExist = await listingExistTask;
-
-            if (guestExist == false)
-                throw new NotFoundException("Guest not found doing booking creation");
 
             if (accomodationExist == false)
                 throw new NotFoundException("Accomodation not found doing booking creation");
-
-            if (listingExist == false)
-                throw new NotFoundException("Listing not found doing booking creation");
         }
         catch (Exception ex)
         {
@@ -77,6 +78,28 @@ public class CreateBookingHandler(
 
             await bookingRepo.SaveAsync();
             uow.Commit();
+
+            var integrationEvent = new BookingPlacedIntegrationEvent(
+                booking.Id.Value,
+                booking.Period.StartDate,
+                booking.Period.EndDate,
+                booking.Price, 
+                listingEmailResonse.ListingName,
+                listingEmailResonse.DailyPrice,
+                listingEmailResonse.HouseRules,
+                listingEmailResonse.AccomodationType,
+                listingEmailResonse.Street,
+                listingEmailResonse.PostalCode,
+                listingEmailResonse.City,
+                listingEmailResonse.Country,
+                listingEmailResonse.Facilities,
+                listingEmailResonse.ImageUrl,
+                guestEmailResponse.FirstName,
+                guestEmailResponse.LastName,
+                guestEmailResponse.Email
+                );
+
+            await eventPublisher.PublishAsync("booking-placed", integrationEvent);
         }
         catch (Exception ex)
         {

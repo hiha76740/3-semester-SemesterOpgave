@@ -1,5 +1,6 @@
 ﻿using BookingService.ApplicationLib.Services;
 using BookingService.DomainLib.ValueObjects;
+using BookMyHome.ContractsLib.Responses.Accomodations;
 using Dapr.Client;
 using System.Net.Http.Json;
 
@@ -11,15 +12,19 @@ public class ListingService(DaprClient daprClient) : IListingService
 
     private readonly string baseUrl = "api/v1/Listings";
 
-
-    async Task<bool> IListingService.ListingExistAsync(ListingId id)
+    async Task<ListingEmailItemResponse> IListingService.GetListingEmailItemAsync(ListingId id)
     {
-        var response = await client.GetAsync($"{baseUrl}/exists?id={id.Value}");
+        var response = await client.GetAsync($"{baseUrl}/emailitem?listingId={id.Value}");
 
         response.EnsureSuccessStatusCode();
 
-        var exists = await response.Content.ReadFromJsonAsync<bool>();
+        var item = await response.Content.ReadFromJsonAsync<ListingEmailItemResponse>();
 
-        return exists;
+        if (item == null)
+            throw new InvalidOperationException("Could not deserialize guest info for email");
+
+        return item;
     }
+
+    
 }
