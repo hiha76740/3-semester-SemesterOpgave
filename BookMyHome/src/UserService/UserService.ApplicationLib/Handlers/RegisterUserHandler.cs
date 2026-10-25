@@ -1,4 +1,6 @@
-﻿using UserService.ApplicationLib.Authentication;
+﻿using BookMyHome.BuildingBlocksLib.Messaging;
+using BookMyHome.ContractsLib.Events;
+using UserService.ApplicationLib.Authentication;
 using UserService.ApplicationLib.Repositories;
 using UserService.DomainLib.Entities;
 using UserService.DomainLib.Enums;
@@ -9,38 +11,55 @@ namespace UserService.ApplicationLib.Handlers;
 
 public class RegisterUserHandler(
     IUserRepository userRepo,
-    IPasswordHashService passwordHashService
+    IPasswordHashService passwordHashService,
+    IIntegrationEventPublisher eventPublisher
     ) : IRegisterUserHandler
 {
     async Task IRegisterUserHandler.Handle(RegisterUserCommand command)
     {
-        var normalizedEmail = command.Email.ToLower();
+        try
+        {
+            var normalizedEmail = command.Email.ToLower();
 
-        var usernameExsist =  await userRepo.UsernameExsistsAsync(normalizedEmail);   
+            var usernameExsist = await userRepo.UsernameExsistsAsync(normalizedEmail);
 
-        if (usernameExsist == true)
-            throw new ArgumentException("User already exsist");
+            if (usernameExsist == true)
+                throw new ArgumentException("User already exsist");
 
-        if (Enum.TryParse<AccessRoles>(command.Role, ignoreCase: true, out var role) == false)
-            throw new ArgumentException($"Invalid role: {command.Role}");
+            if (Enum.TryParse<AccessRoles>(command.Role, ignoreCase: true, out var role) == false)
+                throw new ArgumentException($"Invalid role: {command.Role}");
 
-        var hashPassword = passwordHashService.Hash(command.Password);
+            var hashPassword = passwordHashService.Hash(command.Password);
 
-        var user = User.Create(
-            command.FirstName,
-            command.LastName,
-            command.Birthdate,
-            command.Street,
-            command.PostalCode,
-            command.City,
-            command.PhoneNumber,
-            command.Email,
-            hashPassword,
-            role
-            );
+            var user = User.Create(
+                command.FirstName,
+                command.LastName,
+                command.Birthdate,
+                command.Street,
+                command.PostalCode,
+                command.City,
+                command.PhoneNumber,
+                command.Email,
+                hashPassword,
+                role
+                );
 
-        await userRepo.RegisterUserAsync(user);
+            await userRepo.RegisterUserAsync(user);
 
-        await userRepo.SaveAsync();
+            await userRepo.SaveAsync();
+
+            var integrationEvent = new UserRegisteredIntegrationEvent(
+                user.FirstName,
+                user.LastName,
+                user.Email.Value,
+                user.Username
+                );
+
+            await eventPublisher.PublishAsync("user-registered", integrationEvent);
+        }
+        catch (Exception)
+        {
+            throw;
+        }
     }
 }
