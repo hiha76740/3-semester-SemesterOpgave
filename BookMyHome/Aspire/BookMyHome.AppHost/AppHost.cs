@@ -1,6 +1,7 @@
 var builder = DistributedApplication.CreateBuilder(args);
 
-
+var emailService = builder.AddProject<Projects.EmailService_Api>("emailservice")
+    .WithDaprSidecar();
 
 var accomodationDatabaseServer = builder.AddSqlServer("accomodationSqlServer")
     .WithContainerName("bookmyhome-accomodation-sqlserver-dev")
@@ -53,13 +54,8 @@ var reverseProxy = builder.AddProject<Projects.BookMyHome_Yarp>("bookmyhome-yarp
 var frontend = builder.AddProject<Projects.BookMyHome_Web>("frontend")
     .WithHttpsEndpoint(port: 21007)
     .WithReference(reverseProxy)
-    .WaitFor(reverseProxy);
-
-
-
-
-
-builder.AddProject<Projects.EmailService_Api>("emailservice-api");
+    .WaitFor(reverseProxy)
+    .WaitFor(emailService);
 
 
 
