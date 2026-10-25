@@ -1,5 +1,6 @@
 ﻿using BookingService.ApplicationLib.Services;
 using BookingService.InfrastructureLib.EventPublishers;
+using BookMyHome.BuildingBlocksLib.Messaging;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace BookingService.InfrastructureLib.Extensions;
