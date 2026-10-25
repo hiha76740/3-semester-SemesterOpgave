@@ -17,6 +17,12 @@ internal class UserConfiguration : IEntityTypeConfiguration<User>
             value => new UserId(value)
             );
 
+        builder.Property(u => u.Birthdate)
+            .HasConversion(
+            date => date.ToDateTime(TimeOnly.MinValue),
+            dateTime => DateOnly.FromDateTime(dateTime))
+            .HasColumnType("date");
+
         builder.ComplexProperty(
             u => u.Address);
 
