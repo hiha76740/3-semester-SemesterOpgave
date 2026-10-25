@@ -58,8 +58,8 @@ services:
     image: mysql:latest
     container_name: mysql-userdb
     environment:
-      - MYSQL_ROOT_PASSWORD="${USERDB_SA_PASSWORD}"
-      - MYSQL_DATABASE=UserDB
+      MYSQL_ROOT_PASSWORD: "${USERDB_SA_PASSWORD}"
+      MYSQL_DATABASE: UserDB
     volumes:
       - mysql-userdb-data:/var/lib/mysql
     restart: unless-stopped
@@ -418,6 +418,50 @@ services:
     labels:
       com.centurylinklabs.watchtower.enable: "true"
 
+# -------- Email Service --------
+  BookMyHome-EmailService:
+    image: ghcr.io/hiha76740/bookmyhome-emailservice:latest
+    container_name: bookmyhome-emailservice
+    restart: unless-stopped
+        
+    environment:
+        ASPNETCORE_URLS: "http://+:8080"
+        SMTP__Host: "papercut"
+
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 60s
+  
+  BookMyHome-EmailService-dapr:
+    image: daprio/daprd:1.18.0
+    command:
+      - "./daprd"
+      - "--app-id"
+      - "accomodationservice"
+      - "--app-port"
+      - "8080"
+      - "--app-protocol"
+      - "http"
+      - "--placement-host-address"
+      - "placement:50006"
+      - "--scheduler-host-address"
+      - "scheduler:50007"
+    depends_on:
+      - BookMyHome-EmailService
+      - placement
+      - scheduler
+    network_mode: "service:BookMyHome-EmailService"
+    restart: unless-stopped
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+
+
+
 # -------- Dapr Services --------    
 
   placement:
@@ -445,7 +489,23 @@ services:
       WATCHTOWER_POLL_INTERVAL: 30
       WATCHTOWER_CLEANUP: "true"
     command: --label-enable
-        
+
+
+# -------- papercut --------            
+  papercut:
+    image: changemakerstudiosus/papercut-smtp:latest
+    container_name: papercut-smtp
+    ports:
+      - "37408:8080"  # Web UI
+    volumes:
+      - papercut-messages:/app/Incoming
+      - papercut-logs:/app/logs
+    environment:
+      - SmtpServer__IP=0.0.0.0
+      - SmtpServer__Port=2525
+      - Urls=http://0.0.0.0:8080
+    restart: unless-stopped
+
 
 volumes:
     mysql-userdb-data:
@@ -453,3 +513,5 @@ volumes:
     mssql-Accomodationdb-data:
     BookMyHome-Images:
     dapr-scheduler-data:
+    papercut-messages:
+    papercut-logs:
