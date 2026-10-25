@@ -1,12 +1,17 @@
+using EmailService.ApplicationLib.Extensions;
+using EmailService.InfrastructureLib.Extensions;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
 
-// Add services to the container.
-
+builder.Services.AddHandlerDI();
+builder.Services.AddServiceDI();
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+builder.Services.AddSingleton(builder.Configuration);
+
 
 var app = builder.Build();
 
@@ -18,10 +23,11 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
+app.UseCloudEvents();
 app.UseAuthorization();
-
 app.MapControllers();
+app.MapSubscribeHandler();
 
 app.Run();
