@@ -15,4 +15,6 @@ public interface IListingQueries
     Task<IReadOnlyList<ListingDto>> GetAvailableListings(DateOnly start, DateOnly end);
 
     Task<bool> CheckIfExistsAsync(Guid id);
+
+    Task<ListingEmailItemDto?> GetListingEmailItemAsync(Guid id);
 }

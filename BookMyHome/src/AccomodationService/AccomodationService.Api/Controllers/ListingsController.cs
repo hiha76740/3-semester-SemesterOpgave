@@ -356,27 +356,6 @@ namespace AccomodationService.Api.Controllers
             }
         }
 
-        [HttpGet("exists")]
-        [EndpointSummary("This endpoint will check if a specific listings exists")]
-        [EndpointDescription("Checks if the requested listing exists in database or returns false if no listing was found")]
-        [ProducesResponseType<bool>(StatusCodes.Status200OK, "application/json", Description = "Returns true if listing exists")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while checking requested listing")]
-        public async Task<ActionResult<bool>> CheckIfExists(
-            [Required][Description("Id of the listing you want to check")] Guid id)
-        {
-            try
-            {
-                var exists = await queries.CheckIfExistsAsync(id);
-
-                return Ok(exists);
-            }
-            catch (Exception ex)
-            {
-
-                return BadRequest(ex.Message);
-            }
-        }
-
         [Authorize(Roles = "Host")]
         [HttpPut("{listingId:guid}/image")]
         [RequestSizeLimit(6 * 1024 * 1024)]
@@ -420,6 +399,54 @@ namespace AccomodationService.Api.Controllers
                 await imageHandler.HandleAsync(command);
 
                 return Ok();
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("exists")]
+        [EndpointSummary("This endpoint will check if a specific listings exists")]
+        [EndpointDescription("Checks if the requested listing exists in database or returns false if no listing was found")]
+        [ProducesResponseType<bool>(StatusCodes.Status200OK, "application/json", Description = "Returns true if listing exists")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while checking requested listing")]
+        public async Task<ActionResult<bool>> CheckIfExists(
+            [Required][Description("Id of the listing you want to check")] Guid id)
+        {
+            try
+            {
+                var exists = await queries.CheckIfExistsAsync(id);
+
+                return Ok(exists);
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("emailitem")]
+        [EndpointSummary("This endpoint will get info required for email for the requested listing")]
+        [EndpointDescription("Gets the email info for the requested listing, if listing exists returns info otherwise returns not found")]
+        [ProducesResponseType<ListingEmailItemResponse>(StatusCodes.Status200OK, "application/json", Description = "Returns all info needed for email")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while getting info for email item")]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Description = "Requested listing not found")]
+        public async Task<ActionResult<ListingEmailItemResponse>> GetListingEmailItem(
+            [Required][Description("Id of the listing you want to get info for")] Guid listingId)
+        {
+            try
+            {
+                var dto = await queries.GetListingEmailItemAsync(listingId);
+
+                if (dto == null)
+                    return NotFound("Listing not found");
+
+                var url = dto.ImageFileName == null ? null : $"{appsettings["ImageBaseUrl"]}/images/{dto.ImageFileName}";
+
+                return Ok(dto.AsEmailItemReponse(url));
 
             }
             catch (Exception ex)

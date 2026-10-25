@@ -29,6 +29,25 @@ public static class ListingMapper
         return output;
     }
 
+    public static ListingEmailItemResponse AsEmailItemReponse(this ListingEmailItemDto dto, string? url)
+    {
+        var output = new ListingEmailItemResponse(         
+            dto.ListingName,
+            dto.DailyPrice,
+            dto.HouseRules,
+            dto.AccomodationType,
+            dto.Street,
+            dto.PostalCode,
+            dto.City,
+            dto.Country,
+            dto.Facilities,
+            url
+            );
+
+        return output;
+    }
+
+
     public static CreateListingCommand AsCreateListingCommand(this CreateListingRequest request, Guid hostId, Stream? imageStream = null, string? extension = null)
     {
         var output = new CreateListingCommand(

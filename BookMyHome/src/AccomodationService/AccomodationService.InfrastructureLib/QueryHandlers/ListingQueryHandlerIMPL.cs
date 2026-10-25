@@ -138,4 +138,28 @@ public class ListingQueryHandlerIMPL(AccomodationDbContext db, IBookingService b
 
         return output;
     }
+
+    async Task<ListingEmailItemDto?> IListingQueries.GetListingEmailItemAsync(Guid id)
+    {
+        var listingId = new ListingId(id);
+
+        return await db.Listings
+            .AsNoTracking()
+            .Where(l => l.Id == listingId)
+            .Select(l => new ListingEmailItemDto(
+                l.ListingName,
+                l.DailyPrice,
+                l.HouseRules,
+                l.Type.ToString(),
+                l.Accomodation.Address.Street,
+                l.Accomodation.Address.PostalCode,
+                l.Accomodation.Address.City,
+                l.Accomodation.Address.Country,
+                l.Accomodation.facilities.Select(f => f.Name).ToArray(),
+                l.ImageFileName
+                ))
+            .FirstOrDefaultAsync();
+
+
+    }
 }
