@@ -9,4 +9,6 @@ public interface IUserQueries
     Task<UserDto?> GetByIdAsync(Guid id);
 
     Task<bool> CheckIfExistsAsync(Guid id);
+
+    Task<UserEmailItemDto?> GetUserEmailItemAsync(Guid id);
 }

@@ -88,5 +88,30 @@ namespace UserService.Api.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpGet("emailitem")]
+        [EndpointSummary("This endpoint will get info required for email for the requested user")]
+        [EndpointDescription("Gets the email info for the requested user, if user exists returns info otherwise returns not found")]
+        [ProducesResponseType<UserEmailItemResponse>(StatusCodes.Status200OK, "application/json", Description = "Returns all info needed to send email to user")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while getting info for email item")]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Description = "Requested user not found")]
+        public async Task<ActionResult<UserEmailItemResponse>> GetUserEmailItem(
+            [Required][Description("Id of the user you want to get info for")] Guid userId)
+        {
+            try
+            {
+                var dto = await queries.GetUserEmailItemAsync(userId);
+
+                if (dto == null)
+                    return NotFound("User not found");
+
+                return Ok(dto.AsUserEmailItemResponse());
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

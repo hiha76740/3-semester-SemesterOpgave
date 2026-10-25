@@ -30,5 +30,15 @@ namespace UserService.Api.Mapper
             return output;
         }
 
+        public static UserEmailItemResponse AsUserEmailItemResponse(this UserEmailItemDto dto)
+        {
+            var output = new UserEmailItemResponse
+                (dto.Firstname,
+                dto.Lastname,
+                dto.Email);
+
+            return output;
+        }
+
     }
 }

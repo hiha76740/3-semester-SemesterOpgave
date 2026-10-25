@@ -43,7 +43,22 @@ namespace UserService.InfrastructureLib.QueryHandlers
                     u.Username
                     ))
                 .FirstOrDefaultAsync();
-                
+
+        }
+
+        async Task<UserEmailItemDto?> IUserQueries.GetUserEmailItemAsync(Guid id)
+        {
+            var userId = new UserId(id);
+
+            return await db.Users
+                .Where(u => u.Id == userId)
+                .Select(u => new UserEmailItemDto(
+                    u.FirstName,
+                    u.LastName,
+                    u.Email.Value,
+                    u.Username
+                    ))
+                .FirstOrDefaultAsync();
         }
     }
 }
