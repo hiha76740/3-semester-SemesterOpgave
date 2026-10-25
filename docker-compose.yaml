@@ -442,7 +442,7 @@ services:
     command:
       - "./daprd"
       - "--app-id"
-      - "accomodationservice"
+      - "emailservice"
       - "--app-port"
       - "8080"
       - "--app-protocol"
