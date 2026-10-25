@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using BookMyHome.BuildingBlocksLib.Messaging;
+using Moq;
 using UserService.ApplicationLib.Authentication;
 using UserService.ApplicationLib.Handlers;
 using UserService.ApplicationLib.Repositories;
@@ -38,6 +39,8 @@ public class RegisterUserTests
             .Setup(s => s.Hash(It.IsAny<string>()))
             .Returns(hashedPassword);
 
+        var mockEventPublisher = new Mock<IIntegrationEventPublisher>();
+
         var command = new RegisterUserCommand(
             firstName,
             lastName,
@@ -51,7 +54,7 @@ public class RegisterUserTests
             role
             );
 
-        var handler = new RegisterUserHandler(mockUserRepo.Object, mockPasswordHash.Object) as IRegisterUserHandler;
+        var handler = new RegisterUserHandler(mockUserRepo.Object, mockPasswordHash.Object, mockEventPublisher.Object) as IRegisterUserHandler;
 
         // Act
         await handler.Handle(command);
