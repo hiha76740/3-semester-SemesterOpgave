@@ -6,6 +6,7 @@ using BookingService.DomainLib.Entities;
 using BookingService.DomainLib.ValueObjects;
 using BookingService.FacadeLib.Commands.DTOs;
 using BookingService.FacadeLib.Commands.Interfaces;
+using BookMyHome.BuildingBlocksLib.Messaging;
 using BookMyHome.ContractsLib.Events;
 using BookMyHome.ContractsLib.Responses.Accomodations;
 using BookMyHome.ContractsLib.Responses.Users;

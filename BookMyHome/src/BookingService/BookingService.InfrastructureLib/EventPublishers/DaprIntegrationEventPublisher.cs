@@ -1,4 +1,4 @@
-﻿using BookingService.ApplicationLib.Services;
+﻿using BookMyHome.BuildingBlocksLib.Messaging;
 using Dapr.Client;
 
 namespace BookingService.InfrastructureLib.EventPublishers;
