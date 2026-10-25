@@ -21,7 +21,9 @@
     <Project Path="src/BookingService/BookingService.InfrastructureLib/BookingService.InfrastructureLib.csproj" />
   </Folder>
   <Folder Name="/src/EmailService/">
+    <Project Path="src/EmailService/EmailService.Api/EmailService.Api.csproj" />
     <Project Path="src/EmailService/EmailService.ApplicationLib/EmailService.ApplicationLib.csproj" />
+    <Project Path="src/EmailService/EmailService.FacadeLib/EmailService.FacadeLib.csproj" Id="89b5722e-edf9-425d-8c2a-609f154d6c75" />
     <Project Path="src/EmailService/EmailService.InfrastructureLib/EmailService.InfrastructureLib.csproj" />
   </Folder>
   <Folder Name="/src/Proxy/">

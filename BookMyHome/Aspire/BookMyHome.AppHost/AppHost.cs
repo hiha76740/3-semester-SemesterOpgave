@@ -59,4 +59,10 @@ var frontend = builder.AddProject<Projects.BookMyHome_Web>("frontend")
 
 
 
+builder.AddProject<Projects.EmailService_Api>("emailservice-api");
+
+
+
+
+
 builder.Build().Run();

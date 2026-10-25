@@ -23,6 +23,7 @@
     <ProjectReference Include="..\..\src\AccomodationService\AccomodationService.Api\AccomodationService.Api.csproj" />
     <ProjectReference Include="..\..\src\BookingService\BookingService.Api\BookingService.Api.csproj" />
     <ProjectReference Include="..\..\src\BookMyHome.Web\BookMyHome.Web.csproj" />
+    <ProjectReference Include="..\..\src\EmailService\EmailService.Api\EmailService.Api.csproj" />
     <ProjectReference Include="..\..\src\Proxy\BookMyHome.Yarp\BookMyHome.Yarp.csproj" />
     <ProjectReference Include="..\..\src\UserService\UserService.Api\UserService.Api.csproj" />
   </ItemGroup>
