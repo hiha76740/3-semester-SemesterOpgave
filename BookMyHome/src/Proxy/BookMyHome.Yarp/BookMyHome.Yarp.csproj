@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Aspire\BookMyHome.ServiceDefaults\BookMyHome.ServiceDefaults.csproj" />
+    <ProjectReference Include="..\..\Shared\BookMyHome.BuildingBlocksLib\BookMyHome.BuildingBlocksLib.csproj" />
   </ItemGroup>
 
 </Project>

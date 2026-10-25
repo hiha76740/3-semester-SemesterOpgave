@@ -1,5 +1,5 @@
+using BookMyHome.BuildingBlocksLib.DependencyInjection;
 using BookMyHome.Yarp.Extensions;
-using Microsoft.AspNetCore.Authentication.BearerToken;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,18 +13,16 @@ builder.Services.AddBookMyHomeCors(corsPolicyName);
 builder.Services.AddReverseProxy()
     .LoadFromConfig(builder.Configuration.GetSection("YARP"));
 
-builder.Services
-    .AddAuthentication(BearerTokenDefaults.AuthenticationScheme)
-    .AddBearerToken();
+builder.Services.AddBookMyHomeAuthentication(builder);
 
 var app = builder.Build();
 
 app.MapDefaultEndpoints();
 
+app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseCors();
 app.MapHealthChecks("health");
 app.MapReverseProxy();
 
