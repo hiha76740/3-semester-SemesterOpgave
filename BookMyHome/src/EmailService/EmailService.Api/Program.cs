@@ -10,6 +10,8 @@ builder.Services.AddServiceDI();
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
+builder.Services.AddHealthChecks();
+
 builder.Services.AddSingleton(builder.Configuration);
 
 
@@ -24,6 +26,8 @@ if (app.Environment.IsDevelopment())
 }
 
 //app.UseHttpsRedirection();
+
+app.MapHealthChecks("health");
 
 app.UseCloudEvents();
 app.UseAuthorization();
