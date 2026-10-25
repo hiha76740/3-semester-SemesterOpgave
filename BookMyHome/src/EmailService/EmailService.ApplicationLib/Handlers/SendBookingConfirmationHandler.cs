@@ -8,7 +8,7 @@ public class SendBookingConfirmationHandler(IEmailSenderService emailSender) : I
 {
     Task ISendBookingConfirmationHandler.HandleAsync(SendBookingConfirmationCommand command)
     {
-        var subject = $"Bookingbekræftelse for booking {command.BookingId}";
+        var subject = $"Bookingbekræftelse";
         var name = $"{command.UserFirstName} {command.UserLastName}";
 
         var body = $"""
