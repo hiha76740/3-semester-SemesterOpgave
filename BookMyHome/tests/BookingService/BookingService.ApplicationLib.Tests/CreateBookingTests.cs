@@ -6,6 +6,8 @@ using BookingService.DomainLib.Entities;
 using BookingService.DomainLib.ValueObjects;
 using BookingService.FacadeLib.Commands.DTOs;
 using BookingService.FacadeLib.Commands.Interfaces;
+using BookMyHome.ContractsLib.Responses.Accomodations;
+using BookMyHome.ContractsLib.Responses.Users;
 using Moq;
 
 namespace BookingService.ApplicationLib.Tests;
@@ -23,32 +25,42 @@ public class CreateBookingTests
         var endDate = startDate.AddDays(5);
         var price = 5000m;
 
+        var userEmailItem = new UserEmailItemResponse("Fornavn", "Efternavn", "Test@test.dk");
+        var listingEmailItem = new ListingEmailItemResponse(
+            "Listingnavn",
+            1, 
+            "Hus regler",
+            "House",
+            "Testvej 2",
+            "1234",
+            "By", 
+            "DK",
+            Array.Empty<string>(),
+            null);
+
 
         var mockGuestService = new Mock<IGuestService>();
         var mockAccomodationService = new Mock<IAccomodationService>();
         var mockListingService = new Mock<IListingService>();
         var mockBookingRepo = new Mock<IBookingRepository>();
         var mockUnitOfWork = new Mock<IUnitOfWork>();
+        var mockIntergrationEventPublisher = new Mock<IIntegrationEventPublisher>();
 
         mockGuestService
-            .Setup(s => s.GuestExistAsync(guestId))
-            .ReturnsAsync(true);
+            .Setup(s => s.GetGuestEmailItemAsync(guestId))
+            .ReturnsAsync(userEmailItem);
 
         mockAccomodationService
             .Setup(s => s.AccomodationExistAsync(accomodationId))
             .ReturnsAsync(true);
 
         mockListingService
-            .Setup(s => s.ListingExistAsync(listingId))
-            .ReturnsAsync(true);
+            .Setup(s => s.GetListingEmailItemAsync(listingId))
+            .ReturnsAsync(listingEmailItem);
 
         mockBookingRepo
             .Setup(r => r.HasOverlapingBookingAsync(accomodationId, startDate, endDate))
             .ReturnsAsync(false);
-
-
-
-
 
 
         var command = new CreateBookingCommand(
@@ -59,7 +71,7 @@ public class CreateBookingTests
             endDate,
             price);
 
-        var handler = new CreateBookingHandler(mockGuestService.Object, mockAccomodationService.Object,mockListingService.Object, mockBookingRepo.Object, mockUnitOfWork.Object) as ICreateBookingHandler;
+        var handler = new CreateBookingHandler(mockGuestService.Object, mockAccomodationService.Object,mockListingService.Object, mockBookingRepo.Object, mockUnitOfWork.Object, mockIntergrationEventPublisher.Object) as ICreateBookingHandler;
 
         // Act
         await handler.HandleAsync(command);
