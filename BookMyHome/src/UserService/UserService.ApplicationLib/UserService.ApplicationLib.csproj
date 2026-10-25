@@ -5,6 +5,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Shared\BookMyHome.BuildingBlocksLib\BookMyHome.BuildingBlocksLib.csproj" />
     <ProjectReference Include="..\UserService.DomainLib\UserService.DomainLib.csproj" />
     <ProjectReference Include="..\UserService.FacadeLib\UserService.FacadeLib.csproj" />
     <ProjectReference Include="..\..\Shared\BookMyHome.SharedKernelLib\BookMyHome.SharedKernelLib.csproj" />

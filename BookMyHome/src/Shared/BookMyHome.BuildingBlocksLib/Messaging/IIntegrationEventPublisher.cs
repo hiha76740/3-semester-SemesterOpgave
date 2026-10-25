@@ -1,4 +1,4 @@
-﻿namespace BookingService.ApplicationLib.Services;
+﻿namespace BookMyHome.BuildingBlocksLib.Messaging;
 
 public interface IIntegrationEventPublisher
 {
