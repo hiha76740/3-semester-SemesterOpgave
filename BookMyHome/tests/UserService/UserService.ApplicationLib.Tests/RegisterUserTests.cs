@@ -1,4 +1,5 @@
 ﻿using BookMyHome.BuildingBlocksLib.Messaging;
+using Microsoft.Extensions.Logging;
 using Moq;
 using UserService.ApplicationLib.Authentication;
 using UserService.ApplicationLib.Handlers;
@@ -30,6 +31,7 @@ public class RegisterUserTests
 
         var mockUserRepo = new Mock<IUserRepository>();
         var mockPasswordHash = new Mock<IPasswordHashService>();
+        var mockLogger = new Mock<ILogger<RegisterUserHandler>>();
 
         mockUserRepo
             .Setup(r => r.UsernameExsistsAsync(It.IsAny<string>()))
@@ -54,7 +56,7 @@ public class RegisterUserTests
             role
             );
 
-        var handler = new RegisterUserHandler(mockUserRepo.Object, mockPasswordHash.Object, mockEventPublisher.Object) as IRegisterUserHandler;
+        var handler = new RegisterUserHandler(mockUserRepo.Object, mockPasswordHash.Object, mockEventPublisher.Object, mockLogger.Object) as IRegisterUserHandler;
 
         // Act
         await handler.Handle(command);
@@ -63,7 +65,7 @@ public class RegisterUserTests
         mockUserRepo.Verify(r => r.RegisterUserAsync(It.IsAny<User>()), Times.Once);
         mockUserRepo.Verify(r => r.SaveAsync(), Times.Once);
 
-        
+
 
     }
 }
