@@ -4,27 +4,44 @@ using BookingService.DomainLib.Entities;
 using BookingService.DomainLib.ValueObjects;
 using BookingService.FacadeLib.Commands.DTOs;
 using BookingService.FacadeLib.Commands.Interfaces;
+using Microsoft.Extensions.Logging;
 using Shared.BookMyHome.SharedKernelLib.Exceptions;
 
 namespace BookingService.ApplicationLib.Handlers;
 
-public class CancelBookingHandler(IBookingRepository bookingRepo, IAccomodationService accomodationService) : ICancelBookingHandler
+public class CancelBookingHandler(IBookingRepository bookingRepo, IAccomodationService accomodationService, ILogger<CancelBookingHandler> logger) : ICancelBookingHandler
 {
     async Task ICancelBookingHandler.Handle(CancelBookingCommand command)
     {
-        var bookingId = new BookingId(command.BookingId);
-        var userId = new GuestId(command.UserId);
+        try
+        {
+            logger.LogInformation("Starting cancellation of booking {id}", command.BookingId);
 
-        var booking = await bookingRepo.GetBookingByIdAsync(bookingId) ??
-            throw new NotFoundException("Booking was not found doing booking cancellation");
+            var bookingId = new BookingId(command.BookingId);
+            var userId = new GuestId(command.UserId);
 
-        var hostId = await accomodationService.GetAccmodationHostIdAsync(booking.AccomodationId);
+            var booking = await bookingRepo.GetBookingByIdAsync(bookingId) ??
+                throw new NotFoundException("Booking was not found doing booking cancellation");
 
-        if (booking.GuestId != userId && hostId != command.UserId)
-            throw new UnauthorizedAccessException("You do not have permission to cancel this booking");
+            var hostId = await accomodationService.GetAccmodationHostIdAsync(booking.AccomodationId);
 
-        booking.CancelBooking();
+            if (booking.GuestId != userId && hostId != command.UserId)
+                throw new UnauthorizedAccessException("You do not have permission to cancel this booking");
 
-        await bookingRepo.SaveAsync();
+            booking.CancelBooking();
+            logger.LogInformation("Booking {id} was cancelled successfully", command.BookingId);
+
+            await bookingRepo.SaveAsync();
+            logger.LogInformation("Booking cancellation for booking {id} was save to database successfully", command.BookingId);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex.Message);
+
+            if (ex.InnerException != null)
+                logger.LogError(ex.InnerException.Message);
+
+            throw;
+        }
     }
 }
