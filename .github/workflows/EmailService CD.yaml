@@ -1,12 +1,11 @@
 name: EmailService CD
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - "BookMyHome/src/EmailService/**"
-      - "BookMyHome/src/Shared/**"
+  workflow_run:
+    workflows:
+      - "EmailService CI"
+    types:
+      - completed
 
 env:
   REGISTRY: ghcr.io
@@ -16,6 +15,10 @@ env:
 
 jobs:
   Build-and-Deploy-EmailService:
+    if: >
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.head_branch == 'main'
+
     name: Build and Deploy EmailService
     runs-on: ubuntu-latest
     permissions:
@@ -25,6 +28,9 @@ jobs:
     steps:
       - name: Get Code
         uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+
 
       - name: Log into registry ${{ env.REGISTRY }}
         uses: docker/login-action@v4
@@ -38,7 +44,7 @@ jobs:
         uses: docker/build-push-action@v7
         with: 
           context: ${{ env.DOCKER_IMAGE_CONTEXT }}
-          file: BookMyHome/src/EmailService/EmailService.Api/Dockerfile
+          file: BookMyHome/src/EmailService/EmailService.Api//Dockerfile
           push: true
           tags: ${{ env.REGISTRY }}/${{ env.GITHUB_ACTOR }}/${{ env.IMAGE_NAME }}:latest
     
