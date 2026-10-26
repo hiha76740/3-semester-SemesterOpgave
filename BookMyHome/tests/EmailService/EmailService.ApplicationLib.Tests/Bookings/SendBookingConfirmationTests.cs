@@ -37,7 +37,7 @@ public class SendBookingConfirmationTests
             "test@test.dk"
             );
 
-        var handler = new SendBookingConfirmationHandler(mockEmailSender.Object) as ISendBookingConfirmationHandler;
+        var handler = new SendBookingConfirmationHandler(mockEmailSender.Object, mockLogger.Object) as ISendBookingConfirmationHandler;
 
         // Act
         await handler.HandleAsync(command);

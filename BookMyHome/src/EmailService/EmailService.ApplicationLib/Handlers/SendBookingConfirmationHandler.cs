@@ -2,17 +2,22 @@
 using EmailService.ApplicationLib.Services;
 using EmailService.FacadeLib.Commands.DTOs;
 using EmailService.FacadeLib.Commands.Interfaces;
+using Microsoft.Extensions.Logging;
 
 namespace EmailService.ApplicationLib.Handlers;
 
-public class SendBookingConfirmationHandler(IEmailSenderService emailSender) : ISendBookingConfirmationHandler
+public class SendBookingConfirmationHandler(IEmailSenderService emailSender, ILogger<SendBookingConfirmationHandler> logger) : ISendBookingConfirmationHandler
 {
     Task ISendBookingConfirmationHandler.HandleAsync(SendBookingConfirmationCommand command)
     {
-        var subject = $"Bookingbekræftelse";
-        var name = $"{command.UserFirstName} {command.UserLastName}";
+        try
+        {
+            logger.LogInformation("Starting to send booking confirmation to email: {userEmail}", command.UserEmail);
 
-        var body = $"""
+            var subject = $"Bookingbekræftelse";
+            var name = $"{command.UserFirstName} {command.UserLastName}";
+
+            var body = $"""
             Hej {command.UserFirstName} {command.UserLastName}
 
             Tak for din booking.
@@ -40,9 +45,20 @@ public class SendBookingConfirmationHandler(IEmailSenderService emailSender) : I
             Ønsker du at annullere bookingen kan dette gøres via din profil
             """;
 
+            logger.LogInformation("Sending booking confirmation to email: {userEmail}", command.UserEmail);
 
-        var emailDto = new SendEmailDto(name, command.UserEmail, subject, body);
+            var emailDto = new SendEmailDto(name, command.UserEmail, subject, body);
 
-        return emailSender.SendAsync(emailDto);
+            return emailSender.SendAsync(emailDto);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError("Exception error: {error}", ex.Message);
+
+            if (ex.InnerException != null)
+                logger.LogError("InnerException error: {error}", ex.InnerException.Message);
+
+            throw;
+        }
     }
 }
