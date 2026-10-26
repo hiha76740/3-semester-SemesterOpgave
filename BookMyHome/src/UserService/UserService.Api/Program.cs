@@ -1,9 +1,7 @@
 using BookMyHome.BuildingBlocksLib.DependencyInjection;
-using BookMyHome.BuildingBlocksLib.Messaging;
 using Scalar.AspNetCore;
 using UserService.Api.DependencyInjection;
 using UserService.ApplicationLib.Extensions;
-using UserService.InfrastructureLib.EventPublishers;
 using UserService.InfrastructureLib.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,7 +18,7 @@ builder.Services.AddRepositoryDI();
 builder.Services.AddInternalServiceDI();
 builder.Services.AddQueriesDI();
 builder.Services.AddDaprClient();
-builder.Services.AddScoped<IIntegrationEventPublisher, DaprIntegrationEventPublisher>();
+
 
 builder.Services.AddHealthChecks();
 
