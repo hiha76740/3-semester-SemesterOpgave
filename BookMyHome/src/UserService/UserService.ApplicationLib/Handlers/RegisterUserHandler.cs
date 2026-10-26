@@ -1,5 +1,6 @@
 ﻿using BookMyHome.BuildingBlocksLib.Messaging;
 using BookMyHome.ContractsLib.Events;
+using Microsoft.Extensions.Logging;
 using UserService.ApplicationLib.Authentication;
 using UserService.ApplicationLib.Repositories;
 using UserService.DomainLib.Entities;
@@ -12,13 +13,16 @@ namespace UserService.ApplicationLib.Handlers;
 public class RegisterUserHandler(
     IUserRepository userRepo,
     IPasswordHashService passwordHashService,
-    IIntegrationEventPublisher eventPublisher
+    IIntegrationEventPublisher eventPublisher,
+    ILogger<RegisterUserHandler> logger
     ) : IRegisterUserHandler
 {
     async Task IRegisterUserHandler.Handle(RegisterUserCommand command)
     {
         try
         {
+            logger.LogInformation("Beginning to register user with name {firstname} {lastname}", command.FirstName, command.LastName);
+
             var normalizedEmail = command.Email.ToLower();
 
             var usernameExsist = await userRepo.UsernameExsistsAsync(normalizedEmail);
@@ -44,6 +48,8 @@ public class RegisterUserHandler(
                 role
                 );
 
+            logger.LogInformation("User created with id: {userId}", user.Id);
+
             await userRepo.RegisterUserAsync(user);
 
             await userRepo.SaveAsync();
@@ -55,10 +61,16 @@ public class RegisterUserHandler(
                 user.Username
                 );
 
+            logger.LogInformation("Starting to publish event");
+
             await eventPublisher.PublishAsync("user-registered", integrationEvent);
+
+            logger.LogInformation("Event has been published");
+
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            logger.LogError("Error {errorMessage}",ex.Message);
             throw;
         }
     }
