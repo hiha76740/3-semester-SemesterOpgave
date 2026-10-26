@@ -52,6 +52,9 @@
     <Project Path="tests/BookingService/BookingService.ApplicationLib.Tests/BookingService.ApplicationLib.Tests.csproj" />
     <Project Path="tests/BookingService/BookingService.DomainLib.Tests/BookingService.DomainLib.Tests.csproj" />
   </Folder>
+  <Folder Name="/tests/EmailService/">
+    <Project Path="tests/EmailService/EmailService.ApplicationLib.Tests/EmailService.ApplicationLib.Tests.csproj" />
+  </Folder>
   <Folder Name="/tests/UserService/">
     <Project Path="tests/UserService/UserService.ApplicationLib.Tests/UserService.ApplicationLib.Tests.csproj" />
     <Project Path="tests/UserService/UserService.DomainLib.Tests/UserService.DomainLib.Tests.csproj" />
