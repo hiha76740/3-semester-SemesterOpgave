@@ -111,10 +111,15 @@ services:
       - "placement:50006"
       - "--scheduler-host-address"
       - "scheduler:50007"
+      - "--resources-path"
+      - "/components"
     depends_on:
       - BookMyHome-UserService1
       - placement
       - scheduler
+      - kafka-broker
+    volumes:
+      - "./components:/components:ro"
     network_mode: "service:BookMyHome-UserService1"
     restart: unless-stopped  
     labels:
@@ -164,10 +169,15 @@ services:
       - "placement:50006"
       - "--scheduler-host-address"
       - "scheduler:50007"
+      - "--resources-path"
+      - "/components"
     depends_on:
       - BookMyHome-UserService2
       - placement
       - scheduler
+      - kafka-broker
+    volumes:
+      - "./components:/components:ro"
     network_mode: "service:BookMyHome-UserService2"
     restart: unless-stopped
     labels:
@@ -232,10 +242,15 @@ services:
       - "placement:50006"
       - "--scheduler-host-address"
       - "scheduler:50007"
+      - "--resources-path"
+      - "/components"
     depends_on:
       - BookMyHome-BookingService1
       - placement
       - scheduler
+      - kafka-broker
+    volumes:
+      - "./components:/components:ro"
     network_mode: "service:BookMyHome-BookingService1"
     restart: unless-stopped
     labels:
@@ -286,10 +301,15 @@ services:
       - "placement:50006"
       - "--scheduler-host-address"
       - "scheduler:50007"
+      - "--resources-path"
+      - "/components"
     depends_on:
       - BookMyHome-BookingService2
       - placement
       - scheduler
+      - kafka-broker
+    volumes:
+      - "./components:/components:ro"
     network_mode: "service:BookMyHome-BookingService2"
     restart: unless-stopped
     labels:
@@ -355,10 +375,15 @@ services:
       - "placement:50006"
       - "--scheduler-host-address"
       - "scheduler:50007"
+      - "--resources-path"
+      - "/components"
     depends_on:
       - BookMyHome-AccomodationService1
       - placement
       - scheduler
+      - kafka-broker
+    volumes:
+      - "./components:/components:ro"
     network_mode: "service:BookMyHome-AccomodationService1"
     restart: unless-stopped
     labels:
@@ -409,10 +434,15 @@ services:
       - "placement:50006"
       - "--scheduler-host-address"
       - "scheduler:50007"
+      - "--resources-path"
+      - "/components"
     depends_on:
       - BookMyHome-AccomodationService2
       - placement
       - scheduler
+      - kafka-broker
+    volumes:
+      - "./components:/components:ro"
     network_mode: "service:BookMyHome-AccomodationService2"
     restart: unless-stopped
     labels:
@@ -451,10 +481,15 @@ services:
       - "placement:50006"
       - "--scheduler-host-address"
       - "scheduler:50007"
+      - "--resources-path"
+      - "/components"
     depends_on:
       - BookMyHome-EmailService
       - placement
       - scheduler
+      - kafka-broker
+    volumes:
+      - "./components:/components:ro"
     network_mode: "service:BookMyHome-EmailService"
     restart: unless-stopped
     labels:
@@ -491,7 +526,8 @@ services:
     command: --label-enable
 
 
-# -------- papercut --------            
+# -------- papercut --------    
+        
   papercut:
     image: changemakerstudiosus/papercut-smtp:latest
     container_name: papercut-smtp
@@ -506,6 +542,25 @@ services:
       - Urls=http://0.0.0.0:8080
     restart: unless-stopped
 
+
+# -------- kafka --------            
+
+  kafka-broker:
+    image: apache/kafka:latest
+    container_name: kafka-broker
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_LISTENERS: PLAINTEXT://:9092,CONTROLLER://localhost:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-broker:9092
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@localhost:9093
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_NUM_PARTITIONS: 3
 
 volumes:
     mysql-userdb-data:
