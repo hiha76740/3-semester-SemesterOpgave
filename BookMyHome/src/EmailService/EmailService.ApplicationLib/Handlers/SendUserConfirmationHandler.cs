@@ -18,19 +18,19 @@ public class SendUserConfirmationHandler(IEmailSenderService emailSender, ILogge
             var name = $"{command.Firstname} {command.Lastname}";
 
             var body = $"""
-            Hej {name}
+            <p>Hej {name}</p>
 
-            Velkommen til Book My Home.
+            <p>Velkommen til Book My Home.</p>
 
-            Du er oprettet med følgende brugernavn:
-            {command.Username}
+            <p>Du er oprettet med følgende brugernavn:</p>
+            <h4>{command.Username}</h4>
 
-            Vi håber du nemt finder dit næste ophold.
+            <p>Vi håber du nemt finder dit næste ophold.</p>
             """;
 
             logger.LogInformation("Sending user confirmation for user: {username}", command.Username);
 
-            var emailDto = new SendEmailDto(name, command.Email, subject, body);
+            var emailDto = new SendEmailDto(name, command.Email, subject, body,"html");
 
             return emailSender.SendAsync(emailDto);
         }

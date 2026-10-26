@@ -21,7 +21,7 @@ public class MailKitEmailSender(IConfiguration appsettings, ILogger<MailKitEmail
             message.From.Add(new MailboxAddress("BookMyHome", "NoReply@BookMyHome.Test"));
             message.To.Add(new MailboxAddress(emailDto.Name,emailDto.Email));
             message.Subject = emailDto.Subject;
-            message.Body = new TextPart("plain")
+            message.Body = new TextPart(emailDto.Subtype)
             {
                 Text = emailDto.Body
             };
