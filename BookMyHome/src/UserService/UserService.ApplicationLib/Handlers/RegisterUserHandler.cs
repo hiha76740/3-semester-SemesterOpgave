@@ -54,6 +54,8 @@ public class RegisterUserHandler(
 
             await userRepo.SaveAsync();
 
+            logger.LogInformation("User {id} saved in database successfully", user.Id);
+
             var integrationEvent = new UserRegisteredIntegrationEvent(
                 user.FirstName,
                 user.LastName,
@@ -69,7 +71,11 @@ public class RegisterUserHandler(
         }
         catch (Exception ex)
         {
-            logger.LogError("Error {errorMessage}",ex.Message);
+            logger.LogError("Error {errorMessage}", ex.Message);
+
+            if (ex.InnerException != null)
+                logger.LogError("InnerException Error {error}", ex.InnerException.Message);
+
             throw;
         }
     }
