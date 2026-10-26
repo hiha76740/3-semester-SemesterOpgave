@@ -66,7 +66,6 @@ public class RegisterUserHandler(
             await eventPublisher.PublishAsync("user-registered", integrationEvent);
 
             logger.LogInformation("Event has been published");
-
         }
         catch (Exception ex)
         {
