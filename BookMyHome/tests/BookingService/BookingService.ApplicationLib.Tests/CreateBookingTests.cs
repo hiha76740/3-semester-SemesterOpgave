@@ -9,6 +9,7 @@ using BookingService.FacadeLib.Commands.Interfaces;
 using BookMyHome.BuildingBlocksLib.Messaging;
 using BookMyHome.ContractsLib.Responses.Accomodations;
 using BookMyHome.ContractsLib.Responses.Users;
+using Microsoft.Extensions.Logging;
 using Moq;
 
 namespace BookingService.ApplicationLib.Tests;
@@ -46,6 +47,7 @@ public class CreateBookingTests
         var mockBookingRepo = new Mock<IBookingRepository>();
         var mockUnitOfWork = new Mock<IUnitOfWork>();
         var mockIntergrationEventPublisher = new Mock<IIntegrationEventPublisher>();
+        var mockLogger = new Mock<ILogger<CreateBookingHandler>>();
 
         mockGuestService
             .Setup(s => s.GetGuestEmailItemAsync(guestId))
@@ -72,7 +74,7 @@ public class CreateBookingTests
             endDate,
             price);
 
-        var handler = new CreateBookingHandler(mockGuestService.Object, mockAccomodationService.Object,mockListingService.Object, mockBookingRepo.Object, mockUnitOfWork.Object, mockIntergrationEventPublisher.Object) as ICreateBookingHandler;
+        var handler = new CreateBookingHandler(mockGuestService.Object, mockAccomodationService.Object,mockListingService.Object, mockBookingRepo.Object, mockUnitOfWork.Object, mockIntergrationEventPublisher.Object, mockLogger.Object) as ICreateBookingHandler;
 
         // Act
         await handler.HandleAsync(command);

@@ -10,6 +10,7 @@ using BookMyHome.BuildingBlocksLib.Messaging;
 using BookMyHome.ContractsLib.Events;
 using BookMyHome.ContractsLib.Responses.Accomodations;
 using BookMyHome.ContractsLib.Responses.Users;
+using Microsoft.Extensions.Logging;
 using Shared.BookMyHome.SharedKernelLib.Exceptions;
 using System.Data;
 
@@ -21,10 +22,13 @@ public class CreateBookingHandler(
     IListingService listingService,
     IBookingRepository bookingRepo,
     IUnitOfWork uow,
-    IIntegrationEventPublisher eventPublisher) : ICreateBookingHandler
+    IIntegrationEventPublisher eventPublisher,
+    ILogger<CreateBookingHandler> logger) : ICreateBookingHandler
 {
     async Task ICreateBookingHandler.HandleAsync(CreateBookingCommand command)
     {
+        logger.LogInformation("Starting to create booking for the Guest: {GuestId}", command.GuestId);
+
         var guestId = new GuestId(command.GuestId);
         var accomodationId = new AccomodationId(command.AccomodationId);
         var listingId = new ListingId(command.ListingId);
@@ -34,11 +38,13 @@ public class CreateBookingHandler(
 
         try
         {
+            logger.LogInformation("Starting to collect info from other services");
             var guestEmailTask = guestService.GetGuestEmailItemAsync(guestId);
             var accomodationExistTask = accomodationService.AccomodationExistAsync(accomodationId);
             var listingEmailTask = listingService.GetListingEmailItemAsync(listingId);
 
             await Task.WhenAll(guestEmailTask, accomodationExistTask, listingEmailTask);
+
 
             guestEmailResponse = await guestEmailTask ?? throw new NotFoundException("Guest not found doing booking creation");
             listingEmailResonse = await listingEmailTask ?? throw new NotFoundException("Listing not found doing booking creation");
@@ -46,13 +52,25 @@ public class CreateBookingHandler(
 
             if (accomodationExist == false)
                 throw new NotFoundException("Accomodation not found doing booking creation");
+
+            logger.LogInformation("Info collected successfully");
         }
-        catch (NotFoundException)
+        catch (NotFoundException ex)
         {
+            logger.LogError(ex.Message);
+
+            if (ex.InnerException != null)
+                logger.LogError(ex.InnerException.Message);
+
             throw;
         }
         catch (Exception ex)
         {
+            logger.LogError(ex.Message);
+
+            if (ex.InnerException != null)
+                logger.LogError(ex.InnerException.Message);
+
             throw new ApplicationException(ex.Message, ex);
         }
 
@@ -60,6 +78,8 @@ public class CreateBookingHandler(
 
         try
         {
+            logger.LogInformation("Booking transaction is begining");
+
             uow.BeginTransaction(IsolationLevel.Serializable);
 
             var overlapExsists = await bookingRepo.HasOverlapingBookingAsync(
@@ -79,16 +99,24 @@ public class CreateBookingHandler(
                 command.Price
                 );
 
+            logger.LogInformation("Booking created successfully");
+
             await bookingRepo.CreateAsync(booking);
 
+            logger.LogInformation("Adding booking with id {bookingId} to database", booking.Id);
+
             await bookingRepo.SaveAsync();
+            logger.LogInformation("Booking saved to database successfully");
+
             uow.Commit();
+            logger.LogInformation("Booking transaction completed successfully");
+
 
             var integrationEvent = new BookingPlacedIntegrationEvent(
                 booking.Id.Value,
                 booking.Period.StartDate,
                 booking.Period.EndDate,
-                booking.Price, 
+                booking.Price,
                 listingEmailResonse.ListingName,
                 listingEmailResonse.DailyPrice,
                 listingEmailResonse.HouseRules,
@@ -104,10 +132,19 @@ public class CreateBookingHandler(
                 guestEmailResponse.Email
                 );
 
+            logger.LogInformation("Publishing booking placed event");
+            
             await eventPublisher.PublishAsync("booking-placed", integrationEvent);
+
+            logger.LogInformation("Booking placed event published successfully");
         }
         catch (Exception ex)
         {
+            logger.LogError(ex.Message);
+
+            if (ex.InnerException != null)
+                logger.LogError(ex.InnerException.Message);
+
             uow.Rollback();
             throw new ApplicationException(ex.Message, ex);
         }
