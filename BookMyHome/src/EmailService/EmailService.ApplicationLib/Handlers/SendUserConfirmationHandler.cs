@@ -1,17 +1,22 @@
 ﻿using EmailService.ApplicationLib.Services;
 using EmailService.FacadeLib.Commands.DTOs;
 using EmailService.FacadeLib.Commands.Interfaces;
+using Microsoft.Extensions.Logging;
 
 namespace EmailService.ApplicationLib.Handlers;
 
-public class SendUserConfirmationHandler(IEmailSenderService emailSender) : ISendUserConfirmationHandler
+public class SendUserConfirmationHandler(IEmailSenderService emailSender, ILogger<SendUserConfirmationHandler> logger) : ISendUserConfirmationHandler
 {
     Task ISendUserConfirmationHandler.HandleAsync(SendUserConfirmationCommand command)
     {
-        var subject = $"Bekræftelse for bruger oprettelse";
-        var name = $"{command.Firstname} {command.Lastname}";
+        try
+        {
+            logger.LogInformation("Starting to send user confirmation for user: {username}", command.Username);
 
-        var body = $"""
+            var subject = $"Bekræftelse for bruger oprettelse";
+            var name = $"{command.Firstname} {command.Lastname}";
+
+            var body = $"""
             Hej {name}
 
             Velkommen til Book My Home.
@@ -22,11 +27,23 @@ public class SendUserConfirmationHandler(IEmailSenderService emailSender) : ISen
             Vi håber du nemt finder dit næste ophold.
             """;
 
-        return emailSender.SendAsync(
-            name,
-            command.Email,
-            subject,
-            body
-            );
+            logger.LogInformation("Sending user confirmation for user: {username}", command.Username);
+
+            return emailSender.SendAsync(
+                name,
+                command.Email,
+                subject,
+                body
+                );
+        }
+        catch (Exception ex)
+        {
+            logger.LogError("Exception error: {error}", ex.Message);
+
+            if (ex.InnerException != null)
+                logger.LogError("InnerException error: {error}", ex.InnerException.Message);
+            
+            throw;
+        }
     }
 }
