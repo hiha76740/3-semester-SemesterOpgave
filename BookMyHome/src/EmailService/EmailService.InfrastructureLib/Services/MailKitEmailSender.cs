@@ -1,4 +1,5 @@
-﻿using EmailService.ApplicationLib.Services;
+﻿using EmailService.ApplicationLib.Dtos;
+using EmailService.ApplicationLib.Services;
 using MailKit.Net.Smtp;
 using MailKit.Security;
 using Microsoft.Extensions.Configuration;
@@ -9,25 +10,20 @@ namespace EmailService.InfrastructureLib.Services;
 
 public class MailKitEmailSender(IConfiguration appsettings, ILogger<MailKitEmailSender> logger) : IEmailSenderService
 {
-    async Task IEmailSenderService.SendAsync(
-        string recipeientName,
-        string recipientEmail,
-        string subject,
-        string body
-        )
+    async Task IEmailSenderService.SendAsync(SendEmailDto emailDto)
     {
         try
         {
-            logger.LogInformation("Creating message with subject {subject} and to recipeient {recipeitentMail}", subject, recipientEmail);
+            logger.LogInformation("Creating message with subject {subject} and to recipeient {recipeitentMail}", emailDto.Subject, emailDto.Email);
 
             var message = new MimeMessage();
 
             message.From.Add(new MailboxAddress("BookMyHome", "NoReply@BookMyHome.Test"));
-            message.To.Add(new MailboxAddress(recipeientName, recipientEmail));
-            message.Subject = subject;
+            message.To.Add(new MailboxAddress(emailDto.Name,emailDto.Email));
+            message.Subject = emailDto.Subject;
             message.Body = new TextPart("plain")
             {
-                Text = body
+                Text = emailDto.Body
             };
 
             using var client = new SmtpClient();

@@ -1,4 +1,5 @@
-﻿using EmailService.ApplicationLib.Services;
+﻿using EmailService.ApplicationLib.Dtos;
+using EmailService.ApplicationLib.Services;
 using EmailService.FacadeLib.Commands.DTOs;
 using EmailService.FacadeLib.Commands.Interfaces;
 
@@ -38,12 +39,10 @@ public class SendBookingConfirmationHandler(IEmailSenderService emailSender) : I
 
             Ønsker du at annullere bookingen kan dette gøres via din profil
             """;
-        
-        return emailSender.SendAsync(
-            name,
-            command.UserEmail,
-            subject,
-            body
-            );
+
+
+        var emailDto = new SendEmailDto(name, command.UserEmail, subject, body);
+
+        return emailSender.SendAsync(emailDto);
     }
 }

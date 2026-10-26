@@ -1,4 +1,5 @@
-﻿using EmailService.ApplicationLib.Services;
+﻿using EmailService.ApplicationLib.Dtos;
+using EmailService.ApplicationLib.Services;
 using EmailService.FacadeLib.Commands.DTOs;
 using EmailService.FacadeLib.Commands.Interfaces;
 using Microsoft.Extensions.Logging;
@@ -29,12 +30,9 @@ public class SendUserConfirmationHandler(IEmailSenderService emailSender, ILogge
 
             logger.LogInformation("Sending user confirmation for user: {username}", command.Username);
 
-            return emailSender.SendAsync(
-                name,
-                command.Email,
-                subject,
-                body
-                );
+            var emailDto = new SendEmailDto(name, command.Email, subject, body);
+
+            return emailSender.SendAsync(emailDto);
         }
         catch (Exception ex)
         {
@@ -42,7 +40,7 @@ public class SendUserConfirmationHandler(IEmailSenderService emailSender, ILogge
 
             if (ex.InnerException != null)
                 logger.LogError("InnerException error: {error}", ex.InnerException.Message);
-            
+
             throw;
         }
     }

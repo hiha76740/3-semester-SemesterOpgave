@@ -1,6 +1,8 @@
-﻿namespace EmailService.ApplicationLib.Services;
+﻿using EmailService.ApplicationLib.Dtos;
+
+namespace EmailService.ApplicationLib.Services;
 
 public interface IEmailSenderService
 {
-    Task SendAsync(string recipientName, string recipientEmail, string subject, string body);
+    Task SendAsync(SendEmailDto email);
 }
