@@ -19,7 +19,7 @@ public class SendBookingConfirmationHandler(IEmailSenderService emailSender) : I
             Ordrenummer: {command.BookingId}
             Periode: {command.StartDate} - {command.EndDate}
 
-            INDSÆT BILLEDE HER fRA LINK
+            INDSÆT BILLEDE HER FRA LINK
 
             {command.ListingName}
             Type: {command.AccomodationType}
@@ -35,6 +35,8 @@ public class SendBookingConfirmationHandler(IEmailSenderService emailSender) : I
 
             Daglig pris: {command.DailyPrice:C}
             Total: {command.Price:C}
+
+            Ønsker du at annullere bookingen kan dette gøres via din profil
             """;
         
         return emailSender.SendAsync(
