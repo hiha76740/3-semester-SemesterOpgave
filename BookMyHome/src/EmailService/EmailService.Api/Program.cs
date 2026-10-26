@@ -9,6 +9,7 @@ builder.Services.AddHandlerDI();
 builder.Services.AddServiceDI();
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
+builder.Services.AddDaprClient();
 
 builder.Services.AddHealthChecks();
 
