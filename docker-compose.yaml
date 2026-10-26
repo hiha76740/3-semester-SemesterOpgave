@@ -99,6 +99,7 @@ services:
   
   BookMyHome-UserService1-dapr:
     image: daprio/daprd:1.18.0
+    container_name: bookmyhome-userservice1-dapr
     command:
       - "./daprd"
       - "--app-id"
@@ -157,6 +158,7 @@ services:
   
   BookMyHome-UserService2-dapr:
     image: daprio/daprd:1.18.0
+    container_name: bookmyhome-userservice2-dapr
     command:
       - "./daprd"
       - "--app-id"
@@ -230,6 +232,7 @@ services:
 
   BookMyHome-BookingService1-dapr:
     image: daprio/daprd:1.18.0
+    container_name: bookmyhome-bookingservice1-dapr
     command:
       - "./daprd"
       - "--app-id"
@@ -289,6 +292,7 @@ services:
 
   BookMyHome-BookingService2-dapr:
     image: daprio/daprd:1.18.0
+    container_name: bookmyhome-bookingservice2-dapr
     command:
       - "./daprd"
       - "--app-id"
@@ -363,6 +367,7 @@ services:
   
   BookMyHome-AccomodationService1-dapr:
     image: daprio/daprd:1.18.0
+    container_name: bookmyhome-accomodationservice1-dapr
     command:
       - "./daprd"
       - "--app-id"
@@ -422,6 +427,7 @@ services:
   
   BookMyHome-AccomodationService2-dapr:
     image: daprio/daprd:1.18.0
+    container_name: bookmyhome-accomodationservice2-dapr
     command:
       - "./daprd"
       - "--app-id"
@@ -469,6 +475,7 @@ services:
   
   BookMyHome-EmailService-dapr:
     image: daprio/daprd:1.18.0
+    container_name: bookmyhome-emailservice-dapr
     command:
       - "./daprd"
       - "--app-id"
