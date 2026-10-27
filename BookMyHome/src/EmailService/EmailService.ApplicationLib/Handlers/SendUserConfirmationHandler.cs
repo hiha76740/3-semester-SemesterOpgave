@@ -3,6 +3,7 @@ using EmailService.ApplicationLib.Services;
 using EmailService.FacadeLib.Commands.DTOs;
 using EmailService.FacadeLib.Commands.Interfaces;
 using Microsoft.Extensions.Logging;
+using System.Text;
 
 namespace EmailService.ApplicationLib.Handlers;
 
@@ -17,20 +18,24 @@ public class SendUserConfirmationHandler(IEmailSenderService emailSender, ILogge
             var subject = $"Bekræftelse for bruger oprettelse";
             var name = $"{command.Firstname} {command.Lastname}";
 
-            var body = $"""
-            <p>Hej {name}</p>
+            StringBuilder builder = new StringBuilder();
 
-            <p>Velkommen til Book My Home.</p>
+            builder.Append($"<p>Hej {name}</p>");
+            builder.Append("<br/>");
+            builder.Append("<p>Velkommen til BookMyHome.</p>");
+            builder.Append("<br/>");
+            builder.Append("<p>Du er oprettet med følgende brugernavn:</p>");
+            builder.Append($"<h4>{command.Username}</h4>");
+            builder.Append("<br/>");
+            builder.Append("<p>Vi håber du nemt finder dit næste ophold.</p>");
+            builder.Append("<br/>");
+            builder.Append("<img src=\"{{LogoCid}}\" alt=\"BookMyHome\" width=\"150\">");
 
-            <p>Du er oprettet med følgende brugernavn:</p>
-            <h4>{command.Username}</h4>
-
-            <p>Vi håber du nemt finder dit næste ophold.</p>
-            """;
+            var body = builder.ToString();
 
             logger.LogInformation("Sending user confirmation for user: {username}", command.Username);
 
-            var emailDto = new SendEmailDto(name, command.Email, subject, body,"html");
+            var emailDto = new SendEmailDto(name, command.Email, subject, body);
 
             return emailSender.SendAsync(emailDto);
         }
