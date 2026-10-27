@@ -39,7 +39,7 @@ public class SendBookingConfirmationHandler(IEmailSenderService emailSender, ILo
             builder.Append("<br/>");
             builder.Append("<p>Tak for din booking.</p>");
             builder.Append("<br/>");
-            builder.Append($"<p>Ordrenummer: {command.BookingId}</p>");
+            builder.Append($"<p>Bookingnummer: {command.BookingNumber}</p>");
             builder.Append($"<p>Periode: {command.StartDate} - {command.EndDate}</p>");
             builder.Append("<br/>");
             builder.Append($"<img src=\"{command.ImageUrl}\" alt=\"Listing image\" width=\"600\" height=\"500\" style=\"vertical-align:middle\">");

@@ -1,6 +1,11 @@
 ﻿namespace BookMyHome.ContractsLib.Events;
 
-public record BookingPlacedIntegrationEvent(Guid BookingId, DateOnly StartDate, DateOnly EndDate, decimal Price, string ListingName,
+public record BookingPlacedIntegrationEvent(
+    int BookingNumber,
+    DateOnly StartDate,
+    DateOnly EndDate,
+    decimal Price,
+    string ListingName,
     decimal DailyPrice,
     string HouseRules,
     string AccomodationType,

@@ -11,6 +11,7 @@ namespace BookingService.Api.Mapper
         {
             var output = new BookingResponse(
                 Dto.Id,
+                Dto.BookingNumber,
                 Dto.GuestId,
                 Dto.AccomodationId,
                 Dto.StartDate,
@@ -40,6 +41,7 @@ namespace BookingService.Api.Mapper
         {
             var output = new BookingSummaryResponse(
                 dto.BookingId,
+                dto.BookingNumber,
                 dto.ListingName,
                 dto.ListingType,
                 dto.City,

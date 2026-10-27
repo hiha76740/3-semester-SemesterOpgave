@@ -113,7 +113,7 @@ public class CreateBookingHandler(
 
 
             var integrationEvent = new BookingPlacedIntegrationEvent(
-                booking.Id.Value,
+                booking.BookingNumber,
                 booking.Period.StartDate,
                 booking.Period.EndDate,
                 booking.Price,

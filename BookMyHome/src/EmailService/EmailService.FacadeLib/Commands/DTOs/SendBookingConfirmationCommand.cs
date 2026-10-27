@@ -1,7 +1,7 @@
 ﻿namespace EmailService.FacadeLib.Commands.DTOs;
 
 public record SendBookingConfirmationCommand(
-    Guid BookingId,
+    int BookingNumber,
     DateOnly StartDate, 
     DateOnly EndDate, 
     decimal Price,

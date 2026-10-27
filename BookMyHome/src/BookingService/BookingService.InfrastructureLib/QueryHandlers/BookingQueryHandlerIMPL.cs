@@ -32,6 +32,7 @@ public class BookingQueryHandlerIMPL(BookingDbContext db, IAccomodationService a
             .AsNoTracking()
             .Select(b => new BookingDTO(
                 b.Id.Value,
+                b.BookingNumber,
                 b.GuestId.Value,
                 b.AccomodationId.Value,
                 b.ListingId.Value,
@@ -54,6 +55,7 @@ public class BookingQueryHandlerIMPL(BookingDbContext db, IAccomodationService a
             .Where(b => b.GuestId == guestId)
             .Select(b => new BookingDTO(
                 b.Id.Value,
+                b.BookingNumber,
                 b.GuestId.Value,
                 b.AccomodationId.Value,
                 b.ListingId.Value,
@@ -70,6 +72,7 @@ public class BookingQueryHandlerIMPL(BookingDbContext db, IAccomodationService a
 
             var userBooking = new BookingSummaryDto(
                 booking.Id, 
+                booking.BookingNumber,
                 summary.ListingName,
                 summary.ListingType, 
                 summary.City,
@@ -97,6 +100,7 @@ public class BookingQueryHandlerIMPL(BookingDbContext db, IAccomodationService a
             .Where(b => b.AccomodationId == accomdationKey)
             .Select(b => new BookingDTO(
                 b.Id.Value,
+                b.BookingNumber,
                 b.GuestId.Value,
                 b.AccomodationId.Value,
                 b.ListingId.Value,
@@ -113,6 +117,7 @@ public class BookingQueryHandlerIMPL(BookingDbContext db, IAccomodationService a
 
             var userBooking = new BookingSummaryDto(
                 booking.Id,
+                booking.BookingNumber,
                 summary.ListingName,
                 summary.ListingType,
                 summary.City,
@@ -138,6 +143,7 @@ public class BookingQueryHandlerIMPL(BookingDbContext db, IAccomodationService a
             .Where(b => b.Id == bookingId)
             .Select(b => new BookingDTO(
                 b.Id.Value,
+                b.BookingNumber,
                 b.GuestId.Value,
                 b.AccomodationId.Value,
                 b.ListingId.Value,

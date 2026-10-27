@@ -8,7 +8,7 @@ namespace EmailService.Api.Mappers
         public static SendBookingConfirmationCommand AsSendBookingConfirmationCommand(this BookingPlacedIntegrationEvent integrationEvent)
         {
             var output = new SendBookingConfirmationCommand(
-                integrationEvent.BookingId,
+                integrationEvent.BookingNumber,
                 integrationEvent.StartDate,
                 integrationEvent.EndDate,
                 integrationEvent.Price,

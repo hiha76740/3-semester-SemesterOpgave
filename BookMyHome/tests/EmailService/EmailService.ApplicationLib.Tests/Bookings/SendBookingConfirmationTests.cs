@@ -18,7 +18,7 @@ public class SendBookingConfirmationTests
         var mockLogger = new Mock<ILogger<SendBookingConfirmationHandler>>();
 
         var command = new SendBookingConfirmationCommand(
-            Guid.NewGuid(),
+            1,
             DateOnly.FromDateTime(DateTime.Today),
             DateOnly.FromDateTime(DateTime.Today.AddDays(1)),
             100,

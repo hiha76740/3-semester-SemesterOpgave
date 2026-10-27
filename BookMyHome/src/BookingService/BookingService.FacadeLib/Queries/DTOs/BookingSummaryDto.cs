@@ -2,6 +2,7 @@
 
 public record BookingSummaryDto(
     Guid BookingId,
+    int BookingNumber,
     string ListingName,
     string ListingType,
     string City,

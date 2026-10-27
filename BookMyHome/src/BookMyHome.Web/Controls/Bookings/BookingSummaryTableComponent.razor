@@ -1,13 +1,14 @@
-<RadzenDataGrid Data="@Bookings" TItem="BookingSummaryResponse">
+<RadzenDataGrid AllowColumnResize="true" Data="@Bookings" TItem="BookingSummaryResponse">
     <Columns>
-        <RadzenDataGridColumn Property="@nameof(BookingSummaryResponse.ListingName)" Title="Titel" Width="500px" />
-        <RadzenDataGridColumn Property="@nameof(BookingSummaryResponse.ListingType)" Title="Bolig type" Frozen="true" Width="160px" />
-        <RadzenDataGridColumn Property="@nameof(BookingSummaryResponse.City)" Title="By" Frozen="true" Width="160px" />
-        <RadzenDataGridColumn Property="@nameof(BookingSummaryResponse.Country)" Title="Land" Frozen="true" Width="160px" />
-        <RadzenDataGridColumn Property="@nameof(BookingSummaryResponse.StartDate)" Title="Start dato" Frozen="true" Width="160px" />
-        <RadzenDataGridColumn Property="@nameof(BookingSummaryResponse.EndDate)" Title="Slut dato" Frozen="true" Width="160px" />
-        <RadzenDataGridColumn Property="@nameof(BookingSummaryResponse.Price)" Title="Pris" Frozen="true" Width="160px" />
-        <RadzenDataGridColumn Property="@nameof(BookingSummaryResponse.BookingStatus)" Title="Status" Frozen="true" Width="160px" />
+        <RadzenDataGridColumn Property="@nameof(BookingSummaryResponse.BookingNumber)" Title="Booking nummer" Width="160px" Frozen="true" />
+        <RadzenDataGridColumn Property="@nameof(BookingSummaryResponse.ListingName)" Title="Titel" Width="300px" Frozen="false" />
+        <RadzenDataGridColumn Property="@nameof(BookingSummaryResponse.ListingType)" Title="Bolig type" Frozen="false" Width="100px" />
+        <RadzenDataGridColumn Property="@nameof(BookingSummaryResponse.City)" Title="By" Frozen="false" Width="150px" />
+        <RadzenDataGridColumn Property="@nameof(BookingSummaryResponse.Country)" Title="Land" Frozen="false" Width="150px" />
+        <RadzenDataGridColumn Property="@nameof(BookingSummaryResponse.StartDate)" Title="Start dato" Frozen="false" Width="150px" />
+        <RadzenDataGridColumn Property="@nameof(BookingSummaryResponse.EndDate)" Title="Slut dato" Frozen="false" Width="150px" />
+        <RadzenDataGridColumn Property="@nameof(BookingSummaryResponse.Price)" Title="Pris" Frozen="false" Width="150px" />
+        <RadzenDataGridColumn Property="@nameof(BookingSummaryResponse.BookingStatus)" Title="Status" Frozen="false" Width="100px" />
 
         <RadzenDataGridColumn Titem="BookingSummaryResponse"
                               Title="Handling"

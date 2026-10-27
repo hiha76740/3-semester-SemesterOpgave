@@ -2,6 +2,7 @@
 
 public record BookingResponse(
     Guid Id,
+    int BookingNumber,
     Guid GuestId, 
     Guid AccomodationId, 
     DateOnly StartDate,
