@@ -29,7 +29,7 @@ public class SendUserConfirmationHandler(IEmailSenderService emailSender, ILogge
             builder.Append("<br/>");
             builder.Append("<p>Vi håber du nemt finder dit næste ophold.</p>");
             builder.Append("<br/>");
-            builder.Append("<img src=\"{{LogoCid}}\" alt=\"BookMyHome\" width=\"150\">");
+            builder.Append("<img src=\"{{LogoCid}}\" alt=\"BookMyHome\" width=\"200\">");
 
             var body = builder.ToString();
 
