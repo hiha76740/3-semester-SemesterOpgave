@@ -56,8 +56,8 @@ public class SendBookingConfirmationHandler(IEmailSenderService emailSender, ILo
             builder.Append($"<p>Der er følgende hus regler:</p>");
             builder.Append($"<p>{command.HouseRules}</p>");
             builder.Append("<br/>");
-            builder.Append($"<p>Daglig pris: {command.DailyPrice:C}</p>");
-            builder.Append($"<p>Total: {command.Price:C}</p>");
+            builder.Append($"<p>Daglig pris: {command.DailyPrice}DKK</p>");
+            builder.Append($"<p>Total: {command.Price}DKK</p>");
             builder.Append("<br/>");
             builder.Append("<p>Ønsker du at annullere bookingen kan dette gøres via din profil</p>");
             builder.Append("<br/>");
