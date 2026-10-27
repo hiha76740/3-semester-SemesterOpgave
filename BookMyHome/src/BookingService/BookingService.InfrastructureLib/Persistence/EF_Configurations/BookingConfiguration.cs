@@ -48,6 +48,10 @@ internal class BookingConfiguration : IEntityTypeConfiguration<Booking>
                 .HasColumnName("EndDate");
             });
 
+        builder.Property(b => b.BookingNumber)
+            .HasDefaultValueSql("NEXT VALUE FOR BookingNumbers");
 
+        builder.HasIndex(b => b.BookingNumber)
+            .IsUnique();
     }
 }

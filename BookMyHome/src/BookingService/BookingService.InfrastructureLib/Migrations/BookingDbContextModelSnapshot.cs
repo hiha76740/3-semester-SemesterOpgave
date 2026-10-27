@@ -23,6 +23,9 @@ namespace BookingService.InfrastructureLib.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.HasSequence<int>("BookingNumbers")
+                .StartsAt(1000L);
+
             modelBuilder.Entity("BookingService.DomainLib.Entities.Booking", b =>
                 {
                     b.Property<Guid>("Id")
@@ -30,6 +33,11 @@ namespace BookingService.InfrastructureLib.Migrations
 
                     b.Property<Guid>("AccomodationId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("BookingNumber")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValueSql("NEXT VALUE FOR BookingNumbers");
 
                     b.Property<Guid>("GuestId")
                         .HasColumnType("uniqueidentifier");
@@ -59,6 +67,9 @@ namespace BookingService.InfrastructureLib.Migrations
                         });
 
                     b.HasKey("Id");
+
+                    b.HasIndex("BookingNumber")
+                        .IsUnique();
 
                     b.ToTable("Bookings");
                 });

@@ -7,6 +7,7 @@ namespace BookingService.DomainLib.Entities
     public class Booking
     {
         public BookingId Id { get; init; } = null!;
+        public int BookingNumber { get; init; }
         public BookingPeriod Period { get; init; } = null!;
         public BookingStatus Status { get; private set; }
         public decimal Price { get; init; }
