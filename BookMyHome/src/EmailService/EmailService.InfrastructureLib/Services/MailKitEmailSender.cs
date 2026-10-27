@@ -5,6 +5,7 @@ using MailKit.Security;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using MimeKit;
+using MimeKit.Utils;
 
 namespace EmailService.InfrastructureLib.Services;
 
@@ -21,10 +22,17 @@ public class MailKitEmailSender(IConfiguration appsettings, ILogger<MailKitEmail
             message.From.Add(new MailboxAddress("BookMyHome", "NoReply@BookMyHome.Test"));
             message.To.Add(new MailboxAddress(emailDto.Name,emailDto.Email));
             message.Subject = emailDto.Subject;
-            message.Body = new TextPart(emailDto.Subtype)
-            {
-                Text = emailDto.Body
-            };
+
+            var builder = new BodyBuilder();
+
+            var logoPath = Path.Combine(AppContext.BaseDirectory, "Assets", "BookMyHome-logo.png");
+
+            var logo = builder.LinkedResources.Add(logoPath);
+            logo.ContentId = MimeUtils.GenerateMessageId();
+
+            builder.HtmlBody = emailDto.Body.Replace("{{LogoCid}}", $"cid:{logo.ContentId}");
+
+            message.Body = builder.ToMessageBody();
 
             using var client = new SmtpClient();
 
