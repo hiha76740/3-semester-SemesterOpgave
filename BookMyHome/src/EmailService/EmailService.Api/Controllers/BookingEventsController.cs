@@ -7,9 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace EmailService.Api.Controllers
 {
     [ApiController]
-    public class BookingEventsController(
-        ISendBookingConfirmationHandler sendBookingConfirmation
-        ) : ControllerBase
+    public class BookingEventsController(ISendBookingConfirmationHandler sendBookingConfirmation) : ControllerBase
     {
         [Topic("pubsub", "booking-placed")]
         [HttpPost("/events/booking-placed")]
