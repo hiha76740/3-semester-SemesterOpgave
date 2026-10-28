@@ -3,6 +3,7 @@ using EmailService.ApplicationLib.Services;
 using EmailService.FacadeLib.Commands.DTOs;
 using EmailService.FacadeLib.Commands.Interfaces;
 using Microsoft.Extensions.Logging;
+using System.Globalization;
 using System.Text;
 using System.Text.Encodings.Web;
 
@@ -15,6 +16,9 @@ public class SendBookingConfirmationHandler(IEmailSenderService emailSender, ILo
         try
         {
             logger.LogInformation("Starting to send booking confirmation to email: {userEmail}", command.UserEmail);
+
+            var startDateFormatted = command.StartDate.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture);
+            var endDateFormatted = command.EndDate.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture);
 
             var subject = $"Bookingbekræftelse";
             var name = $"{command.UserFirstName} {command.UserLastName}";
@@ -40,7 +44,7 @@ public class SendBookingConfirmationHandler(IEmailSenderService emailSender, ILo
             builder.Append("<p>Tak for din booking.</p>");
             builder.Append("<br/>");
             builder.Append($"<p>Bookingnummer: {command.BookingNumber}</p>");
-            builder.Append($"<p>Periode: {command.StartDate} - {command.EndDate}</p>");
+            builder.Append($"<p>Periode: {startDateFormatted} - {endDateFormatted}</p>");
             builder.Append("<br/>");
             builder.Append($"<img src=\"{command.ImageUrl}\" alt=\"Listing image\" width=\"600\" height=\"500\" style=\"vertical-align:middle\">");
             builder.Append("<br/>");
