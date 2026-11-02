@@ -1,4 +1,4 @@
-﻿using AccomodationService.InfrastructureLib.Persistence;
+using AccomodationService.InfrastructureLib.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

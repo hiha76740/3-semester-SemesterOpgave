@@ -1,4 +1,4 @@
-﻿using AccomodationService.FacadeLib.Commands.DTOs.Accomodations;
+using AccomodationService.FacadeLib.Commands.DTOs.Accomodations;
 
 namespace AccomodationService.FacadeLib.Commands.Interfaces.Accomodations;
 

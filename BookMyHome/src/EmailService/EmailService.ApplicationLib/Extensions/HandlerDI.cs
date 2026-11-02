@@ -1,4 +1,4 @@
-﻿using EmailService.ApplicationLib.Handlers;
+using EmailService.ApplicationLib.Handlers;
 using EmailService.FacadeLib.Commands.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 

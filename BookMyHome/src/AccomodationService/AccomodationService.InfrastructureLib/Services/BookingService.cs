@@ -1,4 +1,4 @@
-﻿using AccomodationService.FacadeLib.Queries.Interfaces;
+using AccomodationService.FacadeLib.Queries.Interfaces;
 using Dapr.Client;
 using System.Globalization;
 using System.Net.Http.Json;

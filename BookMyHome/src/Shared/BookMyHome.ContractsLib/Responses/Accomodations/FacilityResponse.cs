@@ -1,6 +1,6 @@
-﻿namespace BookMyHome.ContractsLib.Responses.Accomodations;
+namespace BookMyHome.ContractsLib.Responses.Accomodations;
 
 public record FacilityResponse(
-    Guid Id, 
+    Guid Id,
     string Name
     );

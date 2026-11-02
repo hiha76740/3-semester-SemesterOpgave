@@ -1,4 +1,4 @@
-﻿using AccomodationService.DomainLib.Enums;
+using AccomodationService.DomainLib.Enums;
 using AccomodationService.DomainLib.ValueObjects;
 using Shared.BookMyHome.SharedKernelLib.Exceptions;
 
@@ -9,10 +9,16 @@ public class Accomodation
     public AccomodationId Id { get; init; } = null!;
     public string Title { get; init; } = null!;
     public HostId HostId { get; init; } = null!;
-    public AccomodationStatus Status { get; private set; }
+    public AccomodationStatus Status
+    {
+        get; private set;
+    }
     public Address Address { get; init; } = null!;
 
-    public string? ImageFileName { get; private set; }
+    public string? ImageFileName
+    {
+        get; private set;
+    }
 
     private readonly List<Listing> _listings = [];
     public IReadOnlyList<Listing> listings => _listings.AsReadOnly();
@@ -131,7 +137,7 @@ public class Accomodation
         if (string.IsNullOrWhiteSpace(title))
             throw new DomainException("Title can not be empty");
 
-        var address = new Address(street, postalCode, city,country);
+        var address = new Address(street, postalCode, city, country);
 
         var accomodation = new Accomodation(hostId, title, address);
 
@@ -156,5 +162,7 @@ public class Accomodation
     }
 
     // EF constructor
-    private Accomodation() { }
+    private Accomodation()
+    {
+    }
 }

@@ -1,4 +1,4 @@
-﻿using BookMyHome.ContractsLib.Events;
+using BookMyHome.ContractsLib.Events;
 using Dapr;
 using EmailService.Api.Mappers;
 using EmailService.FacadeLib.Commands.Interfaces;

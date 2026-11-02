@@ -1,4 +1,4 @@
-﻿namespace AccomodationService.FacadeLib.Commands.DTOs.Listings;
+namespace AccomodationService.FacadeLib.Commands.DTOs.Listings;
 
 public record CreateListingCommand(
     Guid HostId,
@@ -7,6 +7,6 @@ public record CreateListingCommand(
     decimal DailyPrice,
     string HouseRules,
     string AccomodationType,
-    Stream? ImageStream = null, 
+    Stream? ImageStream = null,
     string? Extension = null
     );

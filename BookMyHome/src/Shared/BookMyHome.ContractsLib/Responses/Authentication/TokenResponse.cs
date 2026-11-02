@@ -1,6 +1,6 @@
-﻿namespace BookMyHome.ContractsLib.Responses.Authentication;
+namespace BookMyHome.ContractsLib.Responses.Authentication;
 
 public record TokenResponse(
-    string AccessToken, 
+    string AccessToken,
     string RefreshToken
     );

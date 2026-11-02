@@ -1,4 +1,4 @@
-﻿using Shared.BookMyHome.SharedKernelLib.Exceptions;
+using Shared.BookMyHome.SharedKernelLib.Exceptions;
 
 namespace AccomodationService.DomainLib.Entities;
 
@@ -18,5 +18,7 @@ public class Facility
 
     }
 
-    private Facility() { }
+    private Facility()
+    {
+    }
 }

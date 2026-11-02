@@ -1,4 +1,4 @@
-﻿using AccomodationService.Api.Mapper;
+using AccomodationService.Api.Mapper;
 using AccomodationService.FacadeLib.Commands.Interfaces.Facilities;
 using AccomodationService.FacadeLib.Queries.Interfaces;
 using BookMyHome.BuildingBlocksLib.Helpers;
@@ -37,7 +37,7 @@ namespace AccomodationService.Api.Controllers
                     foreach (var item in list)
                     {
                         response.Add(item.AsResponse());
-                    } 
+                    }
                 }
 
                 return Ok(response);

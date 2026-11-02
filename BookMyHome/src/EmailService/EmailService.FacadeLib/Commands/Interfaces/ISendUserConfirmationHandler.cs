@@ -1,4 +1,4 @@
-﻿using EmailService.FacadeLib.Commands.DTOs;
+using EmailService.FacadeLib.Commands.DTOs;
 
 namespace EmailService.FacadeLib.Commands.Interfaces
 {

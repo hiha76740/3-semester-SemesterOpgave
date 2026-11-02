@@ -1,4 +1,4 @@
-﻿using BookingService.ApplicationLib.Handlers;
+using BookingService.ApplicationLib.Handlers;
 using BookingService.ApplicationLib.Repositories;
 using BookingService.ApplicationLib.Services;
 using BookingService.ApplicationLib.UnitOfWork;
@@ -30,12 +30,12 @@ public class CreateBookingTests
         var userEmailItem = new UserEmailItemResponse("Fornavn", "Efternavn", "Test@test.dk");
         var listingEmailItem = new ListingEmailItemResponse(
             "Listingnavn",
-            1, 
+            1,
             "Hus regler",
             "House",
             "Testvej 2",
             "1234",
-            "By", 
+            "By",
             "DK",
             Array.Empty<string>(),
             null);
@@ -74,7 +74,7 @@ public class CreateBookingTests
             endDate,
             price);
 
-        var handler = new CreateBookingHandler(mockGuestService.Object, mockAccomodationService.Object,mockListingService.Object, mockBookingRepo.Object, mockUnitOfWork.Object, mockIntergrationEventPublisher.Object, mockLogger.Object) as ICreateBookingHandler;
+        var handler = new CreateBookingHandler(mockGuestService.Object, mockAccomodationService.Object, mockListingService.Object, mockBookingRepo.Object, mockUnitOfWork.Object, mockIntergrationEventPublisher.Object, mockLogger.Object) as ICreateBookingHandler;
 
         // Act
         await handler.HandleAsync(command);

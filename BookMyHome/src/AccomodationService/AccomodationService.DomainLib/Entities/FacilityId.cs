@@ -1,3 +1,3 @@
-﻿namespace AccomodationService.DomainLib.Entities;
+namespace AccomodationService.DomainLib.Entities;
 
 public record FacilityId(Guid Value);

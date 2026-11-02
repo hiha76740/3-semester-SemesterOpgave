@@ -1,4 +1,4 @@
-﻿using UserService.ApplicationLib.Authentication;
+using UserService.ApplicationLib.Authentication;
 using UserService.ApplicationLib.Repositories;
 using UserService.FacadeLib.Commands.DTOs;
 using UserService.FacadeLib.Commands.Interfaces;

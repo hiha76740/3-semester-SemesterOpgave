@@ -1,4 +1,4 @@
-﻿using UserService.FacadeLib.Commands.DTOs;
+using UserService.FacadeLib.Commands.DTOs;
 
 namespace UserService.FacadeLib.Commands.Interfaces;
 

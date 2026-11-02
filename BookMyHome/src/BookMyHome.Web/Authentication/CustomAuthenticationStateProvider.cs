@@ -1,4 +1,4 @@
-﻿using BookMyHome.Web.ServiceInterfaces;
+using BookMyHome.Web.ServiceInterfaces;
 using Microsoft.AspNetCore.Components.Authorization;
 using System.Net;
 using System.Security.Claims;

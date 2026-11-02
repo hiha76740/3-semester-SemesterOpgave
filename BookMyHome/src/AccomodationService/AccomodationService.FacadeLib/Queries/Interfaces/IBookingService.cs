@@ -1,4 +1,4 @@
-﻿namespace AccomodationService.FacadeLib.Queries.Interfaces;
+namespace AccomodationService.FacadeLib.Queries.Interfaces;
 
 public interface IBookingService
 {

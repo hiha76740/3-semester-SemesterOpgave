@@ -1,4 +1,4 @@
-﻿using BookMyHome.ContractsLib.Responses.Users;
+using BookMyHome.ContractsLib.Responses.Users;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;

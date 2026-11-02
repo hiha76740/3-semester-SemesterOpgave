@@ -1,4 +1,4 @@
-﻿namespace BookMyHome.Web.States
+namespace BookMyHome.Web.States
 {
     public class BookingState
     {
@@ -11,7 +11,8 @@
         public void Clear()
         {
             StartDate = DateOnly.FromDateTime(DateTime.Today);
-            EndDate = DateOnly.FromDateTime(DateTime.Today.AddDays(7)); ;
+            EndDate = DateOnly.FromDateTime(DateTime.Today.AddDays(7));
+            ;
             AccomodationId = Guid.Empty;
             DailyPrice = 0;
         }

@@ -1,4 +1,4 @@
-﻿using BookingService.Api.Mapper;
+using BookingService.Api.Mapper;
 using BookingService.FacadeLib.Commands.DTOs;
 using BookingService.FacadeLib.Commands.Interfaces;
 using BookingService.FacadeLib.Queries.Interfaces;
@@ -216,7 +216,7 @@ namespace BookingService.Api.Controllers
                 var guestId = UserHelper.GetCurrentUserId(HttpContext.User);
 
                 if (guestId == null ||
-                    UserHelper.IsValidRole(HttpContext.User,"Guest") == false &&
+                    UserHelper.IsValidRole(HttpContext.User, "Guest") == false &&
                     UserHelper.IsValidRole(HttpContext.User, "Host") == false
                     )
                     return Unauthorized("Incorrect permission");

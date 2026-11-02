@@ -1,4 +1,4 @@
-﻿using BookingService.DomainLib.ValueObjects;
+using BookingService.DomainLib.ValueObjects;
 using Shared.BookMyHome.SharedKernelLib.Exceptions;
 
 namespace BookingService.DomainLib.Tests;
@@ -43,6 +43,6 @@ public class BookingPeriodTests
 
         // Act & Assert
         Assert.Throws<DomainException>(() => CreateBookingPeriod(StartDate, endDate));
-        
+
     }
 }

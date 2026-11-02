@@ -1,11 +1,11 @@
-﻿namespace BookMyHome.ContractsLib.Responses.Users;
+namespace BookMyHome.ContractsLib.Responses.Users;
 
 public record UserResponse(
     Guid Id,
     string Firstname,
     string Lastname,
     DateOnly Birthdate,
-    string Street, 
+    string Street,
     string PostalCode,
     string City,
     string PhoneNumber,

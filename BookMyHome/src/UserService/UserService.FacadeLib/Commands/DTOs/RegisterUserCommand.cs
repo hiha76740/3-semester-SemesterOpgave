@@ -1,4 +1,4 @@
-﻿namespace UserService.FacadeLib.Commands.DTOs;
+namespace UserService.FacadeLib.Commands.DTOs;
 
 public record RegisterUserCommand(
     string FirstName,

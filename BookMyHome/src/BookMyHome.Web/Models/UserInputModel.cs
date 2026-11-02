@@ -1,4 +1,4 @@
-﻿namespace BookMyHome.Web.Models
+namespace BookMyHome.Web.Models
 {
     public class UserInputModel
     {

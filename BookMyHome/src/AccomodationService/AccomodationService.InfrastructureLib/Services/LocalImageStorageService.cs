@@ -1,4 +1,4 @@
-﻿using AccomodationService.ApplicationLib.Handlers.Services;
+using AccomodationService.ApplicationLib.Handlers.Services;
 
 namespace AccomodationService.InfrastructureLib.Services
 {

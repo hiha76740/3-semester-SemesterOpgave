@@ -1,4 +1,4 @@
-﻿namespace BookMyHome.BuildingBlocksLib.Messaging;
+namespace BookMyHome.BuildingBlocksLib.Messaging;
 
 public interface IIntegrationEventPublisher
 {

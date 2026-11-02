@@ -1,4 +1,4 @@
-﻿using AccomodationService.FacadeLib.Commands.DTOs.Accomodations;
+using AccomodationService.FacadeLib.Commands.DTOs.Accomodations;
 using AccomodationService.FacadeLib.Queries.DTOs;
 using BookMyHome.ContractsLib.Requests.Accomodations;
 using BookMyHome.ContractsLib.Responses.Accomodations;
@@ -16,7 +16,7 @@ namespace AccomodationService.Api.Mapper
                 Dto.PostalCode,
                 Dto.City,
                 Dto.Country,
-                Dto.Facilities.Select(f => new FacilityResponse(f.Id,f.Name)).ToList(),
+                Dto.Facilities.Select(f => new FacilityResponse(f.Id, f.Name)).ToList(),
                 Dto.Status,
                 url
                 );

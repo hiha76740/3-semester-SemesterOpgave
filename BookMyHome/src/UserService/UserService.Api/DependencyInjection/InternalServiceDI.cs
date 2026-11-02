@@ -1,4 +1,4 @@
-﻿using BookMyHome.BuildingBlocksLib.Messaging;
+using BookMyHome.BuildingBlocksLib.Messaging;
 using UserService.Api.Services;
 using UserService.InfrastructureLib.EventPublishers;
 

@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity;
 using UserService.ApplicationLib.Authentication;
 
 namespace UserService.InfrastructureLib.Authentication;

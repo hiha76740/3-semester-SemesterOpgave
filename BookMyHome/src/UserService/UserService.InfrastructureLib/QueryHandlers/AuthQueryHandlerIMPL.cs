@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using UserService.DomainLib.Entities;
 using UserService.FacadeLib.Queries.DTOs;
 using UserService.FacadeLib.Queries.Interfaces;

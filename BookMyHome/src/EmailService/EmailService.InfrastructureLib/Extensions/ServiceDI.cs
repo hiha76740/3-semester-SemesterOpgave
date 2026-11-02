@@ -1,4 +1,4 @@
-﻿using EmailService.ApplicationLib.Services;
+using EmailService.ApplicationLib.Services;
 using EmailService.InfrastructureLib.Services;
 using Microsoft.Extensions.DependencyInjection;
 

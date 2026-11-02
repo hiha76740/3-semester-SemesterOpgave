@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 using UserService.ApplicationLib.Repositories;
 using UserService.InfrastructureLib.Repositories;
 

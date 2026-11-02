@@ -1,4 +1,4 @@
-﻿using AccomodationService.Api.Mapper;
+using AccomodationService.Api.Mapper;
 using AccomodationService.FacadeLib.Commands.DTOs.Listings;
 using AccomodationService.FacadeLib.Commands.Interfaces.Listings;
 using AccomodationService.FacadeLib.Queries.Interfaces;

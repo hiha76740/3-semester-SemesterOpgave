@@ -1,4 +1,4 @@
-﻿using EmailService.ApplicationLib.Dtos;
+using EmailService.ApplicationLib.Dtos;
 using EmailService.ApplicationLib.Services;
 using MailKit.Net.Smtp;
 using MailKit.Security;
@@ -20,7 +20,7 @@ public class MailKitEmailSender(IConfiguration appsettings, ILogger<MailKitEmail
             var message = new MimeMessage();
 
             message.From.Add(new MailboxAddress("BookMyHome", "NoReply@BookMyHome.Test"));
-            message.To.Add(new MailboxAddress(emailDto.Name,emailDto.Email));
+            message.To.Add(new MailboxAddress(emailDto.Name, emailDto.Email));
             message.Subject = emailDto.Subject;
 
             var builder = new BodyBuilder();

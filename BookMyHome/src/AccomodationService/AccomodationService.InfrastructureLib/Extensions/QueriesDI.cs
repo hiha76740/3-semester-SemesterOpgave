@@ -1,4 +1,4 @@
-﻿using AccomodationService.FacadeLib.Queries.Interfaces;
+using AccomodationService.FacadeLib.Queries.Interfaces;
 using AccomodationService.InfrastructureLib.QueryHandlers;
 using Microsoft.Extensions.DependencyInjection;
 

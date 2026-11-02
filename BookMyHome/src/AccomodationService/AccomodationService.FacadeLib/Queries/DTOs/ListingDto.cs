@@ -1,4 +1,4 @@
-﻿namespace AccomodationService.FacadeLib.Queries.DTOs;
+namespace AccomodationService.FacadeLib.Queries.DTOs;
 
 public record ListingDto(
     Guid ListingId,

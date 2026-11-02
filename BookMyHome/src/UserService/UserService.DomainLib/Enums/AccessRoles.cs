@@ -1,4 +1,4 @@
-﻿namespace UserService.DomainLib.Enums;
+namespace UserService.DomainLib.Enums;
 
 public enum AccessRoles
 {

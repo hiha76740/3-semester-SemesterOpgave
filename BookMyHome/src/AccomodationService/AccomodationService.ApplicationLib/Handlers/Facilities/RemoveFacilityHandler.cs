@@ -1,4 +1,4 @@
-﻿using AccomodationService.ApplicationLib.Repositories;
+using AccomodationService.ApplicationLib.Repositories;
 using AccomodationService.DomainLib.Entities;
 using AccomodationService.DomainLib.ValueObjects;
 using AccomodationService.FacadeLib.Commands.DTOs.Facilities;
@@ -11,14 +11,14 @@ public class RemoveFacilityHandler(IAccomodationRepository repo) : IRemoveFacili
 {
     async Task IRemoveFacilityHandler.Handle(RemoveFacilityCommand command)
     {
-		try
-		{
-			var hostId = new HostId(command.HostId);
-			var accomodationId = new AccomodationId(command.AccomodationId);
-			var facilityId = new FacilityId(command.FacilityId);
+        try
+        {
+            var hostId = new HostId(command.HostId);
+            var accomodationId = new AccomodationId(command.AccomodationId);
+            var facilityId = new FacilityId(command.FacilityId);
 
-			var accomodation = await repo.GetAccomodationWithFacilitiesAsync(accomodationId);
-			var facility = await repo.GetFacilityByIdAsync(facilityId);
+            var accomodation = await repo.GetAccomodationWithFacilitiesAsync(accomodationId);
+            var facility = await repo.GetFacilityByIdAsync(facilityId);
 
             if (accomodation == null)
                 throw new NotFoundException("Accomodation was not found");
@@ -26,19 +26,19 @@ public class RemoveFacilityHandler(IAccomodationRepository repo) : IRemoveFacili
             if (facility == null)
                 throw new NotFoundException("Facility was not found");
 
-			if (accomodation.HostId != hostId)
-				throw new UnauthorizedAccessException("Only the owner of the accomodation can remove facilities");
+            if (accomodation.HostId != hostId)
+                throw new UnauthorizedAccessException("Only the owner of the accomodation can remove facilities");
 
-			accomodation.RemoveFacility(facility);
+            accomodation.RemoveFacility(facility);
 
-			await repo.SaveAsync();
+            await repo.SaveAsync();
 
         }
-		catch (Exception)
-		{
+        catch (Exception)
+        {
 
-			throw;
-		}
+            throw;
+        }
 
 
     }

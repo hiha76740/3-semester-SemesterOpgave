@@ -1,4 +1,4 @@
-﻿using BookMyHome.ContractsLib.Responses.Users;
+using BookMyHome.ContractsLib.Responses.Users;
 using UserService.FacadeLib.Queries.DTOs;
 
 namespace UserService.Api.Mapper

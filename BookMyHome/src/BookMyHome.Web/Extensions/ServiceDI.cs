@@ -1,4 +1,4 @@
-﻿using BookMyHome.Web.ServiceInterfaces;
+using BookMyHome.Web.ServiceInterfaces;
 using BookMyHome.Web.Services;
 
 namespace BookMyHome.Web.Extensions

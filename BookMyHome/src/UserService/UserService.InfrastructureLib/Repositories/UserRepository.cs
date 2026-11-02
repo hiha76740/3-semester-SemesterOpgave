@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using UserService.ApplicationLib.Repositories;
 using UserService.DomainLib.Entities;
 using UserService.InfrastructureLib.Persistence;

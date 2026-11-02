@@ -1,4 +1,4 @@
-﻿using EmailService.ApplicationLib.Dtos;
+using EmailService.ApplicationLib.Dtos;
 using EmailService.ApplicationLib.Handlers;
 using EmailService.ApplicationLib.Services;
 using EmailService.FacadeLib.Commands.DTOs;
@@ -18,13 +18,13 @@ namespace EmailService.ApplicationLib.Tests.Users
             var mockLogger = new Mock<ILogger<SendUserConfirmationHandler>>();
 
             var command = new SendUserConfirmationCommand(
-                "testfirstname", 
-                "testlastname", 
+                "testfirstname",
+                "testlastname",
                 "test@test.dk",
                 "testusername"
                 );
 
-            var handler = new SendUserConfirmationHandler(mockEmailSender.Object,mockLogger.Object) as ISendUserConfirmationHandler;
+            var handler = new SendUserConfirmationHandler(mockEmailSender.Object, mockLogger.Object) as ISendUserConfirmationHandler;
 
             // Act
             await handler.HandleAsync(command);

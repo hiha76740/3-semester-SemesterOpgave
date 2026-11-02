@@ -1,10 +1,10 @@
-﻿using AccomodationService.FacadeLib.Queries.DTOs;
+using AccomodationService.FacadeLib.Queries.DTOs;
 
 namespace AccomodationService.FacadeLib.Queries.Interfaces;
 
 public interface IAccomodationQueries
 {
-    Task<AccomodationDto?> GetAccomodationByIdAsync (Guid id);
+    Task<AccomodationDto?> GetAccomodationByIdAsync(Guid id);
 
     Task<IReadOnlyList<AccomodationDto>> GetAllAccomodationsAsync();
 

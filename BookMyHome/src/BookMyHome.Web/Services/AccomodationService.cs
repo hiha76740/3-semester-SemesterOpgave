@@ -1,4 +1,4 @@
-﻿using BookMyHome.ContractsLib.Requests.Accomodations;
+using BookMyHome.ContractsLib.Requests.Accomodations;
 using BookMyHome.ContractsLib.Responses.Accomodations;
 using BookMyHome.Web.ServiceInterfaces;
 using Microsoft.AspNetCore.Components.Forms;
@@ -18,7 +18,7 @@ namespace BookMyHome.Web.Services
 
 
             var requestContent = JsonContent.Create(createRequest);
-            content.Add(requestContent,"data");
+            content.Add(requestContent, "data");
 
 
             if (imageFile != null)
@@ -119,6 +119,6 @@ namespace BookMyHome.Web.Services
             return accomodation;
         }
 
-        
+
     }
 }

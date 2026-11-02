@@ -1,4 +1,4 @@
-﻿using BookingService.ApplicationLib.Services;
+using BookingService.ApplicationLib.Services;
 using BookingService.DomainLib.Entities;
 using BookingService.DomainLib.Enums;
 using BookingService.DomainLib.ValueObjects;
@@ -24,7 +24,7 @@ public class BookingQueryHandlerIMPL(BookingDbContext db, IAccomodationService a
             );
     }
 
-    
+
 
     async Task<IReadOnlyList<BookingDTO>> IBookingQueries.GetAllAsync()
     {
@@ -71,13 +71,13 @@ public class BookingQueryHandlerIMPL(BookingDbContext db, IAccomodationService a
             var summary = await accomodationService.GetAccomodationSummaryAsync(booking.AccomodationId, booking.ListingId);
 
             var userBooking = new BookingSummaryDto(
-                booking.Id, 
+                booking.Id,
                 booking.BookingNumber,
                 summary.ListingName,
-                summary.ListingType, 
+                summary.ListingType,
                 summary.City,
                 summary.Country,
-                booking.StartDate, 
+                booking.StartDate,
                 booking.EndDate,
                 booking.Price,
                 booking.Status

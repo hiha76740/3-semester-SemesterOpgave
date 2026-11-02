@@ -1,4 +1,4 @@
-﻿namespace BookMyHome.ContractsLib.Requests.Bookings;
+namespace BookMyHome.ContractsLib.Requests.Bookings;
 
 public record CreateBookingRequest(
     Guid GuestId,

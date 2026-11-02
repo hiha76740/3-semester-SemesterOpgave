@@ -1,4 +1,4 @@
-﻿using BookingService.FacadeLib.Queries.Interfaces;
+using BookingService.FacadeLib.Queries.Interfaces;
 using BookingService.InfrastructureLib.QueryHandlers;
 using Microsoft.Extensions.DependencyInjection;
 

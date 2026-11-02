@@ -1,4 +1,4 @@
-﻿namespace UserService.FacadeLib.Queries.DTOs;
+namespace UserService.FacadeLib.Queries.DTOs;
 
 public record UserDto(
     Guid Id,

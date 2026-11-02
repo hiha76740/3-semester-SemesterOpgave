@@ -1,4 +1,4 @@
-﻿using BookingService.ApplicationLib.Services;
+using BookingService.ApplicationLib.Services;
 using BookingService.InfrastructureLib.Services;
 using Microsoft.Extensions.DependencyInjection;
 
