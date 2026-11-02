@@ -3,6 +3,9 @@
     <Project Path="Aspire/BookMyHome.AppHost/BookMyHome.AppHost.csproj" />
     <Project Path="Aspire/BookMyHome.ServiceDefaults/BookMyHome.ServiceDefaults.csproj" />
   </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+  </Folder>
   <Folder Name="/src/">
     <Project Path="src/BookMyHome.Web/BookMyHome.Web.csproj" />
   </Folder>
