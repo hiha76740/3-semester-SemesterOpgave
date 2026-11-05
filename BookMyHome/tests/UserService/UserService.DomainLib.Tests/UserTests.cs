@@ -1,4 +1,4 @@
-using UserService.DomainLib.Entities;
+﻿using UserService.DomainLib.Entities;
 using UserService.DomainLib.Enums;
 
 namespace UserService.DomainLib.Tests;

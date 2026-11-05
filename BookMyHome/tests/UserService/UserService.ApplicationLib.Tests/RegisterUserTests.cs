@@ -1,4 +1,4 @@
-using BookMyHome.BuildingBlocksLib.Messaging;
+﻿using BookMyHome.BuildingBlocksLib.Messaging;
 using Microsoft.Extensions.Logging;
 using Moq;
 using UserService.ApplicationLib.Authentication;

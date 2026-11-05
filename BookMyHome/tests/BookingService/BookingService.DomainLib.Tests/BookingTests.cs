@@ -1,4 +1,4 @@
-using BookingService.DomainLib.Entities;
+﻿using BookingService.DomainLib.Entities;
 using BookingService.DomainLib.Enums;
 using BookingService.DomainLib.ValueObjects;
 using Shared.BookMyHome.SharedKernelLib.Exceptions;
@@ -78,7 +78,7 @@ public class BookingTests
         var booking = CreateBookingWithNoOverlap();
 
         var expected = BookingStatus.Cancelled;
-
+        
         // Act
         booking.CancelBooking();
 

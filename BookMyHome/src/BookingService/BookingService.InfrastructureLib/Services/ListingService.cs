@@ -1,4 +1,4 @@
-using BookingService.ApplicationLib.Services;
+﻿using BookingService.ApplicationLib.Services;
 using BookingService.DomainLib.ValueObjects;
 using BookMyHome.ContractsLib.Responses.Accomodations;
 using Dapr.Client;
@@ -26,5 +26,5 @@ public class ListingService(DaprClient daprClient) : IListingService
         return item;
     }
 
-
+    
 }

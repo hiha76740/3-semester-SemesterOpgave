@@ -1,4 +1,4 @@
-using AccomodationService.ApplicationLib.Handlers.Accomodations;
+﻿using AccomodationService.ApplicationLib.Handlers.Accomodations;
 using AccomodationService.ApplicationLib.Handlers.Facilities;
 using AccomodationService.ApplicationLib.Handlers.Listings;
 using AccomodationService.FacadeLib.Commands.Interfaces.Accomodations;
@@ -20,7 +20,7 @@ public static class HandlerDI
         services.AddScoped<IRemoveFacilityHandler, RemoveFacilityHandler>();
         services.AddScoped<IUpdateAccomodationStatusHandler, UpdateAccomodationStatusHandler>();
         services.AddScoped<IUploadAccomdationImageHandler, UploadAccomodationImageHandler>();
-        services.AddScoped<IUpdateAccomodationHandler, UpdateAccomodationHandler>();
+        services.AddScoped<IUpdateAccomodationHandler,  UpdateAccomodationHandler>();
         services.AddScoped<IUploadListingImageHandler, UploadListingImageHandler>();
 
         return services;

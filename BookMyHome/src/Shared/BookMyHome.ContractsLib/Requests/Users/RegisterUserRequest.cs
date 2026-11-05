@@ -1,4 +1,4 @@
-namespace BookMyHome.ContractsLib.Requests.Users;
+﻿namespace BookMyHome.ContractsLib.Requests.Users;
 
 public record RegisterUserRequest(
     string FirstName,

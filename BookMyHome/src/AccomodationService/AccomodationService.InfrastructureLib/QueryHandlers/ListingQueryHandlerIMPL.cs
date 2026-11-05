@@ -1,4 +1,4 @@
-using AccomodationService.DomainLib.Entities;
+﻿using AccomodationService.DomainLib.Entities;
 using AccomodationService.FacadeLib.Queries.DTOs;
 using AccomodationService.FacadeLib.Queries.Interfaces;
 using AccomodationService.InfrastructureLib.Persistence;

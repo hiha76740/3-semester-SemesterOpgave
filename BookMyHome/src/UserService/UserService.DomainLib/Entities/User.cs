@@ -1,4 +1,4 @@
-using Shared.BookMyHome.SharedKernelLib.Exceptions;
+﻿using Shared.BookMyHome.SharedKernelLib.Exceptions;
 using UserService.DomainLib.Enums;
 using UserService.DomainLib.ValueObject;
 
@@ -9,29 +9,17 @@ namespace UserService.DomainLib.Entities
         public UserId Id { get; init; } = null!;
         public string FirstName { get; private set; } = string.Empty;
         public string LastName { get; private set; } = string.Empty;
-        public DateOnly Birthdate
-        {
-            get; init;
-        }
+        public DateOnly Birthdate { get; init; }
         public Address Address { get; private set; } = null!;
         public PhoneNumber PhoneNumber { get; private set; } = null!;
         public Email Email { get; private set; } = null!;
-        public AccessRoles Role
-        {
-            get; private set;
-        }
+        public AccessRoles Role { get; private set; }
 
         public string Username { get; init; } = string.Empty;
         public string PasswordHash { get; private set; } = string.Empty;
 
-        public string? RefreshToken
-        {
-            get; private set;
-        }
-        public DateTime? RefreshTokenExpiryTime
-        {
-            get; private set;
-        }
+        public string? RefreshToken { get; private set; }
+        public DateTime? RefreshTokenExpiryTime { get; private set; }
 
 
 
@@ -152,8 +140,6 @@ namespace UserService.DomainLib.Entities
         }
 
         // EF constructor
-        private User()
-        {
-        }
+        private User() { }
     }
 }

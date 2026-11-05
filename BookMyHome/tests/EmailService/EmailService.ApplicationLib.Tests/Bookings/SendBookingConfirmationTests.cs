@@ -1,4 +1,4 @@
-using EmailService.ApplicationLib.Dtos;
+﻿using EmailService.ApplicationLib.Dtos;
 using EmailService.ApplicationLib.Handlers;
 using EmailService.ApplicationLib.Services;
 using EmailService.FacadeLib.Commands.DTOs;
@@ -43,6 +43,6 @@ public class SendBookingConfirmationTests
         await handler.HandleAsync(command);
 
         // Assert
-        mockEmailSender.Verify(s => s.SendAsync(It.IsAny<SendEmailDto>()), Times.Once);
+        mockEmailSender.Verify(s => s.SendAsync(It.IsAny<SendEmailDto>()),Times.Once);
     }
 }

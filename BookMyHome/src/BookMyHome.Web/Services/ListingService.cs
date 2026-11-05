@@ -1,4 +1,4 @@
-using BookMyHome.ContractsLib.Requests.Accomodations;
+﻿using BookMyHome.ContractsLib.Requests.Accomodations;
 using BookMyHome.ContractsLib.Responses.Accomodations;
 using BookMyHome.Web.ServiceInterfaces;
 using Microsoft.AspNetCore.Components.Forms;
@@ -142,7 +142,7 @@ namespace BookMyHome.Web.Services
             return listings;
         }
 
-        async Task<ListingResponse> IListingService.GetListingDetailsAsync(Guid accomodationId, Guid listingId)
+        async Task<ListingResponse> IListingService.GetListingDetailsAsync(Guid accomodationId,Guid listingId)
         {
             var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}/details/{accomodationId}/listings/{listingId}");
 
@@ -161,6 +161,6 @@ namespace BookMyHome.Web.Services
 
         }
 
-
+        
     }
 }

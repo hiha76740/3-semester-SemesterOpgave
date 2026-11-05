@@ -1,4 +1,4 @@
-using AccomodationService.ApplicationLib.Handlers.Accomodations;
+﻿using AccomodationService.ApplicationLib.Handlers.Accomodations;
 using AccomodationService.ApplicationLib.Handlers.Services;
 using AccomodationService.ApplicationLib.Repositories;
 using AccomodationService.DomainLib.Entities;
@@ -46,6 +46,6 @@ public class CreateAccomodationTests
 
         // Assert
         mockAccomodationRepo.Verify(r => r.CreateAsync(It.IsAny<Accomodation>()), Times.Once);
-        mockAccomodationRepo.Verify(r => r.SaveAsync(), Times.Once);
+        mockAccomodationRepo.Verify(r => r.SaveAsync(),Times.Once);
     }
 }

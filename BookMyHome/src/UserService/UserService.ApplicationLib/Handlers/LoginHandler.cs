@@ -1,4 +1,4 @@
-using UserService.ApplicationLib.Authentication;
+﻿using UserService.ApplicationLib.Authentication;
 using UserService.ApplicationLib.Repositories;
 using UserService.FacadeLib.Commands.DTOs;
 using UserService.FacadeLib.Commands.Interfaces;
@@ -19,10 +19,10 @@ namespace UserService.ApplicationLib.Handlers
 
 
             string token = tokenService.CreateToken(user);
-
+            
             string refreshToken = refreshTokenService.GenerateRefreshToken();
 
-            user.SetRefreshToken(refreshToken, true);
+            user.SetRefreshToken(refreshToken,true);
 
             await userRepo.SaveAsync();
 

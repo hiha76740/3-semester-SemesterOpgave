@@ -1,4 +1,4 @@
-using BookMyHome.BuildingBlocksLib.Helpers;
+﻿using BookMyHome.BuildingBlocksLib.Helpers;
 using BookMyHome.ContractsLib.Requests.Users;
 using BookMyHome.ContractsLib.Responses.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -136,7 +136,7 @@ namespace UserService.Api.Controllers
         [EndpointSummary("This endpoint will log you out")]
         [EndpointDescription("Deletes the access and refresh token and returns NoContent")]
         [ProducesResponseType(StatusCodes.Status200OK, Description = "Deletion of cookies completed succesfully")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Something went wrong while deleting cookies")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Description ="Something went wrong while deleting cookies")]
         public async Task<ActionResult> Logout()
         {
             try
@@ -151,6 +151,6 @@ namespace UserService.Api.Controllers
             {
                 return BadRequest(ex.Message);
             }
-        }
+        }      
     }
 }

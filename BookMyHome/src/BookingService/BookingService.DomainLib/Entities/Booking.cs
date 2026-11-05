@@ -1,4 +1,4 @@
-using BookingService.DomainLib.Enums;
+﻿using BookingService.DomainLib.Enums;
 using BookingService.DomainLib.ValueObjects;
 using Shared.BookMyHome.SharedKernelLib.Exceptions;
 
@@ -7,19 +7,10 @@ namespace BookingService.DomainLib.Entities
     public class Booking
     {
         public BookingId Id { get; init; } = null!;
-        public int BookingNumber
-        {
-            get; init;
-        }
+        public int BookingNumber { get; init; }
         public BookingPeriod Period { get; init; } = null!;
-        public BookingStatus Status
-        {
-            get; private set;
-        }
-        public decimal Price
-        {
-            get; init;
-        }
+        public BookingStatus Status { get; private set; }
+        public decimal Price { get; init; }
 
         public GuestId GuestId { get; init; } = null!;
         public AccomodationId AccomodationId { get; init; } = null!;
@@ -32,7 +23,7 @@ namespace BookingService.DomainLib.Entities
 
             var bookingPeriod = new BookingPeriod(startDate, endDate);
 
-            var booking = new Booking(guestId, accomodationId, listingId, bookingPeriod, price);
+            var booking = new Booking(guestId, accomodationId,listingId, bookingPeriod, price);
 
             return booking;
         }
@@ -45,7 +36,7 @@ namespace BookingService.DomainLib.Entities
             Status = BookingStatus.Cancelled;
         }
 
-        private Booking(GuestId guestId, AccomodationId accomodationId, ListingId listingId, BookingPeriod bookingPeriod, decimal price)
+        private Booking(GuestId guestId, AccomodationId accomodationId,ListingId listingId, BookingPeriod bookingPeriod, decimal price)
         {
             Id = new BookingId(Guid.NewGuid());
             GuestId = guestId;
@@ -57,9 +48,7 @@ namespace BookingService.DomainLib.Entities
         }
 
         // EF Constructor
-        private Booking()
-        {
-        }
+        private Booking() { }
 
     }
 }

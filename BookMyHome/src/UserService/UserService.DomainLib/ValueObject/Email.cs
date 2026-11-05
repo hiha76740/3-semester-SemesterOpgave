@@ -1,13 +1,10 @@
-using Shared.BookMyHome.SharedKernelLib.Exceptions;
+﻿using Shared.BookMyHome.SharedKernelLib.Exceptions;
 
 namespace UserService.DomainLib.ValueObject;
 
 public record Email
 {
-    public string Value
-    {
-        get; init;
-    }
+    public string Value { get; init; }
 
     public Email(string value)
     {

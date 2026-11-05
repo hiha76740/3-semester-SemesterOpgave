@@ -1,4 +1,4 @@
-namespace BookMyHome.Yarp.Extensions;
+﻿namespace BookMyHome.Yarp.Extensions;
 
 public static class CorsDI
 {

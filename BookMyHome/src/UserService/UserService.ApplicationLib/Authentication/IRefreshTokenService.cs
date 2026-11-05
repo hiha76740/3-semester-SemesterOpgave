@@ -1,4 +1,4 @@
-using UserService.DomainLib.Entities;
+﻿using UserService.DomainLib.Entities;
 
 namespace UserService.ApplicationLib.Authentication;
 

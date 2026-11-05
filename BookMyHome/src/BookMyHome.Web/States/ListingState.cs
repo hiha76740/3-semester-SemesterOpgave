@@ -1,4 +1,4 @@
-namespace BookMyHome.Web.States
+﻿namespace BookMyHome.Web.States
 {
     public class ListingState
     {
@@ -24,10 +24,10 @@ namespace BookMyHome.Web.States
         public void Clear()
         {
             Name = string.Empty;
-            Street = string.Empty;
-            PostalCode = string.Empty;
-            City = string.Empty;
-            Country = string.Empty;
+            Street= string.Empty;
+            PostalCode= string.Empty;
+            City= string.Empty;
+            Country= string.Empty;
             Type = string.Empty;
         }
 

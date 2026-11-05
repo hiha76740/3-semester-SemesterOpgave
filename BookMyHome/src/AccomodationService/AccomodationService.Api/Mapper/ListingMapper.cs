@@ -1,4 +1,4 @@
-using AccomodationService.FacadeLib.Commands.DTOs.Listings;
+﻿using AccomodationService.FacadeLib.Commands.DTOs.Listings;
 using AccomodationService.FacadeLib.Queries.DTOs;
 using BookMyHome.ContractsLib.Requests.Accomodations;
 using BookMyHome.ContractsLib.Responses.Accomodations;
@@ -31,7 +31,7 @@ public static class ListingMapper
 
     public static ListingEmailItemResponse AsEmailItemReponse(this ListingEmailItemDto dto, string? url)
     {
-        var output = new ListingEmailItemResponse(
+        var output = new ListingEmailItemResponse(         
             dto.ListingName,
             dto.DailyPrice,
             dto.HouseRules,

@@ -1,16 +1,13 @@
-using BookingService.DomainLib.Entities;
+﻿using BookingService.DomainLib.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace BookingService.InfrastructureLib.Persistence
 {
     public class BookingDbContext : DbContext
     {
-        public DbSet<Booking> Bookings
-        {
-            get; set;
-        }
+        public DbSet<Booking> Bookings { get; set; }
 
-        public BookingDbContext(DbContextOptions<BookingDbContext> options) : base(options) { }
+        public BookingDbContext(DbContextOptions<BookingDbContext > options) : base(options) { }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -22,6 +19,6 @@ namespace BookingService.InfrastructureLib.Persistence
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(BookingDbContext).Assembly);
 
         }
-
+        
     }
 }

@@ -1,4 +1,4 @@
-namespace AccomodationService.DomainLib.Enums;
+﻿namespace AccomodationService.DomainLib.Enums;
 
 public enum ListingStatus
 {

@@ -1,4 +1,4 @@
-namespace AccomodationService.DomainLib.Tests;
+﻿namespace AccomodationService.DomainLib.Tests;
 
 internal class ListingTests
 {

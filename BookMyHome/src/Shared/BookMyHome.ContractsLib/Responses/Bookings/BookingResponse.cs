@@ -1,11 +1,11 @@
-namespace BookMyHome.ContractsLib.Responses.Bookings;
+﻿namespace BookMyHome.ContractsLib.Responses.Bookings;
 
 public record BookingResponse(
     Guid Id,
     int BookingNumber,
-    Guid GuestId,
-    Guid AccomodationId,
+    Guid GuestId, 
+    Guid AccomodationId, 
     DateOnly StartDate,
-    DateOnly EndDate,
+    DateOnly EndDate, 
     decimal Price
     );

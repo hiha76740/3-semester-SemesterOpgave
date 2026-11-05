@@ -1,3 +1,3 @@
-namespace UserService.DomainLib.Entities;
+﻿namespace UserService.DomainLib.Entities;
 
 public record UserId(Guid Value);

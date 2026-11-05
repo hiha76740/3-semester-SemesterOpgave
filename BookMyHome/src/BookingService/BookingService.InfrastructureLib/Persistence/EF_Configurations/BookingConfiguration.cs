@@ -1,4 +1,4 @@
-using BookingService.DomainLib.Entities;
+﻿using BookingService.DomainLib.Entities;
 using BookingService.DomainLib.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;

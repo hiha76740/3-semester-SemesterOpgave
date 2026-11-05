@@ -1,4 +1,4 @@
-using AccomodationService.FacadeLib.Queries.DTOs;
+﻿using AccomodationService.FacadeLib.Queries.DTOs;
 
 namespace AccomodationService.FacadeLib.Queries.Interfaces;
 

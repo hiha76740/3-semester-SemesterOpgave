@@ -1,4 +1,4 @@
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using UserService.DomainLib.Entities;
 
 namespace UserService.ApplicationLib.Authentication;

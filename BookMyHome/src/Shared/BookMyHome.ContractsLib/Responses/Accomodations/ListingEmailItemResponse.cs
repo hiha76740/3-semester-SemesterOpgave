@@ -1,4 +1,4 @@
-namespace BookMyHome.ContractsLib.Responses.Accomodations;
+﻿namespace BookMyHome.ContractsLib.Responses.Accomodations;
 
 public record ListingEmailItemResponse(
     string ListingName,

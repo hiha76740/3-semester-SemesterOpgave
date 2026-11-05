@@ -1,4 +1,4 @@
-using BookMyHome.ContractsLib.Responses.Accomodations;
+﻿using BookMyHome.ContractsLib.Responses.Accomodations;
 
 namespace BookMyHome.Web.ServiceInterfaces
 {

@@ -1,25 +1,13 @@
-using Shared.BookMyHome.SharedKernelLib.Exceptions;
+﻿using Shared.BookMyHome.SharedKernelLib.Exceptions;
 
 namespace AccomodationService.DomainLib.ValueObjects;
 
 public record Address
 {
-    public string Street
-    {
-        get; init;
-    }
-    public string PostalCode
-    {
-        get; init;
-    }
-    public string City
-    {
-        get; init;
-    }
-    public string Country
-    {
-        get; init;
-    }
+    public string Street { get; init; }
+    public string PostalCode { get; init; }
+    public string City { get; init; }
+    public string Country { get; init; }
 
     public Address(string street, string postalCode, string city, string country)
     {

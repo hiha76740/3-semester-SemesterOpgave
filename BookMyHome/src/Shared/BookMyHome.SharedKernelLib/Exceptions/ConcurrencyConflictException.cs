@@ -1,4 +1,4 @@
-namespace BookMyHome.SharedKernelLib.Exceptions;
+﻿namespace BookMyHome.SharedKernelLib.Exceptions;
 
 public class ConcurrencyConflictException : Exception
 {

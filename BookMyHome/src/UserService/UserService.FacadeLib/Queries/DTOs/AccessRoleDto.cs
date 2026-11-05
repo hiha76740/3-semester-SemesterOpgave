@@ -1,3 +1,3 @@
-namespace UserService.FacadeLib.Queries.DTOs;
+﻿namespace UserService.FacadeLib.Queries.DTOs;
 
 public record AccessRoleDto(string Role);

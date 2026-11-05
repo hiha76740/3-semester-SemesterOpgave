@@ -1,4 +1,4 @@
-using BookingService.ApplicationLib.Exceptions;
+﻿using BookingService.ApplicationLib.Exceptions;
 using BookingService.ApplicationLib.Repositories;
 using BookingService.ApplicationLib.Services;
 using BookingService.ApplicationLib.UnitOfWork;
@@ -133,7 +133,7 @@ public class CreateBookingHandler(
                 );
 
             logger.LogInformation("Publishing booking placed event");
-
+            
             await eventPublisher.PublishAsync("booking-placed", integrationEvent);
 
             logger.LogInformation("Booking placed event published successfully");

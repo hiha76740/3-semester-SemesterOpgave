@@ -1,4 +1,4 @@
-namespace AccomodationService.ApplicationLib.Handlers.Services;
+﻿namespace AccomodationService.ApplicationLib.Handlers.Services;
 
 public interface IImageStorageService
 {

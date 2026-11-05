@@ -1,4 +1,4 @@
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using UserService.ApplicationLib.Authentication;
 using UserService.DomainLib.Entities;
 

@@ -1,3 +1,3 @@
-namespace AccomodationService.DomainLib.ValueObjects;
+﻿namespace AccomodationService.DomainLib.ValueObjects;
 
 public record HostId(Guid Value);

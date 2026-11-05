@@ -1,4 +1,4 @@
-using BookingService.ApplicationLib.Repositories;
+﻿using BookingService.ApplicationLib.Repositories;
 using BookingService.DomainLib.Entities;
 using BookingService.DomainLib.Enums;
 using BookingService.DomainLib.ValueObjects;
@@ -24,7 +24,7 @@ public class BookingRepository(BookingDbContext db) : IBookingRepository
     async Task<bool> IBookingRepository.HasOverlapingBookingAsync(AccomodationId accomodationId, DateOnly startDate, DateOnly endDate)
     {
         return await db.Bookings
-            .AnyAsync(eb =>
+            .AnyAsync(eb => 
                       eb.AccomodationId == accomodationId &&
                       eb.Status == BookingStatus.Booked &&
                       startDate < eb.Period.EndDate &&

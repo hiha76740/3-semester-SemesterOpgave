@@ -1,4 +1,4 @@
-namespace BookMyHome.ContractsLib.Events;
+﻿namespace BookMyHome.ContractsLib.Events;
 
 public record BookingPlacedIntegrationEvent(
     int BookingNumber,
@@ -14,7 +14,7 @@ public record BookingPlacedIntegrationEvent(
     string City,
     string Country,
     string[] Facilities,
-    string? ImageUrl,
+    string? ImageUrl, 
     string FirstName,
     string LastName,
     string Email

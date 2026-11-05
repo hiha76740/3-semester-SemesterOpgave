@@ -1,4 +1,4 @@
-using BookMyHome.ContractsLib.Requests.Accomodations;
+﻿using BookMyHome.ContractsLib.Requests.Accomodations;
 using BookMyHome.ContractsLib.Responses.Accomodations;
 using BookMyHome.Web.ServiceInterfaces;
 using Microsoft.AspNetCore.Components.WebAssembly.Http;

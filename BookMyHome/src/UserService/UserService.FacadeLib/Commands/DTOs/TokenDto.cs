@@ -1,3 +1,3 @@
-namespace UserService.FacadeLib.Commands.DTOs;
+﻿namespace UserService.FacadeLib.Commands.DTOs;
 
 public record TokenDto(string AccessToken, string RefreshToken);

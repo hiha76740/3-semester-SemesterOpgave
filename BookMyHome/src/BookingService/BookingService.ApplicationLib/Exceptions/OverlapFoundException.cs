@@ -1,4 +1,4 @@
-namespace BookingService.ApplicationLib.Exceptions;
+﻿namespace BookingService.ApplicationLib.Exceptions;
 
 internal class OverlapFoundException : Exception
 {
