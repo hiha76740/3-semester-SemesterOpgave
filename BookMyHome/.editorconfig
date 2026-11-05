@@ -34,7 +34,7 @@ csharp_indent_braces = false
 csharp_indent_case_contents = true
 csharp_indent_switch_labels = true
 csharp_prefer_braces = when_multiline:suggestion
-csharp_preserve_single_line_blocks = false
+csharp_preserve_single_line_blocks = true
 csharp_preserve_single_line_statements = false
 
 # Mellemrum omkring operatorer og efter kommaer.
