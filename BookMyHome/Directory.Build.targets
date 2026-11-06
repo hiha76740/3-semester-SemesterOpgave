@@ -1,0 +1,16 @@
+<Project>
+    <!-- Undtag Test-projekter fra XML-regler -->
+    <PropertyGroup Condition="'$(IsTestProject)' == 'true'">
+		<NoWarn>$(NoWarn);CS1591;CA1707</NoWarn>
+    </PropertyGroup>
+
+    <!-- Undtag Aspire-projekter fra analyzer-regler -->
+    <PropertyGroup Condition="'$(MSBuildProjectName)' == 'BookMyHome.AppHost'
+                       Or '$(MSBuildProjectName)' == 'BookMyHome.ServiceDefaults'">
+        <RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
+        <RunAnalyzersDuringLiveAnalysis>false</RunAnalyzersDuringLiveAnalysis>
+        <EnforceCodeStyleInBuild>false</EnforceCodeStyleInBuild>
+        <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+        <NoWarn>$(NoWarn);CS1591</NoWarn>
+    </PropertyGroup>
+</Project>
