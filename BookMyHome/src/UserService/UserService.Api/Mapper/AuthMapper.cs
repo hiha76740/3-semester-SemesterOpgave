@@ -1,12 +1,20 @@
-﻿using BookMyHome.ContractsLib.Requests.Users;
+using BookMyHome.ContractsLib.Requests.Users;
 using BookMyHome.ContractsLib.Responses.Authentication;
 using UserService.FacadeLib.Commands.DTOs;
 using UserService.FacadeLib.Queries.DTOs;
 
 namespace UserService.Api.Mapper;
 
+/// <summary>
+/// 
+/// </summary>
 public static class AuthMapper
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns></returns>
     public static RegisterUserCommand AsRegisterCommand(this RegisterUserRequest request)
     {
         var output = new RegisterUserCommand(
@@ -24,7 +32,11 @@ public static class AuthMapper
 
         return output;
     }
-
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns></returns>
     public static LoginCommand AsLoginCommand(this LoginRequest request)
     {
         var output = new LoginCommand(
@@ -34,7 +46,11 @@ public static class AuthMapper
 
         return output;
     }
-
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="dto"></param>
+    /// <returns></returns>
     public static TokenResponse AsTokenResponse(this TokenDto dto)
     {
         var output = new TokenResponse(
@@ -44,7 +60,11 @@ public static class AuthMapper
 
         return output;
     }
-
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns></returns>
     public static RefreshTokenCommand AsTokenCommand(this RefreshTokenRequest request)
     {
         var output = new RefreshTokenCommand(
@@ -54,7 +74,11 @@ public static class AuthMapper
 
         return output;
     }
-
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="dto"></param>
+    /// <returns></returns>
     public static AuthUserResponse AsAuthUserReponse(this AuthUserDto dto)
     {
         var output = new AuthUserResponse(

@@ -1,4 +1,4 @@
-﻿using AccomodationService.DomainLib.Entities;
+using AccomodationService.DomainLib.Entities;
 using AccomodationService.DomainLib.Enums;
 using AccomodationService.DomainLib.ValueObjects;
 
@@ -6,14 +6,14 @@ namespace AccomodationService.DomainLib.Tests;
 
 public class AccomodationTests
 {
-    private readonly static HostId HostId = new(Guid.Parse("4504e34a-67a5-4cba-b029-8eb0b453b80d"));
-    private readonly static string Title = "Test title";
-    private readonly static string Street = "Test street 4";
-    private readonly static string PostalCode = "12345";
-    private readonly static string City = "Test City";
-    private readonly static string Country = "Denmark";
+    private static readonly HostId s_hostId = new(Guid.Parse("4504e34a-67a5-4cba-b029-8eb0b453b80d"));
+    private static readonly string s_title = "Test title";
+    private static readonly string s_street = "Test street 4";
+    private static readonly string s_postalCode = "12345";
+    private static readonly string s_city = "Test City";
+    private static readonly string s_country = "Denmark";
 
-    private readonly static List<Facility> FacilitiesIds = [];
+    private static readonly List<Facility> s_facilitiesIds = [];
 
     private static Accomodation CreateAccomodation(
         HostId? hostId = null,
@@ -26,13 +26,13 @@ public class AccomodationTests
         )
     {
         return Accomodation.Create(
-            hostId ?? HostId,
-            title ?? Title,
-            street ?? Street,
-            postalCode ?? PostalCode,
-            city ?? City,
-            country ?? Country,
-            facilitiesIds ?? FacilitiesIds
+            hostId ?? s_hostId,
+            title ?? s_title,
+            street ?? s_street,
+            postalCode ?? s_postalCode,
+            city ?? s_city,
+            country ?? s_country,
+            facilitiesIds ?? s_facilitiesIds
             );
     }
 

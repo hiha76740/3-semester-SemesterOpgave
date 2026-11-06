@@ -1,4 +1,4 @@
-﻿using EmailService.ApplicationLib.Dtos;
+using EmailService.ApplicationLib.Dtos;
 using EmailService.ApplicationLib.Handlers;
 using EmailService.ApplicationLib.Services;
 using EmailService.FacadeLib.Commands.DTOs;
@@ -8,6 +8,9 @@ using Moq;
 
 namespace EmailService.ApplicationLib.Tests.Bookings;
 
+/// <summary>
+/// 
+/// </summary>
 public class SendBookingConfirmationTests
 {
     [Fact]
@@ -30,7 +33,7 @@ public class SendBookingConfirmationTests
             "1234",
             "Testby",
             "Denmark",
-            Array.Empty<string>(),
+            [],
             null,
             "TestFirstname",
             "TestLastname",
@@ -43,6 +46,6 @@ public class SendBookingConfirmationTests
         await handler.HandleAsync(command);
 
         // Assert
-        mockEmailSender.Verify(s => s.SendAsync(It.IsAny<SendEmailDto>()),Times.Once);
+        mockEmailSender.Verify(s => s.SendAsync(It.IsAny<SendEmailDto>()), Times.Once);
     }
 }

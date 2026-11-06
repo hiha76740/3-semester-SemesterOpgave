@@ -1,14 +1,19 @@
-﻿using AccomodationService.ApplicationLib.Handlers.Services;
+using AccomodationService.ApplicationLib.Handlers.Services;
 using AccomodationService.ApplicationLib.Repositories;
 using AccomodationService.DomainLib.Entities;
 using AccomodationService.DomainLib.Enums;
 using AccomodationService.DomainLib.ValueObjects;
 using AccomodationService.FacadeLib.Commands.DTOs.Accomodations;
 using AccomodationService.FacadeLib.Commands.Interfaces.Accomodations;
-using Shared.BookMyHome.SharedKernelLib.Exceptions;
+using BookMyHome.SharedKernelLib.Exceptions;
 
 namespace AccomodationService.ApplicationLib.Handlers.Accomodations;
 
+/// <summary>
+/// 
+/// </summary>
+/// <param name="repo"></param>
+/// <param name="imageStorage"></param>
 public class UpdateAccomodationHandler(IAccomodationRepository repo, IImageStorageService imageStorage) : IUpdateAccomodationHandler
 {
     async Task<bool> IUpdateAccomodationHandler.HandleAsync(UpdateAccomodationCommand command)
@@ -18,10 +23,8 @@ public class UpdateAccomodationHandler(IAccomodationRepository repo, IImageStora
             var hostId = new HostId(command.UserId);
             var accomodationId = new AccomodationId(command.AccomodationId);
 
-            var accomodation = await repo.GetAccomodationWithFacilitiesAsync(accomodationId);
-
-            if (accomodation == null)
-                throw new NotFoundException("accomodation was not found");
+            var accomodation = await repo.GetAccomodationWithFacilitiesAsync(accomodationId)
+                ?? throw new NotFoundException("accomodation was not found");
 
             if (accomodation.HostId != hostId)
                 throw new UnauthorizedAccessException("Only the owner can update the accomodation");
@@ -41,7 +44,7 @@ public class UpdateAccomodationHandler(IAccomodationRepository repo, IImageStora
             }
 
 
-            var currentFacilityIds = accomodation.facilities
+            var currentFacilityIds = accomodation.Facilities
                 .Select(f => f.Id.Value)
                 .ToHashSet();
 
@@ -50,7 +53,7 @@ public class UpdateAccomodationHandler(IAccomodationRepository repo, IImageStora
             var facilitiesToAdd = requestedFacilityIds
                 .Except(currentFacilityIds);
 
-            var facilitiesToRemove = accomodation.facilities
+            var facilitiesToRemove = accomodation.Facilities
                 .Where(f => requestedFacilityIds.Contains(f.Id.Value) == false)
                 .ToList();
 
@@ -72,9 +75,9 @@ public class UpdateAccomodationHandler(IAccomodationRepository repo, IImageStora
                 changesMade = true;
             }
 
-            if (command.imageStream != null && command.extension != null)
+            if (command.ImageStream != null && command.Extension != null)
             {
-                var fileName = await imageStorage.SaveAsync(command.imageStream, command.extension);
+                var fileName = await imageStorage.SaveAsync(command.ImageStream, command.Extension);
                 accomodation.SetImage(fileName);
                 changesMade = true;
             }
@@ -86,8 +89,7 @@ public class UpdateAccomodationHandler(IAccomodationRepository repo, IImageStora
         }
         catch (Exception ex)
         {
-
-            throw new ApplicationException(ex.Message, ex);
+            throw new InvalidOperationException(ex.Message, ex);
         }
 
     }

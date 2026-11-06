@@ -9,13 +9,15 @@ using System.Text.Encodings.Web;
 
 namespace EmailService.ApplicationLib.Handlers;
 
+///
 public class SendBookingConfirmationHandler(IEmailSenderService emailSender, ILogger<SendBookingConfirmationHandler> logger) : ISendBookingConfirmationHandler
 {
     Task ISendBookingConfirmationHandler.HandleAsync(SendBookingConfirmationCommand command)
     {
         try
         {
-            logger.LogInformation("Starting to send booking confirmation to email: {userEmail}", command.UserEmail);
+            if (logger.IsEnabled(LogLevel.Information))
+                logger.LogInformation("Starting to send booking confirmation to email: {UserEmail}", command.UserEmail);
 
             var startDateFormatted = command.StartDate.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture);
             var endDateFormatted = command.EndDate.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture);
@@ -37,31 +39,31 @@ public class SendBookingConfirmationHandler(IEmailSenderService emailSender, ILo
                 facilitiesHtml = "<li>Ingen faciliteter angivet.</li>";
             }
 
-            StringBuilder builder = new StringBuilder();
+            var builder = new StringBuilder();
 
-            builder.Append($"<p>Hej {command.UserFirstName} {command.UserLastName}</p>");
+            builder.Append(CultureInfo.GetCultureInfo("da-DK"), $"<p>Hej {command.UserFirstName} {command.UserLastName}</p>");
             builder.Append("<br/>");
             builder.Append("<p>Tak for din booking.</p>");
             builder.Append("<br/>");
-            builder.Append($"<p>Bookingnummer: {command.BookingNumber}</p>");
-            builder.Append($"<p>Periode: {startDateFormatted} - {endDateFormatted}</p>");
+            builder.Append(CultureInfo.GetCultureInfo("da-DK"), $"<p>Bookingnummer: {command.BookingNumber}</p>");
+            builder.Append(CultureInfo.GetCultureInfo("da-DK"), $"<p>Periode: {startDateFormatted} - {endDateFormatted}</p>");
             builder.Append("<br/>");
-            builder.Append($"<img src=\"{command.ImageUrl}\" alt=\"Listing image\" width=\"600\" height=\"500\" style=\"vertical-align:middle\">");
+            builder.Append(CultureInfo.GetCultureInfo("da-DK"), $"<img src=\"{command.ImageUrl}\" alt=\"Listing image\" width=\"600\" height=\"500\" style=\"vertical-align:middle\">");
             builder.Append("<br/>");
-            builder.Append($"<h3>{command.ListingName}</h3>");
-            builder.Append($"<h4>Type: {command.AccomodationType}</h4>");
+            builder.Append(CultureInfo.GetCultureInfo("da-DK"), $"<h3>{command.ListingName}</h3>");
+            builder.Append(CultureInfo.GetCultureInfo("da-DK"), $"<h4>Type: {command.AccomodationType}</h4>");
             builder.Append("<br/>");
             builder.Append($"<p>Addressen er:</p>");
-            builder.Append($"<p>{command.Street}, {command.PostalCode} {command.City}, {command.Country}<p/>");
+            builder.Append(CultureInfo.GetCultureInfo("da-DK"), $"<p>{command.Street}, {command.PostalCode} {command.City}, {command.Country}<p/>");
             builder.Append("<br/>");
             builder.Append("<p>Der vil være følgende facilities til rådighed:<p>");
-            builder.Append($"<ul>{facilitiesHtml}</ul>");
+            builder.Append(CultureInfo.GetCultureInfo("da-DK"), $"<ul>{facilitiesHtml}</ul>");
             builder.Append("<br/>");
             builder.Append($"<p>Der er følgende hus regler:</p>");
-            builder.Append($"<p>{command.HouseRules}</p>");
+            builder.Append(CultureInfo.GetCultureInfo("da-DK"), $"<p>{command.HouseRules}</p>");
             builder.Append("<br/>");
-            builder.Append($"<p>Daglig pris: {command.DailyPrice}DKK</p>");
-            builder.Append($"<p>Total: {command.Price}DKK</p>");
+            builder.Append(CultureInfo.GetCultureInfo("da-DK"), $"<p>Daglig pris: {command.DailyPrice:2}DKK</p>");
+            builder.Append(CultureInfo.GetCultureInfo("da-DK"), $"<p>Total: {command.Price:2}</p>");
             builder.Append("<br/>");
             builder.Append("<p>Ønsker du at annullere bookingen kan dette gøres via din profil</p>");
             builder.Append("<br/>");
@@ -69,7 +71,8 @@ public class SendBookingConfirmationHandler(IEmailSenderService emailSender, ILo
 
             var body = builder.ToString();
 
-            logger.LogInformation("Sending booking confirmation to email: {userEmail}", command.UserEmail);
+            if (logger.IsEnabled(LogLevel.Information))
+                logger.LogInformation("Sending booking confirmation to email: {UserEmail}", command.UserEmail);
 
             var emailDto = new SendEmailDto(name, command.UserEmail, subject, body);
 
@@ -77,11 +80,13 @@ public class SendBookingConfirmationHandler(IEmailSenderService emailSender, ILo
         }
         catch (Exception ex)
         {
-            logger.LogError("Exception error: {error}", ex.Message);
+            if (logger.IsEnabled(LogLevel.Error))
+            {
+                logger.LogError("Exception error: {Error}", ex.Message);
 
-            if (ex.InnerException != null)
-                logger.LogError("InnerException error: {error}", ex.InnerException.Message);
-
+                if (ex.InnerException != null)
+                    logger.LogError("InnerException error: {Error}", ex.InnerException.Message);
+            }
             throw;
         }
     }

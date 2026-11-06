@@ -9,18 +9,24 @@ using MimeKit.Utils;
 
 namespace EmailService.InfrastructureLib.Services;
 
+/// <summary>
+/// 
+/// </summary>
+/// <param name="appsettings"></param>
+/// <param name="logger"></param>
 public class MailKitEmailSender(IConfiguration appsettings, ILogger<MailKitEmailSender> logger) : IEmailSenderService
 {
     async Task IEmailSenderService.SendAsync(SendEmailDto emailDto)
     {
         try
         {
-            logger.LogInformation("Creating message with subject {subject} and to recipeient {recipeitentMail}", emailDto.Subject, emailDto.Email);
+            if (logger.IsEnabled(LogLevel.Information))
+                logger.LogInformation("Creating message with subject {Subject} and to recipeient {RecipeitentMail}", emailDto.Subject, emailDto.Email);
 
             var message = new MimeMessage();
 
             message.From.Add(new MailboxAddress("BookMyHome", "NoReply@BookMyHome.Test"));
-            message.To.Add(new MailboxAddress(emailDto.Name,emailDto.Email));
+            message.To.Add(new MailboxAddress(emailDto.Name, emailDto.Email));
             message.Subject = emailDto.Subject;
 
             var builder = new BodyBuilder();
@@ -39,7 +45,8 @@ public class MailKitEmailSender(IConfiguration appsettings, ILogger<MailKitEmail
             var smtpHost = appsettings.GetValue<string>("SMTP:Host") ?? throw new InvalidOperationException("SMTP Host is missing");
             var smtpPort = appsettings.GetValue<int>("SMTP:Port");
 
-            logger.LogInformation("Connecting to SMTP server {smtpHost} on port {smtpPort}", smtpHost, smtpPort);
+            if (logger.IsEnabled(LogLevel.Information))
+                logger.LogInformation("Connecting to SMTP server {SmtpHost} on port {SmtpPort}", smtpHost, smtpPort);
 
             await client.ConnectAsync(
                 smtpHost,
@@ -59,10 +66,13 @@ public class MailKitEmailSender(IConfiguration appsettings, ILogger<MailKitEmail
         }
         catch (Exception ex)
         {
-            logger.LogError("Exception error: {error}", ex.Message);
+            if (logger.IsEnabled(LogLevel.Error))
+            {
+                logger.LogError("Exception error: {Error}", ex.Message);
 
-            if (ex.InnerException != null)
-                logger.LogError("InnerException error: {error}", ex.InnerException.Message);
+                if (ex.InnerException != null)
+                    logger.LogError("InnerException error: {Error}", ex.InnerException.Message);
+            }
 
             throw;
         }

@@ -1,0 +1,12 @@
+[*.cs]
+generated_code = true
+
+# Undtag migrations fra analyzer-regler
+dotnet_analyzer_diagnostic.severity = none
+
+# Bevar namespaces med klammer
+csharp_style_namespace_declarations = block_scoped
+dotnet_diagnostic.IDE0161.severity = none
+
+# Tillad manglende XML-kommentarer
+dotnet_diagnostic.CS1591.severity = none

@@ -1,3 +1,7 @@
-﻿namespace AccomodationService.DomainLib.Entities;
+namespace AccomodationService.DomainLib.Entities;
 
+/// <summary>
+/// 
+/// </summary>
+/// <param name="Value"></param>
 public record AccomodationId(Guid Value);

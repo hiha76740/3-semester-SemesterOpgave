@@ -1,12 +1,21 @@
-﻿using AccomodationService.ApplicationLib.Handlers.Services;
+using AccomodationService.ApplicationLib.Handlers.Services;
 using AccomodationService.FacadeLib.Queries.Interfaces;
 using AccomodationService.InfrastructureLib.Services;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AccomodationService.InfrastructureLib.Extensions;
 
+/// <summary>
+/// 
+/// </summary>
 public static class ServiceDI
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="services"></param>
+    /// <param name="imageDirectory"></param>
+    /// <returns></returns>
     public static IServiceCollection AddServiceDI(this IServiceCollection services, string imageDirectory)
     {
         services.AddScoped<IBookingService, BookingService>();

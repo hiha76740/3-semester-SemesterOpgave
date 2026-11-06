@@ -1,4 +1,4 @@
-﻿using AccomodationService.DomainLib.Entities;
+using AccomodationService.DomainLib.Entities;
 using AccomodationService.DomainLib.Enums;
 using AccomodationService.DomainLib.ValueObjects;
 using AccomodationService.FacadeLib.Queries.DTOs;
@@ -8,6 +8,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AccomodationService.InfrastructureLib.QueryHandlers;
 
+/// <summary>
+/// 
+/// </summary>
+/// <param name="db"></param>
 public class AccomodationQueryHandlerIMPL(AccomodationDbContext db) : IAccomodationQueries
 {
     async Task<bool> IAccomodationQueries.CheckIfExistsAsync(Guid id)
@@ -33,7 +37,7 @@ public class AccomodationQueryHandlerIMPL(AccomodationDbContext db) : IAccomodat
                 a.Address.PostalCode,
                 a.Address.City,
                 a.Address.Country,
-                a.facilities.Select(f => new FacilityDto(f.Id.Value,f.Name)).ToList(),
+                a.Facilities.Select(f => new FacilityDto(f.Id.Value, f.Name)).ToList(),
                 a.Status.ToString(),
                 a.ImageFileName
                 ))
@@ -58,7 +62,7 @@ public class AccomodationQueryHandlerIMPL(AccomodationDbContext db) : IAccomodat
 
         return await db.Accomodations
             .Where(a => a.Id == accomodationKey)
-            .SelectMany(a => a.listings
+            .SelectMany(a => a.Listings
                 .Where(l => l.Id == listingKey)
                 .Select(l => new AccomodationSummaryDto(
                     l.ListingName,
@@ -80,7 +84,7 @@ public class AccomodationQueryHandlerIMPL(AccomodationDbContext db) : IAccomodat
                 a.Address.PostalCode,
                 a.Address.City,
                 a.Address.Country,
-                a.facilities.Select(f => new FacilityDto(f.Id.Value, f.Name)).ToList(),
+                a.Facilities.Select(f => new FacilityDto(f.Id.Value, f.Name)).ToList(),
                 a.Status.ToString(),
                 a.ImageFileName
                 ))
@@ -101,7 +105,7 @@ public class AccomodationQueryHandlerIMPL(AccomodationDbContext db) : IAccomodat
                 a.Address.PostalCode,
                 a.Address.City,
                 a.Address.Country,
-                a.facilities.Select(f => new FacilityDto(f.Id.Value, f.Name)).ToList(),
+                a.Facilities.Select(f => new FacilityDto(f.Id.Value, f.Name)).ToList(),
                 a.Status.ToString(),
                 a.ImageFileName
                 ))

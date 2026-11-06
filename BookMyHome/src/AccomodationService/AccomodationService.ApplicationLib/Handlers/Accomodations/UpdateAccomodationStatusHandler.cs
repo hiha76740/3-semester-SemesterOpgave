@@ -1,13 +1,17 @@
-﻿using AccomodationService.ApplicationLib.Repositories;
+using AccomodationService.ApplicationLib.Repositories;
 using AccomodationService.DomainLib.Entities;
 using AccomodationService.DomainLib.Enums;
 using AccomodationService.DomainLib.ValueObjects;
 using AccomodationService.FacadeLib.Commands.DTOs.Accomodations;
 using AccomodationService.FacadeLib.Commands.Interfaces.Accomodations;
-using Shared.BookMyHome.SharedKernelLib.Exceptions;
+using BookMyHome.SharedKernelLib.Exceptions;
 
 namespace AccomodationService.ApplicationLib.Handlers.Accomodations;
 
+/// <summary>
+/// 
+/// </summary>
+/// <param name="repo"></param>
 public class UpdateAccomodationStatusHandler(IAccomodationRepository repo) : IUpdateAccomodationStatusHandler
 {
     async Task IUpdateAccomodationStatusHandler.HandleAsync(UpdateAccomodationStatusCommand command)
@@ -15,10 +19,8 @@ public class UpdateAccomodationStatusHandler(IAccomodationRepository repo) : IUp
         var hostId = new HostId(command.UserId);
         var accomodationId = new AccomodationId(command.AccomodationId);
 
-        var accomodation = await repo.GetAccomodationByIdAsync(accomodationId);
-
-        if (accomodation == null)
-            throw new NotFoundException("accomodation was not found");
+        var accomodation = await repo.GetAccomodationByIdAsync(accomodationId)
+            ?? throw new NotFoundException("accomodation was not found");
 
         if (accomodation.HostId != hostId)
             throw new UnauthorizedAccessException("Only the owner can update the status of the accomodation");

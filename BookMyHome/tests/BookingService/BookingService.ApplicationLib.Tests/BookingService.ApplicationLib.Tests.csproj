@@ -1,31 +1,32 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>BookingService.ApplicationLib.Tests</RootNamespace>
-    <TargetFramework>net10.0</TargetFramework>
-  </PropertyGroup>
+    <PropertyGroup>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <OutputType>Exe</OutputType>
+        <RootNamespace>BookingService.ApplicationLib.Tests</RootNamespace>
+        <TargetFramework>net10.0</TargetFramework>
+        <IsTestProject>true</IsTestProject>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <Content Include="xunit.runner.json" CopyToOutputDirectory="PreserveNewest" />
-  </ItemGroup>
+    <ItemGroup>
+        <Content Include="xunit.runner.json" CopyToOutputDirectory="PreserveNewest" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <Using Include="Xunit" />
-  </ItemGroup>
+    <ItemGroup>
+        <Using Include="Xunit" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.13" />
-    <PackageReference Include="Moq" Version="4.21.0" />
-    <PackageReference Include="xunit.v3.mtp-v2" Version="4.0.2" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.13" />
+        <PackageReference Include="Moq" Version="4.21.0" />
+        <PackageReference Include="xunit.v3.mtp-v2" Version="4.0.2" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\src\BookingService\BookingService.DomainLib\BookingService.DomainLib.csproj" />
-    <ProjectReference Include="..\..\..\src\BookingService\BookingService.FacadeLib\BookingService.FacadeLib.csproj" />
-    <ProjectReference Include="..\..\..\src\BookingService\BookingService.ApplicationLib\BookingService.ApplicationLib.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\..\..\src\BookingService\BookingService.DomainLib\BookingService.DomainLib.csproj" />
+        <ProjectReference Include="..\..\..\src\BookingService\BookingService.FacadeLib\BookingService.FacadeLib.csproj" />
+        <ProjectReference Include="..\..\..\src\BookingService\BookingService.ApplicationLib\BookingService.ApplicationLib.csproj" />
+    </ItemGroup>
 
 </Project>

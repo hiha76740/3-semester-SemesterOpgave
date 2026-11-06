@@ -1,4 +1,4 @@
-﻿using BookMyHome.BuildingBlocksLib.Helpers;
+using BookMyHome.BuildingBlocksLib.Helpers;
 using BookMyHome.ContractsLib.Requests.Users;
 using BookMyHome.ContractsLib.Responses.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -8,149 +8,148 @@ using UserService.Api.Services;
 using UserService.FacadeLib.Commands.Interfaces;
 using UserService.FacadeLib.Queries.Interfaces;
 
-namespace UserService.Api.Controllers
+namespace UserService.Api.Controllers;
+
+[Route("api/v1/[controller]")]
+[ApiController]
+public class AuthController(
+    IRegisterUserHandler register,
+    ILoginHandler login,
+    IRefreshTokensHandler refresh,
+    ICookieService cookieService,
+    IAuthQueries authQueries
+    ) : ControllerBase
 {
-    [Route("api/v1/[controller]")]
-    [ApiController]
-    public class AuthController(
-        IRegisterUserHandler register,
-        ILoginHandler login,
-        IRefreshTokensHandler refresh,
-        ICookieService cookieService,
-        IAuthQueries authQueries
-        ) : ControllerBase
+
+    [HttpPost("register")]
+    [EndpointSummary("This endpoint will register a user")]
+    [EndpointDescription("Register a user when all required info is given")]
+    [ProducesResponseType(StatusCodes.Status200OK, Description = "User was registered succesfully")]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error doing registration of user")]
+    public async Task<ActionResult> Register(RegisterUserRequest request)
     {
-
-        [HttpPost("register")]
-        [EndpointSummary("This endpoint will register a user")]
-        [EndpointDescription("Register a user when all required info is given")]
-        [ProducesResponseType(StatusCodes.Status200OK, Description = "User was registered succesfully")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error doing registration of user")]
-        public async Task<ActionResult> Register(RegisterUserRequest request)
+        try
         {
-            try
-            {
-                await register.Handle(request.AsRegisterCommand());
+            await register.Handle(request.AsRegisterCommand());
 
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-
-                return BadRequest(ex.Message);
-            }
+            return Ok();
         }
-
-        [HttpPost("login")]
-        [EndpointSummary("This endpoint will log in a user")]
-        [EndpointDescription("Logs in a user when username and password is correct")]
-        [ProducesResponseType(StatusCodes.Status200OK, Description = "User was logged in succesfully")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error doing log in")]
-        public async Task<ActionResult> Login(LoginRequest request)
+        catch (Exception ex)
         {
-            try
-            {
-                var token = await login.HandleAsync(request.AsLoginCommand());
 
-                if (token == null)
-                    return BadRequest("Invalid username or password");
-
-                cookieService.SetTokenInsideCookie(token, HttpContext);
-
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return BadRequest(ex.Message);
         }
+    }
 
-
-
-        [HttpPost("Refresh-token")]
-        [EndpointSummary("This endpoint will create a new refresh token")]
-        [EndpointDescription("Creates a new refresh token when all required info is given")]
-        [ProducesResponseType(StatusCodes.Status200OK, Description = "Refresh token was created succesfully")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error doing creation of refresh token")]
-        public async Task<ActionResult> Refresh()
+    [HttpPost("login")]
+    [EndpointSummary("This endpoint will log in a user")]
+    [EndpointDescription("Logs in a user when username and password is correct")]
+    [ProducesResponseType(StatusCodes.Status200OK, Description = "User was logged in succesfully")]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error doing log in")]
+    public async Task<ActionResult> Login(LoginRequest request)
+    {
+        try
         {
-            try
-            {
-                HttpContext.Request.Cookies.TryGetValue("refreshToken", out var refreshToken);
-                HttpContext.Request.Cookies.TryGetValue("accessToken", out var expiredAccessToken);
+            var token = await login.HandleAsync(request.AsLoginCommand());
 
-                if (refreshToken == null || expiredAccessToken == null)
-                    return BadRequest("Invalid request");
+            if (token == null)
+                return BadRequest("Invalid username or password");
 
-                var request = new RefreshTokenRequest(expiredAccessToken, refreshToken);
+            cookieService.SetTokenInsideCookie(token, HttpContext);
 
-                var result = await refresh.HandleAsync(request.AsTokenCommand());
-
-                if (result == null || result.AccessToken == null || result.RefreshToken == null)
-                    return Unauthorized("Invalid refresh token");
-
-                cookieService.SetTokenInsideCookie(result, HttpContext);
-
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-
-                return BadRequest(ex.Message);
-            }
+            return Ok();
         }
-
-
-
-        [Authorize]
-        [HttpGet("Me")]
-        [EndpointSummary("This endpoint will get current user information")]
-        [EndpointDescription("Get current user information, like username, firstname and lastname")]
-        [ProducesResponseType<AuthUserResponse>(StatusCodes.Status200OK, "application/json", Description = "Returns info of current user")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while getting current user info")]
-        public async Task<ActionResult<AuthUserResponse>> GetCurrentUserInfo()
+        catch (Exception ex)
         {
-            try
-            {
-                var userId = UserHelper.GetCurrentUserId(HttpContext.User);
-
-                if (userId == null)
-                    return BadRequest("User id not valid");
-
-                var dto = await authQueries.GetCurrentUserInfo(userId.Value);
-
-                if (dto == null)
-                    return NotFound("user not found");
-
-                return Ok(dto.AsAuthUserReponse());
-
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return BadRequest(ex.Message);
         }
+    }
 
-        [Authorize]
-        [HttpPost("logout")]
-        [EndpointSummary("This endpoint will log you out")]
-        [EndpointDescription("Deletes the access and refresh token and returns NoContent")]
-        [ProducesResponseType(StatusCodes.Status200OK, Description = "Deletion of cookies completed succesfully")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest, Description ="Something went wrong while deleting cookies")]
-        public async Task<ActionResult> Logout()
+
+
+    [HttpPost("Refresh-token")]
+    [EndpointSummary("This endpoint will create a new refresh token")]
+    [EndpointDescription("Creates a new refresh token when all required info is given")]
+    [ProducesResponseType(StatusCodes.Status200OK, Description = "Refresh token was created succesfully")]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error doing creation of refresh token")]
+    public async Task<ActionResult> Refresh()
+    {
+        try
         {
-            try
-            {
-                Response.Cookies.Delete("accessToken");
-                Response.Cookies.Delete("refreshToken");
+            HttpContext.Request.Cookies.TryGetValue("refreshToken", out var refreshToken);
+            HttpContext.Request.Cookies.TryGetValue("accessToken", out var expiredAccessToken);
 
-                return NoContent();
+            if (refreshToken == null || expiredAccessToken == null)
+                return BadRequest("Invalid request");
 
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }      
+            var request = new RefreshTokenRequest(expiredAccessToken, refreshToken);
+
+            var result = await refresh.HandleAsync(request.AsTokenCommand());
+
+            if (result == null || result.AccessToken == null || result.RefreshToken == null)
+                return Unauthorized("Invalid refresh token");
+
+            cookieService.SetTokenInsideCookie(result, HttpContext);
+
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+
+            return BadRequest(ex.Message);
+        }
+    }
+
+
+
+    [Authorize]
+    [HttpGet("Me")]
+    [EndpointSummary("This endpoint will get current user information")]
+    [EndpointDescription("Get current user information, like username, firstname and lastname")]
+    [ProducesResponseType<AuthUserResponse>(StatusCodes.Status200OK, "application/json", Description = "Returns info of current user")]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while getting current user info")]
+    public async Task<ActionResult<AuthUserResponse>> GetCurrentUserInfo()
+    {
+        try
+        {
+            var userId = UserHelper.GetCurrentUserId(HttpContext.User);
+
+            if (userId == null)
+                return BadRequest("User id not valid");
+
+            var dto = await authQueries.GetCurrentUserInfo(userId.Value);
+
+            if (dto == null)
+                return NotFound("user not found");
+
+            return Ok(dto.AsAuthUserReponse());
+
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [Authorize]
+    [HttpPost("logout")]
+    [EndpointSummary("This endpoint will log you out")]
+    [EndpointDescription("Deletes the access and refresh token and returns NoContent")]
+    [ProducesResponseType(StatusCodes.Status200OK, Description = "Deletion of cookies completed succesfully")]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Something went wrong while deleting cookies")]
+    public ActionResult Logout()
+    {
+        try
+        {
+            Response.Cookies.Delete("accessToken");
+            Response.Cookies.Delete("refreshToken");
+
+            return NoContent();
+
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
 }

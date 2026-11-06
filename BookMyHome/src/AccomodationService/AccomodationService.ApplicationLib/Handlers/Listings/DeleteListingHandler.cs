@@ -1,13 +1,17 @@
-﻿using AccomodationService.ApplicationLib.Repositories;
+using AccomodationService.ApplicationLib.Repositories;
 using AccomodationService.DomainLib.Entities;
 using AccomodationService.DomainLib.ValueObjects;
 using AccomodationService.FacadeLib.Commands.DTOs.Listings;
 using AccomodationService.FacadeLib.Commands.Interfaces.Listings;
-using Shared.BookMyHome.SharedKernelLib.Exceptions;
+using BookMyHome.SharedKernelLib.Exceptions;
 
 namespace AccomodationService.ApplicationLib.Handlers.Listings;
 
-internal class DeleteListingHandler(IAccomodationRepository repo) : IDeleteListingHandler
+/// <summary>
+/// 
+/// </summary>
+/// <param name="repo"></param>
+public class DeleteListingHandler(IAccomodationRepository repo) : IDeleteListingHandler
 {
     async Task IDeleteListingHandler.HandleAsync(DeleteListingCommand command)
     {
@@ -17,10 +21,8 @@ internal class DeleteListingHandler(IAccomodationRepository repo) : IDeleteListi
             var hostId = new HostId(command.HostId);
             var listingId = new ListingId(command.ListingId);
 
-            var accomodation = await repo.GetAccomodationWithListingsAsync(accomodationId);
-
-            if (accomodation == null)
-                throw new NotFoundException("Accomodation was not found");
+            var accomodation = await repo.GetAccomodationWithListingsAsync(accomodationId)
+                ?? throw new NotFoundException("Accomodation was not found");
 
             if (accomodation.HostId != hostId)
                 throw new UnauthorizedAccessException("Deletion aborted, only the owner can delete listings");
@@ -31,7 +33,7 @@ internal class DeleteListingHandler(IAccomodationRepository repo) : IDeleteListi
         }
         catch (Exception ex)
         {
-            throw new ApplicationException("Something went wrong doing deletion of listing", ex);
+            throw new InvalidOperationException("Something went wrong doing deletion of listing", ex);
         }
     }
 }

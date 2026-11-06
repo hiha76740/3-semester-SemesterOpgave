@@ -6,14 +6,18 @@ using System.Net.Http.Json;
 
 namespace BookMyHome.Web.Services;
 
+/// <summary>
+/// 
+/// </summary>
+/// <param name="httpClient"></param>
 public class BookingService(HttpClient httpClient) : IBookingService
 {
-    private readonly string baseUrl = "bookings-api";
+    private readonly string _baseUrl = "bookings-api";
 
 
     async Task IBookingService.CancelBookingAsync(Guid bookingId)
     {
-        var request = new HttpRequestMessage(HttpMethod.Put, $"{baseUrl}/{bookingId}/cancel");
+        var request = new HttpRequestMessage(HttpMethod.Put, $"{_baseUrl}/{bookingId}/cancel");
 
         request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
 
@@ -24,7 +28,7 @@ public class BookingService(HttpClient httpClient) : IBookingService
 
     async Task<IReadOnlyList<BookingSummaryResponse>> IBookingService.GetAccomodationBookingsAsync(Guid accomdationId)
     {
-        var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}/accomodation/bookings?accomdationId={accomdationId}");
+        var request = new HttpRequestMessage(HttpMethod.Get, $"{_baseUrl}/accomodation/bookings?accomdationId={accomdationId}");
 
         request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
 
@@ -32,10 +36,8 @@ public class BookingService(HttpClient httpClient) : IBookingService
 
         response.EnsureSuccessStatusCode();
 
-        var bookings = await response.Content.ReadFromJsonAsync<IReadOnlyList<BookingSummaryResponse>>();
-
-        if (bookings == null)
-            throw new InvalidOperationException("Could not deserialize bookings");
+        var bookings = await response.Content.ReadFromJsonAsync<IReadOnlyList<BookingSummaryResponse>>()
+            ?? throw new InvalidOperationException("Could not deserialize bookings");
 
         return bookings;
 
@@ -43,7 +45,7 @@ public class BookingService(HttpClient httpClient) : IBookingService
 
     async Task<IReadOnlyList<BookingSummaryResponse>> IBookingService.GetUserBookingsAsync()
     {
-        var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}/user/bookings");
+        var request = new HttpRequestMessage(HttpMethod.Get, $"{_baseUrl}/user/bookings");
 
         request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
 
@@ -51,19 +53,17 @@ public class BookingService(HttpClient httpClient) : IBookingService
 
         response.EnsureSuccessStatusCode();
 
-        var bookings = await response.Content.ReadFromJsonAsync<IReadOnlyList<BookingSummaryResponse>>();
-
-        if (bookings == null)
-            throw new InvalidOperationException("Could not deserialize bookings");
+        var bookings = await response.Content.ReadFromJsonAsync<IReadOnlyList<BookingSummaryResponse>>()
+            ?? throw new InvalidOperationException("Could not deserialize bookings");
 
         return bookings;
     }
 
-    async Task<int> IBookingService.MakeBookingAsync(CreateBookingRequest CreateRequest)
+    async Task<int> IBookingService.MakeBookingAsync(CreateBookingRequest createRequest)
     {
-        var request = new HttpRequestMessage(HttpMethod.Post, $"{baseUrl}/")
+        var request = new HttpRequestMessage(HttpMethod.Post, $"{_baseUrl}/")
         {
-            Content = JsonContent.Create(CreateRequest)
+            Content = JsonContent.Create(createRequest)
         };
 
         request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);

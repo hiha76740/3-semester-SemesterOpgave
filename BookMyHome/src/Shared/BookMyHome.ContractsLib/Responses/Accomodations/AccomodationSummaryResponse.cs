@@ -1,5 +1,12 @@
-﻿namespace BookMyHome.ContractsLib.Responses.Accomodations;
+namespace BookMyHome.ContractsLib.Responses.Accomodations;
 
+/// <summary>
+/// 
+/// </summary>
+/// <param name="ListingName"></param>
+/// <param name="ListingType"></param>
+/// <param name="City"></param>
+/// <param name="Country"></param>
 public record AccomodationSummaryResponse(
     string ListingName,
     string ListingType,

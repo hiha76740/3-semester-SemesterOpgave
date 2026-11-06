@@ -1,3 +1,9 @@
-﻿namespace AccomodationService.FacadeLib.Commands.DTOs.Facilities;
+namespace AccomodationService.FacadeLib.Commands.DTOs.Facilities;
 
-public record AddFacilityCommand(Guid HostId, Guid AccomodationId,Guid FacilityId);
+/// <summary>
+/// 
+/// </summary>
+/// <param name="HostId"></param>
+/// <param name="AccomodationId"></param>
+/// <param name="FacilityId"></param>
+public record AddFacilityCommand(Guid HostId, Guid AccomodationId, Guid FacilityId);

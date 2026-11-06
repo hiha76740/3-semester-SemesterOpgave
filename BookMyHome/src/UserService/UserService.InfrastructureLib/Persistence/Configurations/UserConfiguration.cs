@@ -1,11 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using UserService.DomainLib.Entities;
 using UserService.DomainLib.ValueObject;
 
-namespace UserService.InfrastructureLib.Persistence.EF_Configurations;
+namespace UserService.InfrastructureLib.Persistence.Configurations;
 
-internal class UserConfiguration : IEntityTypeConfiguration<User>
+internal sealed class UserConfiguration : IEntityTypeConfiguration<User>
 {
     public void Configure(EntityTypeBuilder<User> builder)
     {

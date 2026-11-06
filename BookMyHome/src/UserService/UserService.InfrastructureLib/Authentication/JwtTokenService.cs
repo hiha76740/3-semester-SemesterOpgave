@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -8,17 +8,21 @@ using UserService.DomainLib.Entities;
 
 namespace UserService.InfrastructureLib.Authentication;
 
+/// <summary>
+/// 
+/// </summary>
+/// <param name="configuration"></param>
 public class JwtTokenService(IConfiguration configuration) : ITokenService
 {
     string ITokenService.CreateToken(User user)
     {
         var claims = new List<Claim>
         {
-            new Claim(ClaimTypes.Name, user.Username),
-            new Claim(ClaimTypes.NameIdentifier, user.Id.Value.ToString()),
-            new Claim(ClaimTypes.GivenName, user.FirstName),
-            new Claim(ClaimTypes.Surname, user.LastName),
-            new Claim(ClaimTypes.Role, user.Role.ToString())
+            new(ClaimTypes.Name, user.Username),
+            new(ClaimTypes.NameIdentifier, user.Id.Value.ToString()),
+            new(ClaimTypes.GivenName, user.FirstName),
+            new(ClaimTypes.Surname, user.LastName),
+            new(ClaimTypes.Role, user.Role.ToString())
         };
 
         var key = new SymmetricSecurityKey(
@@ -54,12 +58,10 @@ public class JwtTokenService(IConfiguration configuration) : ITokenService
         };
 
         var tokenHandler = new JwtSecurityTokenHandler();
-        SecurityToken securityToken;
-        var principal = tokenHandler.ValidateToken(token,tokenValidationParameters, out securityToken);
-        var jwtSecurityToken = securityToken as JwtSecurityToken;
+        var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out var securityToken);
 
-        if (jwtSecurityToken == null || jwtSecurityToken.Header.Alg
-            .Equals(SecurityAlgorithms.HmacSha512, StringComparison.InvariantCultureIgnoreCase) == false)
+        if (securityToken is not JwtSecurityToken jwtSecurityToken || jwtSecurityToken.Header.Alg
+            .Equals(SecurityAlgorithms.HmacSha512, StringComparison.OrdinalIgnoreCase) == false)
         {
             throw new SecurityTokenException("Invalid token");
         }

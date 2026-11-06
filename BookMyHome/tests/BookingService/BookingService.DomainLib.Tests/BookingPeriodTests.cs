@@ -1,12 +1,12 @@
-﻿using BookingService.DomainLib.ValueObjects;
-using Shared.BookMyHome.SharedKernelLib.Exceptions;
+using BookingService.DomainLib.ValueObjects;
+using BookMyHome.SharedKernelLib.Exceptions;
 
 namespace BookingService.DomainLib.Tests;
 
 public class BookingPeriodTests
 {
-    private readonly static DateOnly StartDate = DateOnly.FromDateTime(DateTime.UtcNow);
-    private readonly static DateOnly EndDate = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(5));
+    private static readonly DateOnly s_startDate = DateOnly.FromDateTime(DateTime.UtcNow);
+    private static readonly DateOnly s_endDate = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(5));
 
     private static BookingPeriod CreateBookingPeriod(
         DateOnly? start = null,
@@ -14,8 +14,8 @@ public class BookingPeriodTests
         )
     {
         return new BookingPeriod(
-            start ?? StartDate,
-            end ?? EndDate
+            start ?? s_startDate,
+            end ?? s_endDate
             );
     }
 
@@ -23,7 +23,7 @@ public class BookingPeriodTests
     public void Create_GivenValidBookingPeriod_SetsStartAndEndDate()
     {
         // Arrange
-        var expected = new BookingPeriod(StartDate, EndDate);
+        var expected = new BookingPeriod(s_startDate, s_endDate);
 
         // Act
         var period = CreateBookingPeriod();
@@ -39,10 +39,10 @@ public class BookingPeriodTests
     public void Create_GivenInvalidEndDate_ThrowsException(int end)
     {
         // Arrange
-        var endDate = StartDate.AddDays(end);
+        var endDate = s_startDate.AddDays(end);
 
         // Act & Assert
-        Assert.Throws<DomainException>(() => CreateBookingPeriod(StartDate, endDate));
-        
+        Assert.Throws<DomainException>(() => CreateBookingPeriod(s_startDate, endDate));
+
     }
 }

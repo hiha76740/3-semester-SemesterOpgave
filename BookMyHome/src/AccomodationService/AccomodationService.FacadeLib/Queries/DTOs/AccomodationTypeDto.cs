@@ -1,3 +1,7 @@
-﻿namespace AccomodationService.FacadeLib.Queries.DTOs;
+namespace AccomodationService.FacadeLib.Queries.DTOs;
 
-public record AccomodationTypeDto(string type);
+/// <summary>
+/// 
+/// </summary>
+/// <param name="Type"></param>
+public record AccomodationTypeDto(string Type);

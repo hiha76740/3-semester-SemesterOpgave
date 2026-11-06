@@ -1,14 +1,19 @@
-﻿using AccomodationService.ApplicationLib.Handlers.Services;
+using AccomodationService.ApplicationLib.Handlers.Services;
 using AccomodationService.ApplicationLib.Repositories;
 using AccomodationService.DomainLib.Entities;
 using AccomodationService.DomainLib.Enums;
 using AccomodationService.DomainLib.ValueObjects;
 using AccomodationService.FacadeLib.Commands.DTOs.Listings;
 using AccomodationService.FacadeLib.Commands.Interfaces.Listings;
-using Shared.BookMyHome.SharedKernelLib.Exceptions;
+using BookMyHome.SharedKernelLib.Exceptions;
 
 namespace AccomodationService.ApplicationLib.Handlers.Listings;
 
+/// <summary>
+/// 
+/// </summary>
+/// <param name="accomodationRepo"></param>
+/// <param name="imageStorage"></param>
 public class CreateListingHandler(IAccomodationRepository accomodationRepo, IImageStorageService imageStorage) : ICreateListingHandler
 {
     async Task ICreateListingHandler.HandleAsync(CreateListingCommand command)
@@ -16,10 +21,8 @@ public class CreateListingHandler(IAccomodationRepository accomodationRepo, IIma
         var hostId = new HostId(command.HostId);
         var accomodationId = new AccomodationId(command.AccomodationId);
 
-        var accomodation = await accomodationRepo.GetAccomodationByIdAsync(accomodationId);
-
-        if (accomodation == null)
-            throw new NotFoundException("Accomodation not found");
+        var accomodation = await accomodationRepo.GetAccomodationByIdAsync(accomodationId)
+            ?? throw new NotFoundException("Accomodation not found");
 
         if (accomodation.HostId != hostId)
             throw new UnauthorizedAccessException("Only the owner can create listings.");

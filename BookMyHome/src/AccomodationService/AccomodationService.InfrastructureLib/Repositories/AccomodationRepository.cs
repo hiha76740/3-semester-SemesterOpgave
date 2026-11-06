@@ -1,4 +1,4 @@
-﻿using AccomodationService.ApplicationLib.Repositories;
+using AccomodationService.ApplicationLib.Repositories;
 using AccomodationService.DomainLib.Entities;
 using AccomodationService.DomainLib.ValueObjects;
 using AccomodationService.InfrastructureLib.Persistence;
@@ -7,7 +7,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AccomodationService.InfrastructureLib.Repositories;
 
-internal class AccomodationRepository(AccomodationDbContext db) : IAccomodationRepository
+/// <summary>
+/// 
+/// </summary>
+/// <param name="db"></param>
+public class AccomodationRepository(AccomodationDbContext db) : IAccomodationRepository
 {
     async Task<bool> IAccomodationRepository.AccomodationExsistByAddress(HostId id, string street, string postalCode, string city, string country)
     {
@@ -34,7 +38,7 @@ internal class AccomodationRepository(AccomodationDbContext db) : IAccomodationR
     async Task<Accomodation?> IAccomodationRepository.GetAccomodationWithFacilitiesAsync(AccomodationId id)
     {
         return await db.Accomodations
-            .Include(a => a.facilities)
+            .Include(a => a.Facilities)
             .Where(a => a.Id == id)
             .FirstOrDefaultAsync();
     }
@@ -42,7 +46,7 @@ internal class AccomodationRepository(AccomodationDbContext db) : IAccomodationR
     async Task<Accomodation?> IAccomodationRepository.GetAccomodationWithListingsAsync(AccomodationId id)
     {
         return await db.Accomodations
-            .Include(a => a.listings)
+            .Include(a => a.Listings)
             .Where(a => a.Id == id)
             .FirstOrDefaultAsync();
     }
@@ -59,7 +63,7 @@ internal class AccomodationRepository(AccomodationDbContext db) : IAccomodationR
 
     async Task IAccomodationRepository.UpdateAsync(Accomodation accomodation, ListingId listingId, byte[] originalRowVersion)
     {
-        var listing = accomodation.listings
+        var listing = accomodation.Listings
             .Single(l => l.Id == listingId);
 
         db.Entry(listing)

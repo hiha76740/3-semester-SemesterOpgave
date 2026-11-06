@@ -1,3 +1,8 @@
-﻿namespace BookingService.FacadeLib.Commands.DTOs;
+namespace BookingService.FacadeLib.Commands.DTOs;
 
-public record CancelBookingCommand(Guid BookingId, Guid UserId); 
+/// <summary>
+/// 
+/// </summary>
+/// <param name="BookingId"></param>
+/// <param name="UserId"></param>
+public record CancelBookingCommand(Guid BookingId, Guid UserId);

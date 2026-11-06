@@ -1,6 +1,9 @@
-﻿namespace BookingService.ApplicationLib.Exceptions;
+namespace BookingService.ApplicationLib.Exceptions;
 
-internal class OverlapFoundException : Exception
+/// <summary>
+/// 
+/// </summary>
+/// <param name="message"></param>
+public class OverlapFoundException(string message) : Exception(message)
 {
-    public OverlapFoundException(string message) : base(message) { }
 }

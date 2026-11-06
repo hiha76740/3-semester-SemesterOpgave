@@ -1,6 +1,9 @@
-namespace Shared.BookMyHome.SharedKernelLib.Exceptions;
+namespace BookMyHome.SharedKernelLib.Exceptions;
 
-public class DomainException : Exception
+/// <summary>
+/// 
+/// </summary>
+/// <param name="message"></param>
+public class DomainException(string message) : Exception(message)
 {
-    public DomainException(string message) : base(message) { }
 }

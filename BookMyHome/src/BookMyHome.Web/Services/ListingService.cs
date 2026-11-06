@@ -6,161 +6,152 @@ using Microsoft.AspNetCore.Components.WebAssembly.Http;
 using System.Globalization;
 using System.Net.Http.Json;
 
-namespace BookMyHome.Web.Services
+namespace BookMyHome.Web.Services;
+
+/// <summary>
+/// 
+/// </summary>
+/// <param name="httpClient"></param>
+public class ListingService(HttpClient httpClient) : IListingService
 {
-    public class ListingService(HttpClient httpClient) : IListingService
+    private readonly string _baseUrl = "listings-api";
+
+
+    async Task<int> IListingService.Create(CreateListingRequest createRequest, IBrowserFile? imageFile)
     {
-        private readonly string baseUrl = "listings-api";
+        using var content = new MultipartFormDataContent();
 
 
-        async Task<int> IListingService.Create(CreateListingRequest createRequest, IBrowserFile? imageFile)
+        var requestContent = JsonContent.Create(createRequest);
+        content.Add(requestContent, "data");
+
+
+        if (imageFile != null)
         {
-            using var content = new MultipartFormDataContent();
-
-
-            var requestContent = JsonContent.Create(createRequest);
-            content.Add(requestContent, "data");
-
-
-            if (imageFile != null)
-            {
-                const long maxFileSize = 5 * 1024 * 1024;
-                var fileContent = new StreamContent(imageFile.OpenReadStream(maxFileSize));
-                content.Add(fileContent, "file", imageFile.Name);
-            }
-
-            var request = new HttpRequestMessage(HttpMethod.Post, $"/{baseUrl}")
-            {
-                Content = content
-            };
-
-            request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
-
-            using var response = await httpClient.SendAsync(request);
-
-            return (int)response.StatusCode;
+            const long MaxFileSize = 5 * 1024 * 1024;
+            var fileContent = new StreamContent(imageFile.OpenReadStream(MaxFileSize));
+            content.Add(fileContent, "file", imageFile.Name);
         }
 
-        async Task<int> IListingService.UpdateListing(Guid accomodationId, Guid listingId, UpdateListingRequest updateRequest, IBrowserFile? imageFile)
+        var request = new HttpRequestMessage(HttpMethod.Post, $"/{_baseUrl}")
         {
-            using var content = new MultipartFormDataContent();
+            Content = content
+        };
 
-            var requestContent = JsonContent.Create(updateRequest);
-            content.Add(requestContent, "data");
+        request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
 
-            if (imageFile != null)
-            {
-                const long maxFileSize = 5 * 1024 * 1024;
-                var fileContent = new StreamContent(imageFile.OpenReadStream(maxFileSize));
-                content.Add(fileContent, "file", imageFile.Name);
-            }
+        using var response = await httpClient.SendAsync(request);
 
-            var request = new HttpRequestMessage(HttpMethod.Put, $"{baseUrl}/{accomodationId}/listings/{listingId}")
-            {
-                Content = content
-            };
+        return (int)response.StatusCode;
+    }
 
-            request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
+    async Task<int> IListingService.UpdateListing(Guid accomodationId, Guid listingId, UpdateListingRequest updateRequest, IBrowserFile? imageFile)
+    {
+        using var content = new MultipartFormDataContent();
 
-            using var response = await httpClient.SendAsync(request);
+        var requestContent = JsonContent.Create(updateRequest);
+        content.Add(requestContent, "data");
 
-            return (int)response.StatusCode;
+        if (imageFile != null)
+        {
+            const long MaxFileSize = 5 * 1024 * 1024;
+            var fileContent = new StreamContent(imageFile.OpenReadStream(MaxFileSize));
+            content.Add(fileContent, "file", imageFile.Name);
         }
 
-        async Task<Guid> IListingService.GetAccomodationIdByListingId(Guid listingId)
+        var request = new HttpRequestMessage(HttpMethod.Put, $"{_baseUrl}/{accomodationId}/listings/{listingId}")
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}/{listingId}/accomodationId");
+            Content = content
+        };
 
-            request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
+        request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
 
-            using var response = await httpClient.SendAsync(request);
+        using var response = await httpClient.SendAsync(request);
 
-            response.EnsureSuccessStatusCode();
+        return (int)response.StatusCode;
+    }
 
-            var guid = await response.Content.ReadFromJsonAsync<Guid?>();
+    async Task<Guid> IListingService.GetAccomodationIdByListingId(Guid listingId)
+    {
+        var request = new HttpRequestMessage(HttpMethod.Get, $"{_baseUrl}/{listingId}/accomodationId");
 
-            if (guid == null)
-                throw new InvalidOperationException("Could not deserialize accomodation id");
+        request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
 
-            return guid.Value;
-        }
+        using var response = await httpClient.SendAsync(request);
 
-        async Task<IReadOnlyList<ListingResponse>> IListingService.GetAccomodationListings(Guid accomodationId)
-        {
-            var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}/{accomodationId}/listings");
+        response.EnsureSuccessStatusCode();
 
-            request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
+        var guid = await response.Content.ReadFromJsonAsync<Guid?>()
+            ?? throw new InvalidOperationException("Could not deserialize accomodation id");
 
-            using var response = await httpClient.SendAsync(request);
+        return guid;
+    }
 
-            response.EnsureSuccessStatusCode();
+    async Task<IReadOnlyList<ListingResponse>> IListingService.GetAccomodationListings(Guid accomodationId)
+    {
+        var request = new HttpRequestMessage(HttpMethod.Get, $"{_baseUrl}/{accomodationId}/listings");
 
-            var list = await response.Content.ReadFromJsonAsync<IReadOnlyList<ListingResponse>>();
+        request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
 
-            if (list == null)
-                throw new InvalidOperationException("Could not deserialize listings");
+        using var response = await httpClient.SendAsync(request);
 
-            return list;
-        }
+        response.EnsureSuccessStatusCode();
 
-        async Task<IReadOnlyList<ListingResponse>> IListingService.GetAllAvailiableListingsByPeriod(DateOnly start, DateOnly end)
-        {
-            var from = start.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
-            var to = end.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+        var list = await response.Content.ReadFromJsonAsync<IReadOnlyList<ListingResponse>>()
+            ?? throw new InvalidOperationException("Could not deserialize listings");
 
-            var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}/period?start={from}&end={to}");
+        return list;
+    }
 
-            request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
+    async Task<IReadOnlyList<ListingResponse>> IListingService.GetAllAvailiableListingsByPeriod(DateOnly start, DateOnly end)
+    {
+        var from = start.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+        var to = end.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
 
-            using var response = await httpClient.SendAsync(request);
+        var request = new HttpRequestMessage(HttpMethod.Get, $"{_baseUrl}/period?start={from}&end={to}");
 
-            response.EnsureSuccessStatusCode();
+        request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
 
-            var listings = await response.Content.ReadFromJsonAsync<IReadOnlyList<ListingResponse>>();
+        using var response = await httpClient.SendAsync(request);
 
-            if (listings == null)
-                throw new InvalidOperationException("Could not deserialize listings");
+        response.EnsureSuccessStatusCode();
 
-            return listings;
-        }
+        var listings = await response.Content.ReadFromJsonAsync<IReadOnlyList<ListingResponse>>()
+            ?? throw new InvalidOperationException("Could not deserialize listings");
 
-        async Task<IReadOnlyList<ListingResponse>> IListingService.GetAllListingsAsync()
-        {
-            var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}");
+        return listings;
+    }
 
-            request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
+    async Task<IReadOnlyList<ListingResponse>> IListingService.GetAllListingsAsync()
+    {
+        var request = new HttpRequestMessage(HttpMethod.Get, $"{_baseUrl}");
 
-            using var response = await httpClient.SendAsync(request);
+        request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
 
-            response.EnsureSuccessStatusCode();
+        using var response = await httpClient.SendAsync(request);
 
-            var listings = await response.Content.ReadFromJsonAsync<IReadOnlyList<ListingResponse>>();
+        response.EnsureSuccessStatusCode();
 
-            if (listings == null)
-                throw new InvalidOperationException("Could not deserialize listings");
+        var listings = await response.Content.ReadFromJsonAsync<IReadOnlyList<ListingResponse>>()
+            ?? throw new InvalidOperationException("Could not deserialize listings");
 
-            return listings;
-        }
+        return listings;
+    }
 
-        async Task<ListingResponse> IListingService.GetListingDetailsAsync(Guid accomodationId,Guid listingId)
-        {
-            var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}/details/{accomodationId}/listings/{listingId}");
+    async Task<ListingResponse> IListingService.GetListingDetailsAsync(Guid accomodationId, Guid listingId)
+    {
+        var request = new HttpRequestMessage(HttpMethod.Get, $"{_baseUrl}/details/{accomodationId}/listings/{listingId}");
 
-            request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
+        request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
 
-            using var response = await httpClient.SendAsync(request);
+        using var response = await httpClient.SendAsync(request);
 
-            response.EnsureSuccessStatusCode();
+        response.EnsureSuccessStatusCode();
 
-            var listing = await response.Content.ReadFromJsonAsync<ListingResponse>();
+        var listing = await response.Content.ReadFromJsonAsync<ListingResponse>()
+            ?? throw new InvalidOperationException("Could not deserialize listings");
 
-            if (listing == null)
-                throw new InvalidOperationException("Could not deserialize listings");
+        return listing;
 
-            return listing;
-
-        }
-
-        
     }
 }

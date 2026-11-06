@@ -1,41 +1,42 @@
-﻿using BookMyHome.ContractsLib.Responses.Users;
+using BookMyHome.ContractsLib.Responses.Users;
 using BookMyHome.Web.ServiceInterfaces;
 using Microsoft.AspNetCore.Components.WebAssembly.Http;
 using System.Net.Http.Json;
 
-namespace BookMyHome.Web.Services
+namespace BookMyHome.Web.Services;
+
+/// <summary>
+/// 
+/// </summary>
+/// <param name="httpClient"></param>
+public class UserService(HttpClient httpClient) : IUserService
 {
-    public class UserService(HttpClient httpClient) : IUserService
+    private readonly string _baseUrl = "users-api";
+
+
+    async Task<IReadOnlyList<AccessRoleReponse>> IUserService.GetAllAccessRoles()
     {
-        private readonly string baseUrl = "users-api";
+        var response = await httpClient.GetFromJsonAsync<IReadOnlyList<AccessRoleReponse>>($"{_baseUrl}/Roles");
 
+        if (response == null)
+            return [];
 
-        async Task<IReadOnlyList<AccessRoleReponse>> IUserService.GetAllAccessRoles()
-        {
-            var response = await httpClient.GetFromJsonAsync<IReadOnlyList<AccessRoleReponse>>($"{baseUrl}/Roles");
+        return response;
+    }
 
-            if (response == null)
-                return new List<AccessRoleReponse>();
+    async Task<UserResponse> IUserService.GetUserById(Guid id)
+    {
+        var request = new HttpRequestMessage(HttpMethod.Get, $"{_baseUrl}/{id}");
 
-            return response;
-        }
+        request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
 
-        async Task<UserResponse> IUserService.GetUserById(Guid id)
-        {
-            var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}/{id}");
+        using var response = await httpClient.SendAsync(request);
 
-            request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
+        response.EnsureSuccessStatusCode();
 
-            using var response = await httpClient.SendAsync(request);
+        var user = await response.Content.ReadFromJsonAsync<UserResponse>()
+            ?? throw new InvalidOperationException("Could not deserialize authenticated user");
 
-            response.EnsureSuccessStatusCode();
-
-            var user = await response.Content.ReadFromJsonAsync<UserResponse>();
-
-            if (user == null)
-                throw new InvalidOperationException("Could not deserialize authenticated user");
-
-            return user;
-        }
+        return user;
     }
 }

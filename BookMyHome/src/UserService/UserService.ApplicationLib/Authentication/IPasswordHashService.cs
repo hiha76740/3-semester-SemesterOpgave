@@ -1,8 +1,21 @@
-﻿namespace UserService.ApplicationLib.Authentication;
+namespace UserService.ApplicationLib.Authentication;
 
+/// <summary>
+/// 
+/// </summary>
 public interface IPasswordHashService
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="password"></param>
+    /// <returns></returns>
     string Hash(string password);
-
-    bool Verify(string password,string passwordHash);
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="password"></param>
+    /// <param name="passwordHash"></param>
+    /// <returns></returns>
+    bool Verify(string password, string passwordHash);
 }

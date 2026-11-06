@@ -1,4 +1,4 @@
-﻿using AccomodationService.DomainLib.Entities;
+using AccomodationService.DomainLib.Entities;
 using AccomodationService.FacadeLib.Queries.DTOs;
 using AccomodationService.FacadeLib.Queries.Interfaces;
 using AccomodationService.InfrastructureLib.Persistence;
@@ -6,6 +6,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AccomodationService.InfrastructureLib.QueryHandlers;
 
+/// <summary>
+/// 
+/// </summary>
+/// <param name="db"></param>
+/// <param name="bookingService"></param>
 public class ListingQueryHandlerIMPL(AccomodationDbContext db, IBookingService bookingService) : IListingQueries
 {
     async Task<bool> IListingQueries.CheckIfExistsAsync(Guid id)
@@ -37,7 +42,7 @@ public class ListingQueryHandlerIMPL(AccomodationDbContext db, IBookingService b
                 l.Accomodation.Address.City,
                 l.Accomodation.Address.Country,
                 l.Status.ToString(),
-                l.Accomodation.facilities.Select(f => f.Name).ToArray(),
+                l.Accomodation.Facilities.Select(f => f.Name).ToArray(),
                 l.RowVersion,
                 l.ImageFileName
                 ))
@@ -74,7 +79,7 @@ public class ListingQueryHandlerIMPL(AccomodationDbContext db, IBookingService b
                 l.Accomodation.Address.City,
                 l.Accomodation.Address.Country,
                 l.Status.ToString(),
-                l.Accomodation.facilities.Select(f => f.Name).ToArray(),
+                l.Accomodation.Facilities.Select(f => f.Name).ToArray(),
                 l.RowVersion,
                 l.ImageFileName
                 ))
@@ -97,7 +102,7 @@ public class ListingQueryHandlerIMPL(AccomodationDbContext db, IBookingService b
                 l.Accomodation.Address.City,
                 l.Accomodation.Address.Country,
                 l.Status.ToString(),
-                l.Accomodation.facilities.Select(f => f.Name).ToArray(),
+                l.Accomodation.Facilities.Select(f => f.Name).ToArray(),
                 l.RowVersion,
                 l.ImageFileName
                 ))
@@ -122,7 +127,7 @@ public class ListingQueryHandlerIMPL(AccomodationDbContext db, IBookingService b
                 l.Accomodation.Address.City,
                 l.Accomodation.Address.Country,
                 l.Status.ToString(),
-                l.Accomodation.facilities.Select(f => f.Name).ToArray(),
+                l.Accomodation.Facilities.Select(f => f.Name).ToArray(),
                 l.RowVersion,
                 l.ImageFileName
                 ))
@@ -155,7 +160,7 @@ public class ListingQueryHandlerIMPL(AccomodationDbContext db, IBookingService b
                 l.Accomodation.Address.PostalCode,
                 l.Accomodation.Address.City,
                 l.Accomodation.Address.Country,
-                l.Accomodation.facilities.Select(f => f.Name).ToArray(),
+                l.Accomodation.Facilities.Select(f => f.Name).ToArray(),
                 l.ImageFileName
                 ))
             .FirstOrDefaultAsync();

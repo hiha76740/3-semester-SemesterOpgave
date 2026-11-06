@@ -1,32 +1,32 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <ItemGroup>
-    <ProjectReference Include="..\UserService.DomainLib\UserService.DomainLib.csproj" />
-    <ProjectReference Include="..\UserService.FacadeLib\UserService.FacadeLib.csproj" />
-    <ProjectReference Include="..\UserService.ApplicationLib\UserService.ApplicationLib.csproj" />
-    <ProjectReference Include="..\..\Shared\BookMyHome.SharedKernelLib\BookMyHome.SharedKernelLib.csproj" />
-    <ProjectReference Include="..\..\Shared\BookMyHome.BuildingBlocksLib\BookMyHome.BuildingBlocksLib.csproj" />
-    <ProjectReference Include="..\..\Shared\BookMyHome.ContractsLib\BookMyHome.ContractsLib.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\UserService.DomainLib\UserService.DomainLib.csproj" />
+        <ProjectReference Include="..\UserService.FacadeLib\UserService.FacadeLib.csproj" />
+        <ProjectReference Include="..\UserService.ApplicationLib\UserService.ApplicationLib.csproj" />
+        <ProjectReference Include="..\..\Shared\BookMyHome.SharedKernelLib\BookMyHome.SharedKernelLib.csproj" />
+        <ProjectReference Include="..\..\Shared\BookMyHome.BuildingBlocksLib\BookMyHome.BuildingBlocksLib.csproj" />
+        <ProjectReference Include="..\..\Shared\BookMyHome.ContractsLib\BookMyHome.ContractsLib.csproj" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Dapr.AspNetCore" Version="1.19.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.13" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.13">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="10.0.13" />
-    <PackageReference Include="MySql.EntityFrameworkCore" Version="10.0.12" />
-    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.23.0" />
-    <PackageReference Include="System.Security.Cryptography.Pkcs" Version="10.0.13" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Dapr.AspNetCore" Version="1.19.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.13" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.13">
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="10.0.13" />
+        <PackageReference Include="MySql.EntityFrameworkCore" Version="10.0.12" />
+        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.23.0" />
+        <PackageReference Include="System.Security.Cryptography.Pkcs" Version="10.0.13" />
+    </ItemGroup>
 
-  <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <UserSecretsId>f954716e-aae3-4e97-b939-37a9daa99cff</UserSecretsId>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <UserSecretsId>f954716e-aae3-4e97-b939-37a9daa99cff</UserSecretsId>
+    </PropertyGroup>
 
 </Project>

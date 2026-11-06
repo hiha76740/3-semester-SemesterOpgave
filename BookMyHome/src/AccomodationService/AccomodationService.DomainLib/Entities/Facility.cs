@@ -1,11 +1,20 @@
-﻿using Shared.BookMyHome.SharedKernelLib.Exceptions;
+﻿using BookMyHome.SharedKernelLib.Exceptions;
 
 namespace AccomodationService.DomainLib.Entities;
 
+/// <summary>
+/// 
+/// </summary>
 public class Facility
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public FacilityId Id { get; init; } = null!;
 
+    /// <summary>
+    /// 
+    /// </summary>
     public string Name { get; init; } = string.Empty;
 
     internal Facility(string name)
@@ -15,7 +24,6 @@ public class Facility
 
         Id = new FacilityId(Guid.NewGuid());
         Name = name;
-
     }
 
     private Facility() { }

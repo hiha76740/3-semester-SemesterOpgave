@@ -2,16 +2,42 @@
 using BookMyHome.ContractsLib.Responses.Accomodations;
 using Microsoft.AspNetCore.Components.Forms;
 
-namespace BookMyHome.Web.ServiceInterfaces
+namespace BookMyHome.Web.ServiceInterfaces;
+
+/// <summary>
+/// 
+/// </summary>
+public interface IAccomodationService
 {
-    public interface IAccomodationService
-    {
-        Task<int> Create(CreateAccomodationRequest request, IBrowserFile? imageFile);
-        Task<AccomodationResponse?> GetAccomodationByIdAsync(Guid id);
-        Task<IReadOnlyList<AccomodationResponse>> GetCurrentUserAccomodationsAsync();
-
-        Task<int> UpdateAccomodationAsync(Guid accomodationId, UpdateAccomodationRequest updateRequest, IBrowserFile? imageFile);
-
-        Task<IReadOnlyList<AccomodationTypeResponse>> GetAllAccomodationTypes();
-    }
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="request"></param>
+    /// <param name="imageFile"></param>
+    /// <returns></returns>
+    Task<int> Create(CreateAccomodationRequest request, IBrowserFile? imageFile);
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    Task<AccomodationResponse?> GetAccomodationByIdAsync(Guid id);
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    Task<IReadOnlyList<AccomodationResponse>> GetCurrentUserAccomodationsAsync();
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="accomodationId"></param>
+    /// <param name="updateRequest"></param>
+    /// <param name="imageFile"></param>
+    /// <returns></returns>
+    Task<int> UpdateAccomodationAsync(Guid accomodationId, UpdateAccomodationRequest updateRequest, IBrowserFile? imageFile);
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    Task<IReadOnlyList<AccomodationTypeResponse>> GetAllAccomodationTypes();
 }

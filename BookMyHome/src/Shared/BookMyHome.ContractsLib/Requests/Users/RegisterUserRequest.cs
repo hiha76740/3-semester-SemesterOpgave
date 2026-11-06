@@ -1,5 +1,18 @@
-﻿namespace BookMyHome.ContractsLib.Requests.Users;
+namespace BookMyHome.ContractsLib.Requests.Users;
 
+/// <summary>
+/// 
+/// </summary>
+/// <param name="FirstName"></param>
+/// <param name="LastName"></param>
+/// <param name="Birthdate"></param>
+/// <param name="Street"></param>
+/// <param name="PostalCode"></param>
+/// <param name="City"></param>
+/// <param name="PhoneNumber"></param>
+/// <param name="Email"></param>
+/// <param name="Password"></param>
+/// <param name="Role"></param>
 public record RegisterUserRequest(
     string FirstName,
     string LastName,

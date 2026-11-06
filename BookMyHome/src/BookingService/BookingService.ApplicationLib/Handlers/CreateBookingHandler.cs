@@ -1,4 +1,4 @@
-﻿using BookingService.ApplicationLib.Exceptions;
+using BookingService.ApplicationLib.Exceptions;
 using BookingService.ApplicationLib.Repositories;
 using BookingService.ApplicationLib.Services;
 using BookingService.ApplicationLib.UnitOfWork;
@@ -10,12 +10,22 @@ using BookMyHome.BuildingBlocksLib.Messaging;
 using BookMyHome.ContractsLib.Events;
 using BookMyHome.ContractsLib.Responses.Accomodations;
 using BookMyHome.ContractsLib.Responses.Users;
+using BookMyHome.SharedKernelLib.Exceptions;
 using Microsoft.Extensions.Logging;
-using Shared.BookMyHome.SharedKernelLib.Exceptions;
 using System.Data;
 
 namespace BookingService.ApplicationLib.Handlers;
 
+/// <summary>
+/// 
+/// </summary>
+/// <param name="guestService"></param>
+/// <param name="accomodationService"></param>
+/// <param name="listingService"></param>
+/// <param name="bookingRepo"></param>
+/// <param name="uow"></param>
+/// <param name="eventPublisher"></param>
+/// <param name="logger"></param>
 public class CreateBookingHandler(
     IGuestService guestService,
     IAccomodationService accomodationService,
@@ -27,14 +37,15 @@ public class CreateBookingHandler(
 {
     async Task ICreateBookingHandler.HandleAsync(CreateBookingCommand command)
     {
-        logger.LogInformation("Starting to create booking for the Guest: {GuestId}", command.GuestId);
+        if (logger.IsEnabled(LogLevel.Information))
+            logger.LogInformation("Starting to create booking for the Guest: {GuestId}", command.GuestId);
 
         var guestId = new GuestId(command.GuestId);
         var accomodationId = new AccomodationId(command.AccomodationId);
         var listingId = new ListingId(command.ListingId);
 
-        UserEmailItemResponse? guestEmailResponse = null;
-        ListingEmailItemResponse? listingEmailResonse = null;
+        UserEmailItemResponse? guestEmailResponse;
+        ListingEmailItemResponse? listingEmailResonse;
 
         try
         {
@@ -57,28 +68,35 @@ public class CreateBookingHandler(
         }
         catch (NotFoundException ex)
         {
-            logger.LogError(ex.Message);
+            if (logger.IsEnabled(LogLevel.Error))
+            {
+                logger.LogError("Error {ErrorMessage}", ex.Message);
 
-            if (ex.InnerException != null)
-                logger.LogError(ex.InnerException.Message);
+                if (ex.InnerException != null)
+                    logger.LogError("InnerException Error {Error}", ex.InnerException.Message);
+            }
 
             throw;
         }
         catch (Exception ex)
         {
-            logger.LogError(ex.Message);
+            if (logger.IsEnabled(LogLevel.Error))
+            {
+                logger.LogError("Error {ErrorMessage}", ex.Message);
 
-            if (ex.InnerException != null)
-                logger.LogError(ex.InnerException.Message);
+                if (ex.InnerException != null)
+                    logger.LogError("InnerException Error {Error}", ex.InnerException.Message);
+            }
 
-            throw new ApplicationException(ex.Message, ex);
+            throw new InvalidOperationException(ex.Message, ex);
         }
 
 
 
         try
         {
-            logger.LogInformation("Booking transaction is begining");
+            if (logger.IsEnabled(LogLevel.Information))
+                logger.LogInformation("Booking transaction is begining");
 
             uow.BeginTransaction(IsolationLevel.Serializable);
 
@@ -99,17 +117,22 @@ public class CreateBookingHandler(
                 command.Price
                 );
 
-            logger.LogInformation("Booking created successfully");
+            if (logger.IsEnabled(LogLevel.Information))
+                logger.LogInformation("Booking created successfully");
 
             await bookingRepo.CreateAsync(booking);
-
-            logger.LogInformation("Adding booking with id {bookingId} to database", booking.Id);
+            if (logger.IsEnabled(LogLevel.Information))
+                logger.LogInformation("Adding booking with id {BookingId} to database", booking.Id);
 
             await bookingRepo.SaveAsync();
-            logger.LogInformation("Booking saved to database successfully");
+
+            if (logger.IsEnabled(LogLevel.Information))
+                logger.LogInformation("Booking saved to database successfully");
 
             uow.Commit();
-            logger.LogInformation("Booking transaction completed successfully");
+
+            if (logger.IsEnabled(LogLevel.Information))
+                logger.LogInformation("Booking transaction completed successfully");
 
 
             var integrationEvent = new BookingPlacedIntegrationEvent(
@@ -132,21 +155,27 @@ public class CreateBookingHandler(
                 guestEmailResponse.Email
                 );
 
-            logger.LogInformation("Publishing booking placed event");
-            
+            if (logger.IsEnabled(LogLevel.Information))
+                logger.LogInformation("Publishing booking placed event");
+
             await eventPublisher.PublishAsync("booking-placed", integrationEvent);
 
-            logger.LogInformation("Booking placed event published successfully");
+            if (logger.IsEnabled(LogLevel.Information))
+                logger.LogInformation("Booking placed event published successfully");
         }
         catch (Exception ex)
         {
-            logger.LogError(ex.Message);
+            if (logger.IsEnabled(LogLevel.Error))
+            {
+                logger.LogError("Error {ErrorMessage}", ex.Message);
 
-            if (ex.InnerException != null)
-                logger.LogError(ex.InnerException.Message);
+                if (ex.InnerException != null)
+                    logger.LogError("InnerException Error {Error}", ex.InnerException.Message);
+            }
 
             uow.Rollback();
-            throw new ApplicationException(ex.Message, ex);
+
+            throw new InvalidOperationException(ex.Message, ex);
         }
     }
 }

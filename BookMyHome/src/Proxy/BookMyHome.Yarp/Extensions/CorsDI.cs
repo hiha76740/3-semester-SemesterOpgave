@@ -1,7 +1,16 @@
 ﻿namespace BookMyHome.Yarp.Extensions;
 
+/// <summary>
+/// 
+/// </summary>
 public static class CorsDI
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="services"></param>
+    /// <param name="policyName"></param>
+    /// <returns></returns>
     public static IServiceCollection AddBookMyHomeCors(this IServiceCollection services, string policyName)
     {
         services.AddCors(options =>

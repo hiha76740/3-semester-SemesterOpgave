@@ -1,3 +1,8 @@
-﻿namespace BookMyHome.ContractsLib.Requests.Accomodations;
+namespace BookMyHome.ContractsLib.Requests.Accomodations;
 
-public record UpdateAccomodationRequest(string Status, List<Guid>FacilitiesIds);
+/// <summary>
+/// 
+/// </summary>
+/// <param name="Status"></param>
+/// <param name="FacilitiesIds"></param>
+public record UpdateAccomodationRequest(string Status, List<Guid> FacilitiesIds);

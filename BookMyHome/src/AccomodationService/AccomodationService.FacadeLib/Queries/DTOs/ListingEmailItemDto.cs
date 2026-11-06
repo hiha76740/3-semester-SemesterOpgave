@@ -1,5 +1,18 @@
-﻿namespace AccomodationService.FacadeLib.Queries.DTOs;
+namespace AccomodationService.FacadeLib.Queries.DTOs;
 
+/// <summary>
+/// 
+/// </summary>
+/// <param name="ListingName"></param>
+/// <param name="DailyPrice"></param>
+/// <param name="HouseRules"></param>
+/// <param name="AccomodationType"></param>
+/// <param name="Street"></param>
+/// <param name="PostalCode"></param>
+/// <param name="City"></param>
+/// <param name="Country"></param>
+/// <param name="Facilities"></param>
+/// <param name="ImageFileName"></param>
 public record ListingEmailItemDto(
     string ListingName,
     decimal DailyPrice,

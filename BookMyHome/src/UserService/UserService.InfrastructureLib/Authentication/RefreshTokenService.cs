@@ -1,9 +1,11 @@
-﻿using System.Security.Cryptography;
+using System.Security.Cryptography;
 using UserService.ApplicationLib.Authentication;
-using UserService.DomainLib.Entities;
 
 namespace UserService.InfrastructureLib.Authentication;
 
+/// <summary>
+/// 
+/// </summary>
 public class RefreshTokenService : IRefreshTokenService
 {
     string IRefreshTokenService.GenerateRefreshToken()

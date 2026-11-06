@@ -1,6 +1,10 @@
-﻿namespace BookMyHome.SharedKernelLib.Exceptions;
+namespace BookMyHome.SharedKernelLib.Exceptions;
 
-public class ConcurrencyConflictException : Exception
+/// <summary>
+/// 
+/// </summary>
+/// <param name="message"></param>
+/// <param name="innerException"></param>
+public class ConcurrencyConflictException(string message, Exception innerException) : Exception(message, innerException)
 {
-    public ConcurrencyConflictException(string message, Exception innerException) : base(message, innerException) { }
 }

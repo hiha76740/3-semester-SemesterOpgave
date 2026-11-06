@@ -1,64 +1,66 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using UserService.DomainLib.Entities;
 using UserService.DomainLib.Enums;
 using UserService.FacadeLib.Queries.DTOs;
 using UserService.FacadeLib.Queries.Interfaces;
 using UserService.InfrastructureLib.Persistence;
 
-namespace UserService.InfrastructureLib.QueryHandlers
+namespace UserService.InfrastructureLib.QueryHandlers;
+
+/// <summary>
+/// 
+/// </summary>
+/// <param name="db"></param>
+public class UserQueryIMPLHandler(UserDbContext db) : IUserQueries
 {
-    internal class UserQueryIMPLHandler(UserDbContext db) : IUserQueries
+    async Task<bool> IUserQueries.CheckIfExistsAsync(Guid id)
     {
-        async Task<bool> IUserQueries.CheckIfExistsAsync(Guid id)
-        {
-            var userId = new UserId(id);
+        var userId = new UserId(id);
 
-            return await db.Users
-                .AsNoTracking()
-                .AnyAsync(u => u.Id == userId);
-        }
+        return await db.Users
+            .AsNoTracking()
+            .AnyAsync(u => u.Id == userId);
+    }
 
-        IReadOnlyList<AccessRoleDto> IUserQueries.GetAllAccessRoles()
-        {
-            return Enum.GetValues<AccessRoles>()
-                .Select(r => new AccessRoleDto(r.ToString())).ToList();
-        }
+    IReadOnlyList<AccessRoleDto> IUserQueries.GetAllAccessRoles()
+    {
+        return [.. Enum.GetValues<AccessRoles>().Select(r => new AccessRoleDto(r.ToString()))];
+    }
 
-        async Task<UserDto?> IUserQueries.GetByIdAsync(Guid id)
-        {
-            var userId = new UserId(id);
+    async Task<UserDto?> IUserQueries.GetByIdAsync(Guid id)
+    {
+        var userId = new UserId(id);
 
-            return await db.Users
-                .Where(u => u.Id == userId)
-                .Select(u => new UserDto(
-                    u.Id.Value,
-                    u.FirstName,
-                    u.LastName,
-                    u.Birthdate,
-                    u.Address.Street,
-                    u.Address.PostalCode,
-                    u.Address.City,
-                    u.PhoneNumber.Value,
-                    u.Email.Value,
-                    u.Username
-                    ))
-                .FirstOrDefaultAsync();
+        return await db.Users
+            .Where(u => u.Id == userId)
+            .Select(u => new UserDto(
+                u.Id.Value,
+                u.FirstName,
+                u.LastName,
+                u.Birthdate,
+                u.Address.Street,
+                u.Address.PostalCode,
+                u.Address.City,
+                u.PhoneNumber.Value,
+                u.Email.Value,
+                u.Username
+                ))
+            .FirstOrDefaultAsync();
 
-        }
+    }
 
-        async Task<UserEmailItemDto?> IUserQueries.GetUserEmailItemAsync(Guid id)
-        {
-            var userId = new UserId(id);
+    async Task<UserEmailItemDto?> IUserQueries.GetUserEmailItemAsync(Guid id)
+    {
+        var userId = new UserId(id);
 
-            return await db.Users
-                .Where(u => u.Id == userId)
-                .Select(u => new UserEmailItemDto(
-                    u.FirstName,
-                    u.LastName,
-                    u.Email.Value,
-                    u.Username
-                    ))
-                .FirstOrDefaultAsync();
-        }
+        return await db.Users
+            .Where(u => u.Id == userId)
+            .Select(u => new UserEmailItemDto(
+                u.FirstName,
+                u.LastName,
+                u.Email.Value,
+                u.Username
+                ))
+            .FirstOrDefaultAsync();
     }
 }

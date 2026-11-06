@@ -1,10 +1,16 @@
-﻿using UserService.ApplicationLib.Authentication;
+using UserService.ApplicationLib.Authentication;
 using UserService.ApplicationLib.Repositories;
 using UserService.FacadeLib.Commands.DTOs;
 using UserService.FacadeLib.Commands.Interfaces;
 
 namespace UserService.ApplicationLib.Handlers;
 
+/// <summary>
+/// 
+/// </summary>
+/// <param name="userRepo"></param>
+/// <param name="tokenService"></param>
+/// <param name="refreshTokenService"></param>
 public class RefreshTokenHandler(IUserRepository userRepo, ITokenService tokenService, IRefreshTokenService refreshTokenService) : IRefreshTokensHandler
 {
     async Task<TokenDto?> IRefreshTokensHandler.HandleAsync(RefreshTokenCommand command)
@@ -12,7 +18,7 @@ public class RefreshTokenHandler(IUserRepository userRepo, ITokenService tokenSe
         var principal = tokenService.GetPrincipalFromExpiredToken(command.ExpiredAccessToken);
 
         if (principal.Identity == null || principal.Identity.Name == null)
-            throw new ArgumentNullException(nameof(principal));
+            throw new InvalidOperationException("The principal must contain an identity with a name.");
 
         var user = await userRepo.GetUserByUsernameAsync(principal.Identity.Name);
 
@@ -21,7 +27,9 @@ public class RefreshTokenHandler(IUserRepository userRepo, ITokenService tokenSe
             || user.RefreshToken != command.RefreshToken
             || user.RefreshTokenExpiryTime <= DateTime.UtcNow
             )
+        {
             return null;
+        }
 
         var token = tokenService.CreateToken(user);
         var refreshToken = refreshTokenService.GenerateRefreshToken();

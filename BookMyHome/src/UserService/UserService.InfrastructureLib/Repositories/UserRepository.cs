@@ -1,10 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using UserService.ApplicationLib.Repositories;
 using UserService.DomainLib.Entities;
 using UserService.InfrastructureLib.Persistence;
 
 namespace UserService.InfrastructureLib.Repositories;
 
+/// <summary>
+/// 
+/// </summary>
+/// <param name="db"></param>
 public class UserRepository(UserDbContext db) : IUserRepository
 {
     async Task<User?> IUserRepository.GetUserById(UserId id)

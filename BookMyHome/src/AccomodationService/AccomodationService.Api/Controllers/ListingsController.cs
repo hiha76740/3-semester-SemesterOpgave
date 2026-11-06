@@ -1,4 +1,4 @@
-﻿using AccomodationService.Api.Mapper;
+using AccomodationService.Api.Mapper;
 using AccomodationService.FacadeLib.Commands.DTOs.Listings;
 using AccomodationService.FacadeLib.Commands.Interfaces.Listings;
 using AccomodationService.FacadeLib.Queries.Interfaces;
@@ -11,448 +11,458 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
 
-namespace AccomodationService.Api.Controllers
+namespace AccomodationService.Api.Controllers;
+
+[Route("api/v1/[controller]")]
+[ApiController]
+public class ListingsController(
+    IListingQueries queries,
+    ICreateListingHandler listingCreate,
+    IUpdateListingHandler update,
+    IDeleteListingHandler deleteListingById,
+    IUploadListingImageHandler imageHandler,
+    IConfiguration appsettings
+    ) : ControllerBase
 {
-    [Route("api/v1/[controller]")]
-    [ApiController]
-    public class ListingsController(
-        IListingQueries queries,
-        ICreateListingHandler listingCreate,
-        IUpdateListingHandler update,
-        IDeleteListingHandler deleteListingById,
-        IUploadListingImageHandler imageHandler,
-        IConfiguration appsettings
-        ) : ControllerBase
+    [Authorize(Roles = "Host, Guest")]
+    [HttpGet()]
+    [EndpointSummary("This endpoint will get a all listings")]
+    [EndpointDescription("Gets all listings or returns empty list if no listings was found")]
+    [ProducesResponseType<IReadOnlyList<ListingResponse>>(StatusCodes.Status200OK, "application/json", Description = "Returns all listings")]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while receiving listings")]
+    public async Task<ActionResult<IReadOnlyList<ListingResponse>>> GetAllListings()
     {
-        [Authorize(Roles = "Host, Guest")]
-        [HttpGet()]
-        [EndpointSummary("This endpoint will get a all listings")]
-        [EndpointDescription("Gets all listings or returns empty list if no listings was found")]
-        [ProducesResponseType<IReadOnlyList<ListingResponse>>(StatusCodes.Status200OK, "application/json", Description = "Returns all listings")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while receiving listings")]
-        public async Task<ActionResult<IReadOnlyList<ListingResponse>>> GetAllListings()
+        try
         {
-            try
+            var list = await queries.GetAllListings();
+
+            var response = new List<ListingResponse>();
+
+            if (list.Count != 0)
             {
-                var list = await queries.GetAllListings();
-
-                var response = new List<ListingResponse>();
-
-                if (list.Count != 0)
+                foreach (var item in list)
                 {
-                    foreach (var item in list)
-                    {
-                        var url = item.ImageFileName == null ? null : $"{appsettings["ImageBaseUrl"]}/images/{item.ImageFileName}";
+                    var url = item.ImageFileName == null ? null : $"{appsettings["ImageBaseUrl"]}/images/{item.ImageFileName}";
 
-                        response.Add(item.AsReponse(url));
-                    }
+                    response.Add(item.AsReponse(url));
                 }
+            }
 
-                return Ok(response);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return Ok(response);
         }
-
-        [HttpGet("{listingId}/accomodationId")]
-        [EndpointSummary("This endpoint will get a accomodation Id for the request listing")]
-        [EndpointDescription("Gets accomodation id for request listing or returns not found if no accomodation was found")]
-        [ProducesResponseType<Guid>(StatusCodes.Status200OK, "application/json", Description = "Returns accomodationId for requested listing")]
-        [ProducesResponseType(StatusCodes.Status404NotFound, Description = "Accomodation or listing was not found")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while receiving accomodation id")]
-        public async Task<ActionResult<Guid?>> GetAllListings(
-            [Description("Id of the listing you want to find accomodation id for")] Guid listingId)
+        catch (Exception ex)
         {
-            try
-            {
-                var guid = await queries.GetAccomodationIdByListingId(listingId);
-
-                if (guid == null)
-                    return NotFound("No accomodation was found");
-
-                return Ok(guid);
-
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return BadRequest(ex.Message);
         }
+    }
 
-        [HttpGet("period")]
-        [EndpointSummary("This endpoint will get all listings that are availible in the requested period")]
-        [EndpointDescription("Gets all listings that are availible in the requested period or returns empty list if no listings was found")]
-        [ProducesResponseType<ListingResponse>(StatusCodes.Status200OK, "application/json", Description = "Returns list of listings for requested period")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while receiving listings")]
-        public async Task<ActionResult<ListingResponse>> GetAllAvailibleListingsByPeriod(
-            [Required][Description("Start date of the period you want to find listings for")] DateOnly start,
-            [Required][Description("End date of the period you want to find listings for")] DateOnly end)
+    [HttpGet("{listingId}/accomodationId")]
+    [EndpointSummary("This endpoint will get a accomodation Id for the request listing")]
+    [EndpointDescription("Gets accomodation id for request listing or returns not found if no accomodation was found")]
+    [ProducesResponseType<Guid>(StatusCodes.Status200OK, "application/json", Description = "Returns accomodationId for requested listing")]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Description = "Accomodation or listing was not found")]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while receiving accomodation id")]
+    public async Task<ActionResult<Guid?>> GetAllListings(
+        [Description("Id of the listing you want to find accomodation id for")] Guid listingId)
+    {
+        try
         {
-            try
+            var guid = await queries.GetAccomodationIdByListingId(listingId);
+
+            if (guid == null)
+                return NotFound("No accomodation was found");
+
+            return Ok(guid);
+
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpGet("period")]
+    [EndpointSummary("This endpoint will get all listings that are availible in the requested period")]
+    [EndpointDescription("Gets all listings that are availible in the requested period or returns empty list if no listings was found")]
+    [ProducesResponseType<ListingResponse>(StatusCodes.Status200OK, "application/json", Description = "Returns list of listings for requested period")]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while receiving listings")]
+    public async Task<ActionResult<ListingResponse>> GetAllAvailibleListingsByPeriod(
+        [Required][Description("Start date of the period you want to find listings for")] DateOnly start,
+        [Required][Description("End date of the period you want to find listings for")] DateOnly end)
+    {
+        try
+        {
+            var list = await queries.GetAvailableListings(start, end);
+
+            var response = new List<ListingResponse>();
+
+            if (list.Count != 0)
             {
-                var list = await queries.GetAvailableListings(start, end);
-
-                var response = new List<ListingResponse>();
-
-                if (list.Count != 0)
+                foreach (var item in list)
                 {
-                    foreach (var item in list)
-                    {
-                        var url = item.ImageFileName == null ? null : $"{appsettings["ImageBaseUrl"]}/images/{item.ImageFileName}";
+                    var url = item.ImageFileName == null ? null : $"{appsettings["ImageBaseUrl"]}/images/{item.ImageFileName}";
 
-                        response.Add(item.AsReponse(url));
-                    }
+                    response.Add(item.AsReponse(url));
                 }
-
-                return Ok(response);
-
             }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+
+            return Ok(response);
+
         }
-
-
-        [Authorize(Roles = "Host")]
-        [HttpGet("{accomodationId:guid}/listings")]
-        [EndpointSummary("This endpoint will get a all listings for a specific accomodation")]
-        [EndpointDescription("Gets all listings of a accomodation or returns empty list if no listings was found")]
-        [ProducesResponseType<IReadOnlyList<ListingResponse>>(StatusCodes.Status200OK, "application/json", Description = "Returns all listings for the requested accomodation")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while receiving listings for requsted accomodation")]
-        public async Task<ActionResult<IReadOnlyList<ListingResponse>>> GetAllAccomdationListings(
-            [Description("Id of the accomodation you want to find listings for")] Guid accomodationId)
+        catch (Exception ex)
         {
-            try
+            return BadRequest(ex.Message);
+        }
+    }
+
+
+    [Authorize(Roles = "Host")]
+    [HttpGet("{accomodationId:guid}/listings")]
+    [EndpointSummary("This endpoint will get a all listings for a specific accomodation")]
+    [EndpointDescription("Gets all listings of a accomodation or returns empty list if no listings was found")]
+    [ProducesResponseType<IReadOnlyList<ListingResponse>>(StatusCodes.Status200OK, "application/json", Description = "Returns all listings for the requested accomodation")]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while receiving listings for requsted accomodation")]
+    public async Task<ActionResult<IReadOnlyList<ListingResponse>>> GetAllAccomdationListings(
+        [Description("Id of the accomodation you want to find listings for")] Guid accomodationId)
+    {
+        try
+        {
+            var list = await queries.GetAllAccomdationListingsAsync(accomodationId);
+
+            var response = new List<ListingResponse>();
+
+            if (list.Count != 0)
             {
-                var list = await queries.GetAllAccomdationListingsAsync(accomodationId);
-
-                var response = new List<ListingResponse>();
-
-                if (list.Count != 0)
+                foreach (var item in list)
                 {
-                    foreach (var item in list)
-                    {
-                        var url = item.ImageFileName == null ? null : $"{appsettings["ImageBaseUrl"]}/images/{item.ImageFileName}";
+                    var url = item.ImageFileName == null ? null : $"{appsettings["ImageBaseUrl"]}/images/{item.ImageFileName}";
 
-                        response.Add(item.AsReponse(url));
-                    }
+                    response.Add(item.AsReponse(url));
                 }
-
-                return Ok(response);
             }
-            catch (Exception ex)
-            {
 
-                return BadRequest(ex.Message);
-            }
+            return Ok(response);
         }
-
-        [HttpGet("details/{accomodationId:guid}/listings/{listingId:guid}")]
-        [EndpointSummary("This endpoint will get details of a specific listing for a specific accomodation")]
-        [EndpointDescription("Gets a specific listing of a accomodation or returns not found if no listing or accomodation was found")]
-        [ProducesResponseType<ListingResponse>(StatusCodes.Status200OK, "application/json", Description = "Returns specific listing for the requested accomodation")]
-        [ProducesResponseType(StatusCodes.Status404NotFound, Description = "Listing or accomodation not found")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while receiving listing for requsted accomodation")]
-        public async Task<ActionResult<ListingResponse>> GetListingDetailsByIdAsync(
-            [Description("Id of the accomodation you want to find listing for")] Guid accomodationId,
-            [Description("Id of the listing you want to find")] Guid listingId)
+        catch (Exception ex)
         {
-            try
-            {
-                var dto = await queries.GetListingDetailsByIdAsync(accomodationId, listingId);
 
-                if (dto == null)
-                    return NotFound("The requested listing was not found");
-
-                var url = dto.ImageFileName == null ? null : $"{appsettings["ImageBaseUrl"]}/images/{dto.ImageFileName}";
-
-                return Ok(dto.AsReponse(url));
-            }
-            catch (Exception ex)
-            {
-
-                return BadRequest(ex.Message);
-            }
+            return BadRequest(ex.Message);
         }
+    }
 
-        [Authorize(Roles = "Host")]
-        [HttpPost]
-        [RequestSizeLimit(6 * 1024 * 1024)]
-        [EndpointSummary("This endpoint will create a listing for a specific accomodation")]
-        [EndpointDescription("Creates a listing of a specific accomodation")]
-        [ProducesResponseType(StatusCodes.Status200OK, Description = "Creation of listing for the requested accomodation succesfully completed")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while creating listing for requsted accomodation")]
-        public async Task<ActionResult> CreateListingAsync(
-            [Required][FromForm] string data,
-            [FromForm] IFormFile? file
-            )
+    [HttpGet("details/{accomodationId:guid}/listings/{listingId:guid}")]
+    [EndpointSummary("This endpoint will get details of a specific listing for a specific accomodation")]
+    [EndpointDescription("Gets a specific listing of a accomodation or returns not found if no listing or accomodation was found")]
+    [ProducesResponseType<ListingResponse>(StatusCodes.Status200OK, "application/json", Description = "Returns specific listing for the requested accomodation")]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Description = "Listing or accomodation not found")]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while receiving listing for requsted accomodation")]
+    public async Task<ActionResult<ListingResponse>> GetListingDetailsByIdAsync(
+        [Description("Id of the accomodation you want to find listing for")] Guid accomodationId,
+        [Description("Id of the listing you want to find")] Guid listingId)
+    {
+        try
         {
-            try
-            {
-                var userId = UserHelper.GetCurrentUserId(HttpContext.User);
+            var dto = await queries.GetListingDetailsByIdAsync(accomodationId, listingId);
 
-                if (userId == null)
-                    return BadRequest("User id not valid");
+            if (dto == null)
+                return NotFound("The requested listing was not found");
 
-                var request = JsonSerializer.Deserialize<CreateListingRequest>(data, new JsonSerializerOptions(JsonSerializerDefaults.Web));
+            var url = dto.ImageFileName == null ? null : $"{appsettings["ImageBaseUrl"]}/images/{dto.ImageFileName}";
 
-                if (request == null)
-                    return BadRequest("Could not deserialize data");
-
-                Stream? imageStream = null;
-                string? extension = null;
-
-                if (file != null)
-                {
-                    const long maxFileSize = 5 * 1024 * 1024;
-
-                    if (file.Length == 0)
-                        return BadRequest("Please choose a image file");
-
-                    if (file.Length > maxFileSize)
-                        return BadRequest($"Size limit of image is 5 MB.");
-
-                    extension = Path.GetExtension(file.FileName)
-                        .ToLowerInvariant();
-
-                    if (extension != ".jpg" &&
-                        extension != ".jpeg" &&
-                        extension != ".png")
-                        return BadRequest("Only jpg- and png-image files are allowed");
-
-                    imageStream = file.OpenReadStream();
-                }
-
-                await listingCreate.HandleAsync(request.AsCreateListingCommand(userId.Value, imageStream, extension));
-
-                if (imageStream != null)
-                    await imageStream.DisposeAsync();
-
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-
-                return BadRequest(ex.Message);
-            }
+            return Ok(dto.AsReponse(url));
         }
-
-
-        [Authorize(Roles = "Host")]
-        [HttpPut("{accomodationId:guid}/listings/{listingId:guid}")]
-        [EndpointSummary("This endpoint will update the requested listing")]
-        [EndpointDescription("Updates listing where information has changed")]
-        [ProducesResponseType(StatusCodes.Status200OK, Description = "Updating of requested listing succesfully completed")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while updating the request listing")]
-        public async Task<ActionResult> UpdateListing(
-            [Description("Id of the accomodation the listing is assoicated to")] Guid accomodationId,
-            [Description("Id of the listing you want to update the daily price for")] Guid listingId,
-            [Required][FromForm] string data,
-            [FromForm] IFormFile? file
-            )
+        catch (Exception ex)
         {
-            try
-            {
-                var userId = UserHelper.GetCurrentUserId(HttpContext.User);
 
-                if (userId == null || UserHelper.IsValidRole(HttpContext.User, "Host") == false)
-                    return Unauthorized("Incorrect permission");
-
-                var request = JsonSerializer.Deserialize<UpdateListingRequest>(data, new JsonSerializerOptions(JsonSerializerDefaults.Web));
-
-                if (request == null)
-                    return BadRequest("Could not deserialize data");
-
-                Stream? imageStream = null;
-                string? extension = null;
-
-                if (file != null)
-                {
-                    const long maxFileSize = 5 * 1024 * 1024;
-
-                    if (file.Length == 0)
-                        return BadRequest("Please choose a image file");
-
-                    if (file.Length > maxFileSize)
-                        return BadRequest($"Size limit of image is 5 MB.");
-
-                    extension = Path.GetExtension(file.FileName)
-                        .ToLowerInvariant();
-
-                    if (extension != ".jpg" &&
-                        extension != ".jpeg" &&
-                        extension != ".png")
-                        return BadRequest("Only jpg- and png-image files are allowed");
-
-                    imageStream = file.OpenReadStream();
-                }
-
-                var command = new UpdateListingCommand(
-                    userId.Value,
-                    accomodationId,
-                    listingId,
-                    request.ListingName,
-                    request.DailyPrice,
-                    request.HouseRules,
-                    request.AccomodationType,
-                    request.Status,
-                    request.RowVersion,
-                    imageStream,
-                    extension
-                    );
-
-                var changesMade = await update.HandleAsync(command);
-
-                if (changesMade == false)
-                    return NoContent();
-
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-
-                return BadRequest(ex.Message);
-            }
+            return BadRequest(ex.Message);
         }
+    }
 
-        [Authorize(Roles = "Host")]
-        [HttpDelete("{accomodationId:guid}/listings/{listingId:guid}")]
-        [EndpointSummary("This endpoint will delete a specific listing")]
-        [EndpointDescription("Deletes a specific listing of a specific accomodation")]
-        [ProducesResponseType(StatusCodes.Status200OK, Description = "Deletion of requested listing succesfully completed")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while deleting the request listing")]
-        public async Task<ActionResult> DeleteListingById(
-            [Description("Id of the accomodation the listing is assoicated to")] Guid accomodationId,
-            [Description("Id of the listing you want to delete")] Guid listingId,
-            [Description("Original row version")] byte[] RowVersion
-            )
+    [Authorize(Roles = "Host")]
+    [HttpPost]
+    [RequestSizeLimit(6 * 1024 * 1024)]
+    [EndpointSummary("This endpoint will create a listing for a specific accomodation")]
+    [EndpointDescription("Creates a listing of a specific accomodation")]
+    [ProducesResponseType(StatusCodes.Status200OK, Description = "Creation of listing for the requested accomodation succesfully completed")]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while creating listing for requsted accomodation")]
+    public async Task<ActionResult> CreateListingAsync(
+        [Required][FromForm] string data,
+        [FromForm] IFormFile? file
+        )
+    {
+        try
         {
-            try
+            var userId = UserHelper.GetCurrentUserId(HttpContext.User);
+
+            if (userId == null)
+                return BadRequest("User id not valid");
+
+            var jsonSerializerOptions = new JsonSerializerOptions(JsonSerializerDefaults.Web);
+            var jsonOption = jsonSerializerOptions;
+
+            var request = JsonSerializer.Deserialize<CreateListingRequest>(data, jsonOption);
+
+            if (request == null)
+                return BadRequest("Could not deserialize data");
+
+            Stream? imageStream = null;
+            string? extension = null;
+
+            if (file != null)
             {
-                var userId = UserHelper.GetCurrentUserId(HttpContext.User);
-
-                if (userId == null || UserHelper.IsValidRole(HttpContext.User, "Host") == false)
-                    return Unauthorized("Incorrect permission");
-
-                var command = new DeleteListingCommand(
-                    userId.Value,
-                    accomodationId,
-                    listingId,
-                    RowVersion
-                    );
-
-                await deleteListingById.HandleAsync(command);
-
-                return Ok();
-
-            }
-            catch (Exception ex)
-            {
-
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [Authorize(Roles = "Host")]
-        [HttpPut("{listingId:guid}/image")]
-        [RequestSizeLimit(6 * 1024 * 1024)]
-        [EndpointSummary("This endpoint will upload and set a image to the requested accomodation")]
-        [EndpointDescription("Uploads and sets the provided image to the requested accomodation or returns not found if accomodation was not found")]
-        [ProducesResponseType(StatusCodes.Status200OK, Description = "Upload and set of image was done sucessfully")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while uploading and setting image for requested accomodation")]
-        public async Task<ActionResult> UploadAccomodationImage(
-           [Required][Description("Id of the accomodation the requested listing is associated to")] Guid accomodationId,
-           [Description("Id of the listing you want to upload and set the image for")] Guid listingId,
-           [FromForm] IFormFile file)
-        {
-            try
-            {
-                var userId = UserHelper.GetCurrentUserId(HttpContext.User);
-
-                if (userId == null || UserHelper.IsValidRole(HttpContext.User, "Host") == false)
-                    return Unauthorized("Incorrect permission");
-
-
-                const long maxFileSize = 5 * 1024 * 1024;
+                const long MaxFileSize = 5 * 1024 * 1024;
 
                 if (file.Length == 0)
                     return BadRequest("Please choose a image file");
 
-                if (file.Length > maxFileSize)
+                if (file.Length > MaxFileSize)
                     return BadRequest($"Size limit of image is 5 MB.");
 
-                var extension = Path.GetExtension(file.FileName)
+                extension = Path.GetExtension(file.FileName)
                     .ToLowerInvariant();
 
                 if (extension != ".jpg" &&
                     extension != ".jpeg" &&
                     extension != ".png")
+                {
                     return BadRequest("Only jpg- and png-image files are allowed");
+                }
 
-                await using var imageStream = file.OpenReadStream();
-
-                var command = new UploadListingImageCommand(userId.Value, accomodationId, listingId, imageStream, extension);
-
-                await imageHandler.HandleAsync(command);
-
-                return Ok();
-
+                imageStream = file.OpenReadStream();
             }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+
+            await listingCreate.HandleAsync(request.AsCreateListingCommand(userId.Value, imageStream, extension));
+
+            if (imageStream != null)
+                await imageStream.DisposeAsync();
+
+            return Ok();
         }
-
-        [HttpGet("exists")]
-        [EndpointSummary("This endpoint will check if a specific listings exists")]
-        [EndpointDescription("Checks if the requested listing exists in database or returns false if no listing was found")]
-        [ProducesResponseType<bool>(StatusCodes.Status200OK, "application/json", Description = "Returns true if listing exists")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while checking requested listing")]
-        public async Task<ActionResult<bool>> CheckIfExists(
-            [Required][Description("Id of the listing you want to check")] Guid id)
+        catch (Exception ex)
         {
-            try
-            {
-                var exists = await queries.CheckIfExistsAsync(id);
 
-                return Ok(exists);
-            }
-            catch (Exception ex)
-            {
-
-                return BadRequest(ex.Message);
-            }
+            return BadRequest(ex.Message);
         }
+    }
 
-        [HttpGet("emailitem")]
-        [EndpointSummary("This endpoint will get info required for email for the requested listing")]
-        [EndpointDescription("Gets the email info for the requested listing, if listing exists returns info otherwise returns not found")]
-        [ProducesResponseType<ListingEmailItemResponse>(StatusCodes.Status200OK, "application/json", Description = "Returns all info needed for email")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while getting info for email item")]
-        [ProducesResponseType(StatusCodes.Status404NotFound, Description = "Requested listing not found")]
-        public async Task<ActionResult<ListingEmailItemResponse>> GetListingEmailItem(
-            [Required][Description("Id of the listing you want to get info for")] Guid listingId)
+
+    [Authorize(Roles = "Host")]
+    [HttpPut("{accomodationId:guid}/listings/{listingId:guid}")]
+    [EndpointSummary("This endpoint will update the requested listing")]
+    [EndpointDescription("Updates listing where information has changed")]
+    [ProducesResponseType(StatusCodes.Status200OK, Description = "Updating of requested listing succesfully completed")]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while updating the request listing")]
+    public async Task<ActionResult> UpdateListing(
+        [Description("Id of the accomodation the listing is assoicated to")] Guid accomodationId,
+        [Description("Id of the listing you want to update the daily price for")] Guid listingId,
+        [Required][FromForm] string data,
+        [FromForm] IFormFile? file
+        )
+    {
+        try
         {
-            try
+            var userId = UserHelper.GetCurrentUserId(HttpContext.User);
+
+            if (userId == null || UserHelper.IsValidRole(HttpContext.User, "Host") == false)
+                return Unauthorized("Incorrect permission");
+
+            var jsonOptions = new JsonSerializerOptions(JsonSerializerDefaults.Web);
+            var options = jsonOptions;
+            var request = JsonSerializer.Deserialize<UpdateListingRequest>(data, options);
+
+            if (request == null)
+                return BadRequest("Could not deserialize data");
+
+            Stream? imageStream = null;
+            string? extension = null;
+
+            if (file != null)
             {
-                var dto = await queries.GetListingEmailItemAsync(listingId);
+                const long MaxFileSize = 5 * 1024 * 1024;
 
-                if (dto == null)
-                    return NotFound("Listing not found");
+                if (file.Length == 0)
+                    return BadRequest("Please choose a image file");
 
-                var url = dto.ImageFileName == null ? null : $"{appsettings["ImageBaseUrl"]}/images/{dto.ImageFileName}";
+                if (file.Length > MaxFileSize)
+                    return BadRequest($"Size limit of image is 5 MB.");
 
-                return Ok(dto.AsEmailItemReponse(url));
+                extension = Path.GetExtension(file.FileName)
+                    .ToLowerInvariant();
 
+                if (extension != ".jpg" &&
+                    extension != ".jpeg" &&
+                    extension != ".png")
+                {
+                    return BadRequest("Only jpg- and png-image files are allowed");
+                }
+
+                imageStream = file.OpenReadStream();
             }
-            catch (Exception ex)
+
+            var command = new UpdateListingCommand(
+                userId.Value,
+                accomodationId,
+                listingId,
+                request.ListingName,
+                request.DailyPrice,
+                request.HouseRules,
+                request.AccomodationType,
+                request.Status,
+                request.RowVersion,
+                imageStream,
+                extension
+                );
+
+            var changesMade = await update.HandleAsync(command);
+
+            if (changesMade == false)
+                return NoContent();
+
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [Authorize(Roles = "Host")]
+    [HttpDelete("{accomodationId:guid}/listings/{listingId:guid}")]
+    [EndpointSummary("This endpoint will delete a specific listing")]
+    [EndpointDescription("Deletes a specific listing of a specific accomodation")]
+    [ProducesResponseType(StatusCodes.Status200OK, Description = "Deletion of requested listing succesfully completed")]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while deleting the request listing")]
+    public async Task<ActionResult> DeleteListingById(
+        [Description("Id of the accomodation the listing is assoicated to")] Guid accomodationId,
+        [Description("Id of the listing you want to delete")] Guid listingId,
+        [Description("Original row version")] byte[] rowVersion
+        )
+    {
+        try
+        {
+            var userId = UserHelper.GetCurrentUserId(HttpContext.User);
+
+            if (userId == null || UserHelper.IsValidRole(HttpContext.User, "Host") == false)
+                return Unauthorized("Incorrect permission");
+
+            var command = new DeleteListingCommand(
+                userId.Value,
+                accomodationId,
+                listingId,
+                rowVersion
+                );
+
+            await deleteListingById.HandleAsync(command);
+
+            return Ok();
+
+        }
+        catch (Exception ex)
+        {
+
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [Authorize(Roles = "Host")]
+    [HttpPut("{listingId:guid}/image")]
+    [RequestSizeLimit(6 * 1024 * 1024)]
+    [EndpointSummary("This endpoint will upload and set a image to the requested accomodation")]
+    [EndpointDescription("Uploads and sets the provided image to the requested accomodation or returns not found if accomodation was not found")]
+    [ProducesResponseType(StatusCodes.Status200OK, Description = "Upload and set of image was done sucessfully")]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while uploading and setting image for requested accomodation")]
+    public async Task<ActionResult> UploadAccomodationImage(
+       [Required][Description("Id of the accomodation the requested listing is associated to")] Guid accomodationId,
+       [Description("Id of the listing you want to upload and set the image for")] Guid listingId,
+       [FromForm] IFormFile file)
+    {
+        try
+        {
+            var userId = UserHelper.GetCurrentUserId(HttpContext.User);
+
+            if (userId == null || UserHelper.IsValidRole(HttpContext.User, "Host") == false)
+                return Unauthorized("Incorrect permission");
+
+
+            const long MaxFileSize = 5 * 1024 * 1024;
+
+            if (file.Length == 0)
+                return BadRequest("Please choose a image file");
+
+            if (file.Length > MaxFileSize)
+                return BadRequest($"Size limit of image is 5 MB.");
+
+            var extension = Path.GetExtension(file.FileName)
+                .ToLowerInvariant();
+
+            if (extension != ".jpg" &&
+                extension != ".jpeg" &&
+                extension != ".png")
             {
-                return BadRequest(ex.Message);
+                return BadRequest("Only jpg- and png-image files are allowed");
             }
+
+            await using var imageStream = file.OpenReadStream();
+
+            var command = new UploadListingImageCommand(userId.Value, accomodationId, listingId, imageStream, extension);
+
+            await imageHandler.HandleAsync(command);
+
+            return Ok();
+
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpGet("exists")]
+    [EndpointSummary("This endpoint will check if a specific listings exists")]
+    [EndpointDescription("Checks if the requested listing exists in database or returns false if no listing was found")]
+    [ProducesResponseType<bool>(StatusCodes.Status200OK, "application/json", Description = "Returns true if listing exists")]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while checking requested listing")]
+    public async Task<ActionResult<bool>> CheckIfExists(
+        [Required][Description("Id of the listing you want to check")] Guid id)
+    {
+        try
+        {
+            var exists = await queries.CheckIfExistsAsync(id);
+
+            return Ok(exists);
+        }
+        catch (Exception ex)
+        {
+
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpGet("emailitem")]
+    [EndpointSummary("This endpoint will get info required for email for the requested listing")]
+    [EndpointDescription("Gets the email info for the requested listing, if listing exists returns info otherwise returns not found")]
+    [ProducesResponseType<ListingEmailItemResponse>(StatusCodes.Status200OK, "application/json", Description = "Returns all info needed for email")]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while getting info for email item")]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Description = "Requested listing not found")]
+    public async Task<ActionResult<ListingEmailItemResponse>> GetListingEmailItem(
+        [Required][Description("Id of the listing you want to get info for")] Guid listingId)
+    {
+        try
+        {
+            var dto = await queries.GetListingEmailItemAsync(listingId);
+
+            if (dto == null)
+                return NotFound("Listing not found");
+
+            var url = dto.ImageFileName == null ? null : $"{appsettings["ImageBaseUrl"]}/images/{dto.ImageFileName}";
+
+            return Ok(dto.AsEmailItemReponse(url));
+
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
         }
     }
 }

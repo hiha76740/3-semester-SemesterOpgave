@@ -1,4 +1,4 @@
-﻿using AccomodationService.DomainLib.Entities;
+using AccomodationService.DomainLib.Entities;
 using AccomodationService.FacadeLib.Queries.DTOs;
 using AccomodationService.FacadeLib.Queries.Interfaces;
 using AccomodationService.InfrastructureLib.Persistence;
@@ -6,6 +6,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AccomodationService.InfrastructureLib.QueryHandlers;
 
+/// <summary>
+/// 
+/// </summary>
+/// <param name="db"></param>
 public class FacilityQueryHandlerIMPL(AccomodationDbContext db) : IFaciltiyQueries
 {
     async Task<IReadOnlyList<FacilityDto>> IFaciltiyQueries.GetAllFacilitiesAsync()

@@ -1,4 +1,4 @@
-﻿using BookingService.ApplicationLib.Services;
+using BookingService.ApplicationLib.Services;
 using BookingService.DomainLib.Entities;
 using BookingService.DomainLib.Enums;
 using BookingService.DomainLib.ValueObjects;
@@ -9,6 +9,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BookingService.InfrastructureLib.QueryHandlers;
 
+/// <summary>
+/// 
+/// </summary>
+/// <param name="db"></param>
+/// <param name="accomodationService"></param>
 public class BookingQueryHandlerIMPL(BookingDbContext db, IAccomodationService accomodationService) : IBookingQueries
 {
     async Task<bool> IBookingQueries.Checkavailability(Guid accomodationId, DateOnly startDate, DateOnly endDate)
@@ -24,7 +29,7 @@ public class BookingQueryHandlerIMPL(BookingDbContext db, IAccomodationService a
             );
     }
 
-    
+
 
     async Task<IReadOnlyList<BookingDTO>> IBookingQueries.GetAllAsync()
     {
@@ -71,13 +76,13 @@ public class BookingQueryHandlerIMPL(BookingDbContext db, IAccomodationService a
             var summary = await accomodationService.GetAccomodationSummaryAsync(booking.AccomodationId, booking.ListingId);
 
             var userBooking = new BookingSummaryDto(
-                booking.Id, 
+                booking.Id,
                 booking.BookingNumber,
                 summary.ListingName,
-                summary.ListingType, 
+                summary.ListingType,
                 summary.City,
                 summary.Country,
-                booking.StartDate, 
+                booking.StartDate,
                 booking.EndDate,
                 booking.Price,
                 booking.Status
@@ -134,9 +139,9 @@ public class BookingQueryHandlerIMPL(BookingDbContext db, IAccomodationService a
         return accomdationBookings;
     }
 
-    async Task<BookingDTO?> IBookingQueries.GetBookingByIdAsync(Guid Id)
+    async Task<BookingDTO?> IBookingQueries.GetBookingByIdAsync(Guid id)
     {
-        var bookingId = new BookingId(Id);
+        var bookingId = new BookingId(id);
 
         return await db.Bookings
             .AsNoTracking()

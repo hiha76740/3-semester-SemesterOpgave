@@ -1,117 +1,116 @@
-﻿using BookMyHome.ContractsLib.Responses.Users;
+using BookMyHome.ContractsLib.Responses.Users;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using UserService.Api.Mapper;
 using UserService.FacadeLib.Queries.Interfaces;
 
-namespace UserService.Api.Controllers
+namespace UserService.Api.Controllers;
+
+[Route("api/v1/[controller]")]
+[ApiController]
+public class UsersController(IUserQueries queries) : ControllerBase
 {
-    [Route("api/v1/[controller]")]
-    [ApiController]
-    public class UsersController(IUserQueries queries) : ControllerBase
+    [HttpGet("roles")]
+    [EndpointSummary("This endpoint will get all access roles")]
+    [EndpointDescription("Gets all access roles, if successful returns a list otherwise returns not found")]
+    [ProducesResponseType(StatusCodes.Status200OK, Description = "Returns a list of access roles")]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while getting access roles")]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Description = "No access roles was found")]
+
+    public ActionResult<IReadOnlyList<AccessRoleReponse>> GetAllAccessRoles()
     {
-        [HttpGet("roles")]
-        [EndpointSummary("This endpoint will get all access roles")]
-        [EndpointDescription("Gets all access roles, if successful returns a list otherwise returns not found")]
-        [ProducesResponseType(StatusCodes.Status200OK, Description = "Returns a list of access roles")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while getting access roles")]
-        [ProducesResponseType(StatusCodes.Status404NotFound, Description = "No access roles was found")]
-
-        public ActionResult<IReadOnlyList<AccessRoleReponse>> GetAllAccessRoles()
+        try
         {
-            try
+            var list = queries.GetAllAccessRoles();
+
+            if (list == null || list.Count == 0)
+                return NotFound("No access roles was found");
+
+            var response = new List<AccessRoleReponse>();
+
+            foreach (var item in list)
             {
-                var list = queries.GetAllAccessRoles();
-
-                if (list == null || list.Count == 0)
-                    return NotFound("No access roles was found");
-
-                var response = new List<AccessRoleReponse>();
-
-                foreach (var item in list)
-                {
-                    response.Add(item.AsAccessRoleResponse());
-                }
-
-                return Ok(response);
-
+                response.Add(item.AsAccessRoleResponse());
             }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+
+            return Ok(response);
+
         }
-
-        [HttpGet("{userId:guid}")]
-        [EndpointSummary("This endpoint will get a specific user")]
-        [EndpointDescription("Gets a specific user, if successful returns user otherwise returns not found")]
-        [ProducesResponseType<UserResponse>(StatusCodes.Status200OK, "application/json", Description = "Returns requested user")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while getting requested user")]
-        [ProducesResponseType(StatusCodes.Status404NotFound, Description = "Requested user was not found")]
-        public async Task<ActionResult<UserResponse>> GetUserById(
-            [Required][Description("Id of the user you want to find")] Guid userId)
+        catch (Exception ex)
         {
-            try
-            {
-                var user = await queries.GetByIdAsync(userId);
-
-                if (user == null)
-                    return NotFound("No user was found with the specified Id");
-
-                return Ok(user.AsUserResponse());
-
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return BadRequest(ex.Message);
         }
+    }
 
-        [HttpGet("exists")]
-        [EndpointSummary("This endpoint will check if a specific user exists")]
-        [EndpointDescription("Checks if a specific user exists in datbase, if user exists returns true otherwise returns false")]
-        [ProducesResponseType<bool>(StatusCodes.Status200OK, "application/json", Description = "Returns true")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while checking if requested user exists")]
-        public async Task<ActionResult<UserResponse>> CheckIfExists(
-            [Required][Description("Id of the user you want to check")] Guid userId)
+    [HttpGet("{userId:guid}")]
+    [EndpointSummary("This endpoint will get a specific user")]
+    [EndpointDescription("Gets a specific user, if successful returns user otherwise returns not found")]
+    [ProducesResponseType<UserResponse>(StatusCodes.Status200OK, "application/json", Description = "Returns requested user")]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while getting requested user")]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Description = "Requested user was not found")]
+    public async Task<ActionResult<UserResponse>> GetUserById(
+        [Required][Description("Id of the user you want to find")] Guid userId)
+    {
+        try
         {
-            try
-            {
-                var exists = await queries.CheckIfExistsAsync(userId);
+            var user = await queries.GetByIdAsync(userId);
 
-                return Ok(exists);
+            if (user == null)
+                return NotFound("No user was found with the specified Id");
 
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return Ok(user.AsUserResponse());
+
         }
-
-        [HttpGet("emailitem")]
-        [EndpointSummary("This endpoint will get info required for email for the requested user")]
-        [EndpointDescription("Gets the email info for the requested user, if user exists returns info otherwise returns not found")]
-        [ProducesResponseType<UserEmailItemResponse>(StatusCodes.Status200OK, "application/json", Description = "Returns all info needed to send email to user")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while getting info for email item")]
-        [ProducesResponseType(StatusCodes.Status404NotFound, Description = "Requested user not found")]
-        public async Task<ActionResult<UserEmailItemResponse>> GetUserEmailItem(
-            [Required][Description("Id of the user you want to get info for")] Guid userId)
+        catch (Exception ex)
         {
-            try
-            {
-                var dto = await queries.GetUserEmailItemAsync(userId);
+            return BadRequest(ex.Message);
+        }
+    }
 
-                if (dto == null)
-                    return NotFound("User not found");
+    [HttpGet("exists")]
+    [EndpointSummary("This endpoint will check if a specific user exists")]
+    [EndpointDescription("Checks if a specific user exists in datbase, if user exists returns true otherwise returns false")]
+    [ProducesResponseType<bool>(StatusCodes.Status200OK, "application/json", Description = "Returns true")]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while checking if requested user exists")]
+    public async Task<ActionResult<UserResponse>> CheckIfExists(
+        [Required][Description("Id of the user you want to check")] Guid userId)
+    {
+        try
+        {
+            var exists = await queries.CheckIfExistsAsync(userId);
 
-                return Ok(dto.AsUserEmailItemResponse());
+            return Ok(exists);
 
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpGet("emailitem")]
+    [EndpointSummary("This endpoint will get info required for email for the requested user")]
+    [EndpointDescription("Gets the email info for the requested user, if user exists returns info otherwise returns not found")]
+    [ProducesResponseType<UserEmailItemResponse>(StatusCodes.Status200OK, "application/json", Description = "Returns all info needed to send email to user")]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "Error while getting info for email item")]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Description = "Requested user not found")]
+    public async Task<ActionResult<UserEmailItemResponse>> GetUserEmailItem(
+        [Required][Description("Id of the user you want to get info for")] Guid userId)
+    {
+        try
+        {
+            var dto = await queries.GetUserEmailItemAsync(userId);
+
+            if (dto == null)
+                return NotFound("User not found");
+
+            return Ok(dto.AsUserEmailItemResponse());
+
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
         }
     }
 }

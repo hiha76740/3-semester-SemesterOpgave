@@ -1,11 +1,21 @@
 ﻿using BookMyHome.ContractsLib.Responses.Users;
 
-namespace BookMyHome.Web.ServiceInterfaces
-{
-    public interface IUserService
-    {
-        Task<IReadOnlyList<AccessRoleReponse>> GetAllAccessRoles();
+namespace BookMyHome.Web.ServiceInterfaces;
 
-        Task<UserResponse> GetUserById(Guid id);
-    }
+/// <summary>
+/// 
+/// </summary>
+public interface IUserService
+{
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    Task<IReadOnlyList<AccessRoleReponse>> GetAllAccessRoles();
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    Task<UserResponse> GetUserById(Guid id);
 }

@@ -1,8 +1,13 @@
-﻿using UserService.DomainLib.Entities;
-
 namespace UserService.ApplicationLib.Authentication;
 
+/// <summary>
+/// 
+/// </summary>
 public interface IRefreshTokenService
 {
-    public string GenerateRefreshToken();
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    string GenerateRefreshToken();
 }

@@ -1,11 +1,11 @@
-﻿using AccomodationService.DomainLib.Entities;
+using AccomodationService.DomainLib.Entities;
 using AccomodationService.DomainLib.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace AccomodationService.InfrastructureLib.Persistence.EF_Configurations;
+namespace AccomodationService.InfrastructureLib.Persistence.Configurations;
 
-internal class AccomodationConfiguration : IEntityTypeConfiguration<Accomodation>
+internal sealed class AccomodationConfiguration : IEntityTypeConfiguration<Accomodation>
 {
     public void Configure(EntityTypeBuilder<Accomodation> builder)
     {
@@ -28,7 +28,7 @@ internal class AccomodationConfiguration : IEntityTypeConfiguration<Accomodation
             a => a.Address,
             ad => ad.ToJson());
 
-        builder.HasMany(a => a.facilities)
+        builder.HasMany(a => a.Facilities)
             .WithMany()
             .UsingEntity(j => j.ToTable("AccommodationFacilities"));
     }

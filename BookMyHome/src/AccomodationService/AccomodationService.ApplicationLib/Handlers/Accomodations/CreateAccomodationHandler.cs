@@ -1,4 +1,4 @@
-﻿using AccomodationService.ApplicationLib.Handlers.Services;
+using AccomodationService.ApplicationLib.Handlers.Services;
 using AccomodationService.ApplicationLib.Repositories;
 using AccomodationService.DomainLib.Entities;
 using AccomodationService.DomainLib.ValueObjects;
@@ -7,6 +7,11 @@ using AccomodationService.FacadeLib.Commands.Interfaces.Accomodations;
 
 namespace AccomodationService.ApplicationLib.Handlers.Accomodations;
 
+/// <summary>
+/// 
+/// </summary>
+/// <param name="accomodationRepo"></param>
+/// <param name="imageStorage"></param>
 public class CreateAccomodationHandler(IAccomodationRepository accomodationRepo, IImageStorageService imageStorage) : ICreateAccomodationHandler
 {
     async Task ICreateAccomodationHandler.HandleAsync(CreateAccomodationCommand command)

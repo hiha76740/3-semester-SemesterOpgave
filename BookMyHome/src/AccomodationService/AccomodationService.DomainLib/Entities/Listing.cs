@@ -1,26 +1,48 @@
 ﻿using AccomodationService.DomainLib.Enums;
-using Shared.BookMyHome.SharedKernelLib.Exceptions;
+using BookMyHome.SharedKernelLib.Exceptions;
 
 namespace AccomodationService.DomainLib.Entities;
 
+/// <summary>
+/// 
+/// </summary>
 public class Listing
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public ListingId Id { get; init; } = null!;
-
+    /// <summary>
+    /// 
+    /// </summary>
     public Accomodation Accomodation { get; init; } = null!;
-
+    /// <summary>
+    /// 
+    /// </summary>
     public string ListingName { get; private set; } = string.Empty;
-
+    /// <summary>
+    /// 
+    /// </summary>
     public decimal DailyPrice { get; private set; }
-
+    /// <summary>
+    /// 
+    /// </summary>
     public string HouseRules { get; private set; } = string.Empty;
-
+    /// <summary>
+    /// 
+    /// </summary>
     public AccomodationType Type { get; private set; }
-
+    /// <summary>
+    /// 
+    /// </summary>
     public ListingStatus Status { get; private set; }
-
+    /// <summary>
+    /// 
+    /// </summary>
     public string? ImageFileName { get; private set; }
-
+    /// <summary>
+    /// 
+    /// </summary>
     public byte[] RowVersion { get; private set; } = [];
 
     internal void SetImage(string imageFileName)
@@ -31,7 +53,6 @@ public class Listing
         ImageFileName = imageFileName;
     }
 
-    
     internal void UpdateStatus(ListingStatus newStatus)
     {
         if (Status == newStatus)

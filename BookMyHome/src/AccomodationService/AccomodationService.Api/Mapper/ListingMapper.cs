@@ -1,12 +1,21 @@
-﻿using AccomodationService.FacadeLib.Commands.DTOs.Listings;
+using AccomodationService.FacadeLib.Commands.DTOs.Listings;
 using AccomodationService.FacadeLib.Queries.DTOs;
 using BookMyHome.ContractsLib.Requests.Accomodations;
 using BookMyHome.ContractsLib.Responses.Accomodations;
 
 namespace AccomodationService.Api.Mapper;
 
+/// <summary>
+/// 
+/// </summary>
 public static class ListingMapper
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="dto"></param>
+    /// <param name="url"></param>
+    /// <returns></returns>
     public static ListingResponse AsReponse(this ListingDto dto, string? url)
     {
         var output = new ListingResponse(
@@ -28,10 +37,15 @@ public static class ListingMapper
 
         return output;
     }
-
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="dto"></param>
+    /// <param name="url"></param>
+    /// <returns></returns>
     public static ListingEmailItemResponse AsEmailItemReponse(this ListingEmailItemDto dto, string? url)
     {
-        var output = new ListingEmailItemResponse(         
+        var output = new ListingEmailItemResponse(
             dto.ListingName,
             dto.DailyPrice,
             dto.HouseRules,
@@ -47,7 +61,14 @@ public static class ListingMapper
         return output;
     }
 
-
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="request"></param>
+    /// <param name="hostId"></param>
+    /// <param name="imageStream"></param>
+    /// <param name="extension"></param>
+    /// <returns></returns>
     public static CreateListingCommand AsCreateListingCommand(this CreateListingRequest request, Guid hostId, Stream? imageStream = null, string? extension = null)
     {
         var output = new CreateListingCommand(
@@ -64,6 +85,11 @@ public static class ListingMapper
         return output;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="dto"></param>
+    /// <returns></returns>
     public static AccomodationSummaryResponse AsListingSummaryResponse(this AccomodationSummaryDto dto)
     {
         var output = new AccomodationSummaryResponse(

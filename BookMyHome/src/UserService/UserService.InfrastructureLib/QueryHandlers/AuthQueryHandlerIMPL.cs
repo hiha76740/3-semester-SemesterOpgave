@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using UserService.DomainLib.Entities;
 using UserService.FacadeLib.Queries.DTOs;
 using UserService.FacadeLib.Queries.Interfaces;
@@ -6,6 +6,10 @@ using UserService.InfrastructureLib.Persistence;
 
 namespace UserService.InfrastructureLib.QueryHandlers;
 
+/// <summary>
+/// 
+/// </summary>
+/// <param name="db"></param>
 public class AuthQueryHandlerIMPL(UserDbContext db) : IAuthQueries
 {
     async Task<AuthUserDto?> IAuthQueries.GetCurrentUserInfo(Guid id)

@@ -1,5 +1,19 @@
-﻿namespace AccomodationService.FacadeLib.Commands.DTOs.Listings;
+namespace AccomodationService.FacadeLib.Commands.DTOs.Listings;
 
+/// <summary>
+/// 
+/// </summary>
+/// <param name="HostId"></param>
+/// <param name="AccomodationId"></param>
+/// <param name="ListingId"></param>
+/// <param name="ListingName"></param>
+/// <param name="DailyPrice"></param>
+/// <param name="HouseRules"></param>
+/// <param name="AccomodationType"></param>
+/// <param name="Status"></param>
+/// <param name="RowVersion"></param>
+/// <param name="ImageStream"></param>
+/// <param name="Extension"></param>
 public record UpdateListingCommand(
     Guid HostId,
     Guid AccomodationId,
@@ -8,8 +22,8 @@ public record UpdateListingCommand(
     decimal DailyPrice,
     string HouseRules,
     string AccomodationType,
-    string status,
+    string Status,
     byte[] RowVersion,
-    Stream? imageStream,
-    string? extension
+    Stream? ImageStream,
+    string? Extension
     );

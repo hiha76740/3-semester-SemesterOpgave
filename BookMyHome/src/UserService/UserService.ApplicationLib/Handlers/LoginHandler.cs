@@ -1,34 +1,40 @@
-﻿using UserService.ApplicationLib.Authentication;
+using UserService.ApplicationLib.Authentication;
 using UserService.ApplicationLib.Repositories;
 using UserService.FacadeLib.Commands.DTOs;
 using UserService.FacadeLib.Commands.Interfaces;
 
-namespace UserService.ApplicationLib.Handlers
+namespace UserService.ApplicationLib.Handlers;
+
+/// <summary>
+/// 
+/// </summary>
+/// <param name="userRepo"></param>
+/// <param name="passwordHashService"></param>
+/// <param name="tokenService"></param>
+/// <param name="refreshTokenService"></param>
+public class LoginHandler(IUserRepository userRepo, IPasswordHashService passwordHashService, ITokenService tokenService, IRefreshTokenService refreshTokenService) : ILoginHandler
 {
-    public class LoginHandler(IUserRepository userRepo, IPasswordHashService passwordHashService, ITokenService tokenService, IRefreshTokenService refreshTokenService) : ILoginHandler
+    async Task<TokenDto?> ILoginHandler.HandleAsync(LoginCommand command)
     {
-        async Task<TokenDto?> ILoginHandler.HandleAsync(LoginCommand command)
-        {
-            var user = await userRepo.GetUserByUsernameAsync(command.Username);
+        var user = await userRepo.GetUserByUsernameAsync(command.Username);
 
-            if (user == null)
-                return null;
+        if (user == null)
+            return null;
 
-            if (passwordHashService.Verify(command.password, user.PasswordHash) == false)
-                return null;
+        if (passwordHashService.Verify(command.Password, user.PasswordHash) == false)
+            return null;
 
 
-            string token = tokenService.CreateToken(user);
-            
-            string refreshToken = refreshTokenService.GenerateRefreshToken();
+        var token = tokenService.CreateToken(user);
 
-            user.SetRefreshToken(refreshToken,true);
+        var refreshToken = refreshTokenService.GenerateRefreshToken();
 
-            await userRepo.SaveAsync();
+        user.SetRefreshToken(refreshToken, true);
 
-            var dto = new TokenDto(token, refreshToken);
+        await userRepo.SaveAsync();
 
-            return dto;
-        }
+        var dto = new TokenDto(token, refreshToken);
+
+        return dto;
     }
 }

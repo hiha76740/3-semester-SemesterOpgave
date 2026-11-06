@@ -1,10 +1,10 @@
-﻿using AccomodationService.DomainLib.Entities;
+using AccomodationService.DomainLib.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace AccomodationService.InfrastructureLib.Persistence.EF_Configurations;
+namespace AccomodationService.InfrastructureLib.Persistence.Configurations;
 
-internal class FacilityConfiguration : IEntityTypeConfiguration<Facility>
+internal sealed class FacilityConfiguration : IEntityTypeConfiguration<Facility>
 {
     public void Configure(EntityTypeBuilder<Facility> builder)
     {

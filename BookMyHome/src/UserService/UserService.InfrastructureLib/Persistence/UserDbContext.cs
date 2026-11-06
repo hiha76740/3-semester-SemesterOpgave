@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using UserService.DomainLib.Entities;
 
 namespace UserService.InfrastructureLib.Persistence;

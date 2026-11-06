@@ -7,7 +7,7 @@ builder.AddServiceDefaults();
 
 builder.Services.AddHealthChecks();
 
-string corsPolicyName = "BlazorCors";
+var corsPolicyName = "BlazorCors";
 builder.Services.AddBookMyHomeCors(corsPolicyName);
 
 builder.Services.AddReverseProxy()

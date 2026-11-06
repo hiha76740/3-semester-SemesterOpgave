@@ -1,19 +1,19 @@
-﻿using BookingService.DomainLib.Entities;
+using BookingService.DomainLib.Entities;
 using BookingService.DomainLib.Enums;
 using BookingService.DomainLib.ValueObjects;
-using Shared.BookMyHome.SharedKernelLib.Exceptions;
+using BookMyHome.SharedKernelLib.Exceptions;
 
 namespace BookingService.DomainLib.Tests;
 
 public class BookingTests
 {
-    private readonly static AccomodationId AccomodationId = new(Guid.Parse("4504e34a-67a5-4cba-b029-8eb0b453b80d"));
-    private readonly static GuestId GuestId = new(Guid.Parse("4504e34a-67a5-4cba-b030-8eb0b693b80d"));
-    private readonly static ListingId ListingId = new(Guid.Parse("4504e34a-67a5-4cba-b040-8eb0b693b80d"));
-    private readonly static decimal Price = 500m;
+    private static readonly AccomodationId s_accomodationId = new(Guid.Parse("4504e34a-67a5-4cba-b029-8eb0b453b80d"));
+    private static readonly GuestId s_guestId = new(Guid.Parse("4504e34a-67a5-4cba-b030-8eb0b693b80d"));
+    private static readonly ListingId s_listingId = new(Guid.Parse("4504e34a-67a5-4cba-b040-8eb0b693b80d"));
+    private static readonly decimal s_price = 500m;
 
-    private readonly static DateOnly StartDate = DateOnly.FromDateTime(DateTime.UtcNow);
-    private readonly static DateOnly EndDate = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(5));
+    private static readonly DateOnly s_startDate = DateOnly.FromDateTime(DateTime.UtcNow);
+    private static readonly DateOnly s_endDate = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(5));
 
 
     private static Booking CreateBookingWithNoOverlap(
@@ -26,12 +26,12 @@ public class BookingTests
         )
     {
         return Booking.Create(
-            guestId ?? GuestId,
-            accomodationId ?? AccomodationId,
-            listingId ?? ListingId,
-            startDate ?? StartDate,
-            endDate ?? EndDate,
-            price ?? Price
+            guestId ?? s_guestId,
+            accomodationId ?? s_accomodationId,
+            listingId ?? s_listingId,
+            startDate ?? s_startDate,
+            endDate ?? s_endDate,
+            price ?? s_price
             );
     }
 
@@ -65,7 +65,7 @@ public class BookingTests
     public void Create_GivenNegativePrice_ThrowsException()
     {
         // Arrange
-        decimal price = -10m;
+        var price = -10m;
 
         // Act & Assert
         Assert.Throws<DomainException>(() => CreateBookingWithNoOverlap(price: price));
@@ -78,7 +78,7 @@ public class BookingTests
         var booking = CreateBookingWithNoOverlap();
 
         var expected = BookingStatus.Cancelled;
-        
+
         // Act
         booking.CancelBooking();
 
@@ -94,7 +94,7 @@ public class BookingTests
         booking.CancelBooking();
 
         // Act & Assert
-        Assert.Throws<DomainException>(() => booking.CancelBooking());
+        Assert.Throws<DomainException>(booking.CancelBooking);
     }
 
 

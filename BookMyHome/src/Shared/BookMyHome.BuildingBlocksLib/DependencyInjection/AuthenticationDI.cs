@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -6,11 +6,20 @@ using System.Text;
 
 namespace BookMyHome.BuildingBlocksLib.DependencyInjection;
 
+/// <summary>
+/// 
+/// </summary>
 public static class AuthenticationDI
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="services"></param>
+    /// <param name="builder"></param>
+    /// <returns></returns>
     public static IServiceCollection AddBookMyHomeAuthentication(this IServiceCollection services, WebApplicationBuilder builder)
     {
-        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        _ = services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
         options.TokenValidationParameters = new TokenValidationParameters
@@ -30,7 +39,7 @@ public static class AuthenticationDI
         {
             OnMessageReceived = ctx =>
             {
-                ctx.Request.Cookies.TryGetValue("accessToken", out var accessToken);
+                _ = ctx.Request.Cookies.TryGetValue("accessToken", out var accessToken);
                 if (string.IsNullOrEmpty(accessToken) == false)
                     ctx.Token = accessToken;
 

@@ -1,9 +1,16 @@
-﻿using EmailService.FacadeLib.Commands.DTOs;
+using EmailService.FacadeLib.Commands.DTOs;
 
-namespace EmailService.FacadeLib.Commands.Interfaces
+namespace EmailService.FacadeLib.Commands.Interfaces;
+
+/// <summary>
+/// 
+/// </summary>
+public interface ISendUserConfirmationHandler
 {
-    public interface ISendUserConfirmationHandler
-    {
-        Task HandleAsync(SendUserConfirmationCommand command);
-    }
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="command"></param>
+    /// <returns></returns>
+    Task HandleAsync(SendUserConfirmationCommand command);
 }

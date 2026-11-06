@@ -1,4 +1,4 @@
-﻿using BookMyHome.BuildingBlocksLib.Messaging;
+using BookMyHome.BuildingBlocksLib.Messaging;
 using Microsoft.Extensions.Logging;
 using Moq;
 using UserService.ApplicationLib.Authentication;
@@ -16,18 +16,18 @@ public class RegisterUserTests
     public async Task Handle_GivenValidData_CallsRegisterAndSave()
     {
         // Arrange
-        string firstName = "Tom";
-        string lastName = "Felton";
-        DateOnly birthdate = new DateOnly(1987, 9, 27);
-        string street = "Vejlevej 42";
-        string postalCode = "7100";
-        string city = "Vejle";
-        string phoneNumber = "12345678";
-        string email = "Test@test.dk";
-        string password = "Password";
-        string role = "Guest";
+        var firstName = "Tom";
+        var lastName = "Felton";
+        var birthdate = new DateOnly(1987, 9, 27);
+        var street = "Vejlevej 42";
+        var postalCode = "7100";
+        var city = "Vejle";
+        var phoneNumber = "12345678";
+        var email = "Test@test.dk";
+        var password = "Password";
+        var role = "Guest";
 
-        string hashedPassword = "hashedPassword";
+        var hashedPassword = "hashedPassword";
 
         var mockUserRepo = new Mock<IUserRepository>();
         var mockPasswordHash = new Mock<IPasswordHashService>();

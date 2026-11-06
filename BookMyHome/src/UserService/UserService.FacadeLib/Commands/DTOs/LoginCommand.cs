@@ -1,3 +1,8 @@
-﻿namespace UserService.FacadeLib.Commands.DTOs;
+namespace UserService.FacadeLib.Commands.DTOs;
 
-public record LoginCommand(string Username, string password);
+/// <summary>
+/// 
+/// </summary>
+/// <param name="Username"></param>
+/// <param name="Password"></param>
+public record LoginCommand(string Username, string Password);

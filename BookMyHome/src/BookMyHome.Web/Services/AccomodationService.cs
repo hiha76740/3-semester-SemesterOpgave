@@ -5,120 +5,115 @@ using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components.WebAssembly.Http;
 using System.Net.Http.Json;
 
-namespace BookMyHome.Web.Services
+namespace BookMyHome.Web.Services;
+
+/// <summary>
+/// 
+/// </summary>
+/// <param name="httpClient"></param>
+public class AccomodationService(HttpClient httpClient) : IAccomodationService
 {
-    public class AccomodationService(HttpClient httpClient) : IAccomodationService
+    private readonly string _baseUrl = "accomodations-api";
+
+
+    async Task<int> IAccomodationService.Create(CreateAccomodationRequest createRequest, IBrowserFile? imageFile)
     {
-        private readonly string baseUrl = "accomodations-api";
+        using var content = new MultipartFormDataContent();
 
 
-        async Task<int> IAccomodationService.Create(CreateAccomodationRequest createRequest, IBrowserFile? imageFile)
+        var requestContent = JsonContent.Create(createRequest);
+        content.Add(requestContent, "data");
+
+
+        if (imageFile != null)
         {
-            using var content = new MultipartFormDataContent();
-
-
-            var requestContent = JsonContent.Create(createRequest);
-            content.Add(requestContent,"data");
-
-
-            if (imageFile != null)
-            {
-                const long maxFileSize = 5 * 1024 * 1024;
-                var fileContent = new StreamContent(imageFile.OpenReadStream(maxFileSize));
-                content.Add(fileContent, "file", imageFile.Name);
-            }
-
-            var request = new HttpRequestMessage(HttpMethod.Post, $"{baseUrl}")
-            {
-                Content = content
-            };
-
-            request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
-
-            using var response = await httpClient.SendAsync(request);
-
-            return (int)response.StatusCode;
+            const long MaxFileSize = 5 * 1024 * 1024;
+            var fileContent = new StreamContent(imageFile.OpenReadStream(MaxFileSize));
+            content.Add(fileContent, "file", imageFile.Name);
         }
 
-        async Task<int> IAccomodationService.UpdateAccomodationAsync(Guid accomodationId, UpdateAccomodationRequest updateRequest, IBrowserFile? imageFile)
+        var request = new HttpRequestMessage(HttpMethod.Post, $"{_baseUrl}")
         {
-            using var content = new MultipartFormDataContent();
+            Content = content
+        };
 
-            var requestContent = JsonContent.Create(updateRequest);
-            content.Add(requestContent, "data");
+        request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
 
-            if (imageFile != null)
-            {
-                const long maxFileSize = 5 * 1024 * 1024;
-                var fileContent = new StreamContent(imageFile.OpenReadStream(maxFileSize));
-                content.Add(fileContent, "file", imageFile.Name);
-            }
+        using var response = await httpClient.SendAsync(request);
 
+        return (int)response.StatusCode;
+    }
 
-            var request = new HttpRequestMessage(HttpMethod.Put, $"{baseUrl}/{accomodationId}")
-            {
-                Content = content
-            };
+    async Task<int> IAccomodationService.UpdateAccomodationAsync(Guid accomodationId, UpdateAccomodationRequest updateRequest, IBrowserFile? imageFile)
+    {
+        using var content = new MultipartFormDataContent();
 
-            request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
+        var requestContent = JsonContent.Create(updateRequest);
+        content.Add(requestContent, "data");
 
-            using var response = await httpClient.SendAsync(request);
-
-            return (int)response.StatusCode;
+        if (imageFile != null)
+        {
+            const long MaxFileSize = 5 * 1024 * 1024;
+            var fileContent = new StreamContent(imageFile.OpenReadStream(MaxFileSize));
+            content.Add(fileContent, "file", imageFile.Name);
         }
 
-        async Task<AccomodationResponse?> IAccomodationService.GetAccomodationByIdAsync(Guid id)
+
+        var request = new HttpRequestMessage(HttpMethod.Put, $"{_baseUrl}/{accomodationId}")
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}/{id}");
+            Content = content
+        };
 
-            request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
+        request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
 
-            using var response = await httpClient.SendAsync(request);
+        using var response = await httpClient.SendAsync(request);
 
-            response.EnsureSuccessStatusCode();
+        return (int)response.StatusCode;
+    }
 
-            var accomodation = await response.Content.ReadFromJsonAsync<AccomodationResponse?>();
+    async Task<AccomodationResponse?> IAccomodationService.GetAccomodationByIdAsync(Guid id)
+    {
+        var request = new HttpRequestMessage(HttpMethod.Get, $"{_baseUrl}/{id}");
 
-            if (accomodation == null)
-                throw new InvalidOperationException("Could not deserialize accomodation");
+        request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
 
-            return accomodation;
-        }
+        using var response = await httpClient.SendAsync(request);
 
-        async Task<IReadOnlyList<AccomodationTypeResponse>> IAccomodationService.GetAllAccomodationTypes()
-        {
-            var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}/types");
+        response.EnsureSuccessStatusCode();
 
-            using var response = await httpClient.SendAsync(request);
+        var accomodation = await response.Content.ReadFromJsonAsync<AccomodationResponse?>()
+            ?? throw new InvalidOperationException("Could not deserialize accomodation");
 
-            response.EnsureSuccessStatusCode();
+        return accomodation;
+    }
 
-            var list = await response.Content.ReadFromJsonAsync<IReadOnlyList<AccomodationTypeResponse>>();
+    async Task<IReadOnlyList<AccomodationTypeResponse>> IAccomodationService.GetAllAccomodationTypes()
+    {
+        var request = new HttpRequestMessage(HttpMethod.Get, $"{_baseUrl}/types");
 
-            if (list == null)
-                throw new InvalidOperationException("Could not deserialize accomodation types");
+        using var response = await httpClient.SendAsync(request);
 
-            return list;
-        }
+        response.EnsureSuccessStatusCode();
 
-        async Task<IReadOnlyList<AccomodationResponse>> IAccomodationService.GetCurrentUserAccomodationsAsync()
-        {
-            var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}");
+        var list = await response.Content.ReadFromJsonAsync<IReadOnlyList<AccomodationTypeResponse>>()
+            ?? throw new InvalidOperationException("Could not deserialize accomodation types");
 
-            request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
+        return list;
+    }
 
-            using var response = await httpClient.SendAsync(request);
+    async Task<IReadOnlyList<AccomodationResponse>> IAccomodationService.GetCurrentUserAccomodationsAsync()
+    {
+        var request = new HttpRequestMessage(HttpMethod.Get, $"{_baseUrl}");
 
-            response.EnsureSuccessStatusCode();
+        request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
 
-            var accomodation = await response.Content.ReadFromJsonAsync<IReadOnlyList<AccomodationResponse>>();
+        using var response = await httpClient.SendAsync(request);
 
-            if (accomodation == null)
-                throw new InvalidOperationException("Could not deserialize accomodation");
+        response.EnsureSuccessStatusCode();
 
-            return accomodation;
-        }
+        var accomodation = await response.Content.ReadFromJsonAsync<IReadOnlyList<AccomodationResponse>>()
+            ?? throw new InvalidOperationException("Could not deserialize accomodation");
 
-        
+        return accomodation;
     }
 }

@@ -4,55 +4,56 @@ using BookMyHome.Web.ServiceInterfaces;
 using Microsoft.AspNetCore.Components.WebAssembly.Http;
 using System.Net.Http.Json;
 
-namespace BookMyHome.Web.Services
+namespace BookMyHome.Web.Services;
+
+/// <summary>
+/// 
+/// </summary>
+/// <param name="httpClient"></param>
+public class FacilityService(HttpClient httpClient) : IFacilityService
 {
-    public class FacilityService(HttpClient httpClient) : IFacilityService
+    private readonly string _baseUrl = "facilities-api";
+
+
+    async Task<IReadOnlyList<FacilityResponse>> IFacilityService.GetAllFacilitiesAsync()
     {
-        private readonly string baseUrl = "facilities-api";
+        var request = new HttpRequestMessage(HttpMethod.Get, $"{_baseUrl}");
 
+        request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
 
-        async Task<IReadOnlyList<FacilityResponse>> IFacilityService.GetAllFacilitiesAsync()
+        using var response = await httpClient.SendAsync(request);
+
+        response.EnsureSuccessStatusCode();
+
+        var facilities = await response.Content.ReadFromJsonAsync<IReadOnlyList<FacilityResponse>>()
+            ?? throw new InvalidOperationException("Could not deserialize listings");
+
+        return facilities;
+    }
+
+    async Task IFacilityService.AddFacilityAsync(Guid facilityId, Guid accomodationId)
+    {
+        var request = new HttpRequestMessage(HttpMethod.Put, $"{_baseUrl}/{accomodationId}")
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}");
+            Content = JsonContent.Create(new AddFacilityRequest(facilityId))
+        };
+        request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
 
-            request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
+        using var response = await httpClient.SendAsync(request);
 
-            using var response = await httpClient.SendAsync(request);
+        response.EnsureSuccessStatusCode();
+    }
 
-            response.EnsureSuccessStatusCode();
-
-            var facilities = await response.Content.ReadFromJsonAsync<IReadOnlyList<FacilityResponse>>();
-
-            if (facilities == null)
-                throw new InvalidOperationException("Could not deserialize listings");
-
-            return facilities;
-        }
-
-        async Task IFacilityService.AddFacilityAsync(Guid facilityId, Guid accomodationId)
+    async Task IFacilityService.RemoveFacilityAsync(Guid facilityId, Guid accomodationId)
+    {
+        var request = new HttpRequestMessage(HttpMethod.Delete, $"{_baseUrl}/{accomodationId}")
         {
-            var request = new HttpRequestMessage(HttpMethod.Put, $"{baseUrl}/{accomodationId}")
-            {
-                Content = JsonContent.Create(new AddFacilityRequest(facilityId))
-            };
-            request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
+            Content = JsonContent.Create(new RemoveFacilityRequest(facilityId))
+        };
+        request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
 
-            using var response = await httpClient.SendAsync(request);
+        using var response = await httpClient.SendAsync(request);
 
-            response.EnsureSuccessStatusCode();
-        }
-
-        async Task IFacilityService.RemoveFacilityAsync(Guid facilityId, Guid accomodationId)
-        {
-            var request = new HttpRequestMessage(HttpMethod.Delete, $"{baseUrl}/{accomodationId}")
-            {
-                Content = JsonContent.Create(new RemoveFacilityRequest(facilityId))
-            };
-            request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
-
-            using var response = await httpClient.SendAsync(request);
-
-            response.EnsureSuccessStatusCode();
-        }
+        response.EnsureSuccessStatusCode();
     }
 }

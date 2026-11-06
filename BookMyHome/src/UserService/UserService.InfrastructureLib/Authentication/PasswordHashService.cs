@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity;
 using UserService.ApplicationLib.Authentication;
 
 namespace UserService.InfrastructureLib.Authentication;
 
-internal class PasswordHashService : IPasswordHashService
+internal sealed class PasswordHashService : IPasswordHashService
 {
     private readonly PasswordHasher<object> _passwordHasher = new();
     private readonly object _passwordHasherUser = new();

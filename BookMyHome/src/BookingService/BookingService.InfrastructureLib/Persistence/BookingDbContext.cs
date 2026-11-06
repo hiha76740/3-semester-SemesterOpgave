@@ -1,24 +1,23 @@
-﻿using BookingService.DomainLib.Entities;
+using BookingService.DomainLib.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace BookingService.InfrastructureLib.Persistence
+namespace BookingService.InfrastructureLib.Persistence;
+
+public class BookingDbContext : DbContext
 {
-    public class BookingDbContext : DbContext
+    public DbSet<Booking> Bookings { get; set; }
+
+    public BookingDbContext(DbContextOptions<BookingDbContext> options) : base(options) { }
+
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        public DbSet<Booking> Bookings { get; set; }
+        modelBuilder.HasSequence<int>("BookingNumbers")
+            .StartsAt(1000)
+            .IncrementsBy(1);
 
-        public BookingDbContext(DbContextOptions<BookingDbContext > options) : base(options) { }
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(BookingDbContext).Assembly);
 
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.HasSequence<int>("BookingNumbers")
-                .StartsAt(1000)
-                .IncrementsBy(1);
-
-            modelBuilder.ApplyConfigurationsFromAssembly(typeof(BookingDbContext).Assembly);
-
-        }
-        
     }
+
 }

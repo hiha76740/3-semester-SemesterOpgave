@@ -1,4 +1,5 @@
-﻿using BookMyHome.BuildingBlocksLib.Messaging;
+using System.Globalization;
+using BookMyHome.BuildingBlocksLib.Messaging;
 using BookMyHome.ContractsLib.Events;
 using Microsoft.Extensions.Logging;
 using UserService.ApplicationLib.Authentication;
@@ -10,6 +11,13 @@ using UserService.FacadeLib.Commands.Interfaces;
 
 namespace UserService.ApplicationLib.Handlers;
 
+/// <summary>
+/// 
+/// </summary>
+/// <param name="userRepo"></param>
+/// <param name="passwordHashService"></param>
+/// <param name="eventPublisher"></param>
+/// <param name="logger"></param>
 public class RegisterUserHandler(
     IUserRepository userRepo,
     IPasswordHashService passwordHashService,
@@ -21,9 +29,10 @@ public class RegisterUserHandler(
     {
         try
         {
-            logger.LogInformation("Beginning to register user with name {firstname} {lastname}", command.FirstName, command.LastName);
+            if (logger.IsEnabled(LogLevel.Information))
+                logger.LogInformation("Beginning to register user with name {Firstname} {Lastname}", command.FirstName, command.LastName);
 
-            var normalizedEmail = command.Email.ToLower();
+            var normalizedEmail = command.Email.ToLower(CultureInfo.CurrentCulture);
 
             var usernameExsist = await userRepo.UsernameExsistsAsync(normalizedEmail);
 
@@ -48,13 +57,15 @@ public class RegisterUserHandler(
                 role
                 );
 
-            logger.LogInformation("User created with id: {userId}", user.Id);
+            if (logger.IsEnabled(LogLevel.Information))
+                logger.LogInformation("User created with id: {UserId}", user.Id);
 
             await userRepo.RegisterUserAsync(user);
 
             await userRepo.SaveAsync();
 
-            logger.LogInformation("User {id} saved in database successfully", user.Id);
+            if (logger.IsEnabled(LogLevel.Information))
+                logger.LogInformation("User {Id} saved in database successfully", user.Id);
 
             var integrationEvent = new UserRegisteredIntegrationEvent(
                 user.FirstName,
@@ -71,10 +82,13 @@ public class RegisterUserHandler(
         }
         catch (Exception ex)
         {
-            logger.LogError("Error {errorMessage}", ex.Message);
+            if (logger.IsEnabled(LogLevel.Error))
+            {
+                logger.LogError("Error {ErrorMessage}", ex.Message);
 
-            if (ex.InnerException != null)
-                logger.LogError("InnerException Error {error}", ex.InnerException.Message);
+                if (ex.InnerException != null)
+                    logger.LogError("InnerException Error {Error}", ex.InnerException.Message);
+            }
 
             throw;
         }

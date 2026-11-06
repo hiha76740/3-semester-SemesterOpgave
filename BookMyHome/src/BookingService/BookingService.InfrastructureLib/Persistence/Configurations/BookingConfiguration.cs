@@ -1,11 +1,11 @@
-﻿using BookingService.DomainLib.Entities;
+using BookingService.DomainLib.Entities;
 using BookingService.DomainLib.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace BookingService.InfrastructureLib.Persistence.EF_Configurations;
+namespace BookingService.InfrastructureLib.Persistence.Configurations;
 
-internal class BookingConfiguration : IEntityTypeConfiguration<Booking>
+internal sealed class BookingConfiguration : IEntityTypeConfiguration<Booking>
 {
     public void Configure(EntityTypeBuilder<Booking> builder)
     {

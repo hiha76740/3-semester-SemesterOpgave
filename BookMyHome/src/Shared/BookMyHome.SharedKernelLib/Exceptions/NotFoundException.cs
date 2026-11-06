@@ -1,6 +1,9 @@
-namespace Shared.BookMyHome.SharedKernelLib.Exceptions;
+namespace BookMyHome.SharedKernelLib.Exceptions;
 
-public class NotFoundException : Exception
+/// <summary>
+/// 
+/// </summary>
+/// <param name="message"></param>
+public class NotFoundException(string message) : Exception(message)
 {
-    public NotFoundException(string message) : base(message) { }
 }
