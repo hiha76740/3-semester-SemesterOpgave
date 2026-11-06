@@ -1,4 +1,4 @@
-﻿using BookMyHome.ContractsLib.Requests.Accomodations;
+using BookMyHome.ContractsLib.Requests.Accomodations;
 using BookMyHome.ContractsLib.Responses.Accomodations;
 using BookMyHome.Web.ServiceInterfaces;
 using Microsoft.AspNetCore.Components.WebAssembly.Http;
@@ -12,7 +12,7 @@ namespace BookMyHome.Web.Services;
 /// <param name="httpClient"></param>
 public class FacilityService(HttpClient httpClient) : IFacilityService
 {
-    private readonly string _baseUrl = "facilities-api";
+    private readonly string _baseUrl = "/facilities-api";
 
 
     async Task<IReadOnlyList<FacilityResponse>> IFacilityService.GetAllFacilitiesAsync()

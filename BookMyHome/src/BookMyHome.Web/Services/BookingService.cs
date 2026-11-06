@@ -1,4 +1,4 @@
-﻿using BookMyHome.ContractsLib.Requests.Bookings;
+using BookMyHome.ContractsLib.Requests.Bookings;
 using BookMyHome.ContractsLib.Responses.Bookings;
 using BookMyHome.Web.ServiceInterfaces;
 using Microsoft.AspNetCore.Components.WebAssembly.Http;
@@ -12,7 +12,7 @@ namespace BookMyHome.Web.Services;
 /// <param name="httpClient"></param>
 public class BookingService(HttpClient httpClient) : IBookingService
 {
-    private readonly string _baseUrl = "bookings-api";
+    private readonly string _baseUrl = "/bookings-api";
 
 
     async Task IBookingService.CancelBookingAsync(Guid bookingId)

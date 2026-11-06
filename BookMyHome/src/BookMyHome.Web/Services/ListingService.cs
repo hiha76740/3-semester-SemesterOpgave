@@ -1,4 +1,4 @@
-﻿using BookMyHome.ContractsLib.Requests.Accomodations;
+using BookMyHome.ContractsLib.Requests.Accomodations;
 using BookMyHome.ContractsLib.Responses.Accomodations;
 using BookMyHome.Web.ServiceInterfaces;
 using Microsoft.AspNetCore.Components.Forms;
@@ -14,7 +14,7 @@ namespace BookMyHome.Web.Services;
 /// <param name="httpClient"></param>
 public class ListingService(HttpClient httpClient) : IListingService
 {
-    private readonly string _baseUrl = "listings-api";
+    private readonly string _baseUrl = "/listings-api";
 
 
     async Task<int> IListingService.Create(CreateListingRequest createRequest, IBrowserFile? imageFile)

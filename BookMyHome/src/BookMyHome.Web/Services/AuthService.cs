@@ -1,4 +1,4 @@
-﻿using BookMyHome.ContractsLib.Requests.Users;
+using BookMyHome.ContractsLib.Requests.Users;
 using BookMyHome.ContractsLib.Responses.Authentication;
 using BookMyHome.Web.ServiceInterfaces;
 using Microsoft.AspNetCore.Components.WebAssembly.Http;
@@ -13,7 +13,7 @@ namespace BookMyHome.Web.Services;
 /// <param name="httpClient"></param>
 public class AuthService(HttpClient httpClient) : IAuthService
 {
-    private readonly string _baseUrl = "auth-api";
+    private readonly string _baseUrl = "/auth-api";
 
 
     async Task<AuthUserResponse> IAuthService.GetAuthUserAsync()

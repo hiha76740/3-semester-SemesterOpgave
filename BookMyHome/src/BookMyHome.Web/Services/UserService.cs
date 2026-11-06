@@ -11,7 +11,7 @@ namespace BookMyHome.Web.Services;
 /// <param name="httpClient"></param>
 public class UserService(HttpClient httpClient) : IUserService
 {
-    private readonly string _baseUrl = "users-api";
+    private readonly string _baseUrl = "/users-api";
 
 
     async Task<IReadOnlyList<AccessRoleReponse>> IUserService.GetAllAccessRoles()
