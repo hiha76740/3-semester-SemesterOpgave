@@ -9,6 +9,8 @@ services:
     ports:
         - 8090:80
         - 8091:443
+    networks:
+        - frontend-net
         
     volumes:
         - ./certs:/etc/nginx/certs:ro
@@ -28,14 +30,12 @@ services:
     image: ghcr.io/hiha76740/bookmyhome-proxy:latest
     container_name: bookmyhome-proxy
     restart: unless-stopped
-    ports:
-        - 8000:8080
-        - 8010:8081
+    networks:
+        - frontend-net
+        - backend-net
         
     environment:
-        ASPNETCORE_URLS: "http://+:8080;https://+:8081"
-        ASPNETCORE_Kestrel__Certificates__Default__Path: "/https/bookmyhome.pfx"
-        ASPNETCORE_Kestrel__Certificates__Default__Password: "${ASPNETCORE_KESTREL__CERTIFICATES__DEFAULT__PASSWORD}"
+        ASPNETCORE_URLS: "http://+:8080"
         Jwt__Key: "${JWT_KEY}"
         Jwt__Issuer: "${JWT_ISSUER}"
         Jwt__Audience: "${JWT_AUDIENCE}"
@@ -64,7 +64,9 @@ services:
       - mysql-userdb-data:/var/lib/mysql
     restart: unless-stopped
     ports:
-        - 9001:3306
+        - "127.0.0.1:9001:3306"
+    networks:
+        - user-db-net
  
  # -------- User Service 1 --------
  
@@ -77,16 +79,15 @@ services:
     restart: unless-stopped
         
     environment:
-        ASPNETCORE_URLS: "http://+:8080;https://+:8081"
+        ASPNETCORE_URLS: "http://+:8080"
         ConnectionStrings__UserDB: "${USER_DB_CONNECTION_STRING:?Connection string mangler}"
-        ASPNETCORE_Kestrel__Certificates__Default__Path: "/https/bookmyhome.pfx"
-        ASPNETCORE_Kestrel__Certificates__Default__Password: "${ASPNETCORE_KESTREL__CERTIFICATES__DEFAULT__PASSWORD}"
         Jwt__Key: "${JWT_KEY}"
         Jwt__Issuer: "${JWT_ISSUER}"
         Jwt__Audience: "${JWT_AUDIENCE}"
-
-    volumes:
-        - ${USERPROFILE}/.aspnet/https:/https:ro
+        
+    networks:
+        - backend-net
+        - user-db-net
 
     labels:
       com.centurylinklabs.watchtower.enable: "true"
@@ -136,17 +137,16 @@ services:
     restart: unless-stopped
         
     environment:
-        ASPNETCORE_URLS: "http://+:8080;https://+:8081"
+        ASPNETCORE_URLS: "http://+:8080"
         ConnectionStrings__UserDB: "${USER_DB_CONNECTION_STRING:?Connection string mangler}"
-        ASPNETCORE_Kestrel__Certificates__Default__Path: "/https/bookmyhome.pfx"
-        ASPNETCORE_Kestrel__Certificates__Default__Password: "${ASPNETCORE_KESTREL__CERTIFICATES__DEFAULT__PASSWORD}"
         Jwt__Key: "${JWT_KEY}"
         Jwt__Issuer: "${JWT_ISSUER}"
         Jwt__Audience: "${JWT_AUDIENCE}"
 
-    volumes:
-        - ${USERPROFILE}/.aspnet/https:/https:ro
-
+    networks:
+        - backend-net
+        - user-db-net
+        
     labels:
       com.centurylinklabs.watchtower.enable: "true"
     healthcheck:
@@ -198,7 +198,9 @@ services:
       - mssql-bookingdb-data:/var/opt/mssql
     restart: unless-stopped
     ports:
-        - 9002:1433
+        - 127.0.0.1:9002:1433
+    networks:
+        - booking-db-net
 
   BookMyHome-BookingService1:
     depends_on:
@@ -208,16 +210,15 @@ services:
     restart: unless-stopped
         
     environment:
-        ASPNETCORE_URLS: "http://+:8080;https://+:8081"
+        ASPNETCORE_URLS: "http://+:8080"
         ConnectionStrings__BookingDB: "${BOOKING_DB_CONNECTION_STRING:?Connection string mangler}"
-        ASPNETCORE_Kestrel__Certificates__Default__Path: "/https/bookmyhome.pfx"
-        ASPNETCORE_Kestrel__Certificates__Default__Password: "${ASPNETCORE_KESTREL__CERTIFICATES__DEFAULT__PASSWORD}"
         Jwt__Key: "${JWT_KEY}"
         Jwt__Issuer: "${JWT_ISSUER}"
         Jwt__Audience: "${JWT_AUDIENCE}"
-
-    volumes:
-        - ${USERPROFILE}/.aspnet/https:/https:ro
+        
+    networks:
+        - backend-net
+        - booking-db-net
         
     labels:
       com.centurylinklabs.watchtower.enable: "true"
@@ -270,17 +271,16 @@ services:
     restart: unless-stopped
         
     environment:
-        ASPNETCORE_URLS: "http://+:8080;https://+:8081"
+        ASPNETCORE_URLS: "http://+:8080"
         ConnectionStrings__BookingDB: "${BOOKING_DB_CONNECTION_STRING:?Connection string mangler}"
-        ASPNETCORE_Kestrel__Certificates__Default__Path: "/https/bookmyhome.pfx"
-        ASPNETCORE_Kestrel__Certificates__Default__Password: "${ASPNETCORE_KESTREL__CERTIFICATES__DEFAULT__PASSWORD}"
         Jwt__Key: "${JWT_KEY}"
         Jwt__Issuer: "${JWT_ISSUER}"
         Jwt__Audience: "${JWT_AUDIENCE}"
-
-    volumes:
-        - ${USERPROFILE}/.aspnet/https:/https:ro
-        
+    
+    networks:
+        - backend-net
+        - booking-db-net
+    
     labels:
       com.centurylinklabs.watchtower.enable: "true"
     healthcheck:
@@ -332,7 +332,9 @@ services:
       - mssql-Accomodationdb-data:/var/opt/mssql
     restart: unless-stopped
     ports:
-        - 9003:1433
+        - 127.0.0.1:9003:1433
+    networks:
+        - accomodation-db-net
 
 # -------- Accomodation Service 1 --------   
  
@@ -344,17 +346,18 @@ services:
     restart: unless-stopped
         
     environment:
-        ASPNETCORE_URLS: "http://+:8080;https://+:8081"
+        ASPNETCORE_URLS: "http://+:8080"
         ConnectionStrings__AccomodationDB: "${ACCOMODATION_DB_CONNECTION_STRING:?Connection string mangler}"
-        ASPNETCORE_Kestrel__Certificates__Default__Path: "/https/bookmyhome.pfx"
-        ASPNETCORE_Kestrel__Certificates__Default__Password: "${ASPNETCORE_KESTREL__CERTIFICATES__DEFAULT__PASSWORD}"
         Jwt__Key: "${JWT_KEY}"
         Jwt__Issuer: "${JWT_ISSUER}"
         Jwt__Audience: "${JWT_AUDIENCE}"
 
     volumes:
-        - ${USERPROFILE}/.aspnet/https:/https:ro
         - BookMyHome-Images:/app/Storage/images
+
+    networks:
+        - backend-net
+        - accomodation-db-net
 
     labels:
       com.centurylinklabs.watchtower.enable: "true"
@@ -404,18 +407,19 @@ services:
     restart: unless-stopped
         
     environment:
-        ASPNETCORE_URLS: "http://+:8080;https://+:8081"
+        ASPNETCORE_URLS: "http://+:8080"
         ConnectionStrings__AccomodationDB: "${ACCOMODATION_DB_CONNECTION_STRING:?Connection string mangler}"
-        ASPNETCORE_Kestrel__Certificates__Default__Path: "/https/bookmyhome.pfx"
-        ASPNETCORE_Kestrel__Certificates__Default__Password: "${ASPNETCORE_KESTREL__CERTIFICATES__DEFAULT__PASSWORD}"
         Jwt__Key: "${JWT_KEY}"
         Jwt__Issuer: "${JWT_ISSUER}"
         Jwt__Audience: "${JWT_AUDIENCE}"
 
     volumes:
-        - ${USERPROFILE}/.aspnet/https:/https:ro
         - BookMyHome-Images:/app/Storage/images
 
+    networks:
+        - backend-net
+        - accomodation-db-net
+        
     labels:
       com.centurylinklabs.watchtower.enable: "true"
     healthcheck:
@@ -464,6 +468,9 @@ services:
         ASPNETCORE_URLS: "http://+:8080"
         SMTP__Host: "papercut"
 
+    networks:
+        - backend-net
+
     labels:
       com.centurylinklabs.watchtower.enable: "true"
     healthcheck:
@@ -510,6 +517,8 @@ services:
     image: daprio/placement:1.18.0
     command: ["./placement", "--port", "50006"]
     restart: unless-stopped
+    networks:
+        - backend-net
 
   scheduler:
     image: daprio/scheduler:1.18.0
@@ -518,6 +527,8 @@ services:
     volumes:
       - dapr-scheduler-data:/data
     restart: unless-stopped
+    networks:
+        - backend-net
 
 # -------- watchtower --------    
 
@@ -531,6 +542,9 @@ services:
       WATCHTOWER_POLL_INTERVAL: 30
       WATCHTOWER_CLEANUP: "true"
     command: --label-enable
+    networks:
+        - updates-net
+        
 
 
 # -------- papercut --------    
@@ -539,7 +553,7 @@ services:
     image: changemakerstudiosus/papercut-smtp:latest
     container_name: papercut-smtp
     ports:
-      - "37408:8080"  # Web UI
+      - "127.0.0.1:9004:8080"  # Web UI
     volumes:
       - papercut-messages:/app/Incoming
       - papercut-logs:/app/logs
@@ -548,6 +562,8 @@ services:
       - SmtpServer__Port=2525
       - Urls=http://0.0.0.0:8080
     restart: unless-stopped
+    networks:
+        - backend-net
 
 
 # -------- kafka --------            
@@ -569,6 +585,8 @@ services:
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
       KAFKA_NUM_PARTITIONS: 3
     restart: unless-stopped
+    networks:
+        - backend-net
 
 volumes:
     mysql-userdb-data:
@@ -578,3 +596,22 @@ volumes:
     dapr-scheduler-data:
     papercut-messages:
     papercut-logs:
+    
+networks:
+    frontend-net:
+        driver: bridge
+    
+    backend-net:
+        driver: bridge
+    
+    user-db-net:
+        driver: bridge
+    
+    booking-db-net:
+        driver: bridge
+    
+    accomodation-db-net:
+        driver: bridge
+    
+    updates-net:
+        driver: bridge
