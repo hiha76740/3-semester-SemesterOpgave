@@ -10,9 +10,10 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
-var proxyBase = builder.Configuration["ProxyUrl"];
+var apiBaseAddress = builder.Configuration["ApiBaseAddress"]
+   ?? builder.HostEnvironment.BaseAddress;
 
-builder.Services.AddScoped(_ => new HttpClient { BaseAddress = new Uri(proxyBase!) });
+builder.Services.AddScoped(_ => new HttpClient { BaseAddress = new Uri(apiBaseAddress) });
 builder.Services.AddRadzenComponents();
 
 builder.Services.AddBookMyHomeServices();
